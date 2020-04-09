@@ -1,17 +1,15 @@
-# template for roll20 pathfinder
-Proposition d'une fiche de personnage pour le jeux Pathfinder.
-Le but est de coller au mieux aux règles tout en simplifiant les calculs rébarbartifs, néanmoins le joueur est mis à contribution pour les parties importantes, pour éviter de trop le guider, qui pourrait se reposer sur la fiche sans comprendre les règles.
+# Pathfinder Adventurer's
+Proposal of a character sheet for the Pathfinder game.
+The goal is to stick as well as possible to the Pathfinder rules while simplifying the boring calculations, nevertheless the player is put at contribution for the important parts, but keep some part to complete manually, to avoid guiding him too much.
+The layout is meant to be "responsive friendly"; the window can be resized in different sizes without altering the layout.
 
-La mise en page se veut "responsive friendly"; à comprendre que la fiche de personne peut s'utiliser dans différentes tailles de fenêtre sans altérer la mise en page.
-La mise en page CSS utilise une structure pouvant être réutilisé sans modification du code CSS, voir les [règles](README.md#règles-css) pour d'amples informations.
+## Notes for translation.json
+- the ***language*** property is necessary for a internal function ( to sort string ).
+  It shall correspond to the two-character coding of ISO 639-1
+- replace the ***translation.json*** file with the one of the chosen language in the ***translation*** directory
 
-## Notes pour translation.json
-- la propriété ***language*** est necessaire pour une fonction de tri des chaînes de caractères.
-  Elle doit correspondre au codage en deux caractères de la norme ISO 639-1
-- remplacer le fichier ***translation.json*** par celui de la langue choisie dans le répertoire language
-
-## Fonctionnalitées
-la fiche est basé sur pathfinder 2nd édition, les sources vienent du site https://www.d20pfsrd.com et https://www.pathfinder-fr.org/
+## Functionality
+the sheet is based on pathfinder 2nd edition, sources come from https://www.d20pfsrd.com and https://www.pathfinder-fr.org/
 
 les fonctionnalitées sont les suivantes :
 - template pour un personnage et un animal/familier/compagnon animal
