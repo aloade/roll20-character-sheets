@@ -91,7 +91,7 @@
   "option-unit-kilogram-short": "kg",
   "option-unit-pound": "Pound",
   "option-unit-pound-short": "lb",
-  "option-unit-decimal-title": "Decimal point",
+  "option-unit-decimal-title": "Decimal separator",
   "option-unit-decimal-list": "comma,momayyez,dot",
   "option-unit-decimal-short": "Dec.",
   "option-unit-comma": "Comma",
