@@ -162,7 +162,7 @@
             "spell_concentration_defensive_label": getTranslationByKey("spell-concentration-defensive-label"),
 
             "fortitude_label": getTranslationByKey("fortitude-label"),
-            "reflexes_label": getTranslationByKey("reflexes-label"),
+            "reflex_label": getTranslationByKey("reflex-label"),
             "willpower_label": getTranslationByKey("willpower-label"),
 
             "skill_acrobatics_label": getTranslationByKey("skill-acrobatics-label"),
@@ -299,7 +299,7 @@
                 "compendium_category","compendium_content","compendium_cost","compendium_name","compendium_range","compendium_spell_resistance","compendium_weight",
                 "compendium_armor_category","compendium_arcane_spell_failure_chance","compendium_armor_check_penalty","compendium_armor_bonus","compendium_critical_damage","compendium_critical_range","compendium_damage_medium","compendium_damage_small","compendium_damage_type","compendium_maximum_dexterity_bonus","compendium_weapon_category",
                 "compendium_area","compendium_casting_time","compendium_components","compendium_duration","compendium_effect","compendium_saving_throw","compendium_school","compendium_special","compendium_spell_damage","compendium_spell_damage_type","compendium_target",
-                "compendium_armor_class","compendium_alignment","compendium_aura","compendium_base_attack_bonus","compendium_breath_weapon","compendium_challenge_rating","compendium_charisma", "compendium_cleric_spell_prepared","compendium_combat_maneuver_bonus","compendium_combat_maneuver_defense","compendium_constitution","compendium_creature_type", "compendium_damage_resistance","compendium_defensive_ability","compendium_dexterity","compendium_environment","compendium_experience","compendium_feat","compendium_fortitude", "compendium_hit_points","compendium_immune","compendium_initiative","compendium_intelligence","compendium_languages","compendium_monster_class","compendium_melee_attack","compendium_organization", "compendium_ranged_attack","compendium_racial_modifier","compendium_reach","compendium_reflexes","compendium_resistance","compendium_sense","compendium_skill","compendium_space", "compendium_special_quality","compendium_special_attack","compendium_speed","compendium_spell_known","compendium_spell_like_ability","compendium_size", "compendium_strength","compendium_treasure","compendium_weakness","compendium_willpower","compendium_wisdom"
+                "compendium_armor_class","compendium_alignment","compendium_aura","compendium_base_attack_bonus","compendium_breath_weapon","compendium_challenge_rating","compendium_charisma", "compendium_cleric_spell_prepared","compendium_combat_maneuver_bonus","compendium_combat_maneuver_defense","compendium_constitution","compendium_creature_type", "compendium_damage_resistance","compendium_defensive_ability","compendium_dexterity","compendium_environment","compendium_experience","compendium_feat","compendium_fortitude", "compendium_hit_points","compendium_immune","compendium_initiative","compendium_intelligence","compendium_languages","compendium_monster_class","compendium_melee_attack","compendium_organization", "compendium_ranged_attack","compendium_racial_modifier","compendium_reach","compendium_reflex","compendium_resistance","compendium_sense","compendium_skill","compendium_space", "compendium_special_quality","compendium_special_attack","compendium_speed","compendium_spell_known","compendium_spell_like_ability","compendium_size", "compendium_strength","compendium_treasure","compendium_weakness","compendium_willpower","compendium_wisdom"
             ], (user_string) => {
                 let cache = {};
                 cache.meter = getTranslationByKey("option-unit-meter-short");
@@ -789,7 +789,7 @@
                         "compendium_ranged_attack": "",
                         "compendium_racial_modifier": "",
                         "compendium_reach": "",
-                        "compendium_reflexes": "",
+                        "compendium_reflex": "",
                         "compendium_resistance": "",
                         "compendium_sense": "",
                         "compendium_skill": "",
@@ -947,7 +947,7 @@
                                 "status_action_spell" : false,
                                 "status_concentration" : 0,
                                 "status_fortitude": 0,
-                                "status_reflexes": 0,
+                                "status_reflex": 0,
                                 "status_willpower": 0,
                                 "status_ac_melee" : 0,
                                 "status_ac_ranged" : 0,
@@ -1092,7 +1092,7 @@
                                 cache.status_cmb -= vital_energy;
 
                                 cache.status_fortitude -= vital_energy;
-                                cache.status_reflexes -= vital_energy;
+                                cache.status_reflex -= vital_energy;
                                 cache.status_willpower -= vital_energy;
 
                                 cache.status_skill -= vital_energy;
@@ -1118,7 +1118,7 @@
                                     cache.status_wisdom -= 2;
                                     cache.status_charisma -= 2;
                                     cache.status_fortitude -= 2;
-                                    cache.status_reflexes -= 2;
+                                    cache.status_reflex -= 2;
                                     cache.status_willpower -= 2;
                                     cache.status_skill -= 2;
                                     break;
@@ -1133,7 +1133,7 @@
                                     cache.status_wisdom -= 2;
                                     cache.status_charisma -= 2;
                                     cache.status_fortitude -= 2;
-                                    cache.status_reflexes -= 2;
+                                    cache.status_reflex -= 2;
                                     cache.status_willpower -= 2;
                                     cache.status_skill -= 2;
                                     cache.status_skill_perception -= 2;
@@ -1151,7 +1151,7 @@
                                     cache.status_wisdom -= 2;
                                     cache.status_charisma -= 2;
                                     cache.status_fortitude -= 2;
-                                    cache.status_reflexes -= 2;
+                                    cache.status_reflex -= 2;
                                     cache.status_willpower -= 2;
                                     cache.status_skill -= 2;
                                     cache.status_skill_perception -= 2;
@@ -1338,7 +1338,7 @@
                                 cache.status_wisdom -= 2;
                                 cache.status_charisma -= 2;
                                 cache.status_fortitude -= 2;
-                                cache.status_reflexes -= 2;
+                                cache.status_reflex -= 2;
                                 cache.status_willpower -= 2;
                                 cache.status_skill -= 2;
                                 cache.status_skill_perception -= 2;
@@ -1688,12 +1688,12 @@
                                 }
 
                                 // save
-                                if (cache.status_fortitude !== 0 && cache.status_fortitude === cache.status_reflexes && cache.status_fortitude === cache.status_willpower) {
-                                    cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save"), cache.status_reflexes));
+                                if (cache.status_fortitude !== 0 && cache.status_fortitude === cache.status_reflex && cache.status_fortitude === cache.status_willpower) {
+                                    cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save"), cache.status_reflex));
                                 }
                                 else {
                                     if (cache.status_fortitude !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-fortitude"), cache.status_fortitude));
-                                    if (cache.status_reflexes !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-reflexes"), cache.status_reflexes));
+                                    if (cache.status_reflex !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-reflex"), cache.status_reflex));
                                     if (cache.status_willpower !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-willpower"), cache.status_willpower));
                                 }
 
@@ -1832,7 +1832,7 @@
                                 cache.status_initiative = 0;
                                 cache.status_concentration = 0;
                                 cache.status_fortitude = 0;
-                                cache.status_reflexes = 0;
+                                cache.status_reflex = 0;
                                 cache.status_willpower = 0;
                                 cache.status_ac_melee = 0;
                                 cache.status_ac_ranged = 0;
@@ -1859,7 +1859,7 @@
                             cache.dexterity += cache.status_dexterity + cache.aging_dexterity;
                             cache.constitution += cache.status_constitution + cache.aging_constitution;
                             cache.fortitude += cache.status_fortitude + cache.aging_fortitude;
-                            cache.reflexes += cache.status_dexterity + cache.aging_reflexes;
+                            cache.reflex += cache.status_dexterity + cache.aging_reflex;
                             cache.willpower += cache.status_willpower + cache.aging_willpower;
 
                             cache.strength = Math.min(cache.strength, cache.status_strength_ceiling);
@@ -1925,7 +1925,7 @@
                             load["foo_status_concentration"] = cache.status_concentration;
 
                             load["foo_status_fortitude"] = cache.status_fortitude;
-                            load["foo_status_reflexes"] = cache.status_reflexes;
+                            load["foo_status_reflex"] = cache.status_reflex;
                             load["foo_status_willpower"] = cache.status_willpower;
 
                             load["foo_status_ac_melee"] = cache.status_ac_melee;
@@ -2265,7 +2265,7 @@
     on("sheet:opened"
         + " change:option_unit_decimal change:option_unit_thousand"
         + " change:character_experience_rate"
-        + " change:repeating_class:class_base_attack_bonus1 change:repeating_class:class_base_attack_bonus2 change:repeating_class:class_base_attack_bonus3 change:repeating_class:class_base_attack_bonus4 change:repeating_class:class_fortitude change:repeating_class:class_reflexes change:repeating_class:class_willpower change:repeating_class:class_level remove:repeating_class"
+        + " change:repeating_class:class_base_attack_bonus1 change:repeating_class:class_base_attack_bonus2 change:repeating_class:class_base_attack_bonus3 change:repeating_class:class_base_attack_bonus4 change:repeating_class:class_fortitude change:repeating_class:class_reflex change:repeating_class:class_willpower change:repeating_class:class_level remove:repeating_class"
         , (e) => {
             let field = {
                 "get": {
@@ -2274,7 +2274,7 @@
                     "bab3" : "class_base_attack_bonus3",
                     "bab4" : "class_base_attack_bonus4",
                     "fortitude" : "class_fortitude",
-                    "reflexes" : "class_reflexes",
+                    "reflex" : "class_reflex",
                     "willpower" : "class_willpower",
                     "level" : "class_level"
                 },
@@ -2284,7 +2284,7 @@
                     "bab3" : "foo_class_base_attack_bonus3_total",
                     "bab4" : "foo_class_base_attack_bonus4_total",
                     "fortitude" : "foo_class_fortitude_total",
-                    "reflexes" : "foo_class_reflexes_total",
+                    "reflex" : "foo_class_reflex_total",
                     "willpower" : "foo_class_willpower_total",
                     "level" : "foo_class_level_total"
                 }
@@ -2303,7 +2303,7 @@
                         "bab3": 0,
                         "bab4": 0,
                         "fortitude": 0,
-                        "reflexes": 0,
+                        "reflex": 0,
                         "willpower": 0,
                         "level": 0,
                         "experience_total": ""
@@ -2341,7 +2341,7 @@
                         cache.bab3 += repeating[id][field.get.bab3];
                         cache.bab4 += repeating[id][field.get.bab4];
                         cache.fortitude += repeating[id][field.get.fortitude];
-                        cache.reflexes += repeating[id][field.get.reflexes];
+                        cache.reflex += repeating[id][field.get.reflex];
                         cache.willpower += repeating[id][field.get.willpower];
                         cache.level += repeating[id][field.get.level];
                     });
@@ -2364,7 +2364,7 @@
                     load[field.set.bab3] = cache.bab3;
                     load[field.set.bab4] = cache.bab4;
                     load[field.set.fortitude] = cache.fortitude;
-                    load[field.set.reflexes] = cache.reflexes;
+                    load[field.set.reflex] = cache.reflex;
                     load[field.set.willpower] = cache.willpower;
                     load[field.set.level] = cache.level;
                     load["character_experience_total"] = cache.experience_total
@@ -3580,7 +3580,7 @@
     <span data-i18n="spell-concentration-damage-label"></span>
 
     <span data-i18n="fortitude-label"></span>
-    <span data-i18n="reflexes-label"></span>
+    <span data-i18n="reflex-label"></span>
     <span data-i18n="willpower-label"></span>
 
     <span data-i18n="skill-status-reactive"></span>
@@ -3639,7 +3639,7 @@
     <input type="hidden" name="attr_foo_status_spell_verbal" value="0" />
     <input type="hidden" name="attr_foo_status_concentration" value="0" />
     <input type="hidden" name="attr_foo_status_fortitude" value="0" />
-    <input type="hidden" name="attr_foo_status_reflexes" value="0" />
+    <input type="hidden" name="attr_foo_status_reflex" value="0" />
     <input type="hidden" name="attr_foo_status_willpower" value="0" />
 
     <input type="hidden" name="attr_foo_status_ac_melee" value="0" />
@@ -3668,7 +3668,7 @@
     <input type="hidden" name="attr_foo_class_base_attack_bonus3_total" value="0" />
     <input type="hidden" name="attr_foo_class_base_attack_bonus4_total" value="0" />
     <input type="hidden" name="attr_foo_class_fortitude_total" value="0" />
-    <input type="hidden" name="attr_foo_class_reflexes_total" value="0" />
+    <input type="hidden" name="attr_foo_class_reflex_total" value="0" />
     <input type="hidden" name="attr_foo_class_willpower_total" value="0" />
     <input type="hidden" name="attr_foo_class_level_total" value="0" />
 
@@ -3782,7 +3782,7 @@
     <input type="hidden" name="attr_compendium_ranged_attack" accept="Ranged" />
     <input type="hidden" name="attr_compendium_racial_modifier" accept="Racial Modifiers" />
     <input type="hidden" name="attr_compendium_reach" accept="Reach" />
-    <input type="hidden" name="attr_compendium_reflexes" accept="Ref" />
+    <input type="hidden" name="attr_compendium_reflex" accept="Ref" />
     <input type="hidden" name="attr_compendium_resistance" accept="Resist" />
     <input type="hidden" name="attr_compendium_sense" accept="Senses" />
     <input type="hidden" name="attr_compendium_skill" accept="Skills" />
@@ -5703,7 +5703,7 @@
                                 <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus-title"></span>
                             </th>
                             <th width="7.692308%">
-                                <span data-i18n="reflexes-short" data-i18n-title="reflexes-title"></span>
+                                <span data-i18n="reflex-short" data-i18n-title="reflex-title"></span>
                             </th>
                             <th width="7.692308%">
                                 <span data-i18n="fortitude-short" data-i18n-title="fortitude-title"></span>
@@ -5732,7 +5732,7 @@
                                 <input title="" data-i18n-title="class-base-attack-bonus4-sum-title" type="number" name="attr_class_base_attack_bonus4_total" class="text-strong" value="@{foo_class_base_attack_bonus4_total}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" title="" data-i18n-title="class-reflexes-sum-title" name="attr_class_reflexes_total" class="text-strong" value="@{foo_class_reflexes_total}" disabled="disabled"/>
+                                <input type="number" title="" data-i18n-title="class-reflex-sum-title" name="attr_class_reflex_total" class="text-strong" value="@{foo_class_reflex_total}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" title="" data-i18n-title="class-fortitude-sum-title" name="attr_class_fortitude_total" class="text-strong" value="@{foo_class_fortitude_total}" disabled="disabled"/>
@@ -5835,7 +5835,7 @@
                                     <input type="number" name="attr_class_base_attack_bonus4" title="" min="0" step="1" value="0"/>
                                 </td>
                                 <td width="7.692308%">
-                                    <input type="number" name="attr_class_reflexes" title="" min="0" step="1" value="0"/>
+                                    <input type="number" name="attr_class_reflex" title="" min="0" step="1" value="0"/>
                                 </td>
                                 <td width="7.692308%">
                                     <input type="number" name="attr_class_fortitude" title="" min="0" step="1" value="0"/>
@@ -7313,7 +7313,7 @@
                                                                                                 <select name="attr_spellcustom_save" title="" data-i18n-list="spell-save-type-list">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -8182,7 +8182,7 @@
                                                                                                 <select name="attr_spell0_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -9051,7 +9051,7 @@
                                                                                                 <select name="attr_spell1_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -9920,7 +9920,7 @@
                                                                                                 <select name="attr_spell2_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -10789,7 +10789,7 @@
                                                                                                 <select name="attr_spell3_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -11658,7 +11658,7 @@
                                                                                                 <select name="attr_spell4_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -12527,7 +12527,7 @@
                                                                                                 <select name="attr_spell5_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -13396,7 +13396,7 @@
                                                                                                 <select name="attr_spell6_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -14265,7 +14265,7 @@
                                                                                                 <select name="attr_spell7_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -15134,7 +15134,7 @@
                                                                                                 <select name="attr_spell8_save" title="" data-i18n-list="spell-save-type-list">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -16003,7 +16003,7 @@
                                                                                                 <select name="attr_spell9_save" data-i18n-list="spell-save-type-list" title="">
                                                                                                     <option data-i18n="none" data-i18n-list-item="none" value="0" selected="selected"></option>
                                                                                                     <option data-i18n="save-fortitude" data-i18n-list-item="fortitude" value="1"></option>
-                                                                                                    <option data-i18n="save-reflexes" data-i18n-list-item="reflexes" value="2"></option>
+                                                                                                    <option data-i18n="save-reflex" data-i18n-list-item="reflex" value="2"></option>
                                                                                                     <option data-i18n="save-willpower" data-i18n-list-item="willpower" value="3"></option>
                                                                                                 </select>
                                                                                             </div>
@@ -16413,43 +16413,43 @@
                         <tr>
                             <td>
                                 <button
-                                        data-i18n-title="save-reflexes-roll-title"
+                                        data-i18n-title="save-reflex-roll-title"
                                         type="roll"
-                                        value="@{foo_option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{reflexes_label}}} {{test=[[1d20cs>20+@{reflexes_total}]]}}"
-                                        name="roll_reflexes"
+                                        value="@{foo_option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{reflex_label}}} {{test=[[1d20cs>20+@{reflex_total}]]}}"
+                                        name="roll_reflex"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="save-reflexes"></span>
+                                <span data-i18n="save-reflex"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_total" title="" class="text-strong" value="@{reflexes_base}+@{reflexes_attribute}+@{foo_status_reflexes}+@{reflexes_feat}+@{reflexes_bonus}+@{reflexes_resistance}+@{reflexes_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}+@{reflex_resistance}+@{reflex_misc}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_base" title="" value="@{class_reflexes_total}" disabled="disabled" />
+                                <input type="number" name="attr_reflex_base" title="" value="@{class_reflex_total}" disabled="disabled" />
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_reflexes_attribute" title="" value="@{foo_character_dexterity_mod}" disabled="disabled" />
+                                    <input type="number" name="attr_reflex_attribute" title="" value="@{foo_character_dexterity_mod}" disabled="disabled" />
                                     <div class="input-group-text">
                                         <span data-i18n="character-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_status" title="" step="1" value="@{foo_status_reflexes}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_status" title="" step="1" value="@{foo_status_reflex}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_feat" title="" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_feat" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_bonus" title="" min="0" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_bonus" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_resistance" title="" min="0" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_resistance" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflexes_misc" title="" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_misc" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr>
@@ -19712,7 +19712,7 @@
             <p>
                 <b><span data-i18n="rt-save-short" data-i18n-title="rt-save-title"></span></b> :&nbsp;
                 {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
-                {{#rollTotal() save_used 2}}<span data-i18n="save-reflexes"></span>{{/rollTotal() save_used 2}}
+                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
                 {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
                 {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
                 {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
