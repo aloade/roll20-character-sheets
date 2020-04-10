@@ -1,4 +1,4 @@
-<script data-type="text/worker">
+<script type="text/worker">
     let local = {
         "language": "en", // used for to sort string
         "experience_rate" : {
@@ -3529,7 +3529,7 @@
         return str.replace("%s", value);
     }
 </script>
-<noscript>Javascript must be enabled to use the character sheet</noscript>
+
 <div class="locale">
     <!-- translation -->
     <span data-i18n="language"></span>
@@ -3718,7 +3718,7 @@
 
 <div class="compendium-drop-target">
     <!-- attributes "Level", "Speed 20ft", "Speed 30ft" and "Weapon Type"["simple"/"martial"/"exotic"] are not used -->
-    <!-- attribute "Weapon Category"["unarmed"/"light melee"/"one-handed melee"/"two-hander-melee"/"ranger"] is partially used -->
+    <!-- attribute "Weapon Category"["unarmed"/"light melee"/"one-handed melee"/"two-handed-melee"/"ranged"] is partially used -->
     <!--common -->
     <input type="hidden" name="attr_compendium_category" accept="Category" />
     <input type="hidden" name="attr_compendium_content" accept="Content" />
@@ -5785,8 +5785,8 @@
                                             </optgroup>
                                             <optgroup label="" data-i18n-label="classes-hybrid" data-i18n-list="classes-hybrid-list">
                                                 <option data-i18n="class-arcanist" data-i18n-list-item="arcanist" value="26"></option>
-                                                <option data-i18n="class-brawler" data-i18n-list-item="brawler" value="27"></option>
-                                                <option data-i18n="class-bloodrager" data-i18n-list-item="bloodrager" value="28"></option>
+                                                <option data-i18n="class-bloodrager" data-i18n-list-item="bloodrager" value="27"></option>
+                                                <option data-i18n="class-brawler" data-i18n-list-item="brawler" value="28"></option>
                                                 <option data-i18n="class-hunter" data-i18n-list-item="hunter" value="29"></option>
                                                 <option data-i18n="class-investigator" data-i18n-list-item="investigator" value="30"></option>
                                                 <option data-i18n="class-shaman" data-i18n-list-item="shaman" value="31"></option>
@@ -5797,8 +5797,8 @@
                                             </optgroup>
                                             <optgroup label="" data-i18n-label="classes-occult" data-i18n-list="classes-occult-list">
                                                 <option data-i18n="class-kineticist" data-i18n-list-item="kineticist" value="36"></option>
-                                                <option data-i18n="class-mesmerist" data-i18n-list-item="mesmerist" value="37"></option>
-                                                <option data-i18n="class-medium" data-i18n-list-item="medium" value="38"></option>
+                                                <option data-i18n="class-medium" data-i18n-list-item="medium" value="37"></option>
+                                                <option data-i18n="class-mesmerist" data-i18n-list-item="mesmerist" value="38"></option>
                                                 <option data-i18n="class-occultist" data-i18n-list-item="occultist" value="39"></option>
                                                 <option data-i18n="class-psychic" data-i18n-list-item="psychic" value="40"></option>
                                                 <option data-i18n="class-spiritualist" data-i18n-list-item="spiritualist" value="41"></option>
@@ -19503,7 +19503,6 @@
                 </p>
             </div>
         </div>
-
 
         <div class="sheet-center">
             <p>
