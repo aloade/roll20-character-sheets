@@ -2072,12 +2072,12 @@
     // character height + character weight
     on("sheet:opened"
         + " change:option_unit_decimal change:option_unit_thousand change:option_unit_height change:option_unit_weight"
-        + " change:character_race change:character_genre"
+        + " change:character_race change:character_sex"
         + " change:character_height_mod change:character_weight_mod"
         , () => {
             getAttrsNumber([
                 "option_unit_decimal", "option_unit_thousand", "option_unit_height", "option_unit_weight",
-                "character_race", "character_genre",
+                "character_race", "character_sex",
                 "character_height_mod", "character_weight_mod"
             ], (user) => {
                 let cache = {
@@ -2097,7 +2097,7 @@
                 let load = {};
 
                 if ( user.character_race > 0 ) {
-                    cache.offset = ( user.character_genre === 1 ? 2 : 0 );
+                    cache.offset = ( user.character_sex === 1 ? 2 : 0 );
 
                     switch( local.race[user.character_race][0] ) {
                         case 1: cache.type = "humanoid"; break;
@@ -5206,7 +5206,7 @@
                                 <thead>
                                 <tr>
                                     <th width="33.333333%">
-                                        <span data-i18n="character-gender"></span>
+                                        <span data-i18n="character-sex"></span>
                                     </th>
                                     <th width="33.333333%">
                                         <span data-i18n="character-category-height-short" data-i18n-title="character-category-height-title"></span>
@@ -5219,9 +5219,9 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <select name="attr_character_genre" title="" data-i18n-list="character-gender-list">
-                                            <option data-i18n="character-gender-female" value="1" data-i18n-list-item="female"></option>
-                                            <option data-i18n="character-gender-male" value="2" data-i18n-list-item="male"></option>
+                                        <select name="attr_character_sex" title="" data-i18n-list="character-sex-list">
+                                            <option data-i18n="character-sex-female" value="1" data-i18n-list-item="female"></option>
+                                            <option data-i18n="character-sex-male" value="2" data-i18n-list-item="male"></option>
                                         </select>
                                     </td>
                                     <td>
