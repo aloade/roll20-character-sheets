@@ -1219,7 +1219,7 @@ input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[n
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-character-vitality {
+.charsheet .sheet-character-vigor {
     max-width: 360px;
     margin-bottom: 15px;
 }
@@ -1241,23 +1241,18 @@ input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[n
     max-width: 360px;
 }
 
-.sheet-character-race-standard,
-.sheet-character-race-custom {
+.sheet-template-character-race-standard,
+.sheet-template-character-race-other {
     display: none;
 }
 
-input[name="attr_character_race_custom"][value="show"] ~ div .sheet-character-race-custom,
-input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-race-standard{
+input[name="attr_character_race_toggle"][value="show"] ~ div .sheet-template-character-race-other,
+input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-character-race-standard {
     display: block;
 }
 
 .charsheet .sheet-character-race {
     max-width: 720px;
-    margin-bottom: 15px;
-}
-
-.charsheet .sheet-character-animal-race {
-    max-width: 360px;
     margin-bottom: 15px;
 }
 
@@ -1268,6 +1263,11 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
 
 .charsheet .sheet-character-background {
     max-width: 420px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-character-head {
+    max-width: 360px;
     margin-bottom: 15px;
 }
 
@@ -1332,7 +1332,7 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
     border-bottom: 1px solid rgb(100, 100, 100);
 }
 
-.charsheet .sheet-character-size {
+.charsheet .sheet-character-height {
     max-width: 360px;
     margin-bottom: 15px;
 }
@@ -1352,6 +1352,23 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
     margin-bottom: 15px;
 }
 
+
+.charsheet .sheet-monster-race {
+    max-width: 1440px;
+}
+
+.sheetmonster-race-container-toggle input {
+    display: none;
+}
+
+.sheet-monster-race-toggle[value="show"] ~ div .sheet-monster-race-container-toggle select {
+    max-width: 120px;
+}
+
+.sheet-monster-race-toggle[value="show"] ~ div .sheet-monster-race-container-toggle input {
+    display: block;
+}
+
 .charsheet .sheet-class {
     max-width: 1440px;
 }
@@ -1360,11 +1377,27 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
     display: none;
 }
 
-.sheet-class-toggle[value="show"] ~ table .sheet-class-container-toggle select {
+.sheet-class-toggle[value="show"] ~ div .sheet-class-container-toggle select {
     max-width: 120px;
 }
 
-.sheet-class-toggle[value="show"] ~ table .sheet-class-container-toggle input {
+.sheet-class-toggle[value="show"] ~ div .sheet-class-container-toggle input {
+    display: block;
+}
+
+.charsheet .sheet-class-specialization {
+    max-width: 1440px;
+}
+
+.sheet-class-specialization-container-toggle input {
+    display: none;
+}
+
+.sheet-class-specialization-toggle[value="show"] ~ div .sheet-class-container-toggle select {
+    max-width: 120px;
+}
+
+.sheet-class-specialization-toggle[value="show"] ~ div .sheet-class-specialization-container-toggle input {
     display: block;
 }
 
@@ -1511,7 +1544,12 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
 
 /* magic */
 .charsheet .sheet-caster-level table {
-    max-width: 480px;
+    max-width: 600px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-spell-failure table {
+    max-width: 360px;
     margin-bottom: 15px;
 }
 
@@ -1590,11 +1628,6 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
     background-color: green;
 }
 
-.charsheet .sheet-spell-failure table {
-    max-width: 360px;
-    margin-bottom: 15px;
-}
-
 .charsheet .sheet-spell {
     margin-bottom: 15px;
 }
@@ -1631,7 +1664,7 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
 }
 
 .charsheet .sheet-spell-standard table {
-    max-width: 360px;
+    max-width: 480px;
     margin-bottom: 15px;
 }
 
@@ -1710,17 +1743,17 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
 }
 
 .charsheet .sheet-defense-armor-class-detail {
-    max-width: 960px;
-    margin-bottom: 15px;
-}
-
-.charsheet .sheet-combat-maneuver-defense table {
     max-width: 1080px;
     margin-bottom: 15px;
 }
 
+.charsheet .sheet-combat-maneuver-defense table {
+    max-width: 1320px;
+    margin-bottom: 15px;
+}
+
 .charsheet .sheet-spell-resistance table {
-    max-width: 720px;
+    max-width: 840px;
     margin-bottom: 15px;
 }
 
@@ -2054,6 +2087,10 @@ input[name="attr_character_race_custom"][value="hide"] ~ div .sheet-character-ra
 .charsheet .sheet-note-description {
     min-height: 240px;
     height: 240px;
+}
+
+.charsheet .sheet-deposit {
+    max-width: 480px;
 }
 
 /* --------------------------------------------------- */

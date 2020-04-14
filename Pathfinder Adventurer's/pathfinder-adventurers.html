@@ -1,4 +1,4 @@
-<script type="text/worker">
+<script data-type="text/worker">
     let local = {
         "language": "en", // used for to sort string
         "experience_rate" : {
@@ -194,13 +194,14 @@
             "skill_perception_label": getTranslationByKey("skill-perception-label"),
             "skill_pickpocketing_label": getTranslationByKey("skill-pickpocketing-label"),
             "skill_psychology_label": getTranslationByKey("skill-psychology-label"),
-            "skill_representation_label": getTranslationByKey("skill-representation-label"),
             "skill_sabotage_label": getTranslationByKey("skill-sabotage-label"),
             "skill_spellcraft_label": getTranslationByKey("skill-spellcraft-label"),
             "skill_stealth_label": getTranslationByKey("skill-stealth-label"),
             "skill_survival_label": getTranslationByKey("skill-survival-label"),
             "skill_swimming_label": getTranslationByKey("skill-swimming-label"),
-            "skill_use_of_magic_objects_label": getTranslationByKey("skill-use-of-magic-objects-label")
+            "skill_use_of_magic_objects_label": getTranslationByKey("skill-use-of-magic-objects-label"),
+
+            "skill_representation_label": getTranslationByKey("skill-representation-label")
         };
 
         // send load
@@ -236,7 +237,7 @@
             });
         });
 
-    // roll_attack
+    // attack roll
     on("sheet:opened"
         + " change:option_attack_roll"
         , () => {
@@ -306,14 +307,14 @@
                 cache.kilogram = getTranslationByKey("option-unit-kilogram-short");
 
                 // clean values
-                for( let prop in user_string) {
-                    if ( user_string[prop] === "" ) continue
+                for ( let prop in user_string) {
+                    if ( !user_string.hasOwnProperty(prop) || user_string[prop] === "" ) continue;
 
                     // trim value
                     user_string[prop] = user_string[prop].trim();
 
                     // convert units
-                    if ( !prop.startsWith("compendium_") ) continue
+                    if ( !prop.startsWith("compendium_") ) continue;
                     if ( user_number.compendium_unit_active === 1 ) {
                         if ( user_number.option_unit_height === 2 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(foot|ft)[\.]?/gi, height_callback);
                         if ( user_number.option_unit_weight === 1 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(pound|livre|lb)[\.]?/gi, weight_callback);
@@ -830,7 +831,7 @@
         + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_malus change:character_dexterity_temp"
         + " change:character_stance change:character_category_height_select change:character_movement_base"
         + " change:character_age change:character_race change:character_age_select"
-        + " change:caster_level_rank change:caster_level_misc"
+        + " change:caster_level_rank change:caster_level_misc change:caster_level_temporary"
         + " change:armor_proficiency change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_equipmentweapon:equipment_weapon_weight remove:repeating_equipmentweapon"
@@ -851,7 +852,7 @@
                 "character_dexterity_base", "character_dexterity_race", "character_dexterity_bonus", "character_dexterity_malus", "character_dexterity_temp",
                 "character_stance", "character_category_height_select", "character_movement_base",
                 "character_age", "character_race", "character_age_select",
-                "caster_level_rank", "caster_level_misc",
+                "caster_level_rank", "caster_level_misc", "caster_level_temporary",
                 "armor_proficiency", "armor_proficiency_shield", "armor_proficiency_shield_tower",
                 "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
                 "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight"
@@ -1870,7 +1871,7 @@
                             cache.status_ac_dexterity_ceiling = Math.min(cache.status_ac_dexterity_ceiling, cache.load_dexterity_ceiling);
                             cache.status_cmd_dexterity_ceiling = Math.min(cache.status_cmd_dexterity_ceiling, cache.load_dexterity_ceiling);
 
-                            cache.status_caster_level = Math.max(user.caster_level_rank + cache.status_negative_level + user.caster_level_misc + cache.status_negative_level, 0);
+                            cache.status_caster_level = Math.max(user.caster_level_rank + cache.status_negative_level + user.caster_level_misc + user.caster_level_temporary + cache.status_negative_level, 0);
 
                             // CMB height
                             switch (user.character_category_height_select) {
@@ -2202,7 +2203,7 @@
                     load["character_weight_total"] = "";
                 }
 
-                load["character_race_custom"] = ( user.character_race === 0 ? "show": "hide" );
+                load["character_race_toggle"] = ( user.character_race === 0 ? "show": "hide" );
 
                 delete(user);
                 delete(cache);
@@ -2477,19 +2478,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spellcustom_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spellcustom_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spellcustom_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spellcustom_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2544,19 +2545,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell0_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell0_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell0_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell0_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2611,19 +2612,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell1_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell1_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell1_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell1_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2678,19 +2679,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell2_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell2_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell2_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell2_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2745,19 +2746,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell3_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell3_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell3_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell3_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2812,19 +2813,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell4_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell4_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell4_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell4_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2879,19 +2880,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell5_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell5_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell5_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell5_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -2946,19 +2947,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell6_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell6_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell6_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell6_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -3013,19 +3014,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell7_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell7_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell7_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell7_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -3080,19 +3081,19 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell8_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell8_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell8_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell8_incantation_type_toggle"] = "standard";
-                break
+                break;
         }
 
         // send load
@@ -3147,15 +3148,15 @@
         switch(+e.newValue) {
             case 1: // melee touch
                 load[source+"spell9_incantation_type_toggle"] = "melee-touch";
-                break
+                break;
 
             case 2: // melee touch
                 load[source+"spell9_incantation_type_toggle"] = "none";
-                break
+                break;
 
             case 3: // ranged touch
                 load[source+"spell9_incantation_type_toggle"] = "ranged-touch";
-                break
+                break;
 
             case 4: // standard
                 load[source+"spell9_incantation_type_toggle"] = "standard";
@@ -3236,11 +3237,11 @@
     // armor bonus + spell failure
     on("sheet:opened"
         + " change:user_decimal"
-        + " change:spell_failure_misc"
+        + " change:spell_failure_misc change:spell_failure_temporary"
         + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_bonus change:equipment_armor_spell_failure remove:repeating_equipmentarmor"
         , () => {
             getAttrsNumber([
-                "option_unit_decimal", "option_unit_thousand", "spell_failure_misc"
+                "option_unit_decimal", "option_unit_thousand", "spell_failure_misc", "spell_failure_temporary"
             ], (user) => {
                 let field = {
                     "get": {
@@ -3299,7 +3300,7 @@
                     });
                     delete(repeating);
 
-                    cache.spellfailure = cache.spellfailure_armor + user.spell_failure_misc;
+                    cache.spellfailure = cache.spellfailure_armor + user.spell_failure_misc + user.spell_failure_temporary;
                     if ( cache.spellfailure < 0 ) cache.spellfailure = 0;
                     if ( cache.spellfailure > 100 ) cache.spellfailure = 100;
 
@@ -3387,6 +3388,101 @@
 
                 // send load
                 setAttrs(load);
+            });
+        });
+    });
+
+    // transfert object to repeating_deposit
+    on("clicked:repeating_equipment:inventory-to-deposit", (e) => {
+        // format "repeating_equipment_-LrcL2qT7lhjZ6BZrble_inventory-to-deposit"
+        let source = e.sourceAttribute.replace(/inventory-to-deposit$/, '');
+
+        let field = {
+            "getNumber" : {
+                "quantity" : "equipment_quantity",
+                "weight" : "equipment_weight"
+            },
+            "getString" : {
+                "label" : "equipment_label",
+            },
+            "set" : {
+                "label" : "deposit_label",
+                "quantity": "deposit_quantity",
+                "weight": "deposit_weight"
+            }
+        };
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_deposit_"+generateRowID()+"_" );
+
+                // prepare load
+                let load = {};
+                load[field.set.label] = user_string[ field.getString.label ];
+                load[field.set.quantity] = user_number[ field.getNumber.quantity ];
+                load[field.set.weight] = user_number[ field.getNumber.weight ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // send load
+                setAttrs(load);
+
+                // remove object in equipment
+                removeRepeatingRow(source.slice(0, -1));
+            });
+        });
+    });
+
+    // ------------------------------------------
+    // notes
+    // ------------------------------------------
+    // transfert object to repeating_equipment
+    on("clicked:repeating_deposit:deposit-to-inventory", (e) => {
+        // format "repeating_deposit_-LrcL2qT7lhjZ6BZrble_deposit-to-inventory"
+        let source = e.sourceAttribute.replace(/deposit-to-inventory$/, '');
+
+        let field = {
+            "getNumber" : {
+                "quantity" : "deposit_quantity",
+                "weight" : "deposit_weight"
+            },
+            "getString" : {
+                "label" : "deposit_label",
+            },
+            "set" : {
+                "label" : "equipment_label",
+                "quantity": "equipment_quantity",
+                "weight": "equipment_weight"
+            }
+        };
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_equipment_"+generateRowID()+"_" );
+
+                // prepare load
+                let load = {};
+                load[field.set.label] = user_string[ field.getString.label ];
+                load[field.set.quantity] = user_number[ field.getNumber.quantity ];
+                load[field.set.weight] = user_number[ field.getNumber.weight ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // send load
+                setAttrs(load);
+
+                // remove object in deposit
+                removeRepeatingRow(source.slice(0, -1));
             });
         });
     });
@@ -3484,19 +3580,15 @@
         switch(method) {
             case "in2ft": // inch to feet
                 return value * 0.083333;
-                break;
 
             case "in2m": // inch to meter
                 return value * 0.025400;
-                break;
 
             case "ft2m": // feet to meter
                 return value * 0.304800;
-                break;
 
             case "lb2kg": // pound to kilogram
                 return value * 0.453592;
-                break;
 
             default:
                 return value;
@@ -3515,8 +3607,9 @@
     // array            (array) array to parse
     // str              (string) string to add in array
     function stringAddBegin(arr, str) {
-        for ( let property in arr ) {
-            if ( typeof(arr[property]) === "string" ) arr[property] = str+arr[property];
+        for ( let prop in arr ) {
+            if ( !arr.hasOwnProperty(prop) ) continue;
+            if ( typeof(arr[prop]) === "string" ) arr[prop] = str+arr[prop];
         }
         return arr;
     }
@@ -3710,6 +3803,7 @@
 <input type="hidden" name="attr_foo_option_health" value="standard" />
 <input type="hidden" name="attr_foo_option_attack_roll" value="target" />
 <input type="hidden" name="attr_foo_option_whisper" value="" />
+
 <input type="hidden" name="attr_foo_character_strength_total_alert" value="hide" />
 <input type="hidden" name="attr_foo_character_dexterity_total_alert" value="hide" />
 <input type="hidden" name="attr_foo_character_dexterity_mod_alert" value="hide" />
@@ -3861,15 +3955,15 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <span data-i18n="character-vitality"></span>
+                                    <span data-i18n="character-vigor"></span>
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_vitality" title="" data-i18n-title="character-vitality-title" value="(@{character_vitality_base}+@{character_vitality_tmp})" disabled="disabled" />
+                                        <input type="number" name="attr_character_vigor" title="" data-i18n-title="character-vigor-title" value="(@{character_vigor_base}+@{character_vigor_tmp})" disabled="disabled" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_vitality_max" title="" data-i18n-title="character-vitality-max-title" value="(@{character_vitality_ceiling})" disabled="disabled" />
+                                        <input type="number" name="attr_character_vigor_max" title="" data-i18n-title="character-vigor-max-title" value="(@{character_vigor_ceiling})" disabled="disabled" />
                                     </div>
                                 </td>
                             </tr>
@@ -4346,7 +4440,7 @@
         </div>
     </div>
 
-    <div class="main tab">
+    <div class="template-playable-character template-monster main tab">
         <span class="main-menu"></span>
 
         <input class="tab-input" type="radio" name="attr_nav_tab" title="" value="character" checked="checked">
@@ -4422,7 +4516,7 @@
                             </div>
                             <div class="template-monster">
                                 <h1 data-i18n="character-life-points"></h1>
-                                <table class="animal-life-points">
+                                <table class="monster-life-points">
                                     <thead>
                                     <tr>
                                         <th width="25%">
@@ -4539,8 +4633,8 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="character-vitality-h1"></h1>
-                            <table class="character-vitality">
+                            <h1 data-i18n="character-vigor-h1"></h1>
+                            <table class="character-vigor">
                                 <thead>
                                 <tr>
                                     <th width="33.333333%">
@@ -4551,23 +4645,23 @@
                                     </th>
                                     <td></td>
                                     <th width="33.333333%">
-                                        <span data-i18n="max-short" data-i18n-title="character-vitality-max-title"></span>
+                                        <span data-i18n="max-short" data-i18n-title="character-vigor-max-title"></span>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_vitality_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_character_vigor_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vitality_tmp" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_character_vigor_tmp" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vitality_ceiling" title="" min="0" step="1" />
+                                        <input type="number" name="attr_character_vigor_ceiling" title="" min="0" step="1" />
                                     </td>
                                 </tr>
                                 </tbody>
@@ -4620,7 +4714,7 @@
                             </table>
                         </div>
                         <div class="template-monster">
-                            <table class="animal-level">
+                            <table class="monster-level">
                                 <thead>
                                 <tr>
                                     <th>
@@ -4970,11 +5064,11 @@
                 </div>
 
                 <h1 data-i18n="character-appearance-h1"></h1>
-                <input type="hidden" name="attr_character_race_custom" title="" class="character_race_custom" value="hide" />
+                <input type="hidden" name="attr_character_race_toggle" title="" value="hide" />
                 <div class="section">
                     <div class="flex-row">
                         <div class="flex-col8">
-                            <table class="character-race template-playable-character">
+                            <table class="template-playable-character character-race">
                                 <thead>
                                 <tr>
                                     <th width="25%">
@@ -5044,16 +5138,16 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <input type="text" class="character-race-standard disabled" name="attr_character_type" title="" value="" />
-                                        <input type="text" class="character-race-custom" name="attr_character_type_custom" title="" value="" />
+                                        <input type="text" class="template-character-race-standard disabled" name="attr_character_type" title="" value="" />
+                                        <input type="text" class="template-character-race-other" name="attr_character_type_other" title="" value="" />
                                     </td>
                                     <td>
-                                        <input type="text" class="character-race-standard disabled" name="attr_character_subtype" title="" value="" />
-                                        <input type="text" class="character-race-custom" name="attr_character_subtype_custom" title="" value="" />
+                                        <input type="text" class="template-character-race-standard disabled" name="attr_character_subtype" title="" value="" />
+                                        <input type="text" class="template-character-race-other" name="attr_character_subtype_other" title="" value="" />
                                     </td>
                                     <td>
-                                        <div class="character-race-standard">
-                                            <div class=" input-group">
+                                        <div class="template-character-race-standard">
+                                            <div class="input-group">
                                                 <input type="number" name="attr_character_age" title="" min="0" step="1" value="0">
                                                 <div class="input-group-text">
                                                     <span data-i18n="character-aging-years-short"></span>
@@ -5061,7 +5155,7 @@
                                                 <input type="text" class="disabled" name="attr_character_aging_label" title="" readonly="readonly">
                                             </div>
                                         </div>
-                                        <select class="character-race-custom" name="attr_character_age_select" title="">
+                                        <select class="template-character-race-other" name="attr_character_age_select" title="">
                                             <option data-i18n="character-aging-youth" value="1"></option>
                                             <option data-i18n="character-aging-adult" value="2" selected="selected"></option>
                                             <option data-i18n="character-aging-middle" value="3"></option>
@@ -5072,8 +5166,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-
-                            <table class="character-animal-race template-monster">
+                            <table class="template-monster monster-race">
                                 <thead>
                                 <tr>
                                     <th width="50%">
@@ -5087,106 +5180,113 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <select name="attr_animal_race" title="" data-i18n-list="animal-race-list">
-                                            <optgroup label="" data-i18n-label="animal-race-aquatic" data-i18n-list-item="aquatic" data-i18n-list="animal-race-aquatic-list">
-                                                <option data-i18n="animal-race-blue-ringed-octopus" data-i18n-list-item="blue-ringed-octopus" value="1"></option>
-                                                <option data-i18n="animal-race-dolphin" data-i18n-list-item="dolphin" value="2"></option>
-                                                <option data-i18n="animal-race-electric-eel" data-i18n-list-item="electric-eel" value="3"></option>
-                                                <option data-i18n="animal-race-giant-frog" data-i18n-list-item="giant-frog" value="4"></option>
-                                                <option data-i18n="animal-race-giant-moray-eel" data-i18n-list-item="giant-moray-eel" value="5"></option>
-                                                <option data-i18n="animal-race-killer-whale" data-i18n-list-item="killer-whale" value="6"></option>
-                                                <option data-i18n="animal-race-octopus" data-i18n-list-item="octopus" value="7"></option>
-                                                <option data-i18n="animal-race-poisonous-frog" data-i18n-list-item="poisonous-frog" value="8"></option>
-                                                <option data-i18n="animal-race-shark" data-i18n-list-item="shark" value="9"></option>
-                                                <option data-i18n="animal-race-squid" data-i18n-list-item="squid" value="10"></option>
-                                                <option data-i18n="animal-race-sea-turtle" data-i18n-list-item="sea-turtle" value="11"></option>
-                                                <option data-i18n="animal-race-toad" data-i18n-list-item="toad" value="12"></option>
-                                            </optgroup>
-                                            <optgroup label="" data-i18n-label="animal-race-dinosaur" data-i18n-list-item="dinosaur" data-i18n-list="animal-race-dinosaur-list">
-                                                <option data-i18n="animal-race-archaeopteryx" data-i18n-list-item="archaeopteryx" value="13"></option>
-                                                <option data-i18n="animal-race-ankylosaurus" data-i18n-list-item="ankylosaurus" value="14"></option>
-                                                <option data-i18n="animal-race-brachiosaurus" data-i18n-list-item="brachiosaurus" value="15"></option>
-                                                <option data-i18n="animal-race-compsognathus" data-i18n-list-item="compsognathus" value="16"></option>
-                                                <option data-i18n="animal-race-deinonychus" data-i18n-list-item="deinonychus" value="17"></option>
-                                                <option data-i18n="animal-race-elasmosaurus" data-i18n-list-item="elasmosaurus" value="18"></option>
-                                                <option data-i18n="animal-race-pteranodon" data-i18n-list-item="pteranodon" value="19"></option>
-                                                <option data-i18n="animal-race-sphenodon" data-i18n-list-item="sphenodon" value="20"></option>
-                                                <option data-i18n="animal-race-stegosaurus" data-i18n-list-item="stegosaurus" value="21"></option>
-                                                <option data-i18n="animal-race-velociraptor" data-i18n-list-item="velociraptor" value="22"></option>
-                                                <option data-i18n="animal-race-triceratopic" data-i18n-list-item="triceratopic" value="23"></option>
-                                                <option data-i18n="animal-race-tyrannosaurus" data-i18n-list-item="tyrannosaurus" value="24"></option>
-                                            </optgroup>
-                                            <optgroup label="" data-i18n-label="animal-race-flying" data-i18n-list-item="flying" data-i18n-list="animal-race-flying-list">
-                                                <option data-i18n="animal-race-bat" data-i18n-list-item="bat" value="25"></option>
-                                                <option data-i18n="animal-race-bloody-bat" data-i18n-list-item="bloody-bat" value="26"></option>
-                                                <option data-i18n="animal-race-crab" data-i18n-list-item="crab" value="28"></option>
-                                                <option data-i18n="animal-race-dodo" data-i18n-list-item="dodo" value="27"></option>
-                                                <option data-i18n="animal-race-eagle" data-i18n-list-item="eagle" value="29"></option>
-                                                <option data-i18n="animal-race-falcon" data-i18n-list-item="falcon" value="30"></option>
-                                                <option data-i18n="animal-race-owl" data-i18n-list-item="owl" value="31"></option>
-                                                <option data-i18n="animal-race-raven" data-i18n-list-item="raven" value="32"></option>
-                                                <option data-i18n="animal-race-thrush" data-i18n-list-item="thrush" value="33"></option>
-                                            </optgroup>
-                                            <optgroup label="" data-i18n-label="animal-race-land-based" data-i18n-list-item="land-based" data-i18n-list="animal-race-land-based-list">
-                                                <option data-i18n="animal-race-auroch" data-i18n-list-item="auroch" value="34"></option>
-                                                <option data-i18n="animal-race-badger" data-i18n-list-item="badger" value="35"></option>
-                                                <option data-i18n="animal-race-bear" data-i18n-list-item="bear" value="36"></option>
-                                                <option data-i18n="animal-race-bison" data-i18n-list-item="bison" value="37"></option>
-                                                <option data-i18n="animal-race-bloodthirsty-hyena" data-i18n-list-item="bloodthirsty-hyena" value="38"></option>
-                                                <option data-i18n="animal-race-bloodthirsty-rat" data-i18n-list-item="bloodthirsty-rat" value="39"></option>
-                                                <option data-i18n="animal-race-boar" data-i18n-list-item="boar" value="40"></option>
-                                                <option data-i18n="animal-race-camel" data-i18n-list-item="camel" value="41"></option>
-                                                <option data-i18n="animal-race-cat" data-i18n-list-item="cat" value="42"></option>
-                                                <option data-i18n="animal-race-cheetah" data-i18n-list-item="cheetah" value="43"></option>
-                                                <option data-i18n="animal-race-constrictor-snake" data-i18n-list-item="constrictor-snake" value="44"></option>
-                                                <option data-i18n="animal-race-dog" data-i18n-list-item="dog" value="45"></option>
-                                                <option data-i18n="animal-race-domestic-centipede" data-i18n-list-item="domestic-centipede" value="46"></option>
-                                                <option data-i18n="animal-race-dromedary" data-i18n-list-item="dromedary" value="47"></option>
-                                                <option data-i18n="animal-race-elephant" data-i18n-list-item="elephant" value="48"></option>
-                                                <option data-i18n="animal-race-flying-squirrel" data-i18n-list-item="flying-squirrel" value="49"></option>
-                                                <option data-i18n="animal-race-fox" data-i18n-list-item="fox" value="50"></option>
-                                                <option data-i18n="animal-race-giant-flea" data-i18n-list-item="giant-flea" value="51"></option>
-                                                <option data-i18n="animal-race-glutton" data-i18n-list-item="glutton" value="52"></option>
-                                                <option data-i18n="animal-race-goat" data-i18n-list-item="goat" value="53"></option>
-                                                <option data-i18n="animal-race-goblin-dog" data-i18n-list-item="goblin-dog" value="54"></option>
-                                                <option data-i18n="animal-race-gorilla" data-i18n-list-item="gorilla" value="55"></option>
-                                                <option data-i18n="animal-race-green-scorpion" data-i18n-list-item="green-scorpion" value="56"></option>
-                                                <option data-i18n="animal-race-hedgehog" data-i18n-list-item="hedgehog" value="57"></option>
-                                                <option data-i18n="animal-race-hyena" data-i18n-list-item="hyena" value="58"></option>
-                                                <option data-i18n="animal-race-horse" data-i18n-list-item="horse" value="59"></option>
-                                                <option data-i18n="animal-race-leopard" data-i18n-list-item="leopard" value="60"></option>
-                                                <option data-i18n="animal-race-lion" data-i18n-list-item="lion" value="61"></option>
-                                                <option data-i18n="animal-race-lizard" data-i18n-list-item="lizard" value="62"></option>
-                                                <option data-i18n="animal-race-mara" data-i18n-list-item="mara" value="63"></option>
-                                                <option data-i18n="animal-race-monkey" data-i18n-list-item="monkey" value="64"></option>
-                                                <option data-i18n="animal-race-otter" data-i18n-list-item="otter" value="65"></option>
-                                                <option data-i18n="animal-race-pig" data-i18n-list-item="pig" value="66"></option>
-                                                <option data-i18n="animal-race-platypus" data-i18n-list-item="platypus" value="67"></option>
-                                                <option data-i18n="animal-race-pony" data-i18n-list-item="pony" value="68"></option>
-                                                <option data-i18n="animal-race-porcupine" data-i18n-list-item="porcupine" value="69"></option>
-                                                <option data-i18n="animal-race-raccoon" data-i18n-list-item="raccoon" value="70"></option>
-                                                <option data-i18n="animal-race-rat" data-i18n-list-item="rat" value="71"></option>
-                                                <option data-i18n="animal-race-rhinoceros" data-i18n-list-item="rhinoceros" value="72"></option>
-                                                <option data-i18n="animal-race-roc" data-i18n-list-item="roc" value="73"></option>
-                                                <option data-i18n="animal-race-scarlet-spider" data-i18n-list-item="scarlet-spider" value="74"></option>
-                                                <option data-i18n="animal-race-sloth" data-i18n-list-item="sloth" value="75"></option>
-                                                <option data-i18n="animal-race-smilodon" data-i18n-list-item="smilodon" value="76"></option>
-                                                <option data-i18n="animal-race-snapping-turtle" data-i18n-list-item="snapping-turtle" value="77"></option>
-                                                <option data-i18n="animal-race-snake" data-i18n-list-item="snake" value="78"></option>
-                                                <option data-i18n="animal-race-spotted-lion" data-i18n-list-item="spotted-lion" value="79"></option>
-                                                <option data-i18n="animal-race-tiger" data-i18n-list-item="tiger" value="80"></option>
-                                                <option data-i18n="animal-race-varan" data-i18n-list-item="varan" value="81"></option>
-                                                <option data-i18n="animal-race-viper" data-i18n-list-item="viper" value="82"></option>
-                                                <option data-i18n="animal-race-weasel" data-i18n-list-item="weasel" value="83"></option>
-                                                <option data-i18n="animal-race-wolf" data-i18n-list-item="wolf" value="84"></option>
-                                            </optgroup>
-                                            <optgroup label="" data-i18n-label="animal-race-plant" data-i18n-list-item="plant" data-i18n-list="animal-race-plant-list">
-                                                <option data-i18n="animal-race-carnivorous-plant" data-i18n-list-item="carnivorous-plant" value="85"></option>
-                                                <option data-i18n="animal-race-creeping-ivy" data-i18n-list-item="creeping-ivy" value="86"></option>
-                                                <option data-i18n="animal-race-sylvanian-sprout" data-i18n-list-item="sylvanian-sprout" value="87"></option>
-                                                <option data-i18n="animal-race-vesse-de-loup" data-i18n-list-item="vesse-de-loup" value="88"></option>
-                                            </optgroup>
-                                        </select>
+                                        <input type="hidden" name="attr_monster_race_toggle" title="" class="monster-race-toggle" value="hide" />
+                                        <div class="input-group monster-race-container-toggle">
+                                            <select name="attr_monster_race" title="" data-i18n-list="monster-race-list">
+                                                <optgroup label="" data-i18n-label="monster-race-aquatic" data-i18n-list-item="aquatic" data-i18n-list="monster-race-aquatic-list">
+                                                    <option data-i18n="monster-race-blue-ringed-octopus" data-i18n-list-item="blue-ringed-octopus" value="1"></option>
+                                                    <option data-i18n="monster-race-dolphin" data-i18n-list-item="dolphin" value="2"></option>
+                                                    <option data-i18n="monster-race-electric-eel" data-i18n-list-item="electric-eel" value="3"></option>
+                                                    <option data-i18n="monster-race-giant-frog" data-i18n-list-item="giant-frog" value="4"></option>
+                                                    <option data-i18n="monster-race-giant-moray-eel" data-i18n-list-item="giant-moray-eel" value="5"></option>
+                                                    <option data-i18n="monster-race-killer-whale" data-i18n-list-item="killer-whale" value="6"></option>
+                                                    <option data-i18n="monster-race-octopus" data-i18n-list-item="octopus" value="7"></option>
+                                                    <option data-i18n="monster-race-poisonous-frog" data-i18n-list-item="poisonous-frog" value="8"></option>
+                                                    <option data-i18n="monster-race-shark" data-i18n-list-item="shark" value="9"></option>
+                                                    <option data-i18n="monster-race-squid" data-i18n-list-item="squid" value="10"></option>
+                                                    <option data-i18n="monster-race-sea-turtle" data-i18n-list-item="sea-turtle" value="11"></option>
+                                                    <option data-i18n="monster-race-toad" data-i18n-list-item="toad" value="12"></option>
+                                                </optgroup>
+                                                <optgroup label="" data-i18n-label="monster-race-dinosaur" data-i18n-list-item="dinosaur" data-i18n-list="monster-race-dinosaur-list">
+                                                    <option data-i18n="monster-race-archaeopteryx" data-i18n-list-item="archaeopteryx" value="13"></option>
+                                                    <option data-i18n="monster-race-ankylosaurus" data-i18n-list-item="ankylosaurus" value="14"></option>
+                                                    <option data-i18n="monster-race-brachiosaurus" data-i18n-list-item="brachiosaurus" value="15"></option>
+                                                    <option data-i18n="monster-race-compsognathus" data-i18n-list-item="compsognathus" value="16"></option>
+                                                    <option data-i18n="monster-race-deinonychus" data-i18n-list-item="deinonychus" value="17"></option>
+                                                    <option data-i18n="monster-race-elasmosaurus" data-i18n-list-item="elasmosaurus" value="18"></option>
+                                                    <option data-i18n="monster-race-pteranodon" data-i18n-list-item="pteranodon" value="19"></option>
+                                                    <option data-i18n="monster-race-sphenodon" data-i18n-list-item="sphenodon" value="20"></option>
+                                                    <option data-i18n="monster-race-stegosaurus" data-i18n-list-item="stegosaurus" value="21"></option>
+                                                    <option data-i18n="monster-race-velociraptor" data-i18n-list-item="velociraptor" value="22"></option>
+                                                    <option data-i18n="monster-race-triceratopic" data-i18n-list-item="triceratopic" value="23"></option>
+                                                    <option data-i18n="monster-race-tyrannosaurus" data-i18n-list-item="tyrannosaurus" value="24"></option>
+                                                </optgroup>
+                                                <optgroup label="" data-i18n-label="monster-race-flying" data-i18n-list-item="flying" data-i18n-list="monster-race-flying-list">
+                                                    <option data-i18n="monster-race-bat" data-i18n-list-item="bat" value="25"></option>
+                                                    <option data-i18n="monster-race-bloody-bat" data-i18n-list-item="bloody-bat" value="26"></option>
+                                                    <option data-i18n="monster-race-crab" data-i18n-list-item="crab" value="28"></option>
+                                                    <option data-i18n="monster-race-dodo" data-i18n-list-item="dodo" value="27"></option>
+                                                    <option data-i18n="monster-race-eagle" data-i18n-list-item="eagle" value="29"></option>
+                                                    <option data-i18n="monster-race-falcon" data-i18n-list-item="falcon" value="30"></option>
+                                                    <option data-i18n="monster-race-owl" data-i18n-list-item="owl" value="31"></option>
+                                                    <option data-i18n="monster-race-raven" data-i18n-list-item="raven" value="32"></option>
+                                                    <option data-i18n="monster-race-thrush" data-i18n-list-item="thrush" value="33"></option>
+                                                </optgroup>
+                                                <optgroup label="" data-i18n-label="monster-race-land-based" data-i18n-list-item="land-based" data-i18n-list="monster-race-land-based-list">
+                                                    <option data-i18n="monster-race-auroch" data-i18n-list-item="auroch" value="34"></option>
+                                                    <option data-i18n="monster-race-badger" data-i18n-list-item="badger" value="35"></option>
+                                                    <option data-i18n="monster-race-bear" data-i18n-list-item="bear" value="36"></option>
+                                                    <option data-i18n="monster-race-bison" data-i18n-list-item="bison" value="37"></option>
+                                                    <option data-i18n="monster-race-bloodthirsty-hyena" data-i18n-list-item="bloodthirsty-hyena" value="38"></option>
+                                                    <option data-i18n="monster-race-bloodthirsty-rat" data-i18n-list-item="bloodthirsty-rat" value="39"></option>
+                                                    <option data-i18n="monster-race-boar" data-i18n-list-item="boar" value="40"></option>
+                                                    <option data-i18n="monster-race-camel" data-i18n-list-item="camel" value="41"></option>
+                                                    <option data-i18n="monster-race-cat" data-i18n-list-item="cat" value="42"></option>
+                                                    <option data-i18n="monster-race-cheetah" data-i18n-list-item="cheetah" value="43"></option>
+                                                    <option data-i18n="monster-race-constrictor-snake" data-i18n-list-item="constrictor-snake" value="44"></option>
+                                                    <option data-i18n="monster-race-dog" data-i18n-list-item="dog" value="45"></option>
+                                                    <option data-i18n="monster-race-domestic-centipede" data-i18n-list-item="domestic-centipede" value="46"></option>
+                                                    <option data-i18n="monster-race-dromedary" data-i18n-list-item="dromedary" value="47"></option>
+                                                    <option data-i18n="monster-race-elephant" data-i18n-list-item="elephant" value="48"></option>
+                                                    <option data-i18n="monster-race-flying-squirrel" data-i18n-list-item="flying-squirrel" value="49"></option>
+                                                    <option data-i18n="monster-race-fox" data-i18n-list-item="fox" value="50"></option>
+                                                    <option data-i18n="monster-race-giant-flea" data-i18n-list-item="giant-flea" value="51"></option>
+                                                    <option data-i18n="monster-race-glutton" data-i18n-list-item="glutton" value="52"></option>
+                                                    <option data-i18n="monster-race-goat" data-i18n-list-item="goat" value="53"></option>
+                                                    <option data-i18n="monster-race-goblin-dog" data-i18n-list-item="goblin-dog" value="54"></option>
+                                                    <option data-i18n="monster-race-gorilla" data-i18n-list-item="gorilla" value="55"></option>
+                                                    <option data-i18n="monster-race-green-scorpion" data-i18n-list-item="green-scorpion" value="56"></option>
+                                                    <option data-i18n="monster-race-hedgehog" data-i18n-list-item="hedgehog" value="57"></option>
+                                                    <option data-i18n="monster-race-hyena" data-i18n-list-item="hyena" value="58"></option>
+                                                    <option data-i18n="monster-race-horse" data-i18n-list-item="horse" value="59"></option>
+                                                    <option data-i18n="monster-race-leopard" data-i18n-list-item="leopard" value="60"></option>
+                                                    <option data-i18n="monster-race-lion" data-i18n-list-item="lion" value="61"></option>
+                                                    <option data-i18n="monster-race-lizard" data-i18n-list-item="lizard" value="62"></option>
+                                                    <option data-i18n="monster-race-mara" data-i18n-list-item="mara" value="63"></option>
+                                                    <option data-i18n="monster-race-monkey" data-i18n-list-item="monkey" value="64"></option>
+                                                    <option data-i18n="monster-race-otter" data-i18n-list-item="otter" value="65"></option>
+                                                    <option data-i18n="monster-race-pig" data-i18n-list-item="pig" value="66"></option>
+                                                    <option data-i18n="monster-race-platypus" data-i18n-list-item="platypus" value="67"></option>
+                                                    <option data-i18n="monster-race-pony" data-i18n-list-item="pony" value="68"></option>
+                                                    <option data-i18n="monster-race-porcupine" data-i18n-list-item="porcupine" value="69"></option>
+                                                    <option data-i18n="monster-race-raccoon" data-i18n-list-item="raccoon" value="70"></option>
+                                                    <option data-i18n="monster-race-rat" data-i18n-list-item="rat" value="71"></option>
+                                                    <option data-i18n="monster-race-rhinoceros" data-i18n-list-item="rhinoceros" value="72"></option>
+                                                    <option data-i18n="monster-race-roc" data-i18n-list-item="roc" value="73"></option>
+                                                    <option data-i18n="monster-race-scarlet-spider" data-i18n-list-item="scarlet-spider" value="74"></option>
+                                                    <option data-i18n="monster-race-sloth" data-i18n-list-item="sloth" value="75"></option>
+                                                    <option data-i18n="monster-race-smilodon" data-i18n-list-item="smilodon" value="76"></option>
+                                                    <option data-i18n="monster-race-snapping-turtle" data-i18n-list-item="snapping-turtle" value="77"></option>
+                                                    <option data-i18n="monster-race-snake" data-i18n-list-item="snake" value="78"></option>
+                                                    <option data-i18n="monster-race-spotted-lion" data-i18n-list-item="spotted-lion" value="79"></option>
+                                                    <option data-i18n="monster-race-tiger" data-i18n-list-item="tiger" value="80"></option>
+                                                    <option data-i18n="monster-race-varan" data-i18n-list-item="varan" value="81"></option>
+                                                    <option data-i18n="monster-race-viper" data-i18n-list-item="viper" value="82"></option>
+                                                    <option data-i18n="monster-race-weasel" data-i18n-list-item="weasel" value="83"></option>
+                                                    <option data-i18n="monster-race-wolf" data-i18n-list-item="wolf" value="84"></option>
+                                                </optgroup>
+                                                <optgroup label="" data-i18n-label="monster-race-plant" data-i18n-list-item="plant" data-i18n-list="monster-race-plant-list">
+                                                    <option data-i18n="monster-race-carnivorous-plant" data-i18n-list-item="carnivorous-plant" value="85"></option>
+                                                    <option data-i18n="monster-race-creeping-ivy" data-i18n-list-item="creeping-ivy" value="86"></option>
+                                                    <option data-i18n="monster-race-sylvanian-sprout" data-i18n-list-item="sylvanian-sprout" value="87"></option>
+                                                    <option data-i18n="monster-race-vesse-de-loup" data-i18n-list-item="vesse-de-loup" value="88"></option>
+                                                </optgroup>
+                                                <optgroup label="" data-i18n-label="monster-race-other">
+                                                    <option data-i18n="other" value="0"></option>
+                                                </optgroup>
+                                            </select>
+                                            <input type="text" name="attr_monster_race_other" title="" value="">
+                                        </div>
                                     </td>
                                     <td>
                                         <select name="attr_character_age_select" title="">
@@ -5247,6 +5347,109 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+
+                    <div class="template-playable-character">
+                        <div class="template-character-race-standard">
+                            <div class="flex-row">
+                                <div class="flex-col6">
+                                    <table class="character-height">
+                                        <thead>
+                                        <tr>
+                                            <th width="33.333333%">
+                                                <span data-i18n="character-height" data-i18n-title="character-height-title"></span>
+                                            </th>
+                                            <th width="33.333333%">
+                                                <span data-i18n="character-height-base" data-i18n-title="character-height-base-title"></span>
+                                            </th>
+                                            <th width="33.333333%%">
+                                                <span data-i18n="modifier-short" data-i18n-title="character-height-title"></span>
+                                            </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="disabled text-strong" name="attr_character_height_total" title="" value="" readonly="readonly"/>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="attr_character_height_base" title="" class="disabled" value="" readonly="readonly" />
+                                            </td>
+                                            <td>
+                                                <input type="number" name="attr_character_height_mod" title="" min="1" step="1" value="1">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="flex-col6">
+                                    <table class="character-weight">
+                                        <thead>
+                                        <tr>
+                                            <th width="25%">
+                                                <span data-i18n="weight" data-i18n-title="character-weight-title"></span>
+                                            </th>
+                                            <th width="25%">
+                                                <span data-i18n="character-weight-base" data-i18n-title="character-weight-base-title"></span>
+                                            </th>
+                                            <th width="25%">
+                                                <span data-i18n="character-weight-mod-factor" data-i18n-title="character-weight-mod-factor-title"></span>
+                                            </th>
+                                            <th width="25%%">
+                                                <span data-i18n="modifier-short" data-i18n-title="character-weight-title"></span>
+                                            </th>
+                                            <td></td>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td>
+                                                <input type="text" class="disabled text-strong" name="attr_character_weight_total" value="" title="" readonly="readonly"/>
+                                            </td>
+                                            <td>
+                                                <input type="text" name="attr_character_weight_base" title="" class="disabled" value="" readonly="readonly" />
+                                            </td>
+                                            <td>
+                                                <input type="text" name="attr_character_weight_mod_factor" title="" class="disabled" readonly="readonly" />
+                                            </td>
+                                            <td>
+                                                <input type="number" name="attr_character_weight_mod" title="" min="1" step="1" value="1">
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <table class="character-head">
+                            <thead>
+                            <tr>
+                                <th width="33.333333%">
+                                    <span data-i18n="character-eyes"></span>
+                                </th>
+                                <th width="33.333333%">
+                                    <span data-i18n="character-hair"></span>
+                                </th>
+                                <th width="33.333333%">
+                                    <span data-i18n="character-skin"></span>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td>
+                                    <input type="text" name="attr_character_eyes" title="" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" name="attr_character_hair" title="" value="" />
+                                </td>
+                                <td>
+                                    <input type="text" name="attr_character_skin" title="" value="" />
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="flex-row">
@@ -5540,80 +5743,6 @@
                         </div>
                     </div>
 
-                    <div class="template-playable-character">
-                        <div class="character-race-standard">
-                            <div class="flex-row">
-                                <div class="flex-col6">
-                                    <table class="character-height template-playable-character ">
-                                        <thead>
-                                        <tr>
-                                            <th width="33.333333%">
-                                                <span data-i18n="character-height" data-i18n-title="character-height-title"></span>
-                                            </th>
-                                            <th width="33.333333%">
-                                                <span data-i18n="character-height-base" data-i18n-title="character-height-base-title"></span>
-                                            </th>
-                                            <th width="33.333333%%">
-                                                <span data-i18n="modifier-short" data-i18n-title="character-height-title"></span>
-                                            </th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="text" class="disabled text-strong" name="attr_character_height_total" title="" value="" readonly="readonly"/>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="attr_character_height_base" title="" class="disabled" value="" readonly="readonly" />
-                                            </td>
-                                            <td>
-                                                <input type="number" name="attr_character_height_mod" title="" min="1" step="1" value="1">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                                <div class="flex-col6">
-                                    <table class="character-weight template-playable-character ">
-                                        <thead>
-                                        <tr>
-                                            <th width="25%">
-                                                <span data-i18n="weight" data-i18n-title="character-weight-title"></span>
-                                            </th>
-                                            <th width="25%">
-                                                <span data-i18n="character-weight-base" data-i18n-title="character-weight-base-title"></span>
-                                            </th>
-                                            <th width="25%">
-                                                <span data-i18n="character-weight-mod-factor" data-i18n-title="character-weight-mod-factor-title"></span>
-                                            </th>
-                                            <th width="25%%">
-                                                <span data-i18n="modifier-short" data-i18n-title="character-weight-title"></span>
-                                            </th>
-                                            <td></td>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td>
-                                                <input type="text" class="disabled text-strong" name="attr_character_weight_total" value="" title="" readonly="readonly"/>
-                                            </td>
-                                            <td>
-                                                <input type="text" name="attr_character_weight_base" title="" class="disabled" value="" readonly="readonly" />
-                                            </td>
-                                            <td>
-                                                <input type="text" name="attr_character_weight_mod_factor" title="" class="disabled" readonly="readonly" />
-                                            </td>
-                                            <td>
-                                                <input type="number" name="attr_character_weight_mod" title="" min="1" step="1" value="1">
-                                            </td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
                     <textarea name="attr_character_race_note" title=""></textarea>
                 </div>
 
@@ -5747,11 +5876,11 @@
                         </tbody>
                     </table>
                     <fieldset class="repeating_class">
-                        <input type="hidden" name="attr_class_toggle" title="" class="class-toggle" value="hide" />
                         <table>
                             <tbody>
                             <tr>
                                 <td width="23.076923%">
+                                    <input type="hidden" name="attr_class_toggle" title="" class="class-toggle" value="hide" />
                                     <div class="input-group class-container-toggle">
                                         <select name="attr_class_name" title="">
                                             <optgroup label="" data-i18n-label="classes-core" data-i18n-list="classes-core-list">
@@ -5858,60 +5987,65 @@
                         <div class="class-specialization-content">
                             <div class="flex-row">
                                 <div class="flex-col3">
-                                    <select name="attr_class_specialization_name" title="">
-                                        <optgroup label="" data-i18n-label="classes-core" data-i18n-list="classes-core-list">
-                                            <option data-i18n="class-barbarian" data-i18n-list-item="barbarian" value="1" selected="selected"></option>
-                                            <option data-i18n="class-bard" data-i18n-list-item="bard" value="2"></option>
-                                            <option data-i18n="class-cleric" data-i18n-list-item="cleric" value="3"></option>
-                                            <option data-i18n="class-druid" data-i18n-list-item="druid" value="4"></option>
-                                            <option data-i18n="class-fighter" data-i18n-list-item="fighter" value="5"></option>
-                                            <option data-i18n="class-monk" data-i18n-list-item="monk" value="6"></option>
-                                            <option data-i18n="class-paladin" data-i18n-list-item="paladin" value="7"></option>
-                                            <option data-i18n="class-ranger" data-i18n-list-item="ranger" value="8"></option>
-                                            <option data-i18n="class-rogue" data-i18n-list-item="rogue" value="9"></option>
-                                            <option data-i18n="class-sorcerer" data-i18n-list-item="sorcerer" value="10"></option>
-                                            <option data-i18n="class-wizard" data-i18n-list-item="wizard" value="11"></option>
-                                        </optgroup>
-                                        <optgroup label="" data-i18n-label="classes-extension" data-i18n-list="classes-extension-list">
-                                            <option data-i18n="class-alchemist" data-i18n-list-item="alchemist" value="12"></option>
-                                            <option data-i18n="class-antipaladin" data-i18n-list-item="antipaladin" value="13"></option>
-                                            <option data-i18n="class-cavalier" data-i18n-list-item="cavalier" value="14"></option>
-                                            <option data-i18n="class-gunslinger" data-i18n-list-item="gunslinger" value="15"></option>
-                                            <option data-i18n="class-inquisitor" data-i18n-list-item="inquisitor" value="16"></option>
-                                            <option data-i18n="class-magus" data-i18n-list-item="magus" value="17"></option>
-                                            <option data-i18n="class-ninja" data-i18n-list-item="ninja" value="18"></option>
-                                            <option data-i18n="class-oracle" data-i18n-list-item="oracle" value="19"></option>
-                                            <option data-i18n="class-samurai" data-i18n-list-item="samurai" value="20"></option>
-                                            <option data-i18n="class-shifter" data-i18n-list-item="shifter" value="21"></option>
-                                            <option data-i18n="class-summoner" data-i18n-list-item="summoner" value="22"></option>
-                                            <option data-i18n="class-vampire-hunter" data-i18n-list-item="vampire-hunter" value="23"></option>
-                                            <option data-i18n="class-vigilante" data-i18n-list-item="vigilante" value="24"></option>
-                                            <option data-i18n="class-witch" data-i18n-list-item="witch" value="25"></option>
-                                        </optgroup>
-                                        <optgroup label="" data-i18n-label="classes-hybrid" data-i18n-list="classes-hybrid-list">
-                                            <option data-i18n="class-arcanist" data-i18n-list-item="arcanist" value="26"></option>
-                                            <option data-i18n="class-brawler" data-i18n-list-item="brawler" value="27"></option>
-                                            <option data-i18n="class-bloodrager" data-i18n-list-item="bloodrager" value="28"></option>
-                                            <option data-i18n="class-hunter" data-i18n-list-item="hunter" value="29"></option>
-                                            <option data-i18n="class-investigator" data-i18n-list-item="investigator" value="30"></option>
-                                            <option data-i18n="class-shaman" data-i18n-list-item="shaman" value="31"></option>
-                                            <option data-i18n="class-skald" data-i18n-list-item="skald" value="32"></option>
-                                            <option data-i18n="class-slayer" data-i18n-list-item="slayer" value="33"></option>
-                                            <option data-i18n="class-swashbuckler" data-i18n-list-item="swashbuckler" value="34"></option>
-                                            <option data-i18n="class-warpriest" data-i18n-list-item="warpriest" value="35"></option>
-                                        </optgroup>
-                                        <optgroup label="" data-i18n-label="classes-occult" data-i18n-list="classes-occult-list">
-                                            <option data-i18n="class-kineticist" data-i18n-list-item="kineticist" value="36"></option>
-                                            <option data-i18n="class-mesmerist" data-i18n-list-item="mesmerist" value="37"></option>
-                                            <option data-i18n="class-medium" data-i18n-list-item="medium" value="38"></option>
-                                            <option data-i18n="class-occultist" data-i18n-list-item="occultist" value="39"></option>
-                                            <option data-i18n="class-psychic" data-i18n-list-item="psychic" value="40"></option>
-                                            <option data-i18n="class-spiritualist" data-i18n-list-item="spiritualist" value="41"></option>
-                                        </optgroup>
-                                        <optgroup label="" data-i18n-label="classes-other">
-                                            <option data-i18n="other" value="0"></option>
-                                        </optgroup>
-                                    </select>
+                                    <input type="hidden" name="attr_class_specialization_toggle" title="" class="class-specialization-toggle" value="hide" />
+                                    <div class="input-group class-container-toggle">
+                                        <select name="attr_class_specialization_name" title="">
+                                            <optgroup label="" data-i18n-label="classes-core" data-i18n-list="classes-core-list">
+                                                <option data-i18n="class-barbarian" data-i18n-list-item="barbarian" value="1" selected="selected"></option>
+                                                <option data-i18n="class-bard" data-i18n-list-item="bard" value="2"></option>
+                                                <option data-i18n="class-cleric" data-i18n-list-item="cleric" value="3"></option>
+                                                <option data-i18n="class-druid" data-i18n-list-item="druid" value="4"></option>
+                                                <option data-i18n="class-fighter" data-i18n-list-item="fighter" value="5"></option>
+                                                <option data-i18n="class-monk" data-i18n-list-item="monk" value="6"></option>
+                                                <option data-i18n="class-paladin" data-i18n-list-item="paladin" value="7"></option>
+                                                <option data-i18n="class-ranger" data-i18n-list-item="ranger" value="8"></option>
+                                                <option data-i18n="class-rogue" data-i18n-list-item="rogue" value="9"></option>
+                                                <option data-i18n="class-sorcerer" data-i18n-list-item="sorcerer" value="10"></option>
+                                                <option data-i18n="class-wizard" data-i18n-list-item="wizard" value="11"></option>
+                                            </optgroup>
+                                            <optgroup label="" data-i18n-label="classes-extension" data-i18n-list="classes-extension-list">
+                                                <option data-i18n="class-alchemist" data-i18n-list-item="alchemist" value="12"></option>
+                                                <option data-i18n="class-antipaladin" data-i18n-list-item="antipaladin" value="13"></option>
+                                                <option data-i18n="class-cavalier" data-i18n-list-item="cavalier" value="14"></option>
+                                                <option data-i18n="class-gunslinger" data-i18n-list-item="gunslinger" value="15"></option>
+                                                <option data-i18n="class-inquisitor" data-i18n-list-item="inquisitor" value="16"></option>
+                                                <option data-i18n="class-magus" data-i18n-list-item="magus" value="17"></option>
+                                                <option data-i18n="class-ninja" data-i18n-list-item="ninja" value="18"></option>
+                                                <option data-i18n="class-oracle" data-i18n-list-item="oracle" value="19"></option>
+                                                <option data-i18n="class-samurai" data-i18n-list-item="samurai" value="20"></option>
+                                                <option data-i18n="class-shifter" data-i18n-list-item="shifter" value="21"></option>
+                                                <option data-i18n="class-summoner" data-i18n-list-item="summoner" value="22"></option>
+                                                <option data-i18n="class-vampire-hunter" data-i18n-list-item="vampire-hunter" value="23"></option>
+                                                <option data-i18n="class-vigilante" data-i18n-list-item="vigilante" value="24"></option>
+                                                <option data-i18n="class-witch" data-i18n-list-item="witch" value="25"></option>
+                                            </optgroup>
+                                            <optgroup label="" data-i18n-label="classes-hybrid" data-i18n-list="classes-hybrid-list">
+                                                <option data-i18n="class-arcanist" data-i18n-list-item="arcanist" value="26"></option>
+                                                <option data-i18n="class-brawler" data-i18n-list-item="brawler" value="27"></option>
+                                                <option data-i18n="class-bloodrager" data-i18n-list-item="bloodrager" value="28"></option>
+                                                <option data-i18n="class-hunter" data-i18n-list-item="hunter" value="29"></option>
+                                                <option data-i18n="class-investigator" data-i18n-list-item="investigator" value="30"></option>
+                                                <option data-i18n="class-shaman" data-i18n-list-item="shaman" value="31"></option>
+                                                <option data-i18n="class-skald" data-i18n-list-item="skald" value="32"></option>
+                                                <option data-i18n="class-slayer" data-i18n-list-item="slayer" value="33"></option>
+                                                <option data-i18n="class-swashbuckler" data-i18n-list-item="swashbuckler" value="34"></option>
+                                                <option data-i18n="class-warpriest" data-i18n-list-item="warpriest" value="35"></option>
+                                            </optgroup>
+                                            <optgroup label="" data-i18n-label="classes-occult" data-i18n-list="classes-occult-list">
+                                                <option data-i18n="class-kineticist" data-i18n-list-item="kineticist" value="36"></option>
+                                                <option data-i18n="class-mesmerist" data-i18n-list-item="mesmerist" value="37"></option>
+                                                <option data-i18n="class-medium" data-i18n-list-item="medium" value="38"></option>
+                                                <option data-i18n="class-occultist" data-i18n-list-item="occultist" value="39"></option>
+                                                <option data-i18n="class-psychic" data-i18n-list-item="psychic" value="40"></option>
+                                                <option data-i18n="class-spiritualist" data-i18n-list-item="spiritualist" value="41"></option>
+                                            </optgroup>
+                                            <optgroup label="" data-i18n-label="classes-other">
+                                                <option data-i18n="other" value="0"></option>
+                                            </optgroup>
+                                        </select>
+                                        <input type="text" name="attr_class_specialization_other" title="" value="">
+                                    </div>
+
                                 </div>
                                 <div class="flex-col3"></div>
                                 <div class="flex-col2">
@@ -6162,7 +6296,7 @@
                                 <span data-i18n="bonus"></span>
                             </th>
                             <th width="12.5%">
-                                <span data-i18n="miscellaneous"></span>
+                                <span data-i18n="penalty"></span>
                             </th>
                             <th width="12.5%">
                                 <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
@@ -6180,7 +6314,7 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_combat_maneuver_bonus_category_height}+@{foo_status_cmb}+@{combat_maneuver_bonus_bonus}+@{combat_maneuver_bonus_temporary}+@{combat_maneuver_bonus_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_combat_maneuver_bonus_category_height}+@{foo_status_cmb}+@{combat_maneuver_bonus_bonus}+@{combat_maneuver_bonus_temporary}+@{combat_maneuver_bonus_penalty}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_base_attack_bonus" title="" value="@{foo_class_base_attack_bonus1_total}" disabled="disabled"/>
@@ -6198,7 +6332,7 @@
                                 <input type="number" name="attr_combat_maneuver_bonus_bonus" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_misc" title="" step="1" value="0"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_penalty" title="" step="1" value="0"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_temporary" title="" step="1" value="0"/>
@@ -6282,7 +6416,7 @@
                                                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
                                                             </th>
                                                             <th width="11.111111%">
-                                                                <span data-i18n="battle-equipment-short" data-i18n-title="battle-equipment-title"></span>
+                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                             </th>
                                                             <th width="11.111111%">
                                                                 <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
@@ -6300,7 +6434,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_category_height_select}+(@{foo_status_load_proficiency}+@{foo_status_attack})+@{battle_mod_equipment}+@{battle_mod_temporary}" disabled="disabled" />
+                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_category_height_select}+(@{foo_status_load_proficiency}+@{foo_status_attack})+@{battle_mod_misc}+@{battle_mod_temporary}" disabled="disabled" />
                                                             </td>
                                                             <td>
                                                                 <div class="input-group">
@@ -6329,7 +6463,7 @@
                                                                 <input type="number" name="attr_battle_status" title="" value="@{foo_status_load_proficiency}+@{foo_status_attack}" disabled="disabled" />
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="attr_battle_mod_equipment" title="" step="1" value="0"/>
+                                                                <input type="number" name="attr_battle_mod_misc" title="" step="1" value="0"/>
                                                             </td>
                                                             <td>
                                                                 <input type="number" name="attr_battle_mod_temporary" title="" step="1" value="0"/>
@@ -6541,16 +6675,19 @@
                                 <thead>
                                 <tr>
                                     <td width="1%"></td>
-                                    <th width="25%">
+                                    <th width="20%">
                                         <span data-i18n="total" data-i18n-title="caster-level-total-title"></span>
                                     </th>
-                                    <th width="25%">
+                                    <th width="20%">
                                         <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                     </th>
-                                    <th width="25%">
+                                    <th width="20%">
                                         <span data-i18n="miscellaneous"></span>
                                     </th>
-                                    <th width="25%">
+                                    <th width="20%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                    <th width="20%">
                                         <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
                                     </th>
                                 </tr>
@@ -6596,6 +6733,9 @@
                                     <td>
                                         <input type="number" name="attr_caster_level_misc" title="" step="1" value="0"/>
                                     </td>
+                                    <td>
+                                        <input type="number" name="attr_caster_level_temporary" title="" step="1" value="0"/>
+                                    </td>
                                     <th>
                                         <input type="number" name="attr_caster_level_status" title="" value="@{foo_status_level}" disabled="disabled"/>
                                     </th>
@@ -6612,13 +6752,16 @@
                             <table>
                                 <thead>
                                 <tr>
-                                    <th width="33.333333%">
+                                    <th width="25%">
                                         <span data-i18n="total" data-i18n-title="spell-arcane-spell-failure-chance-total"></span>
                                     </th>
-                                    <th width="33.333333%">
+                                    <th width="25%">
                                         <span data-i18n="spell-arcane-spell-failure-chance-armor-short" data-i18n-title="spell-arcane-spell-failure-chance-armor-title"></span>
                                     </th>
-                                    <th width="33.333333%">
+                                    <th width="25%">
+                                        <span data-i18n="miscellaneous"></span>
+                                    </th>
+                                    <th width="25%">
                                         <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                     </th>
                                 </tr>
@@ -6632,7 +6775,10 @@
                                         <input type="text" class="disabled" name="attr_arcane_spell_failure_malus_percent" title="" value="0%" readonly="readonly"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_spell_failure_misc" title="" value="0%" />
+                                        <input type="number" name="attr_spell_failure_misc" title="" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_spell_failure_temporary" title="" value="0" />
                                     </td>
                                 </tr>
                                 </tbody>
@@ -6768,6 +6914,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_spell_summary_note" title=""></textarea>
                 </div>
 
@@ -7071,27 +7218,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spellcustom_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spellcustom_misc}+@{spellcustom_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spellcustom_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spellcustom_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spellcustom_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -7940,27 +8093,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell0_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell0_misc}+@{spell0_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell0_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell0_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell0_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -8809,27 +8968,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell1_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell1_misc}+@{spell1_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell1_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell1_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell1_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -9678,27 +9843,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell2_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell2_misc}+@{spell2_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell2_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell2_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell2_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -10547,27 +10718,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell3_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell3_misc}+@{spell3_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell3_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell3_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell3_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -11416,27 +11593,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell4_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell4_misc}+@{spell4_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell4_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell4_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell4_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -12285,27 +12468,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell5_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell5_misc}+@{spell5_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell5_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell5_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell5_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -13154,27 +13343,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell6_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell6_misc}+@{spell6_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell6_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell6_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell6_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -13753,7 +13948,7 @@
                                 </div>
                             </fieldset>
                         </div>
-                        
+
                         <label class="tab-label" data-i18n-title="spell-lvl7-title">
                             <span>7</span>
                         </label>
@@ -14023,27 +14218,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell7_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell7_misc}+@{spell7_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell7_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell7_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell7_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -14622,7 +14823,7 @@
                                 </div>
                             </fieldset>
                         </div>
-                        
+
                         <label class="tab-label" data-i18n-title="spell-lvl8-title">
                             <span>8</span>
                         </label>
@@ -14892,27 +15093,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell8_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell8_misc}+@{spell8_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell8_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell8_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell8_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -15761,27 +15968,33 @@
                                                                     <table>
                                                                         <thead>
                                                                         <tr>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="total" data-i18n-title="spell-incantation-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25">
                                                                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                                                                             </th>
-                                                                            <th width="33.333333%">
+                                                                            <th width="25%">
                                                                                 <span data-i18n="miscellaneous"></span>
+                                                                            </th>
+                                                                            <th width="25%">
+                                                                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                                                             </th>
                                                                         </tr>
                                                                         </thead>
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell9_misc}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_incantation_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{foo_status_concentration}+@{spell9_misc}+@{spell9_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell9_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell9_misc" title="" step="1" value="0"/>
+                                                                            </td>
+                                                                            <td>
+                                                                                <input type="number" name="attr_spell9_temporary" title="" step="1" value="0"/>
                                                                             </td>
                                                                         </tr>
                                                                         </tbody>
@@ -16402,7 +16615,7 @@
                                 <span data-i18n="bonus"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="resistance-short" data-i18n-title="resistance-title"></span>
+                                <span data-i18n="penalty"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="miscellaneous"></span>
@@ -16423,7 +16636,7 @@
                                 <span data-i18n="save-reflex"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}+@{reflex_resistance}+@{reflex_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}+@{reflex_penalty}+@{reflex_misc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_base" title="" value="@{class_reflex_total}" disabled="disabled" />
@@ -16446,7 +16659,7 @@
                                 <input type="number" name="attr_reflex_bonus" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_resistance" title="" min="0" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_penalty" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_misc" title="" step="1" value="0"/>
@@ -16566,25 +16779,25 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{foo_status_ac_melee}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{armor_class_mod_temporary}+@{foo_status_ac_melee}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_ac_melee}" data-i18n-title="modifier-status-title" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{foo_status_ac_ranged}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{armor_class_mod_temporary}+@{foo_status_ac_ranged}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_ac_ranged}" data-i18n-title="modifier-status-title" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_status_dexterity_flatfooted}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_status_dexterity_flatfooted}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_dodge}+@{armor_class_mod_deflexion}+@{armor_class_mod_misc}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -16593,29 +16806,32 @@
                     <table class="defense-armor-class-detail">
                         <thead>
                         <tr>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="base"></span>
                             </th>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="armor" data-i18n-title="armor-class-armor-title"></span>
                             </th>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="character-dexterity-short" data-i18n-title="armor-class-modifier-dexterity-title"></span>
                             </th>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="modifier-height-short" data-i18n-title="modifier-height-title"></span>
                             </th>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="armor-class-natural-armor-short" data-i18n-title="armor-class-natural-armor-title"></span>
                             </th>
-                            <th width="12.5%">
-                                <span data-i18n="dodge"></span>
+                            <th width="11.111111%">
+                                <span data-i18n="defense-dodge"></span>
                             </th>
-                            <th width="12.5%">
-                                <span data-i18n="armor-class-deflexion"></span>
+                            <th width="11.111111%">
+                                <span data-i18n="defense-deflexion"></span>
                             </th>
-                            <th width="12.5%">
+                            <th width="11.111111%">
                                 <span data-i18n="miscellaneous"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
@@ -16645,9 +16861,13 @@
                             <td>
                                 <input type="number" name="attr_armor_class_mod_misc" title="" step="1" value="0"/>
                             </td>
+                            <td>
+                                <input type="number" name="attr_armor_class_mod_temporary" title="" step="1" value="0"/>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_equipment_summary_note" title=""></textarea>
                 </div>
 
@@ -16656,39 +16876,45 @@
                     <table>
                         <thead>
                         <tr>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="combat-maneuver-defense-short" data-i18n-title="combat-maneuver-defense-total-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="base"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="base-attack-bonus-short" data-i18n-title="combat-maneuver-defense-base-attack-bonus-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="modifier-special-height-short" data-i18n-title="modifier-special-height-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="character-strength-short" data-i18n-title="modifier-strength-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="character-dexterity-short" data-i18n-title="combat-maneuver-defense-modifier-dexterity-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
                             </th>
-                            <th width="11.111111%">
-                                <span data-i18n="dodge"></span>
+                            <th width="9.090909%">
+                                <span data-i18n="defense-dodge"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="9.090909%">
+                                <span data-i18n="defense-deflexion"></span>
+                            </th>
+                            <th width="9.090909%">
                                 <span data-i18n="miscellaneous"></span>
+                            </th>
+                            <th width="9.090909%">
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_character_strength_mod}+@{foo_combat_maneuver_defense_dexterity}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_dodge}+@{combat_maneuver_defense_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_character_strength_mod}+@{foo_combat_maneuver_defense_dexterity}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_dodge}+@{combat_maneuver_defense_deflexion}+@{combat_maneuver_defense_misc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_base" title="" value="10" disabled="disabled"/>
@@ -16712,6 +16938,9 @@
                                 <input type="number" name="attr_combat_maneuver_defense_dodge" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
+                                <input type="number" name="attr_combat_maneuver_defense_deflexion" title="" step="1" value="0"/>
+                            </td>
+                            <td>
                                 <input type="number" name="attr_combat_maneuver_defense_misc" title="" step="1" value="0"/>
                             </td>
                         </tr>
@@ -16730,30 +16959,33 @@
                     <table>
                         <thead>
                         <tr>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-title"></span>
                             </th>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="caster-level-short" data-i18n-title="caster-level-title"></span>
                             </th>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="racial"></span>
                             </th>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="spell-short" data-i18n-title="spell-title"></span>
                             </th>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="object"></span>
                             </th>
-                            <th width="16.666666%">
+                            <th width="14.285714%">
                                 <span data-i18n="miscellaneous"></span>
+                            </th>
+                            <th width="14.285714%">
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_spell_resistance_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{spell_resistance_racial}+@{spell_resistance_spell}+@{spell_resistance_object}+@{spell_resistance_misc}" disabled="disabled"/>
+                                <input type="number" name="attr_spell_resistance_total" title="" class="text-strong" value="@{foo_caster_level_total}+@{spell_resistance_racial}+@{spell_resistance_spell}+@{spell_resistance_object}+@{spell_resistance_misc}+@{spell_resistance_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_spell_resistance_caster_level" title="" value="@{foo_caster_level_total}" disabled="disabled" />
@@ -16769,6 +17001,9 @@
                             </td>
                             <td>
                                 <input type="number" name="attr_spell_resistance_misc" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_spell_resistance_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         </tbody>
@@ -19178,6 +19413,16 @@
                                         <td width="12%">
                                             <input type="number" name="attr_equipment_weight" title="" min="0" step="0.01" value="0"/>
                                         </td>
+                                        <td>
+                                            <button
+                                                    type="action"
+                                                    name="act_inventory-to-deposit"
+                                                    class="button button-small"
+                                                    data-i18n-title="equipment-inventory-to-deposit-title"
+                                            >
+                                                <span class="chain"></span>
+                                            </button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -19429,6 +19674,17 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
+                        <div class="note section">
+                            <fieldset class="repeating_note">
+                                <div class="note-content">
+                                    <input type="text" name="attr_featracial_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
+                                    <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="flex-col6">
                         <div class="bank section">
                             <table>
                                 <thead>
@@ -19464,19 +19720,65 @@
                                 </tbody>
                             </table>
                         </div>
-                    </div>
-                </div>
 
-                <div class="note section">
-                    <fieldset class="repeating_note">
-                        <div class="note-content">
-                            <input type="text" name="attr_featracial_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
-                            <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
+                        <h1 data-18n="deposit-h1"></h1>
+                        <div class="deposit section">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th width="76%">
+                                        <span data-i18n="description"></span>
+                                    </th>
+                                    <th width="12%">
+                                        <span data-i18n="quantity-short" data-i18n-title="quantity-title"></span>
+                                    </th>
+                                    <th width="12%">
+                                        <span data-i18n="weight" data-i18n-title="weight-unit-title"></span>
+                                    </th>
+                                    <th>
+                                        <div class="button-fake"></div>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                            <fieldset class="repeating_deposit">
+                                <table>
+                                    <tbody>
+                                    <tr>
+                                        <td width="76%">
+                                            <input type="text" name="attr_deposit_label" title=""/>
+                                        </td>
+                                        <td width="12%">
+                                            <input type="number" name="attr_deposit_quantity" title="" min="1" step="1" value="1"/>
+                                        </td>
+                                        <td width="12%">
+                                            <input type="number" name="attr_deposit_weight" title="" min="0" step="0.01" value="0"/>
+                                        </td>
+                                        <td>
+                                            <button
+                                                    type="action"
+                                                    name="act_deposit-to-inventory"
+                                                    class="button button-small"
+                                                    data-i18n-title="deposit-deposit-to-inventory-title"
+                                            >
+                                                <span class="chain"></span>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </fieldset>
                         </div>
-                    </fieldset>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="template-non-playable-character">
+        todo
     </div>
 </div>
 
@@ -19507,7 +19809,7 @@
         <div class="sheet-center">
             <p>
                 <b>{{attack_name}}</b><br />
-                <b><span data-i18n="rt-attack-short" data-i18n-title="rt-attack-title"></span></b> : {{test}}<br />
+                <b><span data-i18n="rt-attack"></span></b> : {{test}}<br />
                 {{#rollWasCrit() test}}<b><span data-i18n="rt-critic-confirmation-short" data-i18n-title="rt-critic-confirmation-title"></span></b> : {{test_critic}}<br />{{/rollWasCrit() test}}
             </p>
         </div>
