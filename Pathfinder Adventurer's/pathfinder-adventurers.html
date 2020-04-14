@@ -1423,7 +1423,11 @@
                                     }
                                     break;
 
-                                case 2 : // pc
+                                case 2 : // npc
+                                    // todo
+                                    break;
+
+                                case 3 : // pc
                                     if (user.character_age < local.race[user.character_race][7]) { // youth
                                         cache.aging_dexterity = 2;
                                         cache.aging_strength = cache.aging_constitution = cache.aging_constitution = cache.aging_wisdom = -2;
@@ -1895,7 +1899,11 @@
                                     load["character_life_points_mythical"] = 0;
                                     break;
 
-                                case 2: // playable character
+                                case 2: // non playable character
+                                    load["foo_option_template"] = "npc";
+                                    break;
+
+                                case 3: // playable character
                                     load["foo_option_template"] = "pc";
                                     break;
                             }
@@ -2070,7 +2078,7 @@
             });
         });
 
-    // character height + character weight
+    // character height + character weight + character race
     on("sheet:opened"
         + " change:option_unit_decimal change:option_unit_thousand change:option_unit_height change:option_unit_weight"
         + " change:character_race change:character_sex"
@@ -2207,6 +2215,22 @@
 
                 delete(user);
                 delete(cache);
+
+                // send load
+                setAttrs(load);
+            });
+        });
+
+    // monster race
+    on("sheet:opened"
+        + " change:monster_race_toggle"
+        , () => {
+            getAttrsNumber(["monster_race_toggle"], (user) => {
+                // prepare load
+                let load = {};
+                load["monster_race_toggle"] = ( user.character_race === 0 ? "show": "hide" );
+
+                delete(user);
 
                 // send load
                 setAttrs(load);
@@ -2379,6 +2403,29 @@
             });
         });
 
+    // class name
+    on("change:repeating_class_specialization:class_specialization_name", (e) => {
+        // format "repeating_class_specialization_-LrcL2qT7lhjZ6BZrble_class_specialization_name"
+        let source = e.sourceAttribute.replace(/class_specialization_name/, '');
+
+        let load = {};
+        switch(+e.newValue) {
+            case 0: // other
+                load[source+"class_specialization_toggle"] = "show";
+                break;
+
+            default:
+                load[source+"class_specialization_toggle"] = "hide";
+                break;
+        }
+
+        // send load
+        setAttrs(load);
+    });
+
+    // ------------------------------------------
+    // battle
+    // ------------------------------------------
     // weapon attribute modifier roll
     // ( need a custom handler, to be able to use the compendium drop )
     on("sheet:opened"
@@ -3799,7 +3846,7 @@
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
 </div>
 
-<input type="hidden" name="attr_foo_option_template" value="pj" />
+<input type="hidden" name="attr_foo_option_template" value="pc" />
 <input type="hidden" name="attr_foo_option_health" value="standard" />
 <input type="hidden" name="attr_foo_option_attack_roll" value="target" />
 <input type="hidden" name="attr_foo_option_whisper" value="" />
@@ -4266,7 +4313,8 @@
                                                 </div>
                                                 <select name="attr_option_template" title="" data-i18n-list="option-template-list">
                                                     <option value="1" data-i18n="option-template-monster" data-i18n-list-item="monster"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
+                                                    <option value="2" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
+                                                    <option value="3" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
                                                 </select>
                                             </div>
                                         </div>

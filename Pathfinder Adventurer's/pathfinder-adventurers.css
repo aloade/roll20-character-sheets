@@ -98,17 +98,21 @@ html, body {
 }
 
 input[name="attr_foo_option_template"][value="monster"] ~ div .sheet-template-monster,
+input[name="attr_foo_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
 input[name="attr_foo_option_template"][value="pc"] ~ div .sheet-template-playable-character {
     display: block;
 }
 
 input[name="attr_foo_option_template"][value="monster"] ~ div tr.sheet-template-monster,
+input[name="attr_foo_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
 input[name="attr_foo_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
     display: table-row;
 }
 
 input[name="attr_foo_option_template"][value="monster"] ~ div th.sheet-template-monster,
 input[name="attr_foo_option_template"][value="monster"] ~ div td.sheet-template-monster,
+input[name="attr_foo_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
+input[name="attr_foo_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
 input[name="attr_foo_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
 input[name="attr_foo_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
     display: table-cell;
