@@ -292,6 +292,7 @@
     // ------------------------------------------
     on("change:compendium_name", (e) => {
         getAttrsNumber([
+            "option_template",
             "compendium_category_height_active", "compendium_unit_active", "option_unit_height", "option_unit_weight",
             "character_category_height_select"
         ], (user_number) => {
@@ -302,9 +303,11 @@
                 "compendium_area","compendium_casting_time","compendium_components","compendium_duration","compendium_effect","compendium_saving_throw","compendium_school","compendium_special","compendium_spell_damage","compendium_spell_damage_type","compendium_target",
                 "compendium_armor_class","compendium_alignment","compendium_aura","compendium_base_attack_bonus","compendium_breath_weapon","compendium_challenge_rating","compendium_charisma", "compendium_cleric_spell_prepared","compendium_combat_maneuver_bonus","compendium_combat_maneuver_defense","compendium_constitution","compendium_creature_type", "compendium_damage_resistance","compendium_defensive_ability","compendium_dexterity","compendium_environment","compendium_experience","compendium_feat","compendium_fortitude", "compendium_hit_points","compendium_immune","compendium_initiative","compendium_intelligence","compendium_languages","compendium_monster_class","compendium_melee_attack","compendium_organization", "compendium_ranged_attack","compendium_racial_modifier","compendium_reach","compendium_reflex","compendium_resistance","compendium_sense","compendium_skill","compendium_space", "compendium_special_quality","compendium_special_attack","compendium_speed","compendium_spell_known","compendium_spell_like_ability","compendium_size", "compendium_strength","compendium_treasure","compendium_weakness","compendium_willpower","compendium_wisdom"
             ], (user_string) => {
-                let cache = {};
-                cache.meter = getTranslationByKey("option-unit-meter-short");
-                cache.kilogram = getTranslationByKey("option-unit-kilogram-short");
+                let cache = {
+                    "type": null,
+                    "meter": getTranslationByKey("option-unit-meter-short"),
+                    "kilogram": getTranslationByKey("option-unit-kilogram-short")
+                };
 
                 // clean values
                 for ( let prop in user_string) {
@@ -329,28 +332,39 @@
                 }
 
                 // detect type of object
-                switch(user_string.compendium_category.toLowerCase()) {
-                    case "bestiary":
-                        cache.type = "monster";
-                        break;
+                if ( user_string.hasOwnProperty("compendium_category")) {
+                    switch (user_string.compendium_category.toLowerCase()) {
+                        case "bestiary":
+                            if (user_string.option_template === 2) cache.type = "monster";
+                            break;
 
-                    case "items":
-                        if ( user_string.compendium_armor_category !== "" ) {
-                            cache.type = "armor";
-                        }
-                        else if ( user_string.compendium_weapon_category !== "" ) {
-                            cache.type = "weapon";
-                        }
-                        else {
-                            cache.type = "other";
-                        }
-                        break;
+                        case "items":
+                            if (user_string.option_template !== 2) {
+                                if (user_string.compendium_armor_category !== "") {
+                                    cache.type = "armor";
+                                }
+                                else if (user_string.compendium_weapon_category !== "") {
+                                    cache.type = "weapon";
+                                }
+                                else {
+                                    cache.type = "other";
+                                }
+                            }
+                            break;
 
-                    case "spells":
-                        cache.type = "spell";
-                        break;
+                        case "spells":
+                            if (user_string.option_template !== 2) cache.type = "spell";
+                            break;
+                    }
                 }
 
+                if ( cache.type === null) {
+                    console.log("'" + user_string.compendium_name + "' drop ignored");
+                    delete(cache);
+                    delete(user_number);
+                    delete(user_string);
+                    return;
+                }
 
                 // iterate data
                 load = {};
@@ -393,8 +407,54 @@
                         break;
 
                     case "monster":
-                        console.log("not implemeted yet, raw data :")
-                        console.log(user_string);
+                        load["monster_armor_class"] = user_string.compendium_armor_class;
+                        load["monster_alignment"] = user_string.compendium_alignment;
+                        load["monster_aura"] = user_string.compendium_aura;
+                        load["monster_base_attack_bonus"] = user_string.compendium_base_attack_bonus;
+                        load["monster_breath_weapon"] = user_string.compendium_breath_weapon;
+                        load["monster_challenge_rating"] = user_string.compendium_challenge_rating;
+                        load["monster_charisma"] = user_string.compendium_charisma;
+                        load["monster_cleric_spell_prepared"] = user_string.compendium_cleric_spell_prepared;
+                        load["monster_combat_maneuver_bonus"] = user_string.compendium_combat_maneuver_bonus;
+                        load["monster_combat_maneuver_defense"] = user_string.compendium_combat_maneuver_defense;
+                        load["monster_constitution"] = user_string.compendium_constitution;
+                        load["monster_content"] = user_string.compendium_content;
+                        load["monster_creature_type"] = user_string.compendium_creature_type;
+                        load["monster_damage_resistance"] = user_string.compendium_damage_resistance;
+                        load["monster_defensive_ability"] = user_string.compendium_defensive_ability;
+                        load["monster_dexterity"] = user_string.compendium_dexterity;
+                        load["monster_environment"] = user_string.compendium_environment;
+                        load["monster_experience"] = user_string.compendium_experience;
+                        load["monster_feat"] = user_string.compendium_feat;
+                        load["monster_fortitude"] = user_string.compendium_fortitude;
+                        load["monster_hit_points"] = user_string.compendium_hit_points;
+                        load["monster_immune"] = user_string.compendium_immune;
+                        load["monster_initiative"] = user_string.compendium_initiative;
+                        load["monster_intelligence"] = user_string.compendium_intelligence;
+                        load["monster_languages"] = user_string.compendium_languages;
+                        load["monster_monster_class"] = user_string.compendium_monster_class;
+                        load["monster_melee_attack"] = user_string.compendium_melee_attack;
+                        load["monster_name"] = user_string.compendium_name;
+                        load["monster_organization"] = user_string.compendium_organization;
+                        load["monster_ranged_attack"] = user_string.compendium_ranged_attack;
+                        load["monster_racial_modifier"] = user_string.compendium_racial_modifier;
+                        load["monster_reach"] = user_string.compendium_reach;
+                        load["monster_reflex"] = user_string.compendium_reflex;
+                        load["monster_resistance"] = user_string.compendium_resistance;
+                        load["monster_sense"] = user_string.compendium_sense;
+                        load["monster_skill"] = user_string.compendium_skill;
+                        load["monster_space"] = user_string.compendium_space;
+                        load["monster_special_quality"] = user_string.compendium_special_quality;
+                        load["monster_special_attack"] = user_string.compendium_special_attack;
+                        load["monster_speed"] = user_string.compendium_speed;
+                        load["monster_spell_known"] = user_string.compendium_spell_known;
+                        load["monster_spell_like_ability"] = user_string.compendium_spell_like_ability;
+                        load["monster_size"] = user_string.compendium_size;
+                        load["monster_strength"] = user_string.compendium_strength;
+                        load["monster_treasure"] = user_string.compendium_treasure;
+                        load["monster_weakness"] = user_string.compendium_weakness;
+                        load["monster_willpower"] = user_string.compendium_willpower;
+                        load["monster_wisdom"] = user_string.compendium_wisdom;
                         break;
 
                     case "other":
@@ -704,13 +764,9 @@
                         // weight
                         load[cache.header+"weight"] = user_string.compendium_weight;
                         break;
-
-                    default:
-                        delete(cache);
-                        console.log("'" + user_string.compendium_name + "' drop ignored");
-                        return;
                 }
                 delete(cache);
+                delete(user_number);
                 delete(user_string);
 
                 // send load
@@ -19725,7 +19781,7 @@
                         <div class="note section">
                             <fieldset class="repeating_note">
                                 <div class="note-content">
-                                    <input type="text" name="attr_featracial_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
+                                    <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
                                     <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
                                 </div>
                             </fieldset>
@@ -19825,8 +19881,119 @@
         </div>
     </div>
 
-    <div class="template-non-playable-character">
-        todo
+    <div class="template-non-playable-character main tab">
+        <span class="main-menu"></span>
+
+        <input class="tab-input" type="radio" name="attr_nav2_tab" title="" value="character" checked="checked">
+        <input class="tab-input" type="radio" name="attr_nav2_tab" title="" value="note">
+
+        <span class="main-slider"></span>
+
+        <label class="tab-label">
+            <span data-i18n="character-nav"></span>
+        </label>
+        <div class="tab-content">
+            <h1>Description</h1>
+            <p>
+                nom <input type="text" name="attr_monster_name" title="" /><br />
+                facteur de puissance <input type="text" name="attr_monster_challenge_rating" title="" /><br />
+                expérience <input type="text" name="attr_monster_experience" title="" /><br />
+                trésor <input type="text" name="attr_monster_treasure" title="" /><br />
+                <br />
+                points de vie <input type="text" name="attr_monster_hit_points" title="" /><br />
+            </p>
+
+            <h1>Caractéristiques</h1>
+            <p>
+                force <input type="text" name="attr_monster_strength" title="" /><br />
+                dexterité <input type="text" name="attr_monster_dexterity" title="" /><br />
+                constitution <input type="text" name="attr_monster_constitution" title="" /><br />
+                intelligence <input type="text" name="attr_monster_intelligence" title="" /><br />
+                charisme <input type="text" name="attr_monster_charisma" title="" /><br />
+                sagesse <input type="text" name="attr_monster_wisdom" title="" /><br />
+            </p>
+            <h1>Physionomie</h1>
+            <p>
+                Taille <input type="text" name="attr_monster_size" title="" /><br />
+                Allonge <input type="text" name="attr_monster_reach" title="" /><br />
+                Espace occupé  <input type="text" name="attr_monster_space" title="" /><br />
+                vitesse <input type="text" name="attr_monster_speed" title="" /><br />
+                langues parlées <input type="text" name="attr_monster_languages" title="" /><br />
+                alignement <input type="text" name="attr_monster_alignment" title="" /><br />
+                sense <input type="text" name="attr_monster_sense" title="" /><br />
+                creature type <input type="text" name="attr_monster_creature_type" title="" /><br />
+                monster class <input type="text" name="attr_monster_monster_class" title="" /><br />
+            </p>
+
+            <h1>Attaque</h1>
+            <p>
+                initiative <input type="text" name="attr_monster_initiative" title="" /><br />
+                BBA <input type="text" name="attr_monster_base_attack_bonus" title="" /><br />
+                breath weapon <input type="text" name="attr_monster_breath_weapon" title="" /><br />
+                melee attack <input type="text" name="attr_monster_melee_attack" title="" /><br />
+                ranged attack <input type="text" name="attr_monster_ranged_attack" title="" /><br />
+                special attack <input type="text" name="attr_monster_special_attack" title="" /><br />
+            </p>
+
+            <h1>Magie</h1>
+            <p>
+                cleric spell prepared <input type="text" name="attr_monster_cleric_spell_prepared" title="" /><br />
+                spell known <input type="text" name="attr_monster_spell_known" title="" /><br />
+                spell like ability <input type="text" name="attr_monster_spell_like_ability" title="" /><br />
+            </p>
+
+            <h1>Défense</h1>
+            <p>
+                defense ability <input type="text" name="attr_monster_defensive_ability" title="" /><br />
+                <br />
+                vigueur <input type="text" name="attr_monster_fortitude" title="" /><br />
+                reflexes <input type="text" name="attr_monster_reflex" title="" /><br />
+                volonté <input type="text" name="attr_monster_willpower" title="" /><br />
+                <br />
+                classe d'armure <input type="text" name="attr_monster_armor_class" title="" /><br />
+                BMO <input type="text" name="attr_monster_combat_maneuver_bonus" title="" /><br />
+                DMD <input type="text" name="attr_monster_combat_maneuver_defense" title="" /><br />
+                <br />
+                résistance <input type="text" name="attr_monster_resistance" title="" /><br />
+                damage resistance <input type="text" name="attr_monster_damage_resistance" title="" /><br />
+                immune <input type="text" name="attr_monster_immune" title="" /><br />
+                weakness <input type="text" name="attr_monster_weakness" title="" />
+            </p>
+
+            <h1>Dons</h1>
+            <p>
+                racial modifier <input type="text" name="attr_monster_racial_modifier" title="" /><br />
+                feat<input type="text" name="attr_monster_feat" title="" /><br />
+                special quality <input type="text" name="attr_monster_special_quality" title="" /><br />
+            </p>
+
+            <h1>Compétences</h1>
+            <p>
+                skill <input type="text" name="attr_monster_skill" title="" /><br />
+                aura <input type="text" name="attr_monster_aura" title="" /><br />
+            </p>
+
+            <h1>Description</h1>
+            <p>
+                Description <input type="text" name="attr_monster_content" title=""/><br />
+                Environment <input type="text" name="attr_monster_environment" title="" /><br />
+                Organisation <input type="text" name="attr_monster_organization" title="" /><br />
+            </p>
+        </div>
+
+        <label class="tab-label">
+            <span data-i18n="note-nav"></span>
+        </label>
+        <div class="tab-content">
+            <div class="note section">
+                <fieldset class="repeating_note">
+                    <div class="note-content">
+                        <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
+                        <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
     </div>
 </div>
 
