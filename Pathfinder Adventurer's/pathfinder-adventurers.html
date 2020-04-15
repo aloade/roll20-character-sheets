@@ -138,7 +138,7 @@
         // language
         // based on 2 characters code ( ISO 639-1 )
         local.language = getTranslationByKey("language");
-        if (local.language === false) local.language = "en";
+        if ( local.language === false ) local.language = "en";
 
         // inline's rolls
         let load = {
@@ -335,15 +335,15 @@
                 if ( user_string.hasOwnProperty("compendium_category")) {
                     switch (user_string.compendium_category.toLowerCase()) {
                         case "bestiary":
-                            if (user_string.option_template === 2) cache.type = "monster";
+                            if ( user_string.option_template === 2 ) cache.type = "monster";
                             break;
 
                         case "items":
-                            if (user_string.option_template !== 2) {
-                                if (user_string.compendium_armor_category !== "") {
+                            if ( user_string.option_template !== 2 ) {
+                                if ( user_string.compendium_armor_category !== "") {
                                     cache.type = "armor";
                                 }
-                                else if (user_string.compendium_weapon_category !== "") {
+                                else if ( user_string.compendium_weapon_category !== "" ) {
                                     cache.type = "weapon";
                                 }
                                 else {
@@ -353,7 +353,7 @@
                             break;
 
                         case "spells":
-                            if (user_string.option_template !== 2) cache.type = "spell";
+                            if ( user_string.option_template !== 2 ) cache.type = "spell";
                             break;
                     }
                 }
@@ -482,13 +482,13 @@
                         cache.content = [];
 
                         // area, target
-                        if (user_string.compendium_area !== "" || user_string.compendium_target !== "" ) {
+                        if ( user_string.compendium_area !== "" || user_string.compendium_target !== "" ) {
                             load[cache.header + "target"] = "";
-                            if (user_string.compendium_area !== "" ) load[cache.header + "target"] += user_string.compendium_area;
-                            if (user_string.compendium_target !== "" ) load[cache.header + "target"] += user_string.compendium_target;
+                            if ( user_string.compendium_area !== "" ) load[cache.header + "target"] += user_string.compendium_area;
+                            if ( user_string.compendium_target !== "" ) load[cache.header + "target"] += user_string.compendium_target;
                         }
                         // casting time
-                        if (user_string.compendium_casting_time !== "" ) {
+                        if ( user_string.compendium_casting_time !== "" ) {
                             // format : <string>
                             // regex : 1 - string
                             cache.casting_time = user_string.compendium_casting_time.match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
@@ -505,7 +505,7 @@
                             }
                         }
                         // components
-                        if (user_string.compendium_components !== "" ) {
+                        if ( user_string.compendium_components !== "" ) {
                             cache.components = user_string.compendium_components.match(/(DF|F|M|S|V)/g);
                             if ( cache.components !== null ) {
                                 load[cache.header + "component_verbal"] = (cache.components.indexOf("V") !== -1 ? 1 : 0);
@@ -517,7 +517,7 @@
                                 cache.components = user_string.compendium_components.match(/\(([^\(^)]+)\)/g);
                                 // format <*> (<string>)
                                 // regex : 2 - materiel details
-                                if (cache.components !== null) {
+                                if ( cache.components !== null ) {
                                     cache.components_description = [];
                                     for ( let i = 0, size = cache.components.length; i < size; i++) {
                                         cache.components_description.push(cache.components[i].slice(1,-1));
@@ -527,14 +527,14 @@
                             }
                         }
                         // damage
-                        if (user_string.compendium_spell_damage !== "" ) {
+                        if ( user_string.compendium_spell_damage !== "" ) {
                             // format : <number>d<number> + <number>
                             // regex : 1 - dice count / 2 - dices / 4 - damage fixed
                             cache.damage = user_string.compendium_spell_damage.match(/([0-9]+)d([0-9]+)(\s+\+\s+([0-9]+))?/i);
                             if ( cache.damage !== null ) {
                                 load[cache.header + "damage_dices_count"] = +cache.damage[1];
                                 load[cache.header + "damage_dices"] = +cache.damage[2];
-                                if (cache.damage[4] !== undefined) load[cache.header + "damage_misc"] = +cache.damage[4];
+                                if ( cache.damage[4] !== undefined ) load[cache.header + "damage_misc"] = +cache.damage[4];
                             }
                             else {
                                 load[cache.header + "damage"] = 1;
@@ -545,7 +545,7 @@
                             load[cache.header + "damage"] = 1;
                         }
                         // duration
-                        if (user_string.compendium_duration !== "" ) {
+                        if ( user_string.compendium_duration !== "" ) {
                             // format : <string>
                             // regex : 1 - string
                             cache.duration = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
@@ -567,17 +567,17 @@
                             }
                         }
                         // effect
-                        if (user_string.compendium_effect !== "" ) {
+                        if ( user_string.compendium_effect !== "" ) {
                             cache.content.push(getTranslationByKey("spell-content-effect") + user_string.compendium_effect);
                         }
                         // name
                         load[cache.header+"name"] = user_string.compendium_name;
                         // spell resistance
-                        if (user_string.compendium_spell_resistance !== "" ) {
+                        if ( user_string.compendium_spell_resistance !== "" ) {
                             load[cache.header + "spell_resistance"] = (/yes/i.test(user_string.compendium_spell_resistance) ? 1 : 0 );
                         }
                         // range
-                        if (user_string.compendium_range !== "" ) {
+                        if ( user_string.compendium_range !== "" ) {
                             // format : <string> <*>
                             // regex : 1 - range / 3 - range details
                             cache.range = user_string.compendium_range.match(/([a-z]+)(\s+\(?(.*)\))?/i);
@@ -590,23 +590,23 @@
                                     case "long": load[cache.header + "range"] = 5; break;
                                     case "unlimited": load[cache.header + "range"] = 6; break;
                                 }
-                                if (cache.range[3] !== undefined) load[cache.header + "range_description"] = cache.range[3];
+                                if ( cache.range[3] !== undefined ) load[cache.header + "range_description"] = cache.range[3];
                             }
                         }
                         // saving throw
-                        if (user_string.compendium_saving_throw !== "" ) {
+                        if ( user_string.compendium_saving_throw !== "" ) {
                             // format : <string> <string> (<string>)
                             // regex : 1 - save / 3 - save type / 4 - harmless
                             cache.saving_throw = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s+(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
-                            if (cache.saving_throw !== null) {
+                            if ( cache.saving_throw !== null ) {
                                 switch (cache.saving_throw[1].toLowerCase()) {
                                     case "none": load[cache.header + "save"] = 0; break;
                                     case "fortitude": load[cache.header + "save"] = 1; break;
                                     case "reflex": load[cache.header + "save"] = 2; break;
                                     case "will": load[cache.header + "save"] = 3; break;
                                 }
-                                if (cache.saving_throw[3] !== undefined) {
-                                    if (cache.saving_throw[4] !== undefined) cache.saving_throw[3] = cache.saving_throw[3] + " harmless";
+                                if ( cache.saving_throw[3] !== undefined ) {
+                                    if ( cache.saving_throw[4] !== undefined ) cache.saving_throw[3] = cache.saving_throw[3] + " harmless";
                                     switch (cache.saving_throw[3].toLowerCase()) {
                                         case "half": load[cache.header + "save_type"] = 3; break;
                                         case "harmless": load[cache.header + "save_type"] = 4; break;
@@ -616,16 +616,16 @@
                                         case "unveils": load[cache.header + "save_type"] = 6; break;
                                     }
                                 }
-                                if (load[cache.header + "save"] !== 0 ) load[cache.header+"save_toggle"] = "show";
+                                if ( load[cache.header + "save"] !== 0 ) load[cache.header+"save_toggle"] = "show";
                             }
                         }
                         // school
-                        if (user_string.compendium_school !== "" ) {
+                        if ( user_string.compendium_school !== "" ) {
                             // format : <string> (<string>) [<array>]
                             // regex : 1 - school / 3 - school (sub) / 5 - register
                             cache.school = user_string.compendium_school.match(/([a-z]+)(\s+\(([a-z]+)\))?(\s+\[([ a-z,-]+)\])?/i);
                             if( cache.scholl !== null ) {
-                                if (cache.school[3] === undefined) cache.school[3] = cache.school[1];
+                                if ( cache.school[3] === undefined ) cache.school[3] = cache.school[1];
                                 switch (cache.school[3].toLowerCase()) {
                                     // abjuration
                                     case "abjuration": load[cache.header + "school"] = 1.1; break;
@@ -661,7 +661,7 @@
                                     default: case "universal": load[cache.header + "school"] = 9.1;
                                     break;
                                 }
-                                if (cache.school[5] !== undefined) {
+                                if ( cache.school[5] !== undefined ) {
                                     cache.school[5] = cache.school[5].split(", ");
                                     switch (cache.school[5][0].toLowerCase()) { // select only first possibility
                                         case "acid": load[cache.header + "register"] = 1; break;
@@ -712,13 +712,13 @@
                         cache.header = "repeating_equipmentweapon_"+generateRowID()+"_equipment_weapon_";
 
                         // critic
-                        if (user_string.compendium_critical_range !== "" ) {
+                        if ( user_string.compendium_critical_range !== "" ) {
                             cache.critical_range = user_string.compendium_critical_range.match(/^([0-9]+)/);
-                            if (cache.critical_range !== null ) load[cache.header+"critic"] = +cache.critical_range[1];
+                            if ( cache.critical_range !== null ) load[cache.header+"critic"] = +cache.critical_range[1];
                         }
-                        if (user_string.compendium_critical_damage !== "" ) {
+                        if ( user_string.compendium_critical_damage !== "" ) {
                             cache.critical_damage = user_string.compendium_critical_damage.match(/([0-9]+)$/);
-                            if (cache.critical_damage !== null ) load[cache.header + "critic_multiplier"] = +cache.critical_damage[1];
+                            if ( cache.critical_damage !== null ) load[cache.header + "critic_multiplier"] = +cache.critical_damage[1];
                         }
                         // damage
                         cache.damage = ( user_number.compendium_category_height_active === 1 && user_number.character_category_height_select > 0 ? user_string.compendium_damage_small : cache.damage = user_string.compendium_damage_medium );
@@ -732,9 +732,9 @@
                         // damage type
                         if ( user_string.compendium_damage_type !== "") {
                             cache.damage_type = 0;
-                            if (user_string.compendium_damage_type.search(/piercing/i) !== -1) cache.damage_type += 1; // percing
-                            if (user_string.compendium_damage_type.search(/slashing/i) !== -1) cache.damage_type += 2; // slshing
-                            if (user_string.compendium_damage_type.search(/bludgeoning/i) !== -1) cache.damage_type += 4; // blugeoning
+                            if ( user_string.compendium_damage_type.search(/piercing/i) !== -1 ) cache.damage_type += 1; // percing
+                            if ( user_string.compendium_damage_type.search(/slashing/i) !== -1 ) cache.damage_type += 2; // slshing
+                            if ( user_string.compendium_damage_type.search(/bludgeoning/i) !== -1 ) cache.damage_type += 4; // blugeoning
                             switch (cache.damage_type) {
                                 case 1: load[cache.header + "damage_type"] = 3; break;
                                 case 2: load[cache.header + "damage_type"] = 4; break;
@@ -1130,16 +1130,16 @@
                             }
 
                             // bleeding
-                            if (user.status_bleeding === 1) {
+                            if ( user.status_bleeding === 1 ) {
                                 cache.status_resume.push(getTranslationByKey("status-bleeding"));
                                 if ( user.status_active === 1 ) cache.status_bleeding = true;
                             }
 
                             // vital energy
                             let vital_energy = Math.abs(user.status_vital_energy_tmp) + Math.abs(user.status_vital_energy);
-                            if (vital_energy > 0) {
-                                if (vital_energy === -1) cache.status_resume.push(getTranslationByKey("status-effect-negative-level"));
-                                if (vital_energy !== 0 && vital_energy !== -1) cache.status_resume.push(getTranslationByKey("status-effect-negative-levels").replace("%s", -cache.status_negative_level));
+                            if ( vital_energy > 0 ) {
+                                if ( vital_energy === -1 ) cache.status_resume.push(getTranslationByKey("status-effect-negative-level"));
+                                if ( vital_energy !== 0 && vital_energy !== -1 ) cache.status_resume.push(getTranslationByKey("status-effect-negative-levels").replace("%s", -cache.status_negative_level));
                                 if ( user.status_active === 1 ) {
                                     cache.status_negative_level -= vital_energy;
                                     cache.status_life_points -= 5 * vital_energy;
@@ -1251,7 +1251,7 @@
                             }
 
                             // environment
-                            if (user.status_cowering === 1) { // cowering
+                            if ( user.status_cowering === 1 ) { // cowering
                                 cache.status_resume.push(getTranslationByKey("status-cowering"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action = true;
@@ -1261,7 +1261,7 @@
                                 }
                             }
 
-                            if (user.status_defenseless === 1) { // defenseless
+                            if ( user.status_defenseless === 1 ) { // defenseless
                                 cache.status_resume.push(getTranslationByKey("status-defenseless"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_sneak_attack = true;
@@ -1270,7 +1270,7 @@
                                 }
                             }
 
-                            if (user.status_down === 1) { // down
+                            if ( user.status_down === 1 ) { // down
                                 cache.status_resume.push(getTranslationByKey("status-down"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack -= 4;
@@ -1279,12 +1279,12 @@
                                 }
                             }
 
-                            if (user.status_dazed === 1) { // dazed
+                            if ( user.status_dazed === 1 ) { // dazed
                                 cache.status_resume.push(getTranslationByKey("status-dazed"));
                                 if ( user.status_active === 1 )cache.status_action = true;
                             }
 
-                            if (user.status_fighting_defensively === 1) { // fighting defensively
+                            if ( user.status_fighting_defensively === 1 ) { // fighting defensively
                                 cache.status_resume.push(getTranslationByKey("status-fighting-defensively"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack = -4;
@@ -1293,7 +1293,7 @@
                                 }
                             }
 
-                            if (user.status_flat_footed === 1) { // flat footed
+                            if ( user.status_flat_footed === 1 ) { // flat footed
                                 cache.status_resume.push(getTranslationByKey("status-flat-footed"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_ac_dexterity_ceiling = 0;
@@ -1361,7 +1361,7 @@
                                     break;
                             }
 
-                            if (user.status_total_defense === 1) { // total defense
+                            if ( user.status_total_defense === 1 ) { // total defense
                                 cache.status_resume.push(getTranslationByKey("status-total-defense"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack_opportunity = true;
@@ -1371,7 +1371,7 @@
                             }
 
                             // sens
-                            if (user.status_depth) {
+                            if ( user.status_depth ) {
                                 cache.status_resume.push(getTranslationByKey("status-depth"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_initiative -= 4;
@@ -1380,14 +1380,14 @@
                                     cache.status_spell_verbal = 20;
                                 }
                             }
-                            if (user.status_dazzled) {
+                            if ( user.status_dazzled ) {
                                 cache.status_resume.push(getTranslationByKey("status-dazzled"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack -= 1;
                                     cache.status_skill_perception -= 1;
                                 }
                             }
-                            if (user.status_blinded) {
+                            if ( user.status_blinded ) {
                                 cache.status_resume.push(getTranslationByKey("status-blinded"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack_failure = 50;
@@ -1401,14 +1401,14 @@
                                     cache.status_skill_perception -= 4;
                                 }
                             }
-                            if (user.status_confused) {
+                            if ( user.status_confused ) {
                                 cache.status_resume.push(getTranslationByKey("status-confused"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_confused = true;
                                     cache.status_attack_opportunity = true;
                                 }
                             }
-                            if (user.status_stunded) {
+                            if ( user.status_stunded ) {
                                 cache.status_resume.push(getTranslationByKey("status-stunded"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action = true;
@@ -1420,7 +1420,7 @@
                             }
 
                             // deseases
-                            if (user.status_nauseous) {
+                            if ( user.status_nauseous ) {
                                 cache.status_resume.push(getTranslationByKey("status-nauseous"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action_attack = true;
@@ -1429,7 +1429,7 @@
                                     cache.status_skill_perception -= 4;
                                 }
                             }
-                            if (user.status_feverish) {
+                            if ( user.status_feverish ) {
                                 cache.status_resume.push(getTranslationByKey("status-feverish"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_attack -= 2;
@@ -1449,28 +1449,28 @@
                             }
 
                             // spells
-                            if (user.status_mesmerized) {
+                            if ( user.status_mesmerized ) {
                                 cache.status_resume.push(getTranslationByKey("status-mesmerized"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action = true;
                                     cache.status_skill_reactive = -4;
                                 }
                             }
-                            if (user.status_intangible) {
+                            if ( user.status_intangible ) {
                                 cache.status_resume.push(getTranslationByKey("status-intangible"));
-                                if (user.status_active === 1) {
+                                if ( user.status_active === 1) {
                                     cache.status_immune_physical_attack = true;
                                     cache.status_half_dammage_magic = true;
                                 }
                             }
-                            if (user.status_invisible) {
+                            if ( user.status_invisible ) {
                                 cache.status_resume.push(getTranslationByKey("status-invisible"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_dexterity_mod_target = true;
                                     cache.status_attack += 2;
                                 }
                             }
-                            if (user.status_paralyzed) {
+                            if ( user.status_paralyzed ) {
                                 cache.status_resume.push(getTranslationByKey("status-paralyzed"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action = true;
@@ -1479,9 +1479,9 @@
                                     //cache.status_ac_melee -= 4;
                                 }
                             }
-                            if (user.status_petrified) {
+                            if ( user.status_petrified ) {
                                 cache.status_resume.push(getTranslationByKey("status-petrified"));
-                                if (user.status_health !== 3) cache.status_resume.push(getTranslationByKey("status-unconscious"));
+                                if ( user.status_health !== 3 ) cache.status_resume.push(getTranslationByKey("status-unconscious"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_action = true;
                                     cache.status_strength_ceiling = 0;
@@ -1491,7 +1491,7 @@
                             }
 
                             // class specialization
-                            if (user.status_class_barbarian_rage) {
+                            if ( user.status_class_barbarian_rage ) {
                                 cache.status_resume.push(getTranslationByKey("status-class-barbarian-rage"));
                                 if ( user.status_active === 1 ) {
                                     cache.status_strength += 4;
@@ -1510,51 +1510,51 @@
                             switch( user.option_template) {
                                 case 1: // monster
                                     if ( user.aging_active === 1 ) {
-                                        if (user.character_age_select === 1) { // youth
+                                        if ( user.character_age_select === 1 ) { // youth
                                             cache.aging_dexterity = 2;
                                             cache.aging_strength = cache.aging_constitution = cache.aging_constitution = cache.aging_wisdom = -2;
                                         }
-                                        else if (user.character_age_select === 2) { // adult
+                                        else if ( user.character_age_select === 2 ) { // adult
                                             // void
                                         }
-                                        else if (user.character_age_select === 3) { // middle age
+                                        else if ( user.character_age_select === 3 ) { // middle age
                                             cache.aging_strength = cache.aging_dexterity = cache.aging_constitution = -1;
                                             cache.aging_intelligence = cache.aging_wisdom = cache.aging_charisma = 1;
                                         }
-                                        else if (user.character_age_select === 4) { // old
+                                        else if ( user.character_age_select === 4 ) { // old
                                             cache.aging_strength = cache.aging_dexterity = cache.aging_constitution = -2;
                                             cache.aging_intelligence = cache.aging_wisdom = cache.aging_charisma = 1;
                                         }
-                                        else if (user.character_age_select === 5) { // venerable
+                                        else if ( user.character_age_select === 5 ) { // venerable
                                             cache.aging_strength = cache.aging_dexterity = cache.aging_constitution = -3;
                                             cache.aging_intelligence = cache.aging_wisdom = cache.aging_charisma = 1;
                                         }
                                     }
                                     break;
 
-                                case 2 : // npc
+                                case 2 : // non playable character
                                     // void
                                     break;
 
-                                case 3 : // pc
-                                    if (user.character_age < local.race[user.character_race][7]) { // youth
+                                case 3 : // playable character
+                                    if ( user.character_age < local.race[user.character_race][7] ) { // youth
                                         cache.aging_label = getTranslationByKey("character-aging-youth");
                                         if ( user.aging_active === 1 ) {
                                             cache.aging_dexterity = 2;
                                             cache.aging_strength = cache.aging_constitution = cache.aging_constitution = cache.aging_wisdom = -2;
                                         }
                                     }
-                                    else if (user.character_age < local.race[user.character_race][8]) { // adult
+                                    else if ( user.character_age < local.race[user.character_race][8] ) { // adult
                                         cache.aging_label = getTranslationByKey("character-aging-adult");
                                     }
-                                    else if (user.character_age < local.race[user.character_race][9]) { // middle age
+                                    else if ( user.character_age < local.race[user.character_race][9] ) { // middle age
                                         cache.aging_label = getTranslationByKey("character-aging-middle");
                                         if ( user.aging_active === 1 ) {
                                             cache.aging_strength = cache.aging_dexterity = cache.aging_constitution = -1;
                                             cache.aging_intelligence = cache.aging_wisdom = cache.aging_charisma = 1;
                                         }
                                     }
-                                    else if (user.character_age < local.race[user.character_race][10]) { // old
+                                    else if ( user.character_age < local.race[user.character_race][10] ) { // old
                                         cache.aging_label = getTranslationByKey("character-aging-old");
                                         if ( user.aging_active === 1 ) {
                                             cache.aging_strength = cache.aging_dexterity = cache.aging_constitution = -2;
@@ -1586,21 +1586,21 @@
 
                             // armor
                             Object.keys(repeating_armor).forEach(id => {
-                                if (repeating_armor[id][field.armor.worn] === 1) {
+                                if ( repeating_armor[id][field.armor.worn] === 1 ) {
                                     if ( user.armor_malus_active === 1 ) {
                                         switch (repeating_armor[id][field.armor.type]) {
                                             case 1: // light
                                             case 2: // medium
                                             case 3: // heavy
-                                                if (user.armor_proficiency < repeating_armor[id][field.armor.type]) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency < repeating_armor[id][field.armor.type] ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 4: // shield
-                                                if (user.armor_proficiency_shield === 0) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency_shield === 0 ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 5: // tower shield
-                                                if (user.armor_proficiency_shield_tower === 0) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency_shield_tower === 0 ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 6: // other
@@ -1608,7 +1608,7 @@
                                                 break;
                                         }
                                         cache.load_armor_malus -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                        if (repeating_armor[id][field.armor.dexterity] !== null ) cache.load_dexterity_ceiling = Math.min(cache.load_dexterity_ceiling, repeating_armor[id][field.armor.dexterity] );
+                                        if ( repeating_armor[id][field.armor.dexterity] !== null ) cache.load_dexterity_ceiling = Math.min(cache.load_dexterity_ceiling, repeating_armor[id][field.armor.dexterity] );
                                     }
                                 }
                                 cache.load_total += repeating_armor[id][field.armor.weight];
@@ -1637,7 +1637,7 @@
                             // need "status_action", "option_unit_movement"
                             // ------------------------------------------
                             // action
-                            if (cache.status_action === true ) {
+                            if ( cache.status_action === true ) {
                                 cache.status_action_spell = true;
                                 cache.status_action_complex = true;
                                 cache.status_action_attack = true;
@@ -1646,7 +1646,7 @@
                             }
 
                             // calculs are the same for feets or meters, although it's not the same thing
-                            if (user.option_unit_movement === 1) cache.move_base = cache.move_base * 2 / 3;
+                            if ( user.option_unit_movement === 1 ) cache.move_base = cache.move_base * 2 / 3;
 
                             // ------------------------------------------
                             // synthesis
@@ -1675,7 +1675,7 @@
                             // Strength in ]10; Infinity[ : load = 24.9087 e^( 0.1386 x Strength )
 
                             // load max
-                            if (cache.strength < 11) {
+                            if ( cache.strength < 11 ) {
                                 cache.load_charge_heavy = 10 * cache.strength;
                             }
                             else {
@@ -1684,10 +1684,9 @@
 
                             // load max + height & stance
                             cache.load_charge_heavy *= local.load_factor[user.character_category_height_select][user.character_stance];
-                            if (user.option_unit_weight === 1) cache.load_charge_heavy = convertUnit(cache.load_charge_heavy, "lb2kg");
 
                             //  overcharge
-                            if (cache.load_charge_heavy === 0) {
+                            if ( cache.load_charge_heavy === 0 ) {
                                 cache.load_total = 0;
                                 cache.load_total_percent = 0;
                                 cache.load_charge_light = 0;
@@ -1696,6 +1695,11 @@
                                 cache.load_type = 1;
                             }
                             else {
+                                if ( user.option_unit_weight === 1 ) {
+                                    cache.load_total = convertUnit(cache.load_total, "lb2kg");
+                                    cache.load_charge_heavy = convertUnit(cache.load_charge_heavy, "lb2kg");
+                                }
+
                                 cache.load_total_percent = cache.load_total / cache.load_charge_heavy;
 
                                 // values need to be rounded now for value consistency
@@ -1704,12 +1708,12 @@
                                 cache.load_charge_medium = +formatNumber(cache.load_charge_heavy * 2 / 3, 0.01);
                                 cache.load_charge_heavy = +formatNumber(cache.load_charge_heavy, 0.01);
 
-                                if (cache.load_total <= cache.load_charge_light) { // light charge
+                                if ( cache.load_total <= cache.load_charge_light ) { // light charge
                                     // void
                                 }
-                                else if (cache.load_total <= cache.load_charge_medium) { // medium charge
+                                else if ( cache.load_total <= cache.load_charge_medium ) { // medium charge
                                     cache.status_resume.push(getTranslationByKey("status-charge-medium"));
-                                    if (cache.load_total_percent < 0.34) cache.load_total_percent = 0.34; // for progress bar consistency
+                                    if ( cache.load_total_percent < 0.34 ) cache.load_total_percent = 0.34; // for progress bar consistency
                                     if ( user.load_active === 1 ) {
                                         cache.load_armor_malus = Math.min(-3, cache.load_armor_malus);
                                         cache.load_dexterity_ceiling = Math.min(3, cache.load_dexterity_ceiling);
@@ -1717,9 +1721,9 @@
                                     }
 
                                 }
-                                else if (cache.load_total <= cache.load_charge_heavy) {  // heavy charge
+                                else if ( cache.load_total <= cache.load_charge_heavy ) {  // heavy charge
                                     cache.status_resume.push(getTranslationByKey("status-charge-heavy"));
-                                    if (cache.load_total_percent < 0.68) cache.load_total_percent = 0.68; // for progress bar consistency
+                                    if ( cache.load_total_percent < 0.68 ) cache.load_total_percent = 0.68; // for progress bar consistency
                                     if ( user.load_active === 1 ) {
                                         cache.load_armor_malus = Math.min(-6, cache.load_armor_malus);
                                         cache.load_dexterity_ceiling = Math.min(1, cache.load_dexterity_ceiling);
@@ -1739,7 +1743,7 @@
                                 }
                             }
 
-                            if (user.armor_malus_active === 1 && cache.load_armor_malus_proficiency !== 0) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
+                            if ( user.armor_malus_active === 1 && cache.load_armor_malus_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
 
                             // ------------------------------------------
                             // CMB height
@@ -1768,26 +1772,26 @@
                                 // status effects
                                 // ------------------------------------------
                                 // health
-                                if (cache.status_life_points !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-life-points"), cache.status_life_points));
+                                if ( cache.status_life_points !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-life-points"), cache.status_life_points));
 
                                 // action
-                                if (cache.status_action === true) {
+                                if ( cache.status_action === true ) {
                                     cache.status_effect.push(getTranslationByKey("status-effect-action-none"));
                                 }
                                 else {
-                                    if (cache.status_action_complex === true) cache.status_effect.push(getTranslationByKey("status-effect-action-complex-none"));
-                                    if (cache.move_tactic === 0) {
+                                    if ( cache.status_action_complex === true) cache.status_effect.push(getTranslationByKey("status-effect-action-complex-none"));
+                                    if ( cache.move_tactic === 0 ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-action-move-none"));
                                     }
-                                    if (cache.move_tactic === 0.5) cache.status_effect.push(getTranslationByKey("status-effect-action-move-half"));
-                                    if (cache.move_run === 0 && cache.move_tactic !== 0) cache.status_effect.push(getTranslationByKey("status-effect-action-run"));
-                                    if (cache.status_rush === true ) cache.status_effect.push(getTranslationByKey("status-effect-rush"));
+                                    if ( cache.move_tactic === 0.5 ) cache.status_effect.push(getTranslationByKey("status-effect-action-move-half"));
+                                    if ( cache.move_run === 0 && cache.move_tactic !== 0 ) cache.status_effect.push(getTranslationByKey("status-effect-action-run"));
+                                    if ( cache.status_rush === true ) cache.status_effect.push(getTranslationByKey("status-effect-rush"));
                                 }
-                                if (cache.status_attack_failure > 0) cache.status_effect.push(getTranslationByKey("status-effect-attack-failure").replace("%s", cache.status_attack_failure));
-                                if (cache.status_confused === true) cache.status_effect.push(getTranslationByKey("status-effect-confused"));
-                                if (cache.status_depth === true) cache.status_effect.push(getTranslationByKey("status-effect-skill-perception-depth"));
-                                if (cache.status_maintained === true) cache.status_effect.push(getTranslationByKey("status-effect-no-action-both-hands"));
-                                if (cache.status_attack_opportunity === true) cache.status_effect.push(getTranslationByKey("status-effect-no-attack-of-opportunity"));
+                                if ( cache.status_attack_failure > 0) cache.status_effect.push(getTranslationByKey("status-effect-attack-failure").replace("%s", cache.status_attack_failure));
+                                if ( cache.status_confused === true ) cache.status_effect.push(getTranslationByKey("status-effect-confused"));
+                                if ( cache.status_depth === true ) cache.status_effect.push(getTranslationByKey("status-effect-skill-perception-depth"));
+                                if ( cache.status_maintained === true ) cache.status_effect.push(getTranslationByKey("status-effect-no-action-both-hands"));
+                                if ( cache.status_attack_opportunity === true ) cache.status_effect.push(getTranslationByKey("status-effect-no-attack-of-opportunity"));
 
                                 // attribute
                                 cache.status_strength_total = cache.status_strength + cache.aging_strength;
@@ -1796,95 +1800,95 @@
                                 cache.status_intelligence_total = cache.status_intelligence + cache.aging_intelligence;
                                 cache.status_wisdom_total = cache.status_wisdom + cache.aging_wisdom;
                                 cache.status_charisma_total = cache.status_charisma + cache.aging_charisma;
-                                if (cache.status_strength_total !== 0 && cache.status_strength_total === cache.status_dexterity_total && cache.status_strength_total === cache.status_constitution_total && cache.status_strength_total === cache.status_intelligence_total && cache.status_strength_total === cache.status_wisdom_total && cache.status_strength_total === cache.status_charisma_total) {
+                                if ( cache.status_strength_total !== 0 && cache.status_strength_total === cache.status_dexterity_total && cache.status_strength_total === cache.status_constitution_total && cache.status_strength_total === cache.status_intelligence_total && cache.status_strength_total === cache.status_wisdom_total && cache.status_strength_total === cache.status_charisma_total ) {
                                     cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-attribute"), cache.status_strength));
                                 }
                                 else {
-                                    if (cache.status_strength_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-strength"), cache.status_strength_total));
-                                    if (cache.status_dexterity_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-dexterity"), cache.status_dexterity_total));
-                                    if (cache.status_constitution_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-constitution"), cache.status_constitution_total));
-                                    if (cache.status_intelligence_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-intelligence"), cache.status_intelligence_total));
-                                    if (cache.status_wisdom_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-wisdom"), cache.status_wisdom_total));
-                                    if (cache.status_charisma_total !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-charisma"), cache.status_charisma_total));
+                                    if ( cache.status_strength_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-strength"), cache.status_strength_total));
+                                    if ( cache.status_dexterity_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-dexterity"), cache.status_dexterity_total));
+                                    if ( cache.status_constitution_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-constitution"), cache.status_constitution_total));
+                                    if ( cache.status_intelligence_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-intelligence"), cache.status_intelligence_total));
+                                    if ( cache.status_wisdom_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-wisdom"), cache.status_wisdom_total));
+                                    if ( cache.status_charisma_total !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-charisma"), cache.status_charisma_total));
                                 }
-                                if (cache.status_strength_ceiling === 0) cache.status_effect.push(getTranslationByKey("status-effect-strength-none"));
-                                if (cache.status_dexterity_ceiling === 0) cache.status_effect.push(getTranslationByKey("status-effect-dexterity-none"));
-                                if (cache.status_dexterity_mod_ceiling === 0) cache.status_effect.push(getTranslationByKey("status-effect-dexterity-mod-none"));
+                                if ( cache.status_strength_ceiling === 0 ) cache.status_effect.push(getTranslationByKey("status-effect-strength-none"));
+                                if ( cache.status_dexterity_ceiling === 0 ) cache.status_effect.push(getTranslationByKey("status-effect-dexterity-none"));
+                                if ( cache.status_dexterity_mod_ceiling === 0 ) cache.status_effect.push(getTranslationByKey("status-effect-dexterity-mod-none"));
 
                                 // battle
-                                if (cache.status_action === false) {
-                                    if (cache.status_action_attack === true) {
+                                if ( cache.status_action === false ) {
+                                    if ( cache.status_action_attack === true ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-attack-none"));
                                     }
                                     else {
-                                        if (cache.status_attack !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-attack"), cache.status_attack));
-                                        if (cache.status_attack_damage !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-attack-damage"), cache.status_attack_damage));
+                                        if ( cache.status_attack !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-attack"), cache.status_attack));
+                                        if ( cache.status_attack_damage !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-attack-damage"), cache.status_attack_damage));
                                     }
                                 }
-                                if (cache.status_cmb !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-cmb"), cache.status_cmb));
-                                if (cache.status_initiative !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-initiative"), cache.status_initiative));
+                                if ( cache.status_cmb !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-combat-maneuver-bonus"), cache.status_cmb));
+                                if ( cache.status_initiative !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-initiative"), cache.status_initiative));
 
                                 // spell
-                                if (cache.status_action === false) {
-                                    if (cache.status_action_spell === true) {
+                                if ( cache.status_action === false ) {
+                                    if ( cache.status_action_spell === true ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-action-spell-none"));
                                     }
                                     else {
-                                        if (cache.status_concentration !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-concentration-difficulty-class"), cache.status_concentration));
+                                        if ( cache.status_concentration !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-concentration-difficulty-class"), cache.status_concentration));
                                     }
-                                    if (cache.status_spell_somatic_material === true) cache.status_effect.push(getTranslationByKey("status-effect-spell-somatic-and-material"));
-                                    if (cache.status_spell_verbal !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-spell-verbal"), cache.status_spell_verbal));
+                                    if ( cache.status_spell_somatic_material === true ) cache.status_effect.push(getTranslationByKey("status-effect-spell-somatic-and-material"));
+                                    if ( cache.status_spell_verbal !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-spell-verbal"), cache.status_spell_verbal));
                                 }
 
                                 // save
-                                if (cache.status_fortitude !== 0 && cache.status_fortitude === cache.status_reflex && cache.status_fortitude === cache.status_willpower) {
+                                if ( cache.status_fortitude !== 0 && cache.status_fortitude === cache.status_reflex && cache.status_fortitude === cache.status_willpower ) {
                                     cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save"), cache.status_reflex));
                                 }
                                 else {
-                                    if (cache.status_fortitude !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-fortitude"), cache.status_fortitude));
-                                    if (cache.status_reflex !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-reflex"), cache.status_reflex));
-                                    if (cache.status_willpower !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-willpower"), cache.status_willpower));
+                                    if ( cache.status_fortitude !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-fortitude"), cache.status_fortitude));
+                                    if ( cache.status_reflex !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-reflex"), cache.status_reflex));
+                                    if ( cache.status_willpower !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-save-willpower"), cache.status_willpower));
                                 }
 
                                 // armor class
-                                if (cache.status_ac_melee !== 0 && cache.status_ac_melee === cache.status_ac_ranged) {
+                                if ( cache.status_ac_melee !== 0 && cache.status_ac_melee === cache.status_ac_ranged ) {
                                     cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class"), cache.status_ac_melee));
                                 }
                                 else {
-                                    if (cache.status_ac_melee !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-melee"), cache.status_ac_melee));
-                                    if (cache.status_ac_ranged !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-ranged"), cache.status_ac_ranged));
+                                    if ( cache.status_ac_melee !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-melee"), cache.status_ac_melee));
+                                    if ( cache.status_ac_ranged !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-ranged"), cache.status_ac_ranged));
                                 }
-                                if (cache.status_ac_dexterity_ceiling === 0 && cache.status_dexterity_mod_ceiling > 0) cache.status_effect.push(getTranslationByKey("status-effect-armor-class-dexterity-bonus-none"));
+                                if ( cache.status_ac_dexterity_ceiling === 0 && cache.status_dexterity_mod_ceiling > 0 ) cache.status_effect.push(getTranslationByKey("status-effect-armor-class-dexterity-bonus-none"));
 
                                 // combat maneuver bonus
-                                if (cache.status_cmd !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-combat-maneuver-defense"), cache.status_cmd));
-                                if (cache.status_cmd_dexterity_ceiling === 0 && user.status_flat_footed === 1) cache.status_effect.push(getTranslationByKey("status-effect-combat-maneuver-defense-dexterity-bonus-none"));
+                                if ( cache.status_cmd !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-combat-maneuver-defense"), cache.status_cmd));
+                                if ( cache.status_cmd_dexterity_ceiling === 0 && user.status_flat_footed === 1 ) cache.status_effect.push(getTranslationByKey("status-effect-combat-maneuver-defense-dexterity-bonus-none"));
 
                                 // defense
-                                if (cache.status_immune_physical_attack === true) cache.status_effect.push(getTranslationByKey("status-effect-immune-physical-attack"));
-                                if (cache.status_half_dammage_magic === true) cache.status_effect.push(getTranslationByKey("status-effect-half-dammage-magic"));
+                                if ( cache.status_immune_physical_attack === true ) cache.status_effect.push(getTranslationByKey("status-effect-immune-physical-attack"));
+                                if ( cache.status_half_dammage_magic === true ) cache.status_effect.push(getTranslationByKey("status-effect-half-dammage-magic"));
 
                                 // skill
-                                if (cache.status_skill !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill"), cache.status_skill));
-                                if (cache.status_skill_sight === true) cache.status_effect.push(getTranslationByKey("status-effect-skill-sight"));
-                                if (cache.status_skill_perception !== 0 && cache.status_skill !== cache.status_skill_perception) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-perception"), cache.status_skill_perception));
-                                if (cache.status_skill_reactive !== 0) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-reactive"), cache.status_skill_reactive));
+                                if ( cache.status_skill !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill"), cache.status_skill));
+                                if ( cache.status_skill_sight === true ) cache.status_effect.push(getTranslationByKey("status-effect-skill-sight"));
+                                if ( cache.status_skill_perception !== 0 && cache.status_skill !== cache.status_skill_perception ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-perception"), cache.status_skill_perception));
+                                if ( cache.status_skill_reactive !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-reactive"), cache.status_skill_reactive));
 
                                 // load
                                 if ( user.load_active === 1 ) {
-                                    if (cache.load_armor_malus !== 0) {
+                                    if ( cache.load_armor_malus !== 0 ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-load-roll").replace("%s", cache.load_armor_malus));
                                     }
-                                    if (cache.load_dexterity_ceiling !== Infinity) {
+                                    if ( cache.load_dexterity_ceiling !== Infinity ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-load-armor-class-dexterity-ceiling").replace("%s", cache.load_dexterity_ceiling));
                                     }
-                                    if (cache.load_armor_malus_proficiency !== 0) {
+                                    if ( cache.load_armor_malus_proficiency !== 0 ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-armor-proficiency").replace("%s", cache.load_armor_malus_proficiency));
                                     }
                                 }
 
                                 // order string
-                                if (cache.status_effect.length === 0) cache.status_effect.push(getTranslationByKey("status-effect-ok"));
+                                if ( cache.status_effect.length === 0 ) cache.status_effect.push(getTranslationByKey("status-effect-ok"));
 
                                 // ------------------------------------------
                                 // alert
@@ -2114,7 +2118,7 @@
                     if ( user_string.character_language_other !== "" ) languages.push(user_string.character_language_other);
 
                     // sum
-                    if (languages.length === 0) languages.push(getTranslationByKey("character-language-none"));
+                    if ( languages.length === 0 ) languages.push(getTranslationByKey("character-language-none"));
                     languages = sortLocale(languages);
 
                     // prepare load
@@ -2304,7 +2308,7 @@
                 if ( user.weapon_proficiency_exotic === 1 ) type.push(getTranslationByKey("weapon-proficiency-exotic"));
 
                 // concate
-                if (type.length === 0) type.push(getTranslationByKey("weapon-proficiency-none"));
+                if ( type.length === 0 ) type.push(getTranslationByKey("weapon-proficiency-none"));
                 //type = sortLocale(type);
 
                 // prepare load
@@ -2421,7 +2425,7 @@
                         cache.willpower += repeating[id][field.get.willpower];
                         cache.level += repeating[id][field.get.level];
                     });
-                    if (cache.level < 0 ) cache.level = 0;
+                    if ( cache.level < 0 ) cache.level = 0;
                     delete(repeating);
 
                     // experience
@@ -3391,7 +3395,7 @@
                     // iterate load
                     // amor
                     Object.keys(repeating).forEach(id => {
-                        if (repeating[id][field.get.worn] === 1) {
+                        if ( repeating[id][field.get.worn] === 1 ) {
                             cache.armor += repeating[id][field.get.armor];
                             cache.spellfailure_armor += repeating[id][field.get.spellfailure];
                         }
@@ -3604,7 +3608,7 @@
     //                  ECMAscript need numbers formated as "1000.1" to convert string to numbers
     function formatNumber(value, step = 1, decimal = ".", thousand = "") {
         // round value
-        if (step !== 0 ) {
+        if ( step !== 0 ) {
             let inverse = 1.0 / step;
             value = Math.round(value * inverse) / inverse;
         }
@@ -3665,7 +3669,7 @@
     //
     // value            (number) number to parse
     function parseNumber(value) {
-        if (value === "") return null;
+        if ( value === "" ) return null;
         return parseFloat(value) || (value === "on" ? 1 : 0);
     }
 
@@ -6852,7 +6856,7 @@
                                 <thead>
                                 <tr>
                                     <th width="25%">
-                                        <span data-i18n="total" data-i18n-title="spell-arcane-spell-failure-chance-total"></span>
+                                        <span data-i18n="total" data-i18n-title="spell-arcane-spell-failure-chance-total-title"></span>
                                     </th>
                                     <th width="25%">
                                         <span data-i18n="spell-arcane-spell-failure-chance-armor-short" data-i18n-title="spell-arcane-spell-failure-chance-armor-title"></span>
