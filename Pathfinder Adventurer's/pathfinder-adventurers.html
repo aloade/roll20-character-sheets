@@ -1895,7 +1895,7 @@
                                 // ------------------------------------------
                                 if ( user.aging_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-aging-alert") );
                                 if ( user.load_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-load-alert") );
-                                if ( user.armor_malus_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-armor-malus-alert") );
+                                if ( user.armor_malus_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-armor-penalty-alert") );
 
                                 // ------------------------------------------
                                 // status attack
@@ -4430,11 +4430,11 @@
                                             <span class="button-switch-label" data-i18n="option-status-all-active"></span>
                                         </div>
                                     </li>
-                                    <li data-i18n-list-item="armor-malus">
+                                    <li data-i18n-list-item="armor-penalty">
                                         <div class="button-switch">
-                                            <input type="checkbox" name="attr_armor_malus_active" title="" data-i18n-title="option-armor-malus-active-title" checked="checked" />
+                                            <input type="checkbox" name="attr_armor_malus_active" title="" data-i18n-title="option-armor-penalty-active-title" checked="checked" />
                                             <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-armor-malus-active"></span>
+                                            <span class="button-switch-label" data-i18n="option-armor-penalty-active"></span>
                                         </div>
                                     </li>
                                     <li data-i18n-list-item="load">
