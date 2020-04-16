@@ -876,7 +876,7 @@
     // ( all these attributes are all linked to dexterity )
     on("sheet:opened"
         + " change:option_template change:option_unit_decimal change:option_unit_thousand change:option_unit_movement change:option_unit_weight"
-        + " change:aging_active change:armor_malus_active change:load_active change:status_active"
+        + " change:aging_active change:armor_penalty_active change:load_active change:status_active"
         + " change:status_health change:status_bleeding change:status_vital_energy_tmp change:status_vital_energy change:status_mental_health change:status_stamina"
         + " change:status_cowering change:status_dazed change:status_defenseless change:status_down change:status_fighting_defensively change:status_movement change:status_flat_footed change:status_total_defense"
         + " change:status_depth change:status_dazzled change:status_blinded change:status_confused change:status_stunded change:status_paralyzed"
@@ -891,13 +891,13 @@
         + " change:armor_proficiency change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_equipmentweapon:equipment_weapon_weight remove:repeating_equipmentweapon"
-        + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_type change:repeating_equipmentarmor:equipment_armor_dexterity_ceiling change:repeating_equipmentarmor:equipment_armor_malus change:repeating_equipmentarmor:equipment_armor_weight remove:repeating_equipmentarmor"
+        + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_type change:repeating_equipmentarmor:equipment_armor_dexterity_ceiling change:repeating_equipmentarmor:equipment_armor_penalty change:repeating_equipmentarmor:equipment_armor_weight remove:repeating_equipmentarmor"
         + " change:repeating_equipment:equipment_quantity change:repeating_equipment:equipment_weight remove:repeating_equipment"
         + " change:attr_equipment_magic_head_weight change:attr_equipment_magic_neck_weight change:attr_equipment_magic_body_weight change:attr_equipment_magic_belt_weight change:attr_equipment_magic_wrist_weight change:attr_equipment_magic_hand_weight change:attr_equipment_magic_finger1_weight change:attr_equipment_magic_finger2_weight change:attr_equipment_magic_foot_weight"
         , () => {
             getAttrsNumber([
                 "option_template", "option_unit_decimal", "option_unit_thousand", "option_unit_movement", "option_unit_weight",
-                "aging_active", "armor_malus_active", "load_active", "status_active",
+                "aging_active", "armor_penalty_active", "load_active", "status_active",
                 "status_health", "status_bleeding", "status_vital_energy_tmp", "status_vital_energy", "status_mental_health", "status_stamina",
                 "status_cowering", "status_dazed", "status_defenseless", "status_down", "status_fighting_defensively", "status_movement", "status_flat_footed", "status_total_defense",
                 "status_depth", "status_dazzled", "status_blinded", "status_confused", "status_stunded", "status_paralyzed",
@@ -917,7 +917,7 @@
                 if ( user.status_health === 3 || user.status_health === 4 || user.status_health === 5 ) user.status_defenseless = 1;
                 if ( user.status_paralyzed === 1 ) user.status_defenseless = 1;
 
-                // "petrified" add "inconscious" and "defeneless" status
+                // "petrified" add "inconscious" and "defeneless" statuses
                 if ( user.status_petrified === 1 ) user.status_defenseless = 1;
 
                 // "fighting defensively" and "total defense" can't active in same time
@@ -931,7 +931,7 @@
                         "worn": "equipment_armor_worn",
                         "type": "equipment_armor_type",
                         "dexterity": "equipment_armor_dexterity_ceiling",
-                        "malus": "equipment_armor_malus",
+                        "malus": "equipment_armor_penalty",
                         "weight": "equipment_armor_weight"
                     },
                     "equipment": {
@@ -939,6 +939,12 @@
                         "quantity": "equipment_quantity"
                     }
                 };
+
+                function attributeModifier(str, value) {
+                    value = ( value > 0 ? "+"+value : value );
+                    return str.replace("%s", value);
+                }
+
                 getAttrsRepeating("equipmentweapon", Object.values(field.weapon), (repeating_weapon) => {
                     getAttrsRepeating("equipmentarmor", Object.values(field.armor), (repeating_armor) => {
                         getAttrsRepeating("equipment", Object.values(field.equipment), (repeating_equipment) => {
@@ -959,8 +965,8 @@
                                 "move_tactic" : 1,
                                 "move_run" : 4,
                                 "unit_weight": "",
-                                "load_armor_malus": 0,
-                                "load_armor_malus_proficiency": 0,
+                                "load_armor_penalty": 0,
+                                "load_armor_penalty_proficiency": 0,
                                 "load_total" : 0,
                                 "load_type": 0, // 0 - none / 1 - light / 2 - medium / 3 - heavy
                                 "load_dexterity_ceiling": Infinity,
@@ -1587,27 +1593,27 @@
                             // armor
                             Object.keys(repeating_armor).forEach(id => {
                                 if ( repeating_armor[id][field.armor.worn] === 1 ) {
-                                    if ( user.armor_malus_active === 1 ) {
+                                    if ( user.armor_penalty_active === 1 ) {
                                         switch (repeating_armor[id][field.armor.type]) {
                                             case 1: // light
                                             case 2: // medium
                                             case 3: // heavy
-                                                if ( user.armor_proficiency < repeating_armor[id][field.armor.type] ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency < repeating_armor[id][field.armor.type] ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 4: // shield
-                                                if ( user.armor_proficiency_shield === 0 ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency_shield === 0 ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 5: // tower shield
-                                                if ( user.armor_proficiency_shield_tower === 0 ) cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency_shield_tower === 0 ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 6: // other
-                                                cache.load_armor_malus_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
                                         }
-                                        cache.load_armor_malus -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                        cache.load_armor_penalty -= Math.abs(repeating_armor[id][field.armor.malus]);
                                         if ( repeating_armor[id][field.armor.dexterity] !== null ) cache.load_dexterity_ceiling = Math.min(cache.load_dexterity_ceiling, repeating_armor[id][field.armor.dexterity] );
                                     }
                                 }
@@ -1666,7 +1672,7 @@
 
                             // ------------------------------------------
                             // load
-                            // need "cache.strength", "cache.move_tactic", "cache.load_armor_malus", "cache.load_dexterity_ceiling"
+                            // need "cache.strength", "cache.move_tactic", "cache.load_armor_penalty", "cache.load_dexterity_ceiling"
                             // ------------------------------------------
                             // pathfinder data are badly rounded, in remplacement  :
                             // light = max / 3
@@ -1715,7 +1721,7 @@
                                     cache.status_resume.push(getTranslationByKey("status-charge-medium"));
                                     if ( cache.load_total_percent < 0.34 ) cache.load_total_percent = 0.34; // for progress bar consistency
                                     if ( user.load_active === 1 ) {
-                                        cache.load_armor_malus = Math.min(-3, cache.load_armor_malus);
+                                        cache.load_armor_penalty = Math.min(-3, cache.load_armor_penalty);
                                         cache.load_dexterity_ceiling = Math.min(3, cache.load_dexterity_ceiling);
                                         cache.move_tactic = Math.min(2 / 3, cache.move_tactic);
                                     }
@@ -1725,7 +1731,7 @@
                                     cache.status_resume.push(getTranslationByKey("status-charge-heavy"));
                                     if ( cache.load_total_percent < 0.68 ) cache.load_total_percent = 0.68; // for progress bar consistency
                                     if ( user.load_active === 1 ) {
-                                        cache.load_armor_malus = Math.min(-6, cache.load_armor_malus);
+                                        cache.load_armor_penalty = Math.min(-6, cache.load_armor_penalty);
                                         cache.load_dexterity_ceiling = Math.min(1, cache.load_dexterity_ceiling);
                                         cache.move_run = Math.min(3, cache.move_run);
                                         cache.move_tactic = Math.min(2 / 3, cache.move_tactic);
@@ -1735,7 +1741,7 @@
                                     cache.status_resume.push(getTranslationByKey("status-overcharge"));
                                     cache.load_total_percent = 1; // for progress bar consistency
                                     if ( user.load_active === 1 ) {
-                                        cache.load_armor_malus = Math.min(-6, cache.load_armor_malus);
+                                        cache.load_armor_penalty = Math.min(-6, cache.load_armor_penalty);
                                         cache.load_dexterity_ceiling = Math.min(1, cache.load_dexterity_ceiling);
                                         cache.move_run = 0;
                                         cache.move_tactic = 0;
@@ -1743,7 +1749,7 @@
                                 }
                             }
 
-                            if ( user.armor_malus_active === 1 && cache.load_armor_malus_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
+                            if ( user.armor_penalty_active === 1 && cache.load_armor_penalty_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
 
                             // ------------------------------------------
                             // CMB height
@@ -1876,14 +1882,14 @@
 
                                 // load
                                 if ( user.load_active === 1 ) {
-                                    if ( cache.load_armor_malus !== 0 ) {
-                                        cache.status_effect.push(getTranslationByKey("status-effect-load-roll").replace("%s", cache.load_armor_malus));
+                                    if ( cache.load_armor_penalty !== 0 ) {
+                                        cache.status_effect.push(getTranslationByKey("status-effect-load-roll").replace("%s", cache.load_armor_penalty));
                                     }
                                     if ( cache.load_dexterity_ceiling !== Infinity ) {
                                         cache.status_effect.push(getTranslationByKey("status-effect-load-armor-class-dexterity-ceiling").replace("%s", cache.load_dexterity_ceiling));
                                     }
-                                    if ( cache.load_armor_malus_proficiency !== 0 ) {
-                                        cache.status_effect.push(getTranslationByKey("status-effect-armor-proficiency").replace("%s", cache.load_armor_malus_proficiency));
+                                    if ( cache.load_armor_penalty_proficiency !== 0 ) {
+                                        cache.status_effect.push(getTranslationByKey("status-effect-armor-proficiency").replace("%s", cache.load_armor_penalty_proficiency));
                                     }
                                 }
 
@@ -1895,7 +1901,7 @@
                                 // ------------------------------------------
                                 if ( user.aging_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-aging-alert") );
                                 if ( user.load_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-load-alert") );
-                                if ( user.armor_malus_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-armor-penalty-alert") );
+                                if ( user.armor_penalty_active === 0 ) cache.status_effect.push( getTranslationByKey("status-active-armor-penalty-alert") );
 
                                 // ------------------------------------------
                                 // status attack
@@ -2030,8 +2036,8 @@
                             load["equipment_load_charge_medium"] = formatNumber(cache.load_charge_medium, 0.01, cache.unit_decimal, cache.unit_thousand) + " " + cache.unit_weight;
                             load["equipment_load_charge_heavy"] = formatNumber(cache.load_charge_heavy, 0.01, cache.unit_decimal, cache.unit_thousand) + " " + cache.unit_weight;
 
-                            load["foo_status_load"] = cache.load_armor_malus;
-                            load["foo_status_load_proficiency"] = cache.load_armor_malus_proficiency;
+                            load["foo_status_load"] = cache.load_armor_penalty;
+                            load["foo_status_load_proficiency"] = cache.load_armor_penalty_proficiency;
                             cache.armor_proficiency = [];
                             switch( user.armor_proficiency) {
                                 case 0: // none
@@ -3422,7 +3428,7 @@
             });
         });
 
-    // export equipment_weapon element to battle repeating
+    // export "equipment_weapon" element to "repeating_battle"
     on("clicked:repeating_equipmentweapon:create-attack", (e) => {
         // format "repeating_equipmentweapon_-LrcL2qT7lhjZ6BZrble_create-attack"
         let source = e.sourceAttribute.replace(/create-attack$/, '');
@@ -3494,7 +3500,7 @@
         });
     });
 
-    // transfert object to repeating_deposit
+    // transfert object to "repeating_deposit"
     on("clicked:repeating_equipment:inventory-to-deposit", (e) => {
         // format "repeating_equipment_-LrcL2qT7lhjZ6BZrble_inventory-to-deposit"
         let source = e.sourceAttribute.replace(/inventory-to-deposit$/, '');
@@ -3543,7 +3549,7 @@
     // ------------------------------------------
     // notes
     // ------------------------------------------
-    // transfert object to repeating_equipment
+    // transfert object to "repeating_equipment"
     on("clicked:repeating_deposit:deposit-to-inventory", (e) => {
         // format "repeating_deposit_-LrcL2qT7lhjZ6BZrble_deposit-to-inventory"
         let source = e.sourceAttribute.replace(/deposit-to-inventory$/, '');
@@ -3604,8 +3610,8 @@
     // decimal          (one character) character for decimal
     // thousand         (one character) character for thousand
     //
-    // note :           to use this function with a number as output, dont change "decimale" or "thousand"
-    //                  ECMAscript need numbers formated as "1000.1" to convert string to numbers
+    // note :           - to use this function with a number as output, dont change "decimal" or "thousand"
+    //                  - ECMAscript need numbers formated as "1000.1" to convert string to numbers
     function formatNumber(value, step = 1, decimal = ".", thousand = "") {
         // round value
         if ( step !== 0 ) {
@@ -3677,7 +3683,7 @@
     // convert units
     //
     // value            (number)
-    // method          (string)
+    // method           (string)
     function convertUnit(value, method) {
         switch(method) {
             case "in2ft": // inch to feet
@@ -3714,14 +3720,6 @@
             if ( typeof(arr[prop]) === "string" ) arr[prop] = str+arr[prop];
         }
         return arr;
-    }
-
-    // ------------------------------------------
-    // internal functions (overlook)
-    // ------------------------------------------
-    function attributeModifier(str, value) {
-        value = ( value > 0 ? "+"+value : value );
-        return str.replace("%s", value);
     }
 </script>
 
@@ -4432,7 +4430,7 @@
                                     </li>
                                     <li data-i18n-list-item="armor-penalty">
                                         <div class="button-switch">
-                                            <input type="checkbox" name="attr_armor_malus_active" title="" data-i18n-title="option-armor-penalty-active-title" checked="checked" />
+                                            <input type="checkbox" name="attr_armor_penalty_active" title="" data-i18n-title="option-armor-penalty-active-title" checked="checked" />
                                             <span class="button-switch-face"></span>
                                             <span class="button-switch-label" data-i18n="option-armor-penalty-active"></span>
                                         </div>
@@ -19462,7 +19460,7 @@
                                     <input type="number" name="attr_equipment_armor_dexterity_ceiling" title="" min="0" step="1"/>
                                 </td>
                                 <td width="9%">
-                                    <input type="number" name="attr_equipment_armor_malus" title="" step="1" value="0"/>
+                                    <input type="number" name="attr_equipment_armor_penalty" title="" step="1" value="0"/>
                                 </td>
                                 <td width="9%">
                                     <input type="number" name="attr_equipment_armor_spell_failure" title="" min="0" max="100" step="1" value="0"/>
