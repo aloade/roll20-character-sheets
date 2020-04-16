@@ -1782,17 +1782,17 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 /* feat */
-.charsheet .sheet-featracial {}
+.charsheet .sheet-feat-racial {}
 
-.charsheet .sheet-featracial-content {
+.charsheet .sheet-feat-racial-content {
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-featracial-label {
+.charsheet .sheet-feat-racial-label {
     border-bottom: none !important;
 }
 
-.charsheet .sheet-featracial-description {
+.charsheet .sheet-feat-racial-description {
     min-height: 240px;
     height: 240px;
 }
