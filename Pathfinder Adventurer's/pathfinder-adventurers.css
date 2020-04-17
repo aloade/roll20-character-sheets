@@ -97,24 +97,24 @@ html, body {
     display: none;
 }
 
-input[name="attr_foo_option_template"][value="monster"] ~ div .sheet-template-monster,
-input[name="attr_foo_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
-input[name="attr_foo_option_template"][value="pc"] ~ div .sheet-template-playable-character {
+input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div .sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div .sheet-template-playable-character {
     display: block;
 }
 
-input[name="attr_foo_option_template"][value="monster"] ~ div tr.sheet-template-monster,
-input[name="attr_foo_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
-input[name="attr_foo_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
+input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div tr.sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
     display: table-row;
 }
 
-input[name="attr_foo_option_template"][value="monster"] ~ div th.sheet-template-monster,
-input[name="attr_foo_option_template"][value="monster"] ~ div td.sheet-template-monster,
-input[name="attr_foo_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
-input[name="attr_foo_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
-input[name="attr_foo_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
-input[name="attr_foo_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
+input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div th.sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div td.sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
+input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
     display: table-cell;
 }
 
@@ -126,20 +126,20 @@ input[name="attr_foo_option_template"][value="pc"] ~ div td.sheet-template-playa
     display: none;
 }
 
-input[name="attr_foo_option_attack_roll"][value="no-target"] ~ div .sheet-template-no-target,
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div .sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="no-target"] ~ div .sheet-template-no-target,
+input[name="attr_option_attack_roll"][value="target"] ~ div .sheet-template-target {
     display: block;
 }
 
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div tr.sheet-template-no-target,
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div tr.sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div tr.sheet-template-no-target,
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div tr.sheet-template-target {
     display: table-row;
 }
 
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div th.sheet-template-no-target,
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div td.sheet-template-no-target,
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div th.sheet-template-target,
-input[name="attr_foo_option_attack_roll"][value="target"] ~ div td.sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div th.sheet-template-no-target,
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div td.sheet-template-no-target,
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div th.sheet-template-target,
+input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div td.sheet-template-target {
     display: table-cell;
 }
 
@@ -151,20 +151,20 @@ input[name="attr_foo_option_attack_roll"][value="target"] ~ div td.sheet-templat
     display: none;
 }
 
-input[name="attr_foo_option_health"][value="standard"] ~ div .sheet-template-health-standard,
-input[name="attr_foo_option_health"][value="alternative"] ~ div .sheet-template-health-alternative {
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div .sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div .sheet-template-health-alternative {
     display: block;
 }
 
-input[name="attr_foo_option_health"][value="standard"] ~ div tr.sheet-template-health-standard,
-input[name="attr_foo_option_health"][value="alternative"] ~ div tr.sheet-template-health-alternative {
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div tr.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div tr.sheet-template-health-alternative {
     display: table-row;
 }
 
-input[name="attr_foo_option_health"][value="standard"] ~ div th.sheet-template-health-standard,
-input[name="attr_foo_option_health"][value="standard"] ~ div td.sheet-template-health-standard,
-input[name="attr_foo_option_health"][value="alternative"] ~ div th.sheet-template-health-alternative,
-input[name="attr_foo_option_health"][value="alternative"] ~ div td.sheet-template-health-alternative {
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div th.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div td.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div th.sheet-template-health-alternative,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.sheet-template-health-alternative {
     display: table-cell;
 }
 

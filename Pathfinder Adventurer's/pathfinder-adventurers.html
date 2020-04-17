@@ -237,32 +237,6 @@
             });
         });
 
-    // attack roll
-    on("sheet:opened"
-        + " change:option_attack_roll"
-        , () => {
-            getAttrsNumber([
-                "option_attack_roll"
-            ], (user) => {
-
-                let load = {};
-
-                switch (user.option_attack_roll) {
-                    case 1: // no-target
-                        load["foo_option_attack_roll"] = "no-target";
-                        break;
-
-                    case 2: // target
-                        load["foo_option_attack_roll"] = "target";
-                        break;
-                }
-                delete(user);
-
-                // send load
-                setAttrs(load);
-            });
-        });
-
     // ------------------------------------------
     // compendium drop
     // ------------------------------------------
@@ -3875,9 +3849,10 @@
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
 </div>
 
-<input type="hidden" name="attr_foo_option_template" value="pc" />
-<input type="hidden" name="attr_foo_option_health" value="standard" />
-<input type="hidden" name="attr_foo_option_attack_roll" value="target" />
+<!-- DOM interactions -->
+<input type="hidden" class="toggle" name="attr_foo_option_template" value="pc" />
+<input type="hidden" class="toggle" name="attr_option_health" value="standard" />
+<input type="hidden" class="toggle" name="attr_option_attack_roll" value="target" />
 
 <input type="hidden" name="attr_foo_character_strength_total_alert" value="hide" />
 <input type="hidden" name="attr_foo_character_dexterity_total_alert" value="hide" />
@@ -4380,8 +4355,8 @@
                                                     <span data-i18n="option-roll-short"></span>
                                                 </div>
                                                 <select name="attr_option_attack_roll" title="" data-i18n-list="option-roll-list">
-                                                    <option value="1" selected="selected" data-i18n="option-roll-no-target" data-i18n-list-item="no-target"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-roll-target" data-i18n-list-item="target"></option>
+                                                    <option value="no-target" selected="selected" data-i18n="option-roll-no-target" data-i18n-list-item="no-target"></option>
+                                                    <option value="target" selected="selected" data-i18n="option-roll-target" data-i18n-list-item="target"></option>
                                                 </select>
                                             </div>
                                         </div>
