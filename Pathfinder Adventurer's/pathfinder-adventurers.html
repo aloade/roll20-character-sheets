@@ -209,35 +209,6 @@
     });
 
     // ------------------------------------------
-    // option
-    // ------------------------------------------
-    // life
-    on("sheet:opened"
-        + " change:option_health"
-        , () => {
-            getAttrsNumber([
-                "option_health"
-            ], (user) => {
-
-                let load = {};
-
-                switch (user.option_health) {
-                    case 1: // standard
-                        load["foo_option_health"] = "standard";
-                        break;
-
-                    case 2: // alternative
-                        load["foo_option_health"] = "alternative";
-                        break;
-                }
-                delete(user);
-
-                // send load
-                setAttrs(load);
-            });
-        });
-
-    // ------------------------------------------
     // compendium drop
     // ------------------------------------------
     on("change:compendium_name", (e) => {
@@ -4307,7 +4278,7 @@
                                                     <span data-i18n="option-template-short"></span>
                                                 </div>
                                                 <select name="attr_option_template" title="" data-i18n-list="option-template-list">
-                                                    <option value="1" data-i18n="option-template-monster" data-i18n-list-item="monster"></option>
+                                                    <option value="1" data-i18n="option-template-monster" data-i18n-list-item="companion"></option>
                                                     <option value="2" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
                                                     <option value="3" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
                                                 </select>
@@ -4321,8 +4292,8 @@
                                                     <span data-i18n="option-template-life-short"></span>
                                                 </div>
                                                 <select name="attr_option_health" title="">
-                                                    <option value="1" selected="selected" data-i18n="option-template-life-standard"></option>
-                                                    <option value="2" data-i18n="option-template-life-alternative"></option>
+                                                    <option value="standard" selected="selected" data-i18n="option-template-life-standard"></option>
+                                                    <option value="alternative" data-i18n="option-template-life-alternative"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -4334,21 +4305,21 @@
                                                     <span data-i18n="option-whisper-short"></span>
                                                 </div>
                                                 <select name="attr_option_whisper" title="" data-i18n-list="option-whisper-list">
-                                                    <option value="" data-i18n="option-whisper-all" selected="selected" data-i18n-list-item="all"></option>
-                                                    <option value="/w gm" data-i18n="option-whisper-gm" data-i18n-list-item="gm"></option>
+                                                    <option value="" data-i18n="option-whisper-everyone" selected="selected" data-i18n-list-item="all"></option>
+                                                    <option value="/w gm" data-i18n="option-whisper-game-master" data-i18n-list-item="gm"></option>
                                                 </select>
                                             </div>
                                         </div>
                                     </li>
                                     <li>
-                                        <div class="button" data-i18n-title="option-roll-title">
+                                        <div class="button" data-i18n-title="option-attack-roll-title">
                                             <div class="input-group">
                                                 <div class="input-group-text">
-                                                    <span data-i18n="option-roll-short"></span>
+                                                    <span data-i18n="option-attack-roll-short"></span>
                                                 </div>
-                                                <select name="attr_option_attack_roll" title="" data-i18n-list="option-roll-list">
-                                                    <option value="no-target" selected="selected" data-i18n="option-roll-no-target" data-i18n-list-item="no-target"></option>
-                                                    <option value="target" selected="selected" data-i18n="option-roll-target" data-i18n-list-item="target"></option>
+                                                <select name="attr_option_attack_roll" title="" data-i18n-list="option-attack-roll-list">
+                                                    <option value="no-target" selected="selected" data-i18n="option-attack-roll-no-target" data-i18n-list-item="no-target"></option>
+                                                    <option value="target" selected="selected" data-i18n="option-attack-roll-target" data-i18n-list-item="target"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -4440,7 +4411,7 @@
                                                 <div class="input-group-text">
                                                     <span data-i18n="option-unit-weight-short"></span>
                                                 </div>
-                                                <select name="attr_option_unit_weight" title="" data-i18n-list="option-uni-weight-list">
+                                                <select name="attr_option_unit_weight" title="" data-i18n-list="option-unit-weight-list">
                                                     <option value="1" selected="selected" data-i18n="option-unit-kilogram" data-i18n-list-item="kilogram"></option>
                                                     <option value="2" data-i18n="option-unit-pound" data-i18n-list-item="pound"></option>
                                                 </select>
