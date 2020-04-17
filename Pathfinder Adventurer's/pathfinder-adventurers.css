@@ -91,26 +91,26 @@ html, body {
 /* --------------------------------------------------- */
 /* option - template */
 /* --------------------------------------------------- */
-.sheet-template-monster,
+.sheet-template-companion,
 .sheet-template-non-playable-character,
 .sheet-template-playable-character {
     display: none;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div .sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div .sheet-template-companion,
 input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div .sheet-template-playable-character {
     display: block;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div tr.sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div tr.sheet-template-companion,
 input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
     display: table-row;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div th.sheet-template-monster,
-input.sheet-toggle[name="attr_foo_option_template"][value="monster"] ~ div td.sheet-template-monster,
+input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div th.sheet-template-companion,
+input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div td.sheet-template-companion,
 input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
@@ -1357,19 +1357,19 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 
-.charsheet .sheet-monster-race {
+.charsheet .sheet-companion-race {
     max-width: 1440px;
 }
 
-.sheetmonster-race-container-toggle input {
+.sheetcompanion-race-container-toggle input {
     display: none;
 }
 
-.sheet-monster-race-toggle[value="show"] ~ div .sheet-monster-race-container-toggle select {
+.sheet-companion-race-toggle[value="show"] ~ div .sheet-companion-race-container-toggle select {
     max-width: 120px;
 }
 
-.sheet-monster-race-toggle[value="show"] ~ div .sheet-monster-race-container-toggle input {
+.sheet-companion-race-toggle[value="show"] ~ div .sheet-companion-race-container-toggle input {
     display: block;
 }
 

@@ -12,12 +12,12 @@
       "displayname": "Sheet type",
       "type": "select",
       "options": [
-        "Monster|1",
-        "non playable character|2",
-        "playable character|3"
+        "Companion|1",
+        "Non playable character|2",
+        "Playable character|3"
       ],
       "default": "3",
-      "description": "Model of the character sheet\nMonster :\n animal, companion or monster\n\nPC :\n Playable Character"
+      "description": "Model of the character sheet\nCompanion :\n animal, monster or other as companion for the players\nNon playable character : use by the GM\nPlyable character :\n standard sheet for the players"
     },
     {
       "attribute": "option_health",

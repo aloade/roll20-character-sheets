@@ -285,11 +285,11 @@
                 if ( user_string.hasOwnProperty("compendium_category")) {
                     switch (user_string.compendium_category.toLowerCase()) {
                         case "bestiary":
-                            if ( user_string.option_template === 2 ) cache.type = "monster";
+                            if ( user_string.option_template === 1 ) cache.type = "monster";
                             break;
 
                         case "items":
-                            if ( user_string.option_template !== 2 ) {
+                            if ( user_string.option_template !== 1 ) {
                                 if ( user_string.compendium_armor_category !== "") {
                                     cache.type = "armor";
                                 }
@@ -303,7 +303,7 @@
                             break;
 
                         case "spells":
-                            if ( user_string.option_template !== 2 ) cache.type = "spell";
+                            if ( user_string.option_template !== 1 ) cache.type = "spell";
                             break;
                     }
                 }
@@ -812,7 +812,7 @@
                         "compendium_weakness": "",
                         "compendium_willpower": "",
                         "compendium_wisdom": ""
-                    }
+                    };
                     setAttrs(load, {silent: true});
                 }
             });
@@ -838,7 +838,7 @@
         + " change:character_stance change:character_category_height_select change:character_movement_base"
         + " change:character_age change:character_race change:character_age_select"
         + " change:caster_level_rank change:caster_level_misc change:caster_level_temporary"
-        + " change:armor_proficiency change:armor_proficiency_shield change:armor_proficiency_shield_tower"
+        + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_equipmentweapon:equipment_weapon_weight remove:repeating_equipmentweapon"
         + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_type change:repeating_equipmentarmor:equipment_armor_dexterity_ceiling change:repeating_equipmentarmor:equipment_armor_penalty change:repeating_equipmentarmor:equipment_armor_weight remove:repeating_equipmentarmor"
@@ -859,7 +859,7 @@
                 "character_stance", "character_category_height_select", "character_movement_base",
                 "character_age", "character_race", "character_age_select",
                 "caster_level_rank", "caster_level_misc", "caster_level_temporary",
-                "armor_proficiency", "armor_proficiency_shield", "armor_proficiency_shield_tower",
+                "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "armor_proficiency_shield", "armor_proficiency_shield_tower",
                 "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
                 "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight"
             ], (user) => {
@@ -1464,7 +1464,7 @@
                             // need "option_template"
                             // ------------------------------------------
                             switch( user.option_template) {
-                                case 1: // monster
+                                case 1: // companion
                                     if ( user.option_status_aging === 1 ) {
                                         if ( user.character_age_select === 1 ) { // youth
                                             cache.aging_dexterity = 2;
@@ -1546,9 +1546,15 @@
                                     if ( user.option_status_armor_penalty === 1 ) {
                                         switch (repeating_armor[id][field.armor.type]) {
                                             case 1: // light
+                                                if ( user.armor_proficiency_light === 0 ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                break;
+
                                             case 2: // medium
+                                                if ( user.armor_proficiency_medium === 0 ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                break;
+
                                             case 3: // heavy
-                                                if ( user.armor_proficiency < repeating_armor[id][field.armor.type] ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if ( user.armor_proficiency_heavy === 0 ) cache.load_armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
                                                 break;
 
                                             case 4: // shield
@@ -1905,8 +1911,8 @@
                             let load = {};
 
                             switch (user.option_template) {
-                                case 1: // monster
-                                    load["foo_option_template"] = "monster";
+                                case 1: // companion
+                                    load["foo_option_template"] = "companion";
                                     load["character_life_points_mythical"] = 0;
                                     break;
 
@@ -1989,23 +1995,9 @@
                             load["foo_status_load"] = cache.load_armor_penalty;
                             load["foo_status_load_proficiency"] = cache.load_armor_penalty_proficiency;
                             cache.armor_proficiency = [];
-                            switch( user.armor_proficiency) {
-                                case 0: // none
-                                    cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-none"));
-                                    break;
-
-                                case 1: // light
-                                    cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-light"));
-                                    break;
-
-                                case 2: // medium
-                                    cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-medium"));
-                                    break;
-
-                                case 3: // heavy
-                                    cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-heavy"));
-                                    break;
-                            }
+                            if ( user.armor_proficiency_light === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-light"));
+                            if ( user.armor_proficiency_medium === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-medium"));
+                            if ( user.armor_proficiency_heavy === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-heavy"));
                             if ( user.armor_proficiency_shield === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-shield"));
                             if ( user.armor_proficiency_shield_tower === 1 ) cache.armor_proficiency.push(getTranslationByKey("equipment-shield-tower"));
                             load["armor_proficiency_resume"] = cache.armor_proficiency.join(", ");
@@ -2232,14 +2224,14 @@
             });
         });
 
-    // monster race
+    // companion race
     on("sheet:opened"
-        + " change:monster_race_toggle"
+        + " change:companion_race_toggle"
         , () => {
-            getAttrsNumber(["monster_race_toggle"], (user) => {
+            getAttrsNumber(["companion_race_toggle"], (user) => {
                 // prepare load
                 let load = {};
-                load["monster_race_toggle"] = ( user.character_race === 0 ? "show": "hide" );
+                load["companion_race_toggle"] = ( user.character_race === 0 ? "show": "hide" );
 
                 delete(user);
 
@@ -4491,7 +4483,7 @@
         </div>
     </div>
 
-    <div class="template-playable-character template-monster main tab">
+    <div class="template-playable-character template-companion main tab">
         <span class="main-menu"></span>
 
         <input class="tab-input" type="radio" name="attr_nav_tab" title="" value="character" checked="checked">
@@ -4565,9 +4557,9 @@
                                     </tbody>
                                 </table>
                             </div>
-                            <div class="template-monster">
+                            <div class="template-companion">
                                 <h1 data-i18n="character-life-points"></h1>
-                                <table class="monster-life-points">
+                                <table class="companion-life-points">
                                     <thead>
                                     <tr>
                                         <th width="25%">
@@ -4764,8 +4756,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <div class="template-monster">
-                            <table class="monster-level">
+                        <div class="template-companion">
+                            <table class="companion-level">
                                 <thead>
                                 <tr>
                                     <th>
@@ -5217,7 +5209,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <table class="template-monster monster-race">
+                            <table class="template-companion companion-race">
                                 <thead>
                                 <tr>
                                     <th width="50%">
@@ -5231,9 +5223,9 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="hidden" name="attr_monster_race_toggle" title="" class="monster-race-toggle" value="hide" />
-                                        <div class="input-group monster-race-container-toggle">
-                                            <select name="attr_monster_race" title="" data-i18n-list="monster-race-list">
+                                        <input type="hidden" name="attr_companion_race_toggle" title="" class="companion-race-toggle" value="hide" />
+                                        <div class="input-group companion-race-container-toggle">
+                                            <select name="attr_companion_race" title="" data-i18n-list="companion-race-list">
                                                 <optgroup label="" data-i18n-label="monster-race-aquatic" data-i18n-list-item="aquatic" data-i18n-list="monster-race-aquatic-list">
                                                     <option data-i18n="monster-race-blue-ringed-octopus" data-i18n-list-item="blue-ringed-octopus" value="1"></option>
                                                     <option data-i18n="monster-race-dolphin" data-i18n-list-item="dolphin" value="2"></option>
@@ -5336,7 +5328,7 @@
                                                     <option data-i18n="other" value="0"></option>
                                                 </optgroup>
                                             </select>
-                                            <input type="text" name="attr_monster_race_other" title="" value="">
+                                            <input type="text" name="attr_companion_race_other" title="" value="">
                                         </div>
                                     </td>
                                     <td>
@@ -6201,28 +6193,21 @@
                                                 <ul>
                                                     <li>
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_armor_proficiency" title="" data-i18n-title="armor-proficiency-title" value="0" />
-                                                            <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="armor-proficiency-none"></span>
-                                                        </div>
-                                                    </li>
-                                                    <li>
-                                                        <div class="button-switch">
-                                                            <input type="checkbox" name="attr_armor_proficiency" title="" data-i18n-title="armor-proficiency-title" value="1" />
+                                                            <input type="checkbox" name="attr_armor_proficiency_light" title="" data-i18n-title="armor-proficiency-title" />
                                                             <span class="button-switch-face"></span>
                                                             <span class="button-switch-label" data-i18n="armor-proficiency-light"></span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_armor_proficiency" title="" data-i18n-title="armor-proficiency-title" value="2" />
+                                                            <input type="checkbox" name="attr_armor_proficiency_medium" title="" data-i18n-title="armor-proficiency-title" value="2" />
                                                             <span class="button-switch-face"></span>
                                                             <span class="button-switch-label" data-i18n="armor-proficiency-medium"></span>
                                                         </div>
                                                     </li>
                                                     <li>
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_armor_proficiency" title="" data-i18n-title="armor-proficiency-title" value="3" />
+                                                            <input type="checkbox" name="attr_armor_proficiency_heavy" title="" data-i18n-title="armor-proficiency-title" value="3" />
                                                             <span class="button-switch-face"></span>
                                                             <span class="button-switch-label" data-i18n="armor-proficiency-heavy"></span>
                                                         </div>
