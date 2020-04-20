@@ -10,7 +10,7 @@
     {
       "attribute": "option_template",
       "displayname": "Template type",
-      "displaytranslationkey": "useroptions-sheet-type",
+      "displaytranslationkey": "useroptions-template",
       "type": "select",
       "options": [
         "Companion|1",
@@ -22,9 +22,9 @@
         "option-template-non-playable-character",
         "option-template-playable-character"
       ],
-      "value": "3",
-      "description": "model of the character sheet\n\nCompanion :\n animal, monster or other\nNPC :\n Non Playable Character\nPC :\n Playable Character",
-      "descriptiontranslationkey": "option-template-title"
+      "default": "3",
+      "description": "model of the character sheet<br /><br />Companion :<br /> animal, monster or other<br />NPC :<br /> Non Playable Character<br />PC :<br /> Playable Character",
+      "descriptiontranslationkey": "useroptions-template-descrption"
     },
     {
       "attribute": "option_health",
@@ -39,9 +39,9 @@
         "option-template-life-standard",
         "option-template-life-alternative"
       ],
-      "value": "standard",
-      "description": "management of the character's Life\nStandard :\n life points + non-lethal damage\n\nAlternative :\n wound points + vigor",
-      "descriptiontranslationkey": "option-template-life-title"
+      "default": "standard",
+      "description": "management of the character's Life<br />Standard :<br /> life points + non-lethal damage<br /><br />Alternative :<br /> wound points + vigor",
+      "descriptiontranslationkey": "useroptions-health-description"
     },
     {
       "attribute": "option_attack_roll",
@@ -56,9 +56,9 @@
         "option-attack-roll-no-target",
         "option-attack-roll-target"
       ],
-      "value": "no-target",
+      "default": "no-target",
       "description": "Target : each attacks and magic rolls need a target ( tests and damages are calculated automatically ).",
-      "descriptiontranslationkey": "option-attack-roll-title"
+      "descriptiontranslationkey": "useroptions-attack-roll-description"
     },
     {
       "attribute": "option_whisper",
@@ -66,16 +66,16 @@
       "displaytranslationkey": "useroptions-whisper",
       "type": "select",
       "options": [
-        "Everyone|",
+        "Everyone| ",
         "Game Master|/w gm"
       ],
       "optiontranslationkeys": [
         "option-whisper-everyone",
         "option-whisper-game-master"
       ],
-      "value": "",
+      "default": " ",
       "description": "decide who can see rolls from players.",
-      "descriptiontranslationkey": "option-whisper-title"
+      "descriptiontranslationkey": "useroptions-whisper-description"
     },
     {
       "attribute": "option_status",
@@ -83,8 +83,8 @@
       "displaytranslationkey": "useroptions-status",
       "type": "checkbox",
       "value": "1",
-      "description": "enable or disable the management of all statuses\n( including Age, Armor Bonus and Load )",
-      "descriptiontranslationkey": "option-status-all-active-title"
+      "description": "enable or disable the management of all statuses<br />( including Age, Armor Bonus and Load )",
+      "descriptiontranslationkey": "useroptions-status-description"
     },
     {
       "attribute": "option_status_aging",
@@ -93,7 +93,7 @@
       "type": "checkbox",
       "value": "1",
       "description": "enable or disable the management of status related to the age of the character",
-      "descriptiontranslationkey": "option-aging-active-title"
+      "descriptiontranslationkey": "useroptions-status-aging-description"
     },
     {
       "attribute": "option_status_armor_penalty",
@@ -102,7 +102,7 @@
       "type": "checkbox",
       "value": "1",
       "description": "enable or disable armor penalty management for the armor pieces ( Armor Bonus and Maximum Dexterity Bonus )",
-      "descriptiontranslationkey": "option-armor-penalty-active-title"
+      "descriptiontranslationkey": "useroptions-status-armor-penalty-description"
     },
     {
       "attribute": "option_status_load",
@@ -111,7 +111,7 @@
       "type": "checkbox",
       "value": "1",
       "description": "enable or disable load management for weapon, armor and equipment",
-      "descriptiontranslationkey": "option-load-active-title"
+      "descriptiontranslationkey": "useroptions-status-load-description"
     },
     {
       "attribute": "option_unit_movement",
@@ -128,9 +128,9 @@
         "option-unit-feet",
         "option-unit-meter"
       ],
-      "value": "1",
+      "default": "1",
       "description": "character movement",
-      "descriptiontranslationkey": "option-unit-movement-title"
+      "descriptiontranslationkey": "useroptions-unit-movement-description"
     },
     {
       "attribute": "option_unit_height",
@@ -145,9 +145,9 @@
         "option-unit-feet",
         "option-unit-feet-meter"
       ],
-      "value": "1",
+      "default": "1",
       "description": "character and item size",
-      "descriptiontranslationkey": "option-unit-height-title"
+      "descriptiontranslationkey": "useroptions-unit-height-description"
     },
     {
       "attribute": "option_unit_weight",
@@ -162,9 +162,9 @@
         "option-unit-kilogram",
         "option-unit-pound"
       ],
-      "value": "2",
+      "default": "2",
       "description": "character and equipment weight",
-      "descriptiontranslationkey": "option-unit-weight-title"
+      "descriptiontranslationkey": "useroptions-unit-weight-description"
     },
     {
       "attribute": "option_unit_decimal",
@@ -181,8 +181,8 @@
         "option-unit-dot",
         "option-unit-momayyez"
       ],
-      "value": "2",
-      "description": "decimal separator\nbe careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
+      "default": "2",
+      "description": "decimal separator<br />be careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
       "descriptiontranslationkey": "useroptions-unit-decimal-description"
     },
     {
@@ -198,8 +198,8 @@
         "option-unit-comma",
         "option-unit-space"
       ],
-      "value": "1",
-      "description": "thousand separator\nbe careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
+      "default": "1",
+      "description": "thousand separator<br />be careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
       "descriptiontranslationkey": "useroptions-unit-thousand-description"
     }
   ],
