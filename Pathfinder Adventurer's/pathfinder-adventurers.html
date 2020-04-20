@@ -256,11 +256,11 @@
                 if ( user_string.hasOwnProperty("compendium_category")) {
                     switch (user_string.compendium_category.toLowerCase()) {
                         case "bestiary":
-                            if ( user_string.option_template === 1 ) cache.type = "monster";
+                            if ( user_number.option_template === 2 ) cache.type = "monster";
                             break;
 
                         case "items":
-                            if ( user_string.option_template !== 1 ) {
+                            if ( user_number.option_template !== 2 ) {
                                 if ( user_string.compendium_armor_category !== "") {
                                     cache.type = "armor";
                                 }
@@ -274,7 +274,7 @@
                             break;
 
                         case "spells":
-                            if ( user_string.option_template !== 1 ) cache.type = "spell";
+                            if ( user_number.option_template !== 2 ) cache.type = "spell";
                             break;
                     }
                 }
@@ -288,7 +288,7 @@
                 }
 
                 // iterate data
-                load = {};
+                let load = {};
                 switch(cache.type) {
                     case "armor":
                         load["nav_tab"] = "inventory";
@@ -798,7 +798,7 @@
     on("sheet:opened"
         + " change:option_template change:option_unit_decimal change:option_unit_thousand change:option_unit_movement change:option_unit_weight"
         + " change:option_status_aging change:option_status_armor_penalty change:option_status_load change:option_status"
-        + " change:status_health change:status_bleeding change:status_vital_energy_tmp change:status_vital_energy change:status_mental_health change:status_stamina"
+        + " change:status_health change:status_bleeding change:status_negative_level_temporary change:status_negative_level change:status_mental_health change:status_stamina"
         + " change:status_cowering change:status_dazed change:status_defenseless change:status_down change:status_fighting_defensively change:status_movement change:status_flat_footed change:status_total_defense"
         + " change:status_depth change:status_dazzled change:status_blinded change:status_confused change:status_stunded change:status_paralyzed"
         + " change:status_nauseous change:status_feverish"
@@ -819,7 +819,7 @@
             getAttrsNumber([
                 "option_template", "option_unit_decimal", "option_unit_thousand", "option_unit_movement", "option_unit_weight",
                 "option_status_aging", "option_status_armor_penalty", "option_status_load", "option_status",
-                "status_health", "status_bleeding", "status_vital_energy_tmp", "status_vital_energy", "status_mental_health", "status_stamina",
+                "status_health", "status_bleeding", "status_negative_level_temporary", "status_negative_level", "status_mental_health", "status_stamina",
                 "status_cowering", "status_dazed", "status_defenseless", "status_down", "status_fighting_defensively", "status_movement", "status_flat_footed", "status_total_defense",
                 "status_depth", "status_dazzled", "status_blinded", "status_confused", "status_stunded", "status_paralyzed",
                 "status_nauseous", "status_feverish",
@@ -1063,10 +1063,10 @@
                             }
 
                             // vital energy
-                            let vital_energy = Math.abs(user.status_vital_energy_tmp) + Math.abs(user.status_vital_energy);
+                            let vital_energy = Math.abs(user.status_negative_level_temporary) + Math.abs(user.status_negative_level);
                             if ( vital_energy > 0 ) {
                                 if ( vital_energy === -1 ) cache.status_resume.push(getTranslationByKey("status-effect-negative-level"));
-                                if ( vital_energy !== 0 && vital_energy !== -1 ) cache.status_resume.push(getTranslationByKey("status-effect-negative-levels").replace("%s", -cache.status_negative_level));
+                                if ( vital_energy !== 0 && vital_energy !== -1 ) cache.status_resume.push(getTranslationByKey("status-effect-negative-levels").replace("%s", vital_energy));
                                 if ( user.option_status === 1 ) {
                                     cache.status_negative_level -= vital_energy;
                                     cache.status_life_points -= 5 * vital_energy;
@@ -1088,6 +1088,7 @@
                                     cache.status_skill_perception -= vital_energy;
                                 }
                             }
+                            delete(vital_energy);
 
                             // mental health
                             switch (user.status_mental_health) {
@@ -3927,7 +3928,7 @@
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_life_points" title="" data-i18n-title="character-life-points-title" value="@{character_life_points_base}+@{character_life_points_mythical}+@{character_life_points_tmp}+@{foo_status_life_points}" disabled="disabled" />
+                                        <input type="number" name="attr_character_life_points" title="" data-i18n-title="character-life-points-title" value="@{character_life_points_base}+@{character_life_points_mythical}+@{character_life_points_temporary}+@{foo_status_life_points}" disabled="disabled" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
@@ -3941,11 +3942,11 @@
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_non_lethal_damage" title="" data-i18n-title="character-non-lethal-damage-title" value="@{character_non_lethal_damage_base}+@{character_non_lethal_damage_tmp}" disabled="disabled"/>
+                                        <input type="number" name="attr_character_non_lethal_damage" title="" data-i18n-title="character-non-lethal-damage-title" value="@{character_non_lethal_damage_base}+@{character_non_lethal_damage_temporary}" disabled="disabled"/>
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_non_lethal_damage_max" title="" data-i18n-title="character-non-lethal-damage-max-title" value="@{character_life_points_base}+@{character_life_points_mythical}+@{character_life_points_tmp}+@{foo_status_life_points}" disabled="disabled"/>
+                                        <input type="number" name="attr_character_non_lethal_damage_max" title="" data-i18n-title="character-non-lethal-damage-max-title" value="@{character_life_points_base}+@{character_life_points_mythical}+@{character_life_points_temporary}+@{foo_status_life_points}" disabled="disabled"/>
                                     </div>
                                 </td>
                             </tr>
@@ -3961,7 +3962,7 @@
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_wound_points" title="" data-i18n-title="character-wound-points-title" value="(@{character_wound_points_base}+@{character_wound_points_tmp})" disabled="disabled" />
+                                        <input type="number" name="attr_character_wound_points" title="" data-i18n-title="character-wound-points-title" value="(@{character_wound_points_base}+@{character_wound_points_temporary})" disabled="disabled" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
@@ -3975,7 +3976,7 @@
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_vigor" title="" data-i18n-title="character-vigor-title" value="(@{character_vigor_base}+@{character_vigor_tmp})" disabled="disabled" />
+                                        <input type="number" name="attr_character_vigor" title="" data-i18n-title="character-vigor-title" value="(@{character_vigor_base}+@{character_vigor_temporary})" disabled="disabled" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
@@ -4062,17 +4063,17 @@
                                     <li>
                                         <div class="status-negative-level input-group">
                                             <div class="input-group-text">
-                                                <span data-i18n="temporary"></span>
+                                                <span data-i18n="permanent"></span>
                                             </div>
-                                            <input type="number" name="attr_status_vital_energy_tmp" title="" min="0" step="1" value="0" />
+                                            <input type="number" name="attr_status_negative_level" title="" min="0" step="1" value="0" />
                                         </div>
                                     </li>
                                     <li>
                                         <div class="status-negative-level input-group">
                                             <div class="input-group-text">
-                                                <span data-i18n="permanent"></span>
+                                                <span data-i18n="temporary"></span>
                                             </div>
-                                            <input type="number" name="attr_status_vital_energy" title="" min="0" step="1" value="0" />
+                                            <input type="number" name="attr_status_negative_level_temporary" title="" min="0" step="1" value="0" />
                                         </div>
                                     </li>
                                 </ul>
@@ -4515,7 +4516,7 @@
                                             <input type="number" name="attr_character_life_points_mythical" title="" min="0" step="1" value="0"/>
                                         </td>
                                         <td>
-                                            <input type="number" name="attr_character_life_points_tmp" title="" min="0" step="1" value="0" />
+                                            <input type="number" name="attr_character_life_points_temporary" title="" min="0" step="1" value="0" />
                                         </td>
                                         <td>
                                             <span data-i18n="sign-separator"></span>
@@ -4558,7 +4559,7 @@
                                             <input type="number" name="attr_character_life_points_base" title="" min="0" step="1" value="0" />
                                         </td>
                                         <td>
-                                            <input type="number" name="attr_character_life_points_tmp" title="" data-i18n-title="character-life-points-tmp-title" min="0" step="1" value="0" />
+                                            <input type="number" name="attr_character_life_points_temporary" title="" data-i18n-title="character-life-points-temporary-title" min="0" step="1" value="0" />
                                         </td>
                                         <td>
                                             <span data-i18n="sign-separator"></span>
@@ -4598,7 +4599,7 @@
                                         <input type="number" name="attr_character_non_lethal_damage_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_non_lethal_damage_tmp" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_character_non_lethal_damage_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
@@ -4637,7 +4638,7 @@
                                         <input type="number" name="attr_character_wound_points_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_tmp" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_character_wound_points_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
@@ -4672,7 +4673,7 @@
                                         <input type="number" name="attr_character_vigor_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_tmp" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_character_vigor_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
@@ -19514,6 +19515,9 @@
                                     <th width="12%">
                                         <span data-i18n="weight" data-i18n-title="weight-unit-title"></span>
                                     </th>
+                                    <th>
+                                        <div class="sheet-button-fake"></div>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -19840,7 +19844,7 @@
                             </table>
                         </div>
 
-                        <h1 data-18n="deposit-h1"></h1>
+                        <h1 data-i18n="deposit-h1"></h1>
                         <div class="deposit section">
                             <table>
                                 <thead>
@@ -19857,6 +19861,7 @@
                                     <th>
                                         <div class="button-fake"></div>
                                     </th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
