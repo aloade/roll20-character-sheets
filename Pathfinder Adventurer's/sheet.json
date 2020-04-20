@@ -9,7 +9,7 @@
   "useroptions": [
     {
       "attribute": "option_template",
-      "displayname": "Template type",
+      "displayname": "",
       "displaytranslationkey": "useroptions-template",
       "type": "select",
       "options": [
@@ -23,12 +23,12 @@
         "option-template-playable-character"
       ],
       "default": "3",
-      "description": "model of the character sheet<br /><br />Companion :<br /> animal, monster or other<br />NPC :<br /> Non Playable Character<br />PC :<br /> Playable Character",
-      "descriptiontranslationkey": "useroptions-template-descrption"
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-template-description"
     },
     {
       "attribute": "option_health",
-      "displayname": "Health type",
+      "displayname": "",
       "displaytranslationkey": "useroptions-health",
       "type": "select",
       "options": [
@@ -40,12 +40,12 @@
         "option-template-life-alternative"
       ],
       "default": "standard",
-      "description": "management of the character's Life<br />Standard :<br /> life points + non-lethal damage<br /><br />Alternative :<br /> wound points + vigor",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-health-description"
     },
     {
       "attribute": "option_attack_roll",
-      "displayname": "For attacks and incantations use",
+      "displayname": "",
       "displaytranslationkey": "useroptions-attack-roll",
       "type": "select",
       "options": [
@@ -57,12 +57,12 @@
         "option-attack-roll-target"
       ],
       "default": "no-target",
-      "description": "Target : each attacks and magic rolls need a target ( tests and damages are calculated automatically ).",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-attack-roll-description"
     },
     {
       "attribute": "option_whisper",
-      "displayname": "Send rolls to",
+      "displayname": "",
       "displaytranslationkey": "useroptions-whisper",
       "type": "select",
       "options": [
@@ -74,48 +74,48 @@
         "option-whisper-game-master"
       ],
       "default": " ",
-      "description": "decide who can see rolls from players.",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-whisper-description"
     },
     {
       "attribute": "option_status",
-      "displayname": "Active all Status effects",
+      "displayname": "",
       "displaytranslationkey": "useroptions-status",
       "type": "checkbox",
       "value": "1",
-      "description": "enable or disable the management of all statuses<br />( including Age, Armor Bonus and Load )",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-status-description"
     },
     {
       "attribute": "option_status_aging",
-      "displayname": "Active aging effects",
+      "displayname": "",
       "displaytranslationkey": "useroptions-status-aging",
       "type": "checkbox",
       "value": "1",
-      "description": "enable or disable the management of status related to the age of the character",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-status-aging-description"
     },
     {
       "attribute": "option_status_armor_penalty",
-      "displayname": "Active armor penalty effects",
+      "displayname": "",
       "displaytranslationkey": "useroptions-status-armor-penalty",
       "type": "checkbox",
       "value": "1",
-      "description": "enable or disable armor penalty management for the armor pieces ( Armor Bonus and Maximum Dexterity Bonus )",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-status-armor-penalty-description"
     },
     {
       "attribute": "option_status_load",
-      "displayname": "Active load effets",
+      "displayname": "",
       "displaytranslationkey": "useroptions-status-load",
       "type": "checkbox",
       "value": "1",
-      "description": "enable or disable load management for weapon, armor and equipment",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-status-load-description"
     },
     {
       "attribute": "option_unit_movement",
-      "displayname": "Unit for movements",
+      "displayname": "",
       "displaytranslationkey": "useroptions-unit-movement",
       "type": "select",
       "options": [
@@ -129,12 +129,12 @@
         "option-unit-meter"
       ],
       "default": "1",
-      "description": "character movement",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-movement-description"
     },
     {
       "attribute": "option_unit_height",
-      "displayname": "Unit for character height",
+      "displayname": "",
       "displaytranslationkey": "useroptions-unit-height",
       "type": "select",
       "options": [
@@ -146,12 +146,12 @@
         "option-unit-feet-meter"
       ],
       "default": "1",
-      "description": "character and item size",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-height-description"
     },
     {
       "attribute": "option_unit_weight",
-      "displayname": "Unit for weight",
+      "displayname": "",
       "displaytranslationkey": "useroptions-unit-weight",
       "type": "select",
       "options": [
@@ -163,12 +163,12 @@
         "option-unit-pound"
       ],
       "default": "2",
-      "description": "character and equipment weight",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-weight-description"
     },
     {
       "attribute": "option_unit_decimal",
-      "displayname": "Decimal separator",
+      "displayname": "",
       "displaytranslationkey": "useroptions-unit-decimal",
       "type": "select",
       "options": [
@@ -182,12 +182,12 @@
         "option-unit-momayyez"
       ],
       "default": "2",
-      "description": "decimal separator<br />be careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-decimal-description"
     },
     {
       "attribute": "option_unit_thousand",
-      "displayname": "Thousand separator",
+      "displayname": "",
       "displaytranslationkey": "useroptions-unit-thousand",
       "type": "select",
       "options": [
@@ -199,7 +199,7 @@
         "option-unit-space"
       ],
       "default": "1",
-      "description": "thousand separator<br />be careful, the web browser can display float numbers in number inputs differently than local configuration and show an error",
+      "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-thousand-description"
     }
   ],
