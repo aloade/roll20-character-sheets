@@ -1064,9 +1064,7 @@
   "skill-status-sight": "sight-related tests automatically fail.",
   "skill-status-rage": "Skills using Dexterity, Intelligence or Charisma are unusable (except for Acrobatics, Horseback Riding, Intimidate and Flying).",
   "skill-nav": "Skills",
-
-  "skill-list": "acrobatics,artistry,spellcraft,craft,bluff,knowledge-dungeon,knowledge-engineering,knowledge-local,knowledge-geography,knowledge-history,knowledge-arcana,knowledge-nature,knowledge-nobility,knowledge-plans,knowledge-religion,disguise,diplomacy,stealth,animal-training,horseback-riding,climbing,pick-pocketing,appraise,escape,intimidate,linguistics,swimming,perception,first-aid,career,psychology,sabotage,survival,use-of-magic-objects,fly",
-
+  "skill-list": "acrobatics,animal-training,appraise,artistry,bluff,career,climbing,craft,disguise,diplomacy,escape,first-aid,fly,horseback-riding,intimidate,knowledge-arcana,knowledge-dungeon,knowledge-engineering,knowledge-geography,knowledge-history,knowledge-local,knowledge-nature,knowledge-nobility,knowledge-plans,knowledge-religion,linguistics,perception,pick-pocketing,psychology,sabotage,spell-craft,stealth,survival,swimming,use-of-magic-objects",
   "skill-ranks": "Ranks",
   "skill-total-title": "= Rank + CC + Mod. + Status + Feature + Feat + Temp.",
   "skill-h1": "Compétences",

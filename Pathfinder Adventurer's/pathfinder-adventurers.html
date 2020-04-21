@@ -260,7 +260,7 @@
                             break;
 
                         case "items":
-                            if ( user_number.option_template !== "npc" ) {
+                            if ( user.option_template === "pc" || user.option_template === "npc" ) {
                                 if ( user_string.compendium_armor_category !== "") {
                                     cache.type = "armor";
                                 }
@@ -274,7 +274,7 @@
                             break;
 
                         case "spells":
-                            if ( user_number.option_template !== "npc" ) cache.type = "spell";
+                            if ( user.option_template === "pc" || user.option_template === "npc" ) cache.type = "spell";
                             break;
                     }
                 }
@@ -1465,7 +1465,7 @@
                                 // need "cache.status_life_points"
                                 // need "option_template", "option_health", "option_status_wound_threshold", "character_life_points_base", "character_life_points_miscellaneous", "character_life_points_temporary", "character_life_points_ceiling"
                                 // ------------------------------------------
-                                if ( user_string.option_template !== "npc" && user_string.option_health === "standard") {
+                                if ( (user_string.option_template === "pc" || user_string.option_template === "npc" ) && user_string.option_health === "standard") {
                                     if ( user_number.option_status_wound_threshold === 1 ) {
                                         let current = {
                                             "base" : user_number.character_life_points_base + user_number.character_life_points_miscellaneous + user_number.character_life_points_temporary + cache.status_life_points,
@@ -3310,23 +3310,81 @@
     // ------------------------------------------
     // skill
     // ------------------------------------------
+    // skill
+    on("sheet:opened"
+        + " change:option_template"
+        + " change:skill_acrobatics_ranks change:skill_animal_training_ranks change:skill_artistry_ranks change:skill_appraise_ranks change:skill_bluff_ranks change:skill_climbing_ranks change:skill_craft_ranks change:skill_career_ranks change:skill_disguise_ranks change:skill_diplomacy_ranks change:skill_first_aid_ranks change:skill_fly_ranks change:skill_knowledge_arcana_ranks change:skill_knowledge_dungeon_ranks change:skill_knowledge_engineering_ranks change:skill_knowledge_geography_ranks change:skill_knowledge_history_ranks change:skill_knowledge_local_ranks change:skill_knowledge_nature_ranks change:skill_knowledge_plans_ranks change:skill_knowledge_religion_ranks change:skill_knowledge_nobility_ranks change:skill_horseback_riding_ranks change:skill_escape_ranks change:skill_intimidate_ranks change:skill_linguistics_ranks change:skill_swimming_ranks change:skill_perception_ranks change:skill_pick_pocketing_ranks change:skill_psychology_ranks change:skill_sabotage_ranks change:skill_stealth_ranks change:skill_survival_ranks change:skill_spell_craft_ranks change:skill_use_of_magic_objects_ranks"
+        , () => {
+            getAttrs([
+                "option_template",
+                "skill_acrobatics_ranks", "skill_animal_training_ranks", "skill_artistry_ranks", "skill_appraise_ranks", "skill_bluff_ranks", "skill_climbing_ranks", "skill_craft_ranks", "skill_career_ranks", "skill_disguise_ranks", "skill_diplomacy_ranks", "skill_first_aid_ranks", "skill_fly_ranks", "skill_knowledge_arcana_ranks", "skill_knowledge_dungeon_ranks", "skill_knowledge_engineering_ranks", "skill_knowledge_geography_ranks", "skill_knowledge_history_ranks", "skill_knowledge_local_ranks", "skill_knowledge_nature_ranks", "skill_knowledge_plans_ranks", "skill_knowledge_religion_ranks", "skill_knowledge_nobility_ranks", "skill_horseback_riding_ranks", "skill_escape_ranks", "skill_intimidate_ranks", "skill_linguistics_ranks", "skill_swimming_ranks", "skill_perception_ranks", "skill_pick_pocketing_ranks", "skill_psychology_ranks", "skill_sabotage_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_spell_craft_ranks", "skill_use_of_magic_objects_ranks"
+            ], (user) => {
+                getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
+                    // white list
+                    let npc_list = [ "skill_climbing_ranks", "skill_escape_ranks", "skill_fly_ranks", "skill_intimidate_ranks", "skill_perception_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_swimming_ranks" ];
+
+                    // prepare load
+                    let load = {};
+                    load["foo_skill_ranks_total"] = 0;
+
+                    // iterate load
+                    Object.keys(user).forEach( attr => {
+                        if ( attr !== "option_template" ) {
+                            switch(user.option_template) {
+                                case "pet":
+                                    // void
+                                    break;
+
+                                case "npc":
+                                    if ( npc_list.indexOf(attr) !== -l ) load["foo_skill_ranks_total"] += parseNumber(user[attr]);
+                                    break;
+
+                                case "pc":
+                                    load["foo_skill_ranks_total"] += parseNumber(user[attr]);
+                                    break;
+                            }
+
+                        }
+                    });
+                    delete(repeating);
+
+                    // send load
+                    setAttrs(load);
+                });
+            });
+        });
+
     // skill representation
     on("sheet:opened"
+        + " option_template"
         + " change:repeating_skillrepresentation:skill_representation_ranks remove:repeating_skillrepresentation"
         , () => {
-            getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
-                // prepare load
-                let load = {};
-                load["foo_skill_representation_ranks_total"] = 0;
+            getAttrs(["option_template"], (user) => {
+                if ( user.option_template === "pc" || user.option_template === "npc") {
+                    getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
+                        // prepare load
+                        let load = {};
+                        load["foo_skill_representation_ranks_total"] = 0;
 
-                // iterate load
-                Object.keys(repeating).forEach( id => {
-                    load["foo_skill_representation_ranks_total"] += repeating[id]["skill_representation_ranks"];
-                });
-                delete(repeating);
+                        // iterate load
+                        Object.keys(repeating).forEach( id => {
+                            load["foo_skill_representation_ranks_total"] += repeating[id]["skill_representation_ranks"];
+                        });
+                        delete(repeating);
 
-                // send load
-                setAttrs(load);
+                        // send load
+                        setAttrs(load);
+                    });
+
+                }
+                else {
+                    // prepare load
+                    let load = {};
+                    load["foo_skill_representation_ranks_total"] = 0;
+
+                    // send load
+                    setAttrs(load);
+                }
             });
         });
 
@@ -3906,6 +3964,7 @@
 
     <input type="hidden" name="attr_foo_combat_maneuver_defense_dexterity" value="0" />
 
+    <input type="hidden" name="attr_foo_skill_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_representation_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
 </div>
@@ -17208,7 +17267,7 @@
                         <tr>
                             <td>
                                 <div class="input-group">
-                                    <input class="text-strong" type="number" name="attr_skill_total" title="" data-i18n-title="skill-total-title" value="@{skill_acrobatics_ranks}+@{skill_animal_training_ranks}+@{skill_artistry_ranks}+@{skill_appraise_ranks}+@{skill_bluff_ranks}+@{skill_climbing_ranks}+@{skill_craft_ranks}+@{skill_career_ranks}+@{skill_disguise_ranks}+@{skill_diplomacy_ranks}+@{skill_first_aid_ranks}+@{skill_fly_ranks}+@{skill_knowledge_arcana_ranks}+@{skill_knowledge_dungeon_ranks}+@{skill_knowledge_engineering_ranks}+@{skill_knowledge_geography_ranks}+@{skill_knowledge_history_ranks}+@{skill_knowledge_local_ranks}+@{skill_knowledge_nature_ranks}+@{skill_knowledge_plans_ranks}+@{skill_knowledge_religion_ranks}+@{skill_knowledge_nobility_ranks}+@{skill_horseback_riding_ranks}+@{skill_escape_ranks}+@{skill_intimidate_ranks}+@{skill_linguistics_ranks}+@{skill_swimming_ranks}+@{skill_perception_ranks}+@{skill_pick_pocketing_ranks}+@{skill_psychology_ranks}+@{skill_sabotage_ranks}+@{skill_stealth_ranks}+@{skill_survival_ranks}+@{skill_spell_craft_ranks}+@{skill_use_of_magic_objects_ranks}+@{foo_skill_representation_ranks_total}+@{foo_skill_custom_ranks_total}" disabled="disabled"/>
+                                    <input class="text-strong" type="number" name="attr_skill_total" title="" data-i18n-title="skill-total-title" value="@{foo_skill_ranks_total}+@{foo_skill_representation_ranks_total}+@{foo_skill_custom_ranks_total}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="sign-separator"></span>
                                     </div>
