@@ -97,24 +97,24 @@ html, body {
     display: none;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div .sheet-template-companion,
-input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div .sheet-template-playable-character {
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div .sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div .sheet-template-playable-character {
     display: block;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div tr.sheet-template-companion,
-input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div tr.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
     display: table-row;
 }
 
-input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div th.sheet-template-companion,
-input.sheet-toggle[name="attr_foo_option_template"][value="companion"] ~ div td.sheet-template-companion,
-input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_foo_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
-input.sheet-toggle[name="attr_foo_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div th.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div td.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
     display: table-cell;
 }
 
