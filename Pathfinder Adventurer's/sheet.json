@@ -87,6 +87,15 @@
       "descriptiontranslationkey": "useroptions-status-description"
     },
     {
+      "attribute": "option_status_wound_threshold",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-status-wound-threshold",
+      "type": "checkbox",
+      "value": "1",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-status-wound-threshold-description"
+    },
+    {
       "attribute": "option_status_aging",
       "displayname": "",
       "displaytranslationkey": "useroptions-status-aging",
