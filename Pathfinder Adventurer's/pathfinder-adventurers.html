@@ -156,7 +156,7 @@
 
             "spell_concentration_label": getTranslationByKey("spell-concentration-label"),
             "spell_concentration_immobilized_label": getTranslationByKey("spell-concentration-immobilized-label"),
-            "spell_concentration_maintained_label": getTranslationByKey("spell-concentration-maintained-label"),
+            "spell_concentration_grappled_label": getTranslationByKey("spell-concentration-grappled-label"),
             "spell_concentration_wound_label": getTranslationByKey("spell-concentration-wound-label"),
             "spell_concentration_damage_label": getTranslationByKey("spell-concentration-damage-label"),
             "spell_concentration_defensive_label": getTranslationByKey("spell-concentration-defensive-label"),
@@ -816,7 +816,7 @@
         + " change:option_status_aging change:option_status_armor_penalty change:option_status_load change:option_status change:option_status_wound_threshold"
         + " change:status_health change:status_bleeding change:status_negative_level_temporary change:status_negative_level change:status_mental_health change:status_stamina"
         + " change:status_cowering change:status_dazed change:status_defenseless change:status_down change:status_fighting_defensively change:status_movement change:status_flat_footed change:status_total_defense"
-        + " change:status_depth change:status_dazzled change:status_blinded change:status_confused change:status_stunded change:status_paralyzed"
+        + " change:status_deafened change:status_dazzled change:status_blinded change:status_confused change:status_stunded change:status_paralyzed"
         + " change:status_nauseous change:status_feverish"
         + " change:status_mesmerized change:status_intangible change:status_invisible change:status_petrified"
         + " change:status_class_barbarian_rage"
@@ -838,7 +838,7 @@
                 "option_status", "option_status_aging", "option_status_armor_penalty", "option_status_load", "option_status_wound_threshold",
                 "status_health", "status_bleeding", "status_negative_level_temporary", "status_negative_level", "status_mental_health", "status_stamina",
                 "status_cowering", "status_dazed", "status_defenseless", "status_down", "status_fighting_defensively", "status_movement", "status_flat_footed", "status_total_defense",
-                "status_depth", "status_dazzled", "status_blinded", "status_confused", "status_stunded", "status_paralyzed",
+                "status_deafened", "status_dazzled", "status_blinded", "status_confused", "status_stunded", "status_paralyzed",
                 "status_nauseous", "status_feverish",
                 "status_mesmerized", "status_intangible", "status_invisible", "status_petrified",
                 "status_class_barbarian_rage",
@@ -937,8 +937,8 @@
                                     "status_rush" : false,
                                     "status_sneak_attack": false,
                                     "status_confused": false,
-                                    "status_depth" : false,
-                                    "status_maintained" : false,
+                                    "status_deafened" : false,
+                                    "status_grappled" : false,
                                     "status_attack_opportunity": false,
                                     "status_strength": 0,
                                     "status_strength_ceiling": Infinity,
@@ -1039,13 +1039,13 @@
                                         // void
                                         break;
 
-                                    case 1: // staggering
-                                        cache.status_resume.push(getTranslationByKey("status-staggering"));
+                                    case 1: // staggered
+                                        cache.status_resume.push(getTranslationByKey("status-staggered"));
                                         if ( user_number.option_status === 1 ) cache.status_action_complex = true;
                                         break;
 
                                     case 2: // out of battle
-                                        cache.status_resume.push(getTranslationByKey("status-out-of-battle"));
+                                        cache.status_resume.push(getTranslationByKey("status-disabled"));
                                         if ( user_number.option_status === 1 ) {
                                             cache.move_tactic = Math.min(0.5, cache.move_tactic);
                                             cache.status_action_complex = true;
@@ -1066,8 +1066,8 @@
                                         //cache.status_ac_melee -= 4;
                                         break;
 
-                                    case 5: // stabilized
-                                        cache.status_resume.push(getTranslationByKey("status-stabilized"));
+                                    case 5: // stable
+                                        cache.status_resume.push(getTranslationByKey("status-stable"));
                                         if ( user_number.option_status === 1 ) cache.status_action = true;
                                         //cache.status_dexterity_ceiling = 0;
                                         //cache.status_ac_melee -= 4;
@@ -1078,8 +1078,8 @@
                                         if ( user_number.option_status === 1 ) cache.status_action = true;
                                         break;
 
-                                    case 7: // void
-                                        cache.status_resume.push(getTranslationByKey("status-void"));
+                                    case 7: // energy-drained
+                                        cache.status_resume.push(getTranslationByKey("status-energy-drained"));
                                         if ( user_number.option_status === 1 ) cache.status_action = true;
                                         break;
                                 }
@@ -1304,15 +1304,15 @@
                                         }
                                         break;
 
-                                    case 6: // maintained
-                                        cache.status_resume.push(getTranslationByKey("status-movement-maintained"));
+                                    case 6: // grappled
+                                        cache.status_resume.push(getTranslationByKey("status-movement-grappled"));
                                         if ( user_number.option_status === 1 ) {
                                             cache.status_attack -= 2;
                                             cache.move_tactic = 0;
                                             cache.status_dexterity -= 4;
                                             cache.status_cmb -= 2;
                                             cache.status_cmd -= 2;
-                                            cache.status_maintained = true;
+                                            cache.status_grappled = true;
                                             cache.status_attack_opportunity = true;
                                         }
                                         break;
@@ -1328,12 +1328,12 @@
                                 }
 
                                 // sens
-                                if ( user_number.status_depth ) {
-                                    cache.status_resume.push(getTranslationByKey("status-depth"));
+                                if ( user_number.status_deafened ) {
+                                    cache.status_resume.push(getTranslationByKey("status-deafened"));
                                     if ( user_number.option_status === 1 ) {
                                         cache.status_initiative -= 4;
                                         cache.status_skill_perception -= 4;
-                                        cache.status_depth = true;
+                                        cache.status_deafened = true;
                                         cache.status_spell_verbal = 20;
                                     }
                                 }
@@ -1824,8 +1824,8 @@
                                     }
                                     if ( cache.status_attack_failure > 0) cache.status_effect.push(getTranslationByKey("status-effect-attack-failure").replace("%s", cache.status_attack_failure));
                                     if ( cache.status_confused === true ) cache.status_effect.push(getTranslationByKey("status-effect-confused"));
-                                    if ( cache.status_depth === true ) cache.status_effect.push(getTranslationByKey("status-effect-skill-perception-depth"));
-                                    if ( cache.status_maintained === true ) cache.status_effect.push(getTranslationByKey("status-effect-no-action-both-hands"));
+                                    if ( cache.status_deafened === true ) cache.status_effect.push(getTranslationByKey("status-effect-skill-perception-deafened"));
+                                    if ( cache.status_grappled === true ) cache.status_effect.push(getTranslationByKey("status-effect-no-action-both-hands"));
                                     if ( cache.status_attack_opportunity === true ) cache.status_effect.push(getTranslationByKey("status-effect-no-attack-of-opportunity"));
 
                                     // attribute
@@ -1972,7 +1972,7 @@
                                     // ------------------------------------------
                                     // status skill status
                                     // ------------------------------------------
-                                    if ( cache.status_depth === true ) cache.status_effect_skill.push( getTranslationByKey("skill-status-perception-depth") );
+                                    if ( cache.status_deafened === true ) cache.status_effect_skill.push( getTranslationByKey("skill-status-perception-deafened") );
                                     if ( cache.status_skill_sight === true ) cache.status_effect_skill.push( getTranslationByKey("skill-status-sight") );
                                     if ( cache.status_skill_reactive !== 0 ) cache.status_effect_skill.push( attributeModifier(getTranslationByKey("skill-status-reactive"), cache.status_skill_reactive) );
                                     if ( cache.status_skill_rage === true ) cache.status_effect_skill.push( getTranslationByKey("skill-status-rage") );
@@ -3810,14 +3810,14 @@
     <span data-i18n="status-healthy"></span>
     <span data-i18n="status-movement-entangled"></span>
     <span data-i18n="status-movement-free"></span>
-    <span data-i18n="status-movement-maintained"></span>
+    <span data-i18n="status-movement-grappled"></span>
     <span data-i18n="status-movement-immobilized"></span>
-    <span data-i18n="status-out-of-battle"></span>
+    <span data-i18n="status-disabled"></span>
     <span data-i18n="status-unconscious"></span>
     <span data-i18n="status-panicked"></span>
     <span data-i18n="status-peaceful"></span>
-    <span data-i18n="status-stabilized"></span>
-    <span data-i18n="status-staggering"></span>
+    <span data-i18n="status-stable"></span>
+    <span data-i18n="status-staggered"></span>
     <span data-i18n="status-scared"></span>
     <span data-i18n="status-tired"></span>
     <span data-i18n="status-void"></span>
@@ -3837,7 +3837,7 @@
     <span data-i18n="spell-status-somatic-and-material"></span>
     <span data-i18n="spell-concentration-defensive-label"></span>
     <span data-i18n="spell-concentration-immobilized-label"></span>
-    <span data-i18n="spell-concentration-maintained-label"></span>
+    <span data-i18n="spell-concentration-grappled-label"></span>
     <span data-i18n="spell-concentration-wound-label"></span>
     <span data-i18n="spell-concentration-damage-label"></span>
 
@@ -4161,13 +4161,13 @@
                                                 </div>
                                                 <select name="attr_status_health" title="">
                                                     <option value="0" selected="selected" data-i18n="status-healthy"></option>
-                                                    <option value="1" data-i18n="status-staggering"></option>
-                                                    <option value="2" data-i18n="status-out-of-battle"></option>
+                                                    <option value="1" data-i18n="status-staggered"></option>
+                                                    <option value="2" data-i18n="status-disabled"></option>
                                                     <option value="3" data-i18n="status-unconscious"></option>
                                                     <option value="4" data-i18n="status-dying"></option>
-                                                    <option value="5" data-i18n="status-stabilized"></option>
+                                                    <option value="5" data-i18n="status-stable"></option>
                                                     <option value="6" data-i18n="status-dead"></option>
-                                                    <option value="7" data-i18n="status-void"></option>
+                                                    <option value="7" data-i18n="status-energy-drained"></option>
                                                 </select>
                                             </div>
                                         </div>
@@ -4278,7 +4278,7 @@
                                                     <option value="2" data-i18n="status-movement-charge"></option>
                                                     <option value="3" data-i18n="status-movement-crawl"></option>
                                                     <option value="4" data-i18n="status-movement-entangled"></option>
-                                                    <option value="5" data-i18n="status-movement-maintained"></option>
+                                                    <option value="5" data-i18n="status-movement-grappled"></option>
                                                     <option value="6" data-i18n="status-movement-immobilized"></option>
                                                 </select>
                                             </div>
@@ -4325,11 +4325,11 @@
                                             <span class="button-switch-label" data-i18n="status-dazzled"></span>
                                         </div>
                                     </li>
-                                    <li data-i18n-list-item="depth">
+                                    <li data-i18n-list-item="deafened">
                                         <div class="button-switch">
-                                            <input type="checkbox" name="attr_status_depth" title="" data-i18n-title="status-depth-title" />
+                                            <input type="checkbox" name="attr_status_deafened" title="" data-i18n-title="status-deafened-title" />
                                             <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="status-depth"></span>
+                                            <span class="button-switch-label" data-i18n="status-deafened"></span>
                                         </div>
                                     </li>
                                     <li data-i18n-list-item="stunded">
@@ -7474,15 +7474,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spellcustom_concentration_maintained"
+                                                                                    name="roll_spellcustom_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spellcustom_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spellcustom_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -8357,15 +8357,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell0_concentration_maintained"
+                                                                                    name="roll_spell0_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell0_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell0_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -9240,15 +9240,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell1_concentration_maintained"
+                                                                                    name="roll_spell1_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell1_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell1_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell1_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell1_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -10123,15 +10123,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell2_concentration_maintained"
+                                                                                    name="roll_spell2_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell2_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell2_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell2_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell2_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -11006,15 +11006,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell3_concentration_maintained"
+                                                                                    name="roll_spell3_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell3_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell3_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell3_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell3_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -11889,15 +11889,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell4_concentration_maintained"
+                                                                                    name="roll_spell4_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell4_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell4_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell4_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell4_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -12772,15 +12772,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell5_concentration_maintained"
+                                                                                    name="roll_spell5_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell5_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell5_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell5_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell5_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -13655,15 +13655,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell6_concentration_maintained"
+                                                                                    name="roll_spell6_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell6_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell6_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell6_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell6_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -14538,15 +14538,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell7_concentration_maintained"
+                                                                                    name="roll_spell7_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell7_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell7_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell7_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell7_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -15421,15 +15421,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell8_concentration_maintained"
+                                                                                    name="roll_spell8_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell8_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell8_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell8_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell8_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
@@ -16304,15 +16304,15 @@
                                                                                 <span data-i18n="status-movement-immobilized"></span>
                                                                             </button>
                                                                         </li>
-                                                                        <li data-i18n-list-item="maintained">
+                                                                        <li data-i18n-list-item="grappled">
                                                                             <button
-                                                                                    name="roll_spell9_concentration_maintained"
+                                                                                    name="roll_spell9_concentration_grappled"
                                                                                     type="roll"
                                                                                     class="button"
-                                                                                    data-i18n-title="spell-concentration-maintained-roll-title"
-                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell9_name}}} {{label_concentration=@{spell_concentration_maintained_label}}} {{test=[[1d20cs>20+@{spell9_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
+                                                                                    data-i18n-title="spell-concentration-grappled-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_concentration=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell9_name}}} {{label_concentration=@{spell_concentration_grappled_label}}} {{test=[[1d20cs>20+@{spell9_concentration_total}]]}} {{difficulty_class=[[10+@{target|combat_maneuver_bonus_total}-(@{foo_status_concentration})]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}"
                                                                             >
-                                                                                <span data-i18n="status-movement-maintained"></span>
+                                                                                <span data-i18n="status-movement-grappled"></span>
                                                                             </button>
                                                                         </li>
                                                                         <li data-i18n-list-item="defensive">
