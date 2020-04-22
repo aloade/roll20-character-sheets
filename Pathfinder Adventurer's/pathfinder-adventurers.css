@@ -309,7 +309,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     border: 0;
     height: 2px;
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0));
-    margin: 20px 20%;
+    margin: 0 20% 20px;
 }
 
 .charsheet button[type="roll"]:not(.sheet-button), .sheet-fake-button-roll {
@@ -454,7 +454,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    margin: 0 -6px 7px;
+    margin: 0 -6px 15px;
     padding: 0;
 }
 
