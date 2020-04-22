@@ -6523,7 +6523,7 @@
                                                 type="roll"
                                                 name="roll_battle_target"
                                                 data-i18n-title="battle-roll-target-title"
-                                                value="@{option_whisper} &{template:roll} {{roll_battle_complete=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{attack_name=@{battle_name}}} {{test=[[1d20cf<1cs>@{battle_damage_critic}+@{battle_total}]]}} {{test_critic=[[1d20cf<1cs>@{battle_damage_critic}+@{battle_total}+@{battle_critic_confirmation}]]}} {{damage=[[{ 1d1, {floor(@{battle_dices_count}d@{battle_dices}+@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select}+@{battle_damage_add}+@{foo_status_attack_damage})} }dl1]]}} {{damage_critic=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_attack_damage}} }dl1]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}} {{target_ac=[[(1-@{battle_range})*(@{target|armor_class_melee})+@{battle_range}*(@{target|armor_class_ranged})]]}} {{target_ac_melee=[[@{target|armor_class_melee}]]}} {{target_ac_ranged=[[@{target|armor_class_ranged}]]}}"
+                                                value="@{option_whisper} &{template:roll} {{roll_battle_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{attack_name=@{battle_name}}} {{test=[[1d20cf<1cs>@{battle_damage_critic}+@{battle_total}]]}} {{test_critic=[[1d20cf<1cs>@{battle_damage_critic}+@{battle_total}+@{battle_critic_confirmation}]]}} {{damage=[[{ 1d1, {floor(@{battle_dices_count}d@{battle_dices}+@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select}+@{battle_damage_add}+@{foo_status_attack_damage})} }dl1]]}} {{damage_critic=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_attack_damage}} }dl1]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}} {{target_ac=[[(1-@{battle_range})*(@{target|armor_class_melee})+@{battle_range}*(@{target|armor_class_ranged})]]}} {{target_ac_melee=[[@{target|armor_class_melee}]]}} {{target_ac_ranged=[[@{target|armor_class_ranged}]]}}"
                                         ></button>
                                     </div>
                                 </div>
@@ -6641,6 +6641,8 @@
                                                         </tr>
                                                         </tbody>
                                                     </table>
+
+                                                    <hr>
 
                                                     <table class="battle-table-damage">
                                                         <thead>
@@ -7114,7 +7116,7 @@
                                                             name="roll_spellcustom_melee_touch_no_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-no-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_melee_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_melee_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}}"
                                                     ></button>
                                                 </div>
                                                 <div class="template-target">
@@ -7122,7 +7124,7 @@
                                                             name="roll_spellcustom_melee_touch_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_melee_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_melee_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -7133,7 +7135,7 @@
                                                             name="roll_spellcustom_ranged_touch_no_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-no-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_ranged_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_ranged_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}}"
                                                     ></button>
                                                 </div>
                                                 <div class="template-target">
@@ -7141,7 +7143,7 @@
                                                             name="roll_spellcustom_ranged_touch_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_ranged_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_ranged_touch_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -7152,7 +7154,7 @@
                                                             name="roll_spellcustom_incantation_no_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-no-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}}"
                                                     ></button>
                                                 </div>
                                                 <div class="template-target">
@@ -7160,7 +7162,7 @@
                                                             name="roll_spellcustom_incantation_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -7170,7 +7172,7 @@
                                                             name="roll_spellcustom_none_no_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-no-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spellcustom_incantation_total}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}}"
                                                     ></button>
                                                 </div>
                                                 <div class="template-target">
@@ -7178,7 +7180,7 @@
                                                             name="roll_spellcustom_none_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spellcustom_component_verbal})*@{spellcustom_spellfailure}*@{spellcustom_component_somatic}]]}} {{incantation_type=[[@{spellcustom_incantation_type}]]}} {{spell_resistance_used=[[@{spellcustom_spell_resistance}]]}} {{spell_failure_used=[[@{spellcustom_spellfailure}]]}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices}+@{spellcustom_damage_misc}+@{spellcustom_damage_temporary}]]}} {{damage_critic=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices}+(@{spellcustom_damage_misc}+@{spellcustom_damage_temporary})*2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -7413,6 +7415,33 @@
                                                         </div>
                                                         <div class="flex-row">
                                                             <div class="flex-col8">
+                                                                <div class="sheet-template-no-target">
+                                                                    <ul class="horizontal-button-group">
+                                                                        <li>
+                                                                            <button
+                                                                                    name="roll_spellcustom_effect"
+                                                                                    type="roll"
+                                                                                    class="button"
+                                                                                    data-i18n-title="spell-effect-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_incantation_effect=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                                            >
+                                                                                <span data-i18n="spell-effect"></span>
+                                                                            </button>
+                                                                        </li>
+                                                                        <li>
+                                                                            <button
+                                                                                    name="roll_spellcustom_effect_critic"
+                                                                                    type="roll"
+                                                                                    class="button"
+                                                                                    data-i18n-title="spell-effect-critic-roll-title"
+                                                                                    value="@{option_whisper} &{template:roll} {{roll_incantation_effect=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{is_critic=show}} {{label=@{spellcustom_name}}} {{damage_used=[[@{spellcustom_damage}]]}} {{damage=[[(@{spellcustom_damage_dices_count}*2)d@{spellcustom_damage_dices} + @{spellcustom_damage_misc} * 2]]}} {{save_used=[[@{spellcustom_save}]]}} {{save=[[@{spellcustom_save_type}]]}} {{save_difficulty_class=[[@{spellcustom_difficulty_class_total}]]}}"
+                                                                            >
+                                                                                <span data-i18n="spell-effect-critic"></span>
+                                                                            </button>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                <hr>
                                                                 <div class="spell-concentration">
                                                                     <table>
                                                                         <thead>
@@ -7602,19 +7631,6 @@
                                                                                 </tbody>
                                                                             </table>
 
-                                                                            <ul class="horizontal-button-group">
-                                                                                <li>
-                                                                                    <button
-                                                                                            name="roll_spellcustom_damage"
-                                                                                            type="roll"
-                                                                                            class="button"
-                                                                                            data-i18n-title="spell-damage-roll-title"
-                                                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_damage=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spellcustom_name}}} {{damage=[[@{spellcustom_damage_dices_count}d@{spellcustom_damage_dices} + @{spellcustom_damage_misc}]]}}"
-                                                                                    >
-                                                                                        <span data-i18n="damage"></span>
-                                                                                    </button>
-                                                                                </li>
-                                                                            </ul>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -8018,7 +8034,7 @@
                                                             name="roll_spell0_melee_touch_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_melee_touch_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices} + @{spell0_damage_misc}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices} + @{spell0_damage_misc} * 2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_melee_touch_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices} + @{spell0_damage_misc}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices} + @{spell0_damage_misc} * 2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -8037,7 +8053,7 @@
                                                             name="roll_spell0_ranged_touch_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_ranged_touch_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices} + @{spell0_damage_misc}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices} + @{spell0_damage_misc} * 2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_ranged_touch_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices} + @{spell0_damage_misc}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices} + @{spell0_damage_misc} * 2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -8056,7 +8072,7 @@
                                                             name="roll_spell0_incantation_target"
                                                             type="roll"
                                                             data-i18n-title="spell-incantation-roll-target-title"
-                                                            value="@{option_whisper} &{template:roll} {{roll_incantation=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_incantation_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices}+@{spell0_damage_misc}+@{spell0_damage_temporary}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices}+(@{spell0_damage_misc}+@{spell0_damage_temporary})*2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
+                                                            value="@{option_whisper} &{template:roll} {{roll_incantation_target=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{spell0_name}}} {{failure_spell=[[1d100]]}} {{failure_spell_total=[[(@{foo_arcane_spell_failure_total}+@{foo_status_spell_verbal}*@{spell0_component_verbal})*@{spell0_spellfailure}*@{spell0_component_somatic}]]}} {{incantation=[[1d20cs>20+@{spell0_incantation_total}]]}} {{incantation_type=[[@{spell0_incantation_type}]]}} {{spell_resistance_used=[[@{spell0_spell_resistance}]]}} {{spell_failure_used=[[@{spell0_spellfailure}]]}} {{damage_used=[[@{spell0_damage}]]}} {{damage=[[@{spell0_damage_dices_count}d@{spell0_damage_dices}+@{spell0_damage_misc}+@{spell0_damage_temporary}]]}} {{damage_critic=[[(@{spell0_damage_dices_count}*2)d@{spell0_damage_dices}+(@{spell0_damage_misc}+@{spell0_damage_temporary})*2]]}} {{save_used=[[@{spell0_save}]]}} {{save=[[@{spell0_save_type}]]}} {{save_difficulty_class=[[@{spell0_difficulty_class_total}]]}} {{target_used=show}} {{target_name=@{target|character_name}}} {{target_status=@{target|character_status}}}]]}} {{target_spell_resistance=[[@{target|spell_resistance_total}]]}}"
                                                     ></button>
                                                 </div>
                                             </div>
@@ -20201,11 +20217,13 @@
 
 <rolltemplate class="sheet-rolltemplate-roll">
     {{#roll_basic}}
-    <div class="sheet-body basic">
-        <p>
-            <b title="{{status}}">{{name}}</b>
-        </p>
-        <div class="sheet-center">
+    <div class="sheet-basic">
+        <div class="sheet-header">
+            <p>
+                <b title="{{status}}">{{name}}</b>
+            </p>
+        </div>
+        <div class="sheet-body">
             <p>
                 <b>{{label}}</b> : {{test}}
             </p>
@@ -20214,28 +20232,29 @@
     {{/roll_basic}}
 
     {{#roll_battle}}
-    <div class="sheet-body sheet-battle">
-        <div class="sheet-flex-row">
+    <div class="sheet-battle">
+        <div class="sheet-header sheet-flex-row">
             <div class="sheet-flex-col sheet-left">
                 <p>
                     <b title="{{status}}">{{name}}</b><br />
                 </p>
             </div>
         </div>
-
-        <div class="sheet-center">
+        {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
+        <div class="sheet-body">
             <p>
                 <b>{{attack_name}}</b><br />
                 <b><span data-i18n="rt-attack"></span></b> : {{test}}<br />
                 {{#rollWasCrit() test}}<b><span data-i18n="rt-critical-confirmation-short" data-i18n-title="rt-critical-confirmation-title"></span></b> : {{test_critic}}<br />{{/rollWasCrit() test}}
             </p>
         </div>
+        {{#rollWasCrit() test}}</div>{{/rollWasCrit() test}}
     </div>
     {{/roll_battle}}
 
-    {{#roll_battle_complete}}
-    <div class="sheet-body sheet-battle">
-        <div class="sheet-flex-row">
+    {{#roll_battle_target}}
+    <div class="sheet-battle">
+        <div class="sheet-header sheet-flex-row">
             <div class="sheet-flex-col sheet-left">
                 <p>
                     <b title="{{status}}">{{name}}</b><br />
@@ -20251,16 +20270,25 @@
         </div>
 
         {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
-        <div class="sheet-center">
+        <div class="sheet-body">
             <p>
                 <b>{{attack_name}}</b><br />
                 <!-- NOT CRITIC -->
                 {{#^rollWasCrit() test}}
+                <!-- FUMBLE -->
+                {{#rollWasFumble() test}}
+                <span data-i18n="rt-missed"></span>
+                {{/rollWasFumble() test}}
+                <!-- FUMBLE -->
+                <!-- NOT FUMBLE -->
+                {{#^rollWasFumble() test}}
                 {{#rollLess() test target_ac}}<span data-i18n="rt-missed"></span>{{/rollLess() test target_ac}}
                 {{#^rollLess() test target_ac}}
                 <span data-i18n="rt-hit"></span><br />
                 <span data-i18n="rt-damage"></span> : {{damage}}<br />
                 {{/^rollLess() test target_ac}}
+                {{/^rollWasFumble() test}}
+                <!-- NOT FUMBLE -->
                 {{/^rollWasCrit() test}}
                 <!-- NOT CRITIC -->
                 <!-- CRITIC -->
@@ -20279,11 +20307,12 @@
         </div>
         {{#rollWasCrit() test}}</div>{{/rollWasCrit() test}}
     </div>
-    {{/roll_battle_complete}}
+    {{/roll_battle_target}}
 
     {{#roll_battle_damage}}
-    <div class="sheet-body sheet-battle">
-        <div class="sheet-flex-row">
+    <div class="sheet-battle">
+        {{#is_critic}}<div class="sheet-critic">{{/is_critic}}
+        <div class="sheet-header sheet-flex-row">
             <div class="sheet-flex-col sheet-left">
                 <p>
                     <b title="{{status}}">{{name}}</b><br />
@@ -20298,8 +20327,7 @@
             {{/target_name}}
         </div>
 
-        {{#is_critic}}<div class="sheet-critic">{{/is_critic}}
-        <div class="sheet-center">
+        <div class="sheet-body">
             <p>
                 <b>{{attack_name}}</b><br />
                 {{#label}}<b>{{label}}</b><br />{{/label}}
@@ -20311,44 +20339,46 @@
     {{/roll_battle_damage}}
 
     {{#roll_battle_deathblow}}
-    <div class="sheet-body sheet-battle">
-        <div class="sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
-                <p>
-                    <b title="{{status}}">{{name}}</b><br />
-                </p>
-            </div>
-            {{#target_name}}
-            <div class="sheet-flex-col sheet-right">
-                <p>
-                    <b title="{{target_status}}">{{target_name}}</b>
-                </p>
-            </div>
-            {{/target_name}}
-        </div>
-
+    <div class="sheet-battle">
         <div class="sheet-critic">
-            <div class="sheet-center">
-                <p>
-                    <b>{{attack_name}}</b><br />
-                    <b><span data-i18n="rt-deathblow"></span></b><br />
-                    <b><span data-i18n="rt-damage"></span></b> : {{damage}}
-                </p>
-                <p>
-                    <b><span data-i18n="rt-save"></span></b> : <span data-i18n="rt-fortitude"></span><br />
-                    <b><span data-i18n="rt-difficulty-class-short" data-i18n-title="rt-difficulty-class-title"></span></b> :  10 + {{damage}}
-                </p>
+            <div class="sheet-header sheet-flex-row">
+                <div class="sheet-flex-col sheet-left">
+                    <p>
+                        <b title="{{status}}">{{name}}</b><br />
+                    </p>
+                </div>
+                {{#target_name}}
+                <div class="sheet-flex-col sheet-right">
+                    <p>
+                        <b title="{{target_status}}">{{target_name}}</b>
+                    </p>
+                </div>
+                {{/target_name}}
+
+                <div class="sheet-body">
+                    <p>
+                        <b>{{attack_name}}</b><br />
+                        <b><span data-i18n="rt-deathblow"></span></b><br />
+                        <b><span data-i18n="rt-damage"></span></b> : {{damage}}
+                    </p>
+                    <p>
+                        <b><span data-i18n="rt-save"></span></b> : <span data-i18n="rt-fortitude"></span><br />
+                        <b><span data-i18n="rt-difficulty-class-short" data-i18n-title="rt-difficulty-class-title"></span></b> :  10 + {{damage}}
+                    </p>
+                </div>
             </div>
         </div>
     </div>
     {{/roll_battle_deathblow}}
 
     {{#roll_caster_level}}
-    <div class="sheet-body sheet-magic">
-        <p>
-            <b title="{{status}}">{{name}}</b>
-        </p>
-        <div class="sheet-center">
+    <div class="sheet-magic">
+        <div class="sheet-header">
+            <p>
+                <b title="{{status}}">{{name}}</b>
+            </p>
+        </div>
+        <div class="sheet-body">
             <p>
                 <span data-i18n="rt-caster-level"></span> : {{caster_level}}
             </p>
@@ -20357,24 +20387,80 @@
     {{/roll_caster_level}}
 
     {{#roll_incantation}}
-    <div class="sheet-body sheet-magic">
-        <div class="sheet-flex-row">
+    <div class="sheet-magic">
+        <div class="sheet-header sheet-flex-row">
             <div class="sheet-flex-col sheet-left">
                 <p>
                     <b title="{{status}}">{{name}}</b><br />
                 </p>
             </div>
-            {{#target_used}}
+        </div>
+        <div class="sheet-body">
+            {{#rollTotal() spell_failure_used 0}}
+            <p>
+                <b>{{label}}</b><br />
+                <span data-i18n="rt-incantation-success"></span>
+            </p>
+            {{/rollTotal() spell_failure_used 0}}
+
+            {{#rollTotal() spell_failure_used 1}}
+            <!-- FAILED -->
+            {{#^rollGreater() failure_spell failure_spell_total}}
+            <p>
+                <b>{{label}}</b><br />
+                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
+                <span data-i18n="rt-incantation-failed"></span>
+            </p>
+            {{/^rollGreater() failure_spell failure_spell_total}}
+            <!-- FAILED -->
+
+            <!-- SUCCESS -->
+            {{#rollGreater() failure_spell failure_spell_total}}
+            {{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}
+            <p>
+                <b>{{label}}</b><br />
+                {{#rollTotal() spell_failure_used 1}}
+                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
+                <span data-i18n="rt-incantation-success"></span><br />
+                {{/rollTotal() spell_failure_used 1}}
+            </p>
+            <p>
+                {{#rollTotal() incantation_type 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 1}}
+                {{#rollTotal() incantation_type 2}}{{/rollTotal() incantation_type 2}}
+                {{#rollTotal() incantation_type 3}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 3}}
+                {{#rollTotal() incantation_type 4}}<b><span data-i18n="spell-incantation-standard"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 4}}
+            </p>
+            {{#rollWasCrit() incantation}}</div>{{/rollWasCrit() incantation}}
+            {{/rollGreater() failure_spell failure_spell_total}}
+            <!-- SUCCESS -->
+            {{/rollTotal() spell_failure_used 1}}
+        </div>
+        <div class="sheet-footer">
+            <p>
+                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-chance-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
+                {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
+            </p>
+        </div>
+    </div>
+    {{/roll_incantation}}
+
+    {{#roll_incantation_target}}
+    <div class="sheet-magic">
+        <div class="sheet-header sheet-flex-row">
+            <div class="sheet-flex-col sheet-left">
+                <p>
+                    <b title="{{status}}">{{name}}</b><br />
+                </p>
+            </div>
             <div class="sheet-flex-col sheet-right">
                 <p>
                     <b title="{{target_status}}">{{target_name}}</b><br />
                 </p>
             </div>
-            {{/target_used}}
         </div>
         <!-- FAILED -->
         {{#^rollGreater() failure_spell failure_spell_total}}
-        <div class="sheet-center">
+        <div class="sheet-body">
             <p>
                 <b>{{label}}</b><br />
                 <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
@@ -20387,7 +20473,7 @@
         <!-- SUCCESS -->
         {{#rollGreater() failure_spell failure_spell_total}}
         {{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}
-        <div class="sheet-center">
+        <div class="sheet-body">
             <p>
                 <b>{{label}}</b><br />
                 {{#rollTotal() spell_failure_used 1}}
@@ -20401,7 +20487,6 @@
                 {{#rollTotal() incantation_type 3}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 3}}
                 {{#rollTotal() incantation_type 4}}<b><span data-i18n="spell-incantation-standard"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 4}}
 
-                {{#target_used}}
                 <!-- NOT CRITIC -->
                 {{#^rollWasCrit() incantation}}
                 {{#rollLess() incantation target_spell_resistance}}<span data-i18n="rt-incantation-hit-no-effect"></span>{{/rollLess() incantation target_spell_resistance}}
@@ -20413,7 +20498,6 @@
                 <b class="sheet-danger"><span data-i18n="rt-incantation-critical-hit"></span></b>
                 {{/rollWasCrit() incantation}}
                 <!-- CRITIC -->
-                {{/target_used}}
             </p>
 
             {{#rollGreater() damage_used 0}}
@@ -20451,38 +20535,59 @@
         {{#rollWasCrit() incantation}}</div>{{/rollWasCrit() incantation}}
         {{/rollGreater() failure_spell failure_spell_total}}
         <!-- SUCCESS -->
-    </div>
 
-    <div class="sheet-footer">
-        <p>
-            {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-chance-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
-            {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
-        </p>
-    </div>
-    {{/roll_incantation}}
-
-    {{#roll_incantation_damage}}
-    <div class="sheet-body sheet-magic">
-        <div class="sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
-                <p>
-                    <b title="{{status}}">{{name}}</b>
-                </p>
-            </div>
-        </div>
-
-        <div class="sheet-center">
+        <div class="sheet-footer">
             <p>
-                <b>{{label}}</b><br />
-                <b><span data-i18n="rt-damage"></span></b> : {{damage}}
+                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-chance-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
+                {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
         </div>
     </div>
-    {{/roll_incantation_damage}}
+    {{/roll_incantation_target}}
+
+    {{#roll_incantation_effect}}
+    <div class="sheet-magic">
+        {{#is_critic}}<div class="sheet-critic">{{/is_critic}}
+        <div class="sheet-header sheet-flex-row">
+            <div class="sheet-flex-col sheet-left">
+                <p>
+                    <b title="{{status}}">{{name}}</b><br />
+                </p>
+            </div>
+        </div>
+        <!-- SUCCESS -->
+        <div class="sheet-body">
+            {{#rollGreater() damage_used 0}}
+            <p>
+                <b><span data-i18n="rt-damage"></span></b> : {{damage}}
+            </p>
+            {{/rollGreater() damage_used 0}}
+
+            {{#rollGreater() save_used 0}}
+            <p>
+                <b><span data-i18n="rt-save" data-i18n-title="rt-save-title"></span></b> :&nbsp;
+                {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}
+            </p>
+            {{/rollGreater() save_used 0}}
+
+        </div>
+        <!-- SUCCESS -->
+        {{#is_critic}}</div>{{/is_critic}}
+    </div>
+    {{/roll_incantation_effect}}
 
     {{#roll_concentration}}
-    <div class="sheet-body sheet-magic">
-        <div class="sheet-flex-row">
+    <div class="sheet-magic">
+        <div class="sheet-header sheet-flex-row">
             <div class="sheet-flex-col sheet-left">
                 <p>
                     <b title="{{status}}">{{name}}</b><br />
@@ -20496,7 +20601,7 @@
             </div>
         </div>
         {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
-        <div class="sheet-center">
+        <div class="sheet-body">
             <p>
                 <b>{{label}}</b><br />
                 <b>{{label_concentration}}</b> : {{test}}<br />
