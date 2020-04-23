@@ -1216,7 +1216,7 @@ input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[n
     color: rgb(200, 82, 58);
 }
 
-.charsheet .sheet-character-life-points {
+.charsheet .sheet-character-hit-points {
     max-width: 720px;
     margin-bottom: 15px;
 }
@@ -1240,7 +1240,7 @@ input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[n
     max-width: 480px;
 }
 
-.charsheet .sheet-animal-life-points {
+.charsheet .sheet-animal-hit-points {
     max-width: 480px;
     margin-bottom: 15px;
 }
