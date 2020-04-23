@@ -22,7 +22,7 @@
         "option-template-non-playable-character",
         "option-template-playable-character"
       ],
-      "default": "3",
+      "default": "pc",
       "description": "foo",
       "descriptiontranslationkey": "useroptions-template-description"
     },
@@ -137,7 +137,7 @@
         "option-unit-feet",
         "option-unit-meter"
       ],
-      "default": "1",
+      "default": "2",
       "description": "foo",
       "descriptiontranslationkey": "useroptions-unit-movement-description"
     },
