@@ -820,7 +820,8 @@
         + " change:status_nauseated change:status_sickened"
         + " change:status_mesmerized change:status_incorporeal change:status_invisible change:status_petrified"
         + " change:status_class_barbarian_rage"
-        + " change:character_hit_points_base change:character_hit_points_miscellaneous change:character_hit_points_temporary change:character_hit_points_ceiling"
+        + " change:character_hit_points_base change:character_hit_points_miscellaneous change:character_hit_points_temporary change:character_hit_points_ceiling" + " change:character_nonlethal_damage_base change:character_nonlethal_damage_temporary"
+        + " change:character_wound_points_base change:character_wound_points_temporary change:character_wound_points_ceiling change:character_vigor_base change:character_vigor_temporary change:character_vigor_ceiling"
         + " change:character_strength_base change:character_strength_race change:character_strength_bonus change:character_strength_penalty change:character_strength_temp"
         + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_penalty change:character_dexterity_temp"
         + " change:character_stance change:character_category_height_select change:character_movement_base"
@@ -842,7 +843,8 @@
                 "status_nauseated", "status_sickened",
                 "status_mesmerized", "status_incorporeal", "status_invisible", "status_petrified",
                 "status_class_barbarian_rage",
-                "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling",
+                "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling", "character_nonlethal_damage_base", "character_nonlethal_damage_temporary",
+                "character_wound_points_base", "character_wound_points_temporary", "character_wound_points_ceiling", "character_vigor_base", "character_vigor_temporary", "character_vigor_ceiling",
                 "character_strength_base", "character_strength_race", "character_strength_bonus", "character_strength_penalty", "character_strength_temporary",
                 "character_dexterity_base", "character_dexterity_race", "character_dexterity_bonus", "character_dexterity_penalty", "character_dexterity_temporary",
                 "character_stance", "character_category_height_select", "character_movement_base",
@@ -923,6 +925,14 @@
                                     "encumbrance_charge_light" : 0,
                                     "encumbrance_charge_medium" : 0,
                                     "encumbrance_charge_heavy" : 0,
+                                    "health_hit_points": 0,
+                                    "health_hit_points_ceiling": 0,
+                                    "health_nonlethal_damage": 0,
+                                    "health_nonlethal_demange_ceiling": 0,
+                                    "health_wound_points": 0,
+                                    "health_wound_points_ceiling": 0,
+                                    "health_vigor": 0,
+                                    "health_vigor_ceiling": 0,
                                     "caster_level": 0,
                                     "status_resume": [],
                                     "status_effect": [],
@@ -1475,89 +1485,6 @@
                                 }
 
                                 // ------------------------------------------
-                                // wound threshold
-                                // need "cache.status_hit_points"
-                                // need "option_template", "option_health", "option_status_wound_threshold", "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling"
-                                // ------------------------------------------
-                                if ( (user_string.option_template === "pc" || user_string.option_template === "npc" ) && user_string.option_health === "standard") {
-                                    if ( user_number.option_status_wound_threshold === 1 ) {
-                                        let current = {
-                                            "base" : user_number.character_hit_points_base + user_number.character_hit_points_miscellaneous + user_number.character_hit_points_temporary + cache.status_hit_points,
-                                            "ceiling": (user_number.character_hit_points_ceiling + cache.status_hit_points),
-                                            "ratio" : 0
-                                        };
-                                        // for the ratio, we need to work with positives values
-                                        if ( current.ceiling < current.base ) {
-                                            current.ratio = 0;
-                                        }
-                                        else {
-                                            if (current.base < 0) {
-                                                current.ceiling += Math.abs(current.base) + 1;
-                                                current.base = 1;
-                                            }
-                                            current.ratio = +formatNumber(current.base / current.ceiling, 0.01);
-                                        }
-
-                                        if ( current.ratio <= 0.25 ) {
-                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-critical"));
-                                            cache.status_attack -= 3;
-                                            cache.status_strength -= 3;
-                                            cache.status_dexterity -= 3;
-                                            cache.status_constitution -= 3;
-                                            cache.status_intelligence -= 3;
-                                            cache.status_wisdom -= 3;
-                                            cache.status_charisma -= 3;
-                                            cache.status_caster_level -= 3;
-                                            cache.status_fortitude -= 3;
-                                            cache.status_reflex -= 3;
-                                            cache.status_willpower -= 3;
-                                            cache.status_ac_melee -= 3;
-                                            cache.status_ac_ranged -= 3;
-                                            cache.status_skill -= 3;
-                                            cache.status_skill_perception -= 3;
-                                        }
-                                        else if ( current.ratio <= 0.5 ) {
-                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-wounded"));
-                                            cache.status_attack -= 2;
-                                            cache.status_strength -= 2;
-                                            cache.status_dexterity -= 2;
-                                            cache.status_constitution -= 2;
-                                            cache.status_intelligence -= 2;
-                                            cache.status_wisdom -= 2;
-                                            cache.status_charisma -= 2;
-                                            cache.status_caster_level -= 2;
-                                            cache.status_fortitude -= 2;
-                                            cache.status_reflex -= 2;
-                                            cache.status_willpower -= 2;
-                                            cache.status_ac_melee -= 2;
-                                            cache.status_ac_ranged -= 2;
-                                            cache.status_skill -= 2;
-                                            cache.status_skill_perception -= 2;
-                                        }
-                                        else if ( current.ratio <= 0.75 ) {
-                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-grazed"));
-                                            cache.status_attack -= 1;
-                                            cache.status_strength -= 1;
-                                            cache.status_dexterity -= 1;
-                                            cache.status_constitution -= 1;
-                                            cache.status_intelligence -= 1;
-                                            cache.status_wisdom -= 1;
-                                            cache.status_charisma -= 1;
-                                            cache.status_caster_level -= 1;
-                                            cache.status_fortitude -= 1;
-                                            cache.status_reflex -= 1;
-                                            cache.status_willpower -= 1;
-                                            cache.status_ac_melee -= 1;
-                                            cache.status_ac_ranged -= 1;
-                                            cache.status_skill -= 1;
-                                            cache.status_skill_perception -= 1;
-                                        }
-
-                                        delete(current);
-                                    }
-                                }
-
-                                // ------------------------------------------
                                 // aging
                                 // need "option_template"
                                 // ------------------------------------------
@@ -1713,6 +1640,16 @@
                                 // ( next statuses need calculated values )
                                 // ------------------------------------------
 
+                                cache.health_hit_points = user_number.character_hit_points_base + user_number.character_hit_points_miscellaneous + user_number.character_hit_points_temporary + cache.status_hit_points;
+                                cache.health_hit_points_ceiling = user_number.character_hit_points_ceiling + cache.status_hit_points;
+                                cache.health_nonlethal_damage = user_number.character_nonlethal_damage_base + user_number.character_nonlethal_damage_temporary;
+                                cache.health_nonlethal_damage_ceiling = cache.health_hit_points;
+
+                                cache.health_wound_points = user_number.character_wound_points_base + user_number.character_wound_points_temporary ;
+                                cache.health_wound_points_ceiling = user_number.character_wound_points_ceiling;
+                                cache.health_vigor = user_number.character_vigor_base + user_number.character_vigor_temporary ;
+                                cache.health_vigor_ceiling = user_number.character_vigor_ceiling;
+
                                 cache.strength += cache.status_strength + cache.aging_strength;
                                 cache.dexterity += cache.status_dexterity + cache.aging_dexterity;
 
@@ -1720,6 +1657,89 @@
                                 cache.strength_mod = Math.floor(cache.strength / 2 - 5);
                                 cache.dexterity = Math.min(cache.dexterity, cache.status_dexterity_ceiling);
                                 cache.dexterity_mod = Math.min(Math.floor(cache.dexterity / 2 - 5), cache.status_dexterity_mod_ceiling);
+
+                                // ------------------------------------------
+                                // wound threshold
+                                // need "cache.status_hit_points"
+                                // need "option_template", "option_health", "option_status_wound_threshold", "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling"
+                                // ------------------------------------------
+                                if ( (user_string.option_template === "pc" || user_string.option_template === "npc" ) && user_string.option_health === "standard") {
+                                    if ( user_number.option_status_wound_threshold === 1 ) {
+                                        let current = {
+                                            "base" : cache.health_hit_points,
+                                            "ceiling": cache.health_hit_points_ceiling,
+                                            "ratio" : 0
+                                        };
+                                        // for the ratio, we need to work with positives values
+                                        if ( current.ceiling < current.base ) {
+                                            current.ratio = 0;
+                                        }
+                                        else {
+                                            if (current.base < 0) {
+                                                current.ceiling += Math.abs(current.base) + 1;
+                                                current.base = 1;
+                                            }
+                                            current.ratio = +formatNumber(current.base / current.ceiling, 0.01);
+                                        }
+
+                                        if ( current.ratio <= 0.25 ) {
+                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-critical"));
+                                            cache.status_attack -= 3;
+                                            cache.status_strength -= 3;
+                                            cache.status_dexterity -= 3;
+                                            cache.status_constitution -= 3;
+                                            cache.status_intelligence -= 3;
+                                            cache.status_wisdom -= 3;
+                                            cache.status_charisma -= 3;
+                                            cache.status_caster_level -= 3;
+                                            cache.status_fortitude -= 3;
+                                            cache.status_reflex -= 3;
+                                            cache.status_willpower -= 3;
+                                            cache.status_ac_melee -= 3;
+                                            cache.status_ac_ranged -= 3;
+                                            cache.status_skill -= 3;
+                                            cache.status_skill_perception -= 3;
+                                        }
+                                        else if ( current.ratio <= 0.5 ) {
+                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-wounded"));
+                                            cache.status_attack -= 2;
+                                            cache.status_strength -= 2;
+                                            cache.status_dexterity -= 2;
+                                            cache.status_constitution -= 2;
+                                            cache.status_intelligence -= 2;
+                                            cache.status_wisdom -= 2;
+                                            cache.status_charisma -= 2;
+                                            cache.status_caster_level -= 2;
+                                            cache.status_fortitude -= 2;
+                                            cache.status_reflex -= 2;
+                                            cache.status_willpower -= 2;
+                                            cache.status_ac_melee -= 2;
+                                            cache.status_ac_ranged -= 2;
+                                            cache.status_skill -= 2;
+                                            cache.status_skill_perception -= 2;
+                                        }
+                                        else if ( current.ratio <= 0.75 ) {
+                                            cache.status_resume.push(getTranslationByKey("status-wound-threshold-grazed"));
+                                            cache.status_attack -= 1;
+                                            cache.status_strength -= 1;
+                                            cache.status_dexterity -= 1;
+                                            cache.status_constitution -= 1;
+                                            cache.status_intelligence -= 1;
+                                            cache.status_wisdom -= 1;
+                                            cache.status_charisma -= 1;
+                                            cache.status_caster_level -= 1;
+                                            cache.status_fortitude -= 1;
+                                            cache.status_reflex -= 1;
+                                            cache.status_willpower -= 1;
+                                            cache.status_ac_melee -= 1;
+                                            cache.status_ac_ranged -= 1;
+                                            cache.status_skill -= 1;
+                                            cache.status_skill_perception -= 1;
+                                        }
+
+                                        delete(current);
+                                    }
+                                }
 
                                 // ------------------------------------------
                                 // encumbrance
@@ -2020,6 +2040,16 @@
 
                                 // prepare payload
                                 let payload = {};
+
+                                payload["health_hit_points"] = cache.health_hit_points;
+                                payload["health_hit_points_max"] = cache.health_hit_points_ceiling;
+                                payload["health_nonlethal_damage"] = cache.health_nonlethal_damage;
+                                payload["health_nonlethal_damage_max"] = cache.health_nonlethal_damage_ceiling;
+
+                                payload["health_wound_points"] = cache.health_wound_points;
+                                payload["health_wound_points_max"] = cache.health_wound_points_ceiling;
+                                payload["health_vigor"] = cache.health_vigor;
+                                payload["health_vigor_max"] = cache.health_vigor_ceiling;
 
                                 payload["character_status"] = cache.status_resume.join(", ");
                                 payload["status_effect"] = cache.status_effect.join("\n");
@@ -4113,11 +4143,11 @@
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_hit_points" title="" data-i18n-title="character-hit-points-title" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled" />
+                                        <input type="number" name="attr_health_hit_points" value="0" readonly="readonly"/>
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_hit_points_max" title="" data-i18n-title="character-hit-points-max-title" value="@{character_hit_points_ceiling}+@{foo_status_hit_points}" disabled="disabled" />
+                                        <input type="number" name="attr_health_hit_points_max" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4127,11 +4157,11 @@
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_nonlethal_damage" title="" data-i18n-title="character-nonlethal-damage-title" value="@{character_nonlethal_damage_base}+@{character_nonlethal_damage_temporary}" disabled="disabled"/>
+                                        <input type="number" name="attr_health_nonlethal_damage" title="" data-i18n-title="character-nonlethal-damage-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_nonlethal_damage_max" title="" data-i18n-title="character-nonlethal-damage-max-title" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
+                                        <input type="number" name="attr_health_nonlethal_damage_max" title="" data-i18n-title="character-nonlethal-damage-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4147,11 +4177,11 @@
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_wound_points" title="" data-i18n-title="character-wound-points-title" value="(@{character_wound_points_base}+@{character_wound_points_temporary})" disabled="disabled" />
+                                        <input type="number" name="attr_health_wound_points" title="" data-i18n-title="character-wound-points-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_wound_points_max" title="" data-i18n-title="character-wound-points-max-title" value="(@{character_wound_points_ceiling})" disabled="disabled" />
+                                        <input type="number" name="attr_health_wound_points_max" title="" data-i18n-title="character-wound-points-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4161,11 +4191,11 @@
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_character_vigor" title="" data-i18n-title="character-vigor-title" value="(@{character_vigor_base}+@{character_vigor_temporary})" disabled="disabled" />
+                                        <input type="number" name="attr_health_vigor" title="" data-i18n-title="character-vigor-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_character_vigor_max" title="" data-i18n-title="character-vigor-max-title" value="(@{character_vigor_ceiling})" disabled="disabled" />
+                                        <input type="number" name="attr_health_vigor_max" title="" data-i18n-title="character-vigor-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4752,7 +4782,7 @@
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{character_hit_points}" disabled="disabled"/>
+                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -5539,7 +5569,7 @@
                                         <tbody>
                                         <tr>
                                             <td>
-                                                <input type="text" class="disabled text-strong" name="attr_character_height_total" title="" value="" readonly="readonly"/>
+                                                <input type="text" class="disabled text-strong" name="attr_character_height_total" title="" value="" readonly="readonly" />
                                             </td>
                                             <td>
                                                 <input type="text" name="attr_character_height_base" title="" class="disabled" value="" readonly="readonly" />
@@ -19547,6 +19577,9 @@
                                             <option data-i18n="equipment-weapon-blunt-or-piercing" value="5"></option>
                                             <option data-i18n="equipment-weapon-blunt-or-sharp" value="6"></option>
                                             <option data-i18n="equipment-weapon-piercing-or-sharp" value="7"></option>
+                                            <option data-i18n="equipment-weapon-blunt-and-piercing" value="8"></option>
+                                            <option data-i18n="equipment-weapon-blunt-and-sharp" value="9"></option>
+                                            <option data-i18n="equipment-weapon-piercing-and-sharp" value="10"></option>
                                         </select>
                                     </td>
                                     <td width="21.428571%">
