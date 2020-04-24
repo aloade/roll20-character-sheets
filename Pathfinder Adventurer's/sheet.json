@@ -2,7 +2,7 @@
   "authors": "lo(ea)l,Einkil",
   "roll20userid": "4268433,707682",
   "preview": "preview.jpg",
-  "instructions": "Please read the README.md file.",
+  "instructions": "code : lo(ea)l, review : Einkil\nPlease read the README.md file.",
   "html": "pathfinder-adventurers.html",
   "css": "pathfinder-adventurers.css",
   "compendium": "pathfinder",
@@ -78,6 +78,25 @@
       "descriptiontranslationkey": "useroptions-whisper-description"
     },
     {
+      "attribute": "character_experience_rate",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-experience-rate",
+      "type": "select",
+      "options": [
+        "Slow|1",
+        "Medium|2",
+        "Fast[3"
+      ],
+      "optiontranslationkeys": [
+        "character-experience-rate-slow",
+        "character-experience-rate-medium",
+        "character-experience-rate-fast"
+      ],
+      "default": "2",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-experience-rate-description"
+    },
+    {
       "attribute": "option_status",
       "displayname": "",
       "displaytranslationkey": "useroptions-status",
@@ -114,13 +133,13 @@
       "descriptiontranslationkey": "useroptions-status-armor-penalty-description"
     },
     {
-      "attribute": "option_status_load",
+      "attribute": "option_status_encumbrance",
       "displayname": "",
-      "displaytranslationkey": "useroptions-status-load",
+      "displaytranslationkey": "useroptions-status-encumbrance",
       "type": "checkbox",
       "value": "1",
       "description": "foo",
-      "descriptiontranslationkey": "useroptions-status-load-description"
+      "descriptiontranslationkey": "useroptions-status-encumbrance-description"
     },
     {
       "attribute": "option_unit_movement",
