@@ -865,7 +865,6 @@
         + " change:equipment_magic_head_weight change:equipment_magic_neck_weight change:equipment_magic_body_weight change:equipment_magic_belt_weight change:equipment_magic_wrist_weight change:equipment_magic_hand_weight change:equipment_magic_finger1_weight change:equipment_magic_finger2_weight change:equipment_magic_foot_weight"
         , common );
      function common() {
-         console.log("go");
         getAttrsNumber([
             "option_unit_decimal", "option_unit_thousand", "option_unit_movement", "option_unit_weight",
             "option_status", "option_status_aging", "option_status_armor_penalty", "option_status_encumbrance", "option_status_wound_threshold",
@@ -1520,7 +1519,7 @@
                             // aging
                             // need "option_template"
                             // ------------------------------------------
-                            switch( user_number.option_template) {
+                            switch( user_string.option_template) {
                                 case "companion" : // companion
                                     if ( user_number.option_status_aging === 1 ) {
                                         if ( user_number.character_age_select === 1 ) { // youth
@@ -3289,7 +3288,7 @@
 
     // sort string with locale configuration
     //
-    // array            (array) number to parse
+    // array            (array of strings)
     function sortLocale(array) {
         return array.sort((strA, strB) => strA.localeCompare(strB, local.language) > 0);
     }
@@ -19445,6 +19444,7 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
+                        <h1 data-i18n="note-h1"></h1>
                         <div class="note section">
                             <fieldset class="repeating_note">
                                 <div class="note-content">
@@ -19881,7 +19881,7 @@
         </div>
         <div class="sheet-body">
             <p>
-                <span data-i18n="rt-caster-level"></span> : {{caster_level}}
+                <b><span data-i18n="rt-caster-level-test"></span></b> : {{caster_level}}
             </p>
         </div>
     </div>
@@ -20107,7 +20107,7 @@
         {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
         <div class="sheet-body">
             <p>
-                <b>{{label}}</b><br />
+                <b>{{label}}</b>
                 <b>{{label_concentration}}</b> : {{test}}<br />
                 <!-- FAILED -->
                 {{#rollLess() test difficulty_class}}<b class="sheet-danger"><span data-i18n="rt-concentration-failed"></span></b>{{/rollLess() test difficulty_class}}
