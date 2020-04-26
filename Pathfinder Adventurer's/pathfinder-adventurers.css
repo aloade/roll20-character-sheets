@@ -598,6 +598,10 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     cursor: pointer;
 }
 
+.sheet-modal-checkbox:checked {
+    position: fixed;
+}
+
 .charsheet .sheet-modal-checkbox:checked ~ .sheet-modal-content {
     opacity: 1;
     visibility: visible;
