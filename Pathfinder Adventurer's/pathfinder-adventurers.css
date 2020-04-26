@@ -1167,7 +1167,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     pointer-events:none;
 }
 
-.charsheet .sheet-paper input:disabled, .charsheet .sheet-paper input[type="text"].sheet-disabled {
+.charsheet .sheet-paper input:disabled, .charsheet .sheet-paper input.sheet-disabled {
     background: transparent repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 7px);
     border: none;
 }
