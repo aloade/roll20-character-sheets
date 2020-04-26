@@ -204,34 +204,36 @@
             "label_skill_representation": getTranslationByKey("skill-representation-label")
         };
 
-        // send payload
+        // send payload + init all variables
         setAttrs(payload, {silent:true}, () => {
             common();
+
             character_spoken_language();
             character_height_weight();
-            character_companion();
+
+            companion_race();
 
             specialization_weapon_proficiency();
-            //class_name();
+            //class_name_repeating();
             specialization_class_experience();
-            //specialization_class_name();
+            //specialization_class_name_repeating();
             weapon_attribute_modifier();
             //weapon_attribute_modifier_repeating();
 
-            spellcustom();
-            //spellcustom_type();
-            //spellcustom_save();
-            //spellcustom_damage();
+            spellcustom_repeating();
+            //spell_type_repeating();
+            //spell_save_repeating();
+            //spell_damage_repeating();
 
             skill();
             skill_representation();
             skill_custom();
 
             equipment_armor();
-            //equipment_to_battle();
-            //equipment_to_deposit();
+            //inventory_to_battle_repeating();
+            //inventory_to_deposit_repeating();
 
-            //note_to_equipment();
+            //deposit_to_inventory_repeating();
         });
     });
 
@@ -863,6 +865,7 @@
         + " change:equipment_magic_head_weight change:equipment_magic_neck_weight change:equipment_magic_body_weight change:equipment_magic_belt_weight change:equipment_magic_wrist_weight change:equipment_magic_hand_weight change:equipment_magic_finger1_weight change:equipment_magic_finger2_weight change:equipment_magic_foot_weight"
         , common );
      function common() {
+         console.log("go");
         getAttrsNumber([
             "option_unit_decimal", "option_unit_thousand", "option_unit_movement", "option_unit_weight",
             "option_status", "option_status_aging", "option_status_armor_penalty", "option_status_encumbrance", "option_status_wound_threshold",
@@ -2386,9 +2389,12 @@
         });
     }
 
+    // ------------------------------------------
+    // companion
+    // ------------------------------------------
     // companion race
-    on( "change:companion_race", character_companion );
-    function character_companion() {
+    on( "change:companion_race", companion_race );
+    function companion_race() {
         getAttrsNumber(["companion_race"], (user) => {
             // prepare payload
             let payload = {};
@@ -2430,8 +2436,8 @@
     }
 
     // class name
-    on( "change:repeating_class:class_name", class_name );
-    function class_name(e) {
+    on( "change:repeating_class:class_name", class_name_repeating );
+    function class_name_repeating(e) {
         // format "repeating_class_-LrcL2qT7lhjZ6BZrble_class_name"
         let source = e.sourceAttribute.replace(/class_name/, '');
 
@@ -2569,8 +2575,8 @@
     }
 
     // class name
-    on( "change:repeating_classspecialization:class_specialization_name", specialization_class_name );
-    function specialization_class_name(e) {
+    on( "change:repeating_classspecialization:class_specialization_name", specialization_class_name_repeating );
+    function specialization_class_name_repeating(e) {
         // format "repeating_classspecialization_-LrcL2qT7lhjZ6BZrble_class_specialization_name"
         let source = e.sourceAttribute.replace(/class_specialization_name/, '');
 
@@ -2650,8 +2656,8 @@
     // spell
     // ------------------------------------------
     // spell custom
-    on( "change:repeating_spellcustom:spellcustom_prepared change:repeating_spellcustom:spellcustom_level remove:repeating_spellcustom", spellcustom);
-    function spellcustom() {
+    on( "change:repeating_spellcustom:spellcustom_prepared change:repeating_spellcustom:spellcustom_level remove:repeating_spellcustom", spellcustom_repeating);
+    function spellcustom_repeating() {
         getAttrsRepeating("spellcustom", ["spellcustom_prepared","spellcustom_level"], (repeating) => {
             let cache = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0];
 
@@ -2681,62 +2687,62 @@
         });
     }
 
-    on( "change:repeating_spellcustom:spellcustom_incantation_type", spell_type );
-    on( "change:repeating_spellcustom:spellcustom_save", spell_save );
-    on( "change:repeating_spellcustom:spellcustom_damage", spell_damage );
+    on( "change:repeating_spellcustom:spellcustom_incantation_type", spell_type_repeating );
+    on( "change:repeating_spellcustom:spellcustom_save", spell_save_repeating );
+    on( "change:repeating_spellcustom:spellcustom_damage", spell_damage_repeating );
 
     // spell 0
-    on( "change:repeating_spell0:spell0_incantation_type", spell_type );
-    on( "change:repeating_spell0:spell0_save", spell_save );
-    on( "change:repeating_spell0:spell0_damage", spell_damage );
+    on( "change:repeating_spell0:spell0_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell0:spell0_save", spell_save_repeating );
+    on( "change:repeating_spell0:spell0_damage", spell_damage_repeating );
 
     // spell 1
-    on( "change:repeating_spell1:spell1_incantation_type", spell_type );
-    on( "change:repeating_spell1:spell1_save", spell_save );
-    on( "change:repeating_spell1:spell1_damage", spell_damage );
+    on( "change:repeating_spell1:spell1_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell1:spell1_save", spell_save_repeating );
+    on( "change:repeating_spell1:spell1_damage", spell_damage_repeating );
 
     // spell 2
-    on( "change:repeating_spell2:spell2_incantation_type", spell_type );
-    on( "change:repeating_spell2:spell2_save", spell_save );
-    on( "change:repeating_spell2:spell2_damage", spell_damage );
+    on( "change:repeating_spell2:spell2_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell2:spell2_save", spell_save_repeating );
+    on( "change:repeating_spell2:spell2_damage", spell_damage_repeating );
 
     // spell 3
-    on( "change:repeating_spell3:spell3_incantation_type", spell_type );
-    on( "change:repeating_spell3:spell3_save", spell_save );
-    on( "change:repeating_spell3:spell3_damage", spell_damage );
+    on( "change:repeating_spell3:spell3_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell3:spell3_save", spell_save_repeating );
+    on( "change:repeating_spell3:spell3_damage", spell_damage_repeating );
 
     // spell 4
-    on( "change:repeating_spell4:spell4_incantation_type", spell_type );
-    on( "change:repeating_spell4:spell4_save", spell_save );
-    on( "change:repeating_spell4:spell4_damage", spell_damage );
+    on( "change:repeating_spell4:spell4_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell4:spell4_save", spell_save_repeating );
+    on( "change:repeating_spell4:spell4_damage", spell_damage_repeating );
 
     // spell 5
-    on( "change:repeating_spell5:spell5_incantation_type", spell_type );
-    on( "change:repeating_spell5:spell5_save", spell_save );
-    on( "change:repeating_spell5:spell5_damage", spell_damage );
+    on( "change:repeating_spell5:spell5_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell5:spell5_save", spell_save_repeating );
+    on( "change:repeating_spell5:spell5_damage", spell_damage_repeating );
 
     // spell 6
-    on( "change:repeating_spell6:spell6_incantation_type", spell_type );
-    on( "change:repeating_spell6:spell6_save", spell_save );
-    on( "change:repeating_spell6:spell6_damage", spell_damage );
+    on( "change:repeating_spell6:spell6_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell6:spell6_save", spell_save_repeating );
+    on( "change:repeating_spell6:spell6_damage", spell_damage_repeating );
 
     // spell 7
-    on( "change:repeating_spell7:spell7_incantation_type", spell_type );
-    on( "change:repeating_spell7:spell7_save", spell_save );
-    on( "change:repeating_spell7:spell7_damage", spell_damage );
+    on( "change:repeating_spell7:spell7_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell7:spell7_save", spell_save_repeating );
+    on( "change:repeating_spell7:spell7_damage", spell_damage_repeating );
 
     // spell 8
-    on( "change:repeating_spell8:spell8_incantation_type", spell_type );
-    on( "change:repeating_spell8:spell8_save", spell_save );
-    on( "change:repeating_spell8:spell8_damage", spell_damage );
+    on( "change:repeating_spell8:spell8_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell8:spell8_save", spell_save_repeating );
+    on( "change:repeating_spell8:spell8_damage", spell_damage_repeating );
 
     // spell 9
-    on( "change:repeating_spell9:spell9_incantation_type", spell_type );
-    on( "change:repeating_spell9:spell9_save", spell_save );
-    on( "change:repeating_spell9:spell9_damage", spell_damage );
+    on( "change:repeating_spell9:spell9_incantation_type", spell_type_repeating );
+    on( "change:repeating_spell9:spell9_save", spell_save_repeating );
+    on( "change:repeating_spell9:spell9_damage", spell_damage_repeating );
 
     // spell functions
-    function spell_type( event ) {
+    function spell_type_repeating( event ) {
         // get spell level
         let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
         if (level === null) return;
@@ -2771,7 +2777,7 @@
         setAttrs(payload);
     }
 
-    function spell_save( event ) {
+    function spell_save_repeating( event ) {
         // get spell level
         let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
         if (level === null) return;
@@ -2789,7 +2795,7 @@
         setAttrs(payload);
     }
 
-    function spell_damage( event ) {
+    function spell_damage_repeating( event ) {
         // get spell level
         let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
         if (level === null) return;
@@ -3000,8 +3006,8 @@
     }
 
     // export "equipment_weapon" element to "repeating_battle"
-    on( "clicked:repeating_equipmentweapon:create-attack", equipment_to_battle );
-    function equipment_to_battle(event)  {
+    on( "clicked:repeating_equipmentweapon:create-attack", inventory_to_battle_repeating );
+    function inventory_to_battle_repeating(event)  {
         // format "repeating_equipmentweapon_-LrcL2qT7lhjZ6BZrble_create-attack"
         let source = event.sourceAttribute.replace(/create-attack$/, '');
 
@@ -3040,26 +3046,29 @@
                 field.set = stringAddBegin(field.set, "repeating_battle_"+generateRowID()+"_" );
 
                 let cache = [];
-                if ( user_number[ field.getNumber.range ] === 1 && user_string[ field.getString.range_description ] !== "" ) cache.push( getTranslationByKey("battle-range").replace("%s", user_string[ field.getString.range_description ]) );
                 if ( user_string[ field.getString.special ] !== "" ) cache.push( user_string[ field.getString.special ] );
 
                 // prepare payload
                 let payload = {};
                 payload[field.set.name] = user_string[ field.getString.name ];
-                payload[field.set.description_short] = cache.join(", ");
                 payload[field.set.damage_dices_count] = user_number[ field.getNumber.damage_dices_count ];
                 payload[field.set.damage_dices] = user_number[ field.getNumber.damage_dices ];
                 switch( user_number[ field.getNumber.range ]) {
                     case 1: // melee
+                        payload[field.set.range] = 0;
                         payload[field.set.modifier_select] = 2;
                         break;
 
                     case 2: // ranged
+                        if ( user_string[ field.getString.range_description ] !== "" ) cache.push( getTranslationByKey("battle-range").replace("%s", user_string[ field.getString.range_description ]) );
+                        payload[field.set.range] = 1;
                         payload[field.set.modifier_select] = 1;
                         break;
                 }
                 payload[field.set.damage_critic] = user_number[ field.getNumber.damage_critic ];
                 payload[field.set.damage_critic_multiplier] = user_number[ field.getNumber.damage_critic_multiplier ];
+
+                payload[field.set.description_short] = cache.join(", ");
 
                 delete(cache);
                 delete(user_number);
@@ -3073,8 +3082,8 @@
     }
 
     // transfert object to "repeating_deposit"
-    on( "clicked:repeating_equipment:inventory-to-deposit", equipment_to_deposit );
-    function equipment_to_deposit(event) {
+    on( "clicked:repeating_equipment:inventory-to-deposit", inventory_to_deposit_repeating );
+    function inventory_to_deposit_repeating(event) {
         // format "repeating_equipment_-LrcL2qT7lhjZ6BZrble_inventory-to-deposit"
         let source = event.sourceAttribute.replace(/inventory-to-deposit$/, '');
 
@@ -3084,10 +3093,10 @@
                 "weight" : "equipment_weight"
             },
             "getString" : {
-                "label" : "label_equipment",
+                "label" : "equipment_label",
             },
             "set" : {
-                "label" : "label_deposit",
+                "label" : "deposit_label",
                 "quantity": "deposit_quantity",
                 "weight": "deposit_weight"
             }
@@ -3110,21 +3119,22 @@
                 delete(user_number);
                 delete(user_string);
 
-                // send payload
-                setAttrs(payload);
-
                 // remove object in equipment
                 removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                // note  removeRepeatingRow() don't trigger on("remove:repeating_equipment")
+                setAttrs(payload, {silent:true}, common );
             });
-        });
+        })
     }
 
     // ------------------------------------------
     // notes
     // ------------------------------------------
     // transfert object to "repeating_equipment"
-    on( "clicked:repeating_deposit:deposit-to-inventory", note_to_equipment );
-    function note_to_equipment(event) {
+    on( "clicked:repeating_deposit:deposit-to-inventory", deposit_to_equipment_repeating );
+    function deposit_to_equipment_repeating(event) {
         // format "repeating_deposit_-LrcL2qT7lhjZ6BZrble_deposit-to-inventory"
         let source = event.sourceAttribute.replace(/deposit-to-inventory$/, '');
 
@@ -3134,10 +3144,10 @@
                 "weight" : "deposit_weight"
             },
             "getString" : {
-                "label" : "label_deposit",
+                "label" : "deposit_label",
             },
             "set" : {
-                "label" : "label_equipment",
+                "label" : "equipment_label",
                 "quantity": "equipment_quantity",
                 "weight": "equipment_weight"
             }
@@ -3160,11 +3170,11 @@
                 delete(user_number);
                 delete(user_string);
 
-                // send payload
-                setAttrs(payload);
-
                 // remove object in deposit
                 removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                setAttrs(payload, {silent:true}, equipment_armor);
             });
         });
     }
@@ -6096,7 +6106,7 @@
                                                             </td>
                                                             <td>
                                                                 <div class="input-group">
-                                                                    <input type="number" class="disabled" name="attr_battle_mod_attribute" title="" value="0" readonly="readonly"/>
+                                                                    <input type="number" class="disabled" name="attr_battle_mod_attribute" title="" value="0" readonly="readonly" />
                                                                     <select class="fixed-small" name="attr_battle_mod_attribute_select" title="" data-i18n-list="battle-modifier-attribute-list">
                                                                         <option data-i18n="character-dexterity-short" value="1" data-i18n-list-item="dexterity"></option>
                                                                         <option data-i18n="character-strength-short" selected="selected" value="2" data-i18n-list-item="strength"></option>
