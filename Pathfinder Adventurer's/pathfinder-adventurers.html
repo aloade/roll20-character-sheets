@@ -752,7 +752,7 @@
                 delete(user_string);
 
                 // send payload
-                setAttrs(payload, {silent: true}, purge_callback);
+                setAttrs(payload, {silent: false}, purge_callback);
 
                 // functions
                 function weight_callback(match) {
@@ -5638,7 +5638,7 @@
                         </div>
                     </div>
 
-                    <textarea name="attr_character_race_note" title=""></textarea>
+                    <textarea name="attr_character_appearance_note" title=""></textarea>
                 </div>
 
                 <h1 data-i18n="move-h1"></h1>
@@ -5697,6 +5697,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_character_movement_note" title=""></textarea>
                 </div>
             </div>
@@ -19181,6 +19182,9 @@
                             <th>
                                 <div class="button-fake"></div>
                             </th>
+                            <th>
+                                <div class="button-fake"></div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -19904,7 +19908,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
-                            
+
                             <fieldset class="repeating_deposit">
                                 <table>
                                     <tbody>
