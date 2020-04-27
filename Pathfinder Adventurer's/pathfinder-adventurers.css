@@ -724,7 +724,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-modal-dialog input {
-    border-bottom: 1px solid rgb(100, 100, 100);
+    border-bottom: 1px solid rgb(100, 100, 100) !important;
 }
 
 /* accordion */
@@ -1554,7 +1554,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-spell-failure table {
+.charsheet .sheet-spell-risk-failure-arcane-spell table {
     max-width: 360px;
     margin-bottom: 15px;
 }
@@ -1736,12 +1736,12 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-defense-armor-class {
+.charsheet .sheet-armor-class {
     max-width: 480px;
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-defense-armor-class-detail {
+.charsheet .sheet-armor-class-detail {
     max-width: 1080px;
     margin-bottom: 15px;
 }
@@ -1813,7 +1813,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 /* inventory */
-.charsheet .sheet-currency table {
+.charsheet .sheet-purse table {
     max-width: 480px;
 }
 
@@ -1856,7 +1856,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     box-shadow: 0 1px rgb(223, 144, 97), 0 2px 4px rgba(0, 0, 0, 0.3);
 }
 
-.charsheet .sheet-inventory-weight table {
+.charsheet .sheet-encumbrance table {
     max-width: 360px;
 }
 

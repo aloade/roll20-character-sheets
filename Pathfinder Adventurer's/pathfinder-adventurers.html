@@ -230,9 +230,11 @@
             skill_custom();
 
             equipment_armor();
+            //weapon_to_racks_repeating();
             //inventory_to_battle_repeating();
             //inventory_to_deposit_repeating();
 
+            //racks_to_weapon_repeating();
             //deposit_to_inventory_repeating();
         });
     });
@@ -286,7 +288,7 @@
                 if ( user_string.hasOwnProperty("compendium_category")) {
                     switch (user_string.compendium_category.toLowerCase()) {
                         case "bestiary":
-                            if ( user_number.option_template === "npc" ) cache.type = "monster";
+                            if ( user_string.option_template === "npc" ) cache.type = "monster";
                             break;
 
                         case "items":
@@ -337,8 +339,8 @@
                         payload[cache.header+"malus"] = +user_string.compendium_armor_check_penalty;
                         // arcane_spell_failure_chance
                         if ( user_string.compendium_arcane_spell_failure_chance !== "" ) {
-                            cache.arcane_spell_failure_chance = user_string.compendium_arcane_spell_failure_chance.match(/^([0-9]+)/);
-                            if ( cache.arcane_spell_failure_chance !== null ) payload[cache.header + "spell_failure"] = +cache.arcane_spell_failure_chance[1];
+                            let regex = user_string.compendium_arcane_spell_failure_chance.match(/^([0-9]+)/);
+                            if ( regex !== null ) payload[cache.header + "spell_failure"] = +regex[1];
                         }
                         // name
                         payload[cache.header+"name"] = user_string.compendium_name;
@@ -380,11 +382,21 @@
                         payload["monster_size"] = user_string.compendium_size;
 
                         // background
-                        if ( user_string.compendium_aligment !== "") {
-                            cache.aligment = user_string.compendium_aligment.match(/([cln])([gne])/i);
-
+                        if ( user_string.compendium_alignment !== "") {
+                            let regex = user_string.compendium_alignment.match(/([cln])([gne])/i);
+                            let alignment = [];
+                            switch( regex[1].toLowerCase() ) {
+                                case "c" : alignment.push("chaotic"); break;
+                                case "l" : alignment.push("lawful"); break;
+                                case "n" : alignment.push("neutral"); break;
+                            }
+                            switch( regex[2].toLowerCase() ) {
+                                case "e" : alignment.push("evil"); break;
+                                case "g" : alignment.push("good"); break;
+                                case "n" : alignment.push("neutral"); break;
+                            }
+                            payload["monster_alignment"] = alignment.join(" "); // [CLN][gne]
                         }
-                        payload["monster_alignment"] = user_string.compendium_alignment; // [CLN][gne]
                         payload["monster_content"] = user_string.compendium_content;
                         payload["monster_creature_type"] = user_string.compendium_creature_type;
                         payload["monster_environment"] = user_string.compendium_environment;
@@ -459,9 +471,9 @@
                         if ( user_string.compendium_casting_time !== "" ) {
                             // format : <string>
                             // regex : 1 - string
-                            cache.casting_time = user_string.compendium_casting_time.match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
-                            if ( cache.casting_time !== null ) {
-                                switch(cache.casting_time[1]) {
+                            let regex = user_string.compendium_casting_time.match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
+                            if ( regex !== null ) {
+                                switch(regex[1]) {
                                     case "1 minute": payload[cache.header + "casting_time"] = 1; break;
                                     case "1 round": payload[cache.header + "casting_time"] = 2; break;
                                     case "free": payload[cache.header + "casting_time"] = 3; break;
@@ -474,23 +486,23 @@
                         }
                         // components
                         if ( user_string.compendium_components !== "" ) {
-                            cache.components = user_string.compendium_components.match(/(DF|F|M|S|V)/g);
-                            if ( cache.components !== null ) {
-                                payload[cache.header + "component_verbal"] = (cache.components.indexOf("V") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_somatic"] = (cache.components.indexOf("S") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_material"] = (cache.components.indexOf("M") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_focalizing"] = (cache.components.indexOf("F") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_divine_focalizing"] = (cache.components.indexOf("DF") !== -1 ? 1 : 0);
+                            let regex = user_string.compendium_components.match(/(DF|F|M|S|V)/g);
+                            if ( regex !== null ) {
+                                payload[cache.header + "component_verbal"] = (regex.indexOf("V") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_somatic"] = (regex.indexOf("S") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_material"] = (regex.indexOf("M") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_focalizing"] = (regex.indexOf("F") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_divine_focalizing"] = (regex.indexOf("DF") !== -1 ? 1 : 0);
 
-                                cache.components = user_string.compendium_components.match(/\(([^\(^)]+)\)/g);
+                                regex = user_string.compendium_components.match(/\(([^\(^)]+)\)/g);
                                 // format <*> (<string>)
                                 // regex : 2 - materiel details
-                                if ( cache.components !== null ) {
-                                    cache.components_description = [];
-                                    for ( let i = 0, size = cache.components.length; i < size; i++) {
-                                        cache.components_description.push(cache.components[i].slice(1,-1));
+                                if ( regex !== null ) {
+                                    regex_description = [];
+                                    for ( let i = 0, size = regex.length; i < size; i++) {
+                                        regex_description.push(regex[i].slice(1,-1));
                                     }
-                                    cache.content.push(getTranslationByKey("spell-content-component") + cache.components_description.join(", "));
+                                    cache.content.push(getTranslationByKey("spell-content-component") + regex_description.join(", "));
                                 }
                             }
                         }
@@ -498,11 +510,11 @@
                         if ( user_string.compendium_spell_damage !== "" ) {
                             // format : <number>d<number> + <number>
                             // regex : 1 - dice count / 2 - dices / 4 - damage fixed
-                            cache.damage = user_string.compendium_spell_damage.match(/([0-9]+)d([0-9]+)(\s+\+\s+([0-9]+))?/i);
-                            if ( cache.damage !== null ) {
-                                payload[cache.header + "damage_dices_count"] = +cache.damage[1];
-                                payload[cache.header + "damage_dices"] = +cache.damage[2];
-                                if ( cache.damage[4] !== undefined ) payload[cache.header + "damage_misc"] = +cache.damage[4];
+                            let regex = user_string.compendium_spell_damage.match(/([0-9]+)d([0-9]+)(\s+\+\s+([0-9]+))?/i);
+                            if ( regex !== null ) {
+                                payload[cache.header + "damage_dices_count"] = +regex[1];
+                                payload[cache.header + "damage_dices"] = +regex[2];
+                                if ( regex[4] !== undefined ) payload[cache.header + "damage_misc"] = +regex[4];
                             }
                             else {
                                 payload[cache.header + "damage"] = 1;
@@ -516,9 +528,9 @@
                         if ( user_string.compendium_duration !== "" ) {
                             // format : <string>
                             // regex : 1 - string
-                            cache.duration = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
-                            if ( cache.duration !== null ) {
-                                switch(cache.duration[1]) {
+                            let regex = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
+                            if ( regex !== null ) {
+                                switch(regex[1]) {
                                     case "concentration": payload[cache.header + "duration"] = 1; break;
                                     case "instantaneous": payload[cache.header + "duration"] = 2; break;
                                     case "permanent": payload[cache.header + "duration"] = 4; break;
@@ -548,9 +560,9 @@
                         if ( user_string.compendium_range !== "" ) {
                             // format : <string> <*>
                             // regex : 1 - range / 3 - range details
-                            cache.range = user_string.compendium_range.match(/([a-z]+)(\s+\(?(.*)\))?/i);
-                            if ( cache.range !== null ) {
-                                switch (cache.range[1].toLowerCase()) {
+                            let regex = user_string.compendium_range.match(/([a-z]+)(\s+\(?(.*)\))?/i);
+                            if ( regex !== null ) {
+                                switch (regex[1].toLowerCase()) {
                                     case "personal": payload[cache.header + "range"] = 1;break;
                                     case "touch": payload[cache.header + "range"] = 2; break;
                                     case "close": payload[cache.header + "range"] = 3; break;
@@ -558,24 +570,24 @@
                                     case "long": payload[cache.header + "range"] = 5; break;
                                     case "unlimited": payload[cache.header + "range"] = 6; break;
                                 }
-                                if ( cache.range[3] !== undefined ) payload[cache.header + "range_description"] = cache.range[3];
+                                if ( regex[3] !== undefined ) payload[cache.header + "range_description"] = regex[3];
                             }
                         }
                         // saving throw
                         if ( user_string.compendium_saving_throw !== "" ) {
                             // format : <string> <string> (<string>)
                             // regex : 1 - save / 3 - save type / 4 - harmless
-                            cache.saving_throw = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s+(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
-                            if ( cache.saving_throw !== null ) {
-                                switch (cache.saving_throw[1].toLowerCase()) {
+                            let regex = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s+(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
+                            if ( regex !== null ) {
+                                switch (regex[1].toLowerCase()) {
                                     case "none": payload[cache.header + "save"] = 0; break;
                                     case "fortitude": payload[cache.header + "save"] = 1; break;
                                     case "reflex": payload[cache.header + "save"] = 2; break;
                                     case "will": payload[cache.header + "save"] = 3; break;
                                 }
-                                if ( cache.saving_throw[3] !== undefined ) {
-                                    if ( cache.saving_throw[4] !== undefined ) cache.saving_throw[3] = cache.saving_throw[3] + " harmless";
-                                    switch (cache.saving_throw[3].toLowerCase()) {
+                                if ( regex[3] !== undefined ) {
+                                    if ( regex[4] !== undefined ) regex[3] = regex[3] + " harmless";
+                                    switch (regex[3].toLowerCase()) {
                                         case "half": payload[cache.header + "save_type"] = 3; break;
                                         case "harmless": payload[cache.header + "save_type"] = 4; break;
                                         case "negates": payload[cache.header + "save_type"] = 1; break;
@@ -591,10 +603,10 @@
                         if ( user_string.compendium_school !== "" ) {
                             // format : <string> (<string>) [<array>]
                             // regex : 1 - school / 3 - school (sub) / 5 - register
-                            cache.school = user_string.compendium_school.match(/([a-z]+)(\s+\(([a-z]+)\))?(\s+\[([ a-z,-]+)\])?/i);
+                            let regex = user_string.compendium_school.match(/([a-z]+)(\s+\(([a-z]+)\))?(\s+\[([ a-z,-]+)\])?/i);
                             if( cache.scholl !== null ) {
-                                if ( cache.school[3] === undefined ) cache.school[3] = cache.school[1];
-                                switch (cache.school[3].toLowerCase()) {
+                                if ( regex[3] === undefined ) regex[3] = regex[1];
+                                switch (regex[3].toLowerCase()) {
                                     // abjuration
                                     case "abjuration": payload[cache.header + "school"] = 1.1; break;
                                     // conjuration
@@ -629,9 +641,9 @@
                                     default: case "universal": payload[cache.header + "school"] = 9.1;
                                     break;
                                 }
-                                if ( cache.school[5] !== undefined ) {
-                                    cache.school[5] = cache.school[5].split(", ");
-                                    switch (cache.school[5][0].toLowerCase()) { // select only first possibility
+                                if ( regex[5] !== undefined ) {
+                                    regex[5] = regex[5].split(", ");
+                                    switch (regex[5][0].toLowerCase()) { // select only first possibility
                                         case "acid": payload[cache.header + "register"] = 1; break;
                                         case "air": payload[cache.header + "register"] = 2; break;
                                         case "chaos": payload[cache.header + "register"] = 3; break;
@@ -677,33 +689,35 @@
 
                         // generate new ID
                         // note : setAttrs() generate new row if doesn't exist
-                        cache.header = "repeating_equipmentweapon_"+generateRowID()+"_equipment_weapon_";
+                        cache.header = "repeating_weapon_"+generateRowID()+"_equipment_weapon_";
 
                         // critic
                         if ( user_string.compendium_critical_range !== "" ) {
-                            cache.critical_range = user_string.compendium_critical_range.match(/^([0-9]+)/);
-                            if ( cache.critical_range !== null ) payload[cache.header+"critic"] = +cache.critical_range[1];
+                            let regex = user_string.compendium_critical_range.match(/^([0-9]+)/);
+                            if ( regex !== null ) payload[cache.header+"critic"] = +regex[1];
                         }
                         if ( user_string.compendium_critical_damage !== "" ) {
-                            cache.critical_damage = user_string.compendium_critical_damage.match(/([0-9]+)$/);
-                            if ( cache.critical_damage !== null ) payload[cache.header + "critic_multiplier"] = +cache.critical_damage[1];
+                            let regex = user_string.compendium_critical_damage.match(/([0-9]+)$/);
+                            if ( regex !== null ) payload[cache.header + "critic_multiplier"] = +regex[1];
                         }
                         // damage
-                        cache.damage = ( user_number.compendium_category_height_active === 1 && user_number.character_category_height_select > 0 ? user_string.compendium_damage_small : cache.damage = user_string.compendium_damage_medium );
-                        if ( cache.damage !== "" ) {
-                            cache.damage = cache.damage.match(/([0-9]+)d([0-9]+)/);
-                            if ( cache.damage !== null ) {
-                                payload[cache.header + "dices_count"] = +cache.damage[1];
-                                payload[cache.header + "dices"] = +cache.damage[2];
+                        if ( user_string.compendium_damage_small !== "" || user_string.compendium_damage_medium !== "" ) {
+                            let damage = (user_number.compendium_category_height_active === 1 && user_number.character_category_height_select > 0 ? user_string.compendium_damage_small : user_string.compendium_damage_medium);
+                            if (damage !== "") {
+                                let regex = damage.match(/([0-9]+)d([0-9]+)/);
+                                if (regex !== null) {
+                                    payload[cache.header + "dices_count"] = +regex[1];
+                                    payload[cache.header + "dices"] = +regex[2];
+                                }
                             }
                         }
                         // damage type
                         if ( user_string.compendium_damage_type !== "") {
-                            cache.damage_type = 0;
-                            if ( user_string.compendium_damage_type.search(/piercing/i) !== -1 ) cache.damage_type += 1; // percing
-                            if ( user_string.compendium_damage_type.search(/slashing/i) !== -1 ) cache.damage_type += 2; // slshing
-                            if ( user_string.compendium_damage_type.search(/bludgeoning/i) !== -1 ) cache.damage_type += 4; // blugeoning
-                            switch (cache.damage_type) {
+                            let damage_type = 0;
+                            if ( user_string.compendium_damage_type.search(/piercing/i) !== -1 ) damage_type += 1; // percing
+                            if ( user_string.compendium_damage_type.search(/slashing/i) !== -1 ) damage_type += 2; // slshing
+                            if ( user_string.compendium_damage_type.search(/bludgeoning/i) !== -1 ) damage_type += 4; // blugeoning
+                            switch (damage_type) {
                                 case 1: payload[cache.header + "damage_type"] = 3; break;
                                 case 2: payload[cache.header + "damage_type"] = 4; break;
                                 case 3: payload[cache.header + "damage_type"] = 7; break;
@@ -859,8 +873,8 @@
         + " change:caster_level_rank change:caster_level_misc change:caster_level_temporary"
         + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
-        + " change:repeating_equipmentweapon:equipment_weapon_weight remove:repeating_equipmentweapon"
-        + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_type change:repeating_equipmentarmor:equipment_armor_dexterity_ceiling change:repeating_equipmentarmor:equipment_armor_penalty change:repeating_equipmentarmor:equipment_armor_weight remove:repeating_equipmentarmor"
+        + " change:repeating_weapon:equipment_weapon_weight remove:repeating_weapon"
+        + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_type change:repeating_armor:equipment_armor_dexterity_ceiling change:repeating_armor:equipment_armor_penalty change:repeating_armor:equipment_armor_weight remove:repeating_armor"
         + " change:repeating_equipment:equipment_quantity change:repeating_equipment:equipment_weight remove:repeating_equipment"
         + " change:equipment_magic_head_weight change:equipment_magic_neck_weight change:equipment_magic_body_weight change:equipment_magic_belt_weight change:equipment_magic_wrist_weight change:equipment_magic_hand_weight change:equipment_magic_finger1_weight change:equipment_magic_finger2_weight change:equipment_magic_foot_weight"
         , common );
@@ -927,8 +941,8 @@
                     return str.replace("%s", value);
                 }
 
-                getAttrsRepeating("equipmentweapon", Object.values(field.weapon), (repeating_weapon) => {
-                    getAttrsRepeating("equipmentarmor", Object.values(field.armor), (repeating_armor) => {
+                getAttrsRepeating("weapon", Object.values(field.weapon), (repeating_weapon) => {
+                    getAttrsRepeating("armor", Object.values(field.armor), (repeating_armor) => {
                         getAttrsRepeating("equipment", Object.values(field.equipment), (repeating_equipment) => {
                             let cache = {
                                 "aging_label": "",
@@ -2873,7 +2887,7 @@
         ], (user) => {
             getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
                 // white list
-                let npc_list = [ "skill_climbing_ranks", "skill_escape_ranks", "skill_fly_ranks", "skill_intimidate_ranks", "skill_perception_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_swimming_ranks" ];
+                let npc_list = ["skill_climbing_ranks", "skill_escape_ranks", "skill_fly_ranks", "skill_intimidate_ranks", "skill_perception_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_swimming_ranks"];
 
                 // prepare payload
                 let payload = {};
@@ -2888,7 +2902,9 @@
                                 break;
 
                             case "npc":
-                                if ( npc_list.indexOf(attr) !== -l ) payload["foo_skill_ranks_total"] += parseNumber(user[attr]);
+                                if ( npc_list.indexOf(attr) !== -1 ) {
+                                    payload["foo_skill_ranks_total"] += parseNumber(user[attr]);
+                                }
                                 break;
 
                             case "pc":
@@ -2908,7 +2924,7 @@
 
     // skill representation
     on(
-        "option_template"
+        "change option_template"
         + " change:repeating_skillrepresentation:skill_representation_ranks remove:repeating_skillrepresentation"
         , skill_representation);
     function skill_representation() {
@@ -2966,7 +2982,7 @@
     // armor bonus + spell failure
     on( "change:user_decimal"
         + " change:spell_failure_misc change:spell_failure_temporary"
-        + " change:repeating_equipmentarmor:equipment_armor_worn change:repeating_equipmentarmor:equipment_armor_bonus change:equipment_armor_spell_failure remove:repeating_equipmentarmor"
+        + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_bonus change:equipment_armor_spell_failure remove:repeating_armor"
         , equipment_armor);
     function equipment_armor() {
         getAttrsNumber([
@@ -2985,7 +3001,7 @@
                     "spellfailure_total_percent": "arcane_spell_failure_total_percent"
                 }
             };
-            getAttrsRepeating("equipmentarmor", Object.values(field.get), (repeating) => {
+            getAttrsRepeating("armor", Object.values(field.get), (repeating) => {
                 let cache = {
                     "unit_decimal": ".",
                     "unit_thousand": ",",
@@ -3050,9 +3066,9 @@
     }
 
     // export "equipment_weapon" element to "repeating_battle"
-    on( "clicked:repeating_equipmentweapon:create-attack", inventory_to_battle_repeating );
+    on( "clicked:repeating_weapon:create-attack", inventory_to_battle_repeating );
     function inventory_to_battle_repeating(event)  {
-        // format "repeating_equipmentweapon_-LrcL2qT7lhjZ6BZrble_create-attack"
+        // format "repeating_weapon_-LrcL2qT7lhjZ6BZrble_create-attack"
         let source = event.sourceAttribute.replace(/create-attack$/, '');
 
         let field = {
@@ -3125,7 +3141,76 @@
         });
     }
 
-    // transfert object to "repeating_deposit"
+    // transfert weapon to "repeating_weaponracks"
+    on( "clicked:repeating_weapon:weapon-to-racks", weapon_to_racks_repeating );
+    function weapon_to_racks_repeating(event) {
+        // format "repeating_weapon_-LrcL2qT7lhjZ6BZrble_weapon-to-racks"
+        let source = event.sourceAttribute.replace(/weapon-to-racks$/, '');
+
+        let field = {
+            "getNumber" : {
+                "damage_dices_count" : "equipment_weapon_dices_count",
+                "damage_dices" : "equipment_weapon_dices",
+                "damage_critic" : "equipment_weapon_critic",
+                "damage_critic_multiplier" : "equipment_weapon_critic_multiplier",
+                "range" : "equipment_weapon_range",
+                "damage_type": "equipment_weapon_damage_type",
+                "weight": "equipment_weapon_weight",
+            },
+            "getString" : {
+                "name" : "equipment_weapon_name",
+                "range_description" : "equipment_weapon_range_description",
+                "special" : "equipment_weapon_special"
+            },
+            "set" : {
+                "name" : "weapon_rack_name",
+                "damage_dices_count" : "weapon_rack_dices_count",
+                "damage_dices" : "weapon_rack_dices",
+                "damage_critic" : "weapon_rack_critic",
+                "damage_critic_multiplier" : "weapon_rack_critic_multiplier",
+                "range" : "weapon_rack_range",
+                "range_description" : "weapon_rack_range_description",
+                "damage_type": "weapon_rack_damage_type",
+                "weight": "weapon_rack_weight",
+                "special" : "weapon_rack_special"
+            }
+        };
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_weaponrack_"+generateRowID()+"_" );
+
+                // prepare payload
+                let payload = {};
+                payload[field.set.name] = user_string[ field.getString.name ];
+                payload[field.set.damage_dices_count] = user_number[ field.getNumber.damage_dices_count ];
+                payload[field.set.damage_dices] = user_number[ field.getNumber.damage_dices ];
+                payload[field.set.damage_critic] = user_number[ field.getNumber.damage_critic ];
+                payload[field.set.damage_critic_multiplier] = user_number[ field.getNumber.damage_critic_multiplier];
+                payload[field.set.range] = user_number[ field.getNumber.range ];
+                payload[field.set.range_description] = user_string[ field.getString.range_description ];
+                payload[field.set.damage_type] = user_number[ field.getNumber.damage_type ];
+                payload[field.set.weight] = user_number[ field.getNumber.weight ];
+                payload[field.set.special] = user_string[ field.getString.special ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // remove object in equipment
+                // note  removeRepeatingRow() don't trigger on("remove:repeating_weapon")
+                removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                setAttrs(payload, {silent:true}, common );
+            });
+        })
+    }
+
+    // transfert equipment to "repeating_deposit"
     on( "clicked:repeating_equipment:inventory-to-deposit", inventory_to_deposit_repeating );
     function inventory_to_deposit_repeating(event) {
         // format "repeating_equipment_-LrcL2qT7lhjZ6BZrble_inventory-to-deposit"
@@ -3176,6 +3261,75 @@
     // ------------------------------------------
     // notes
     // ------------------------------------------
+    // transfert weapon to "repeating_weapon"
+    on( "clicked:repeating_weaponrack:racks-to-weapon", racks_to_weapon_repeating );
+    function racks_to_weapon_repeating(event) {
+        // format "repeating_weaponrack_-LrcL2qT7lhjZ6BZrble_racks-to-weapon"
+        let source = event.sourceAttribute.replace(/racks-to-weapon$/, '');
+
+        let field = {
+            "getNumber" : {
+                "damage_dices_count" : "weapon_rack_dices_count",
+                "damage_dices" : "weapon_rack_dices",
+                "damage_critic" : "weapon_rack_critic",
+                "damage_critic_multiplier" : "weapon_rack_critic_multiplier",
+                "range" : "weapon_rack_range",
+                "damage_type": "weapon_rack_damage_type",
+                "weight": "weapon_rack_weight",
+            },
+            "getString" : {
+                "name" : "weapon_rack_name",
+                "range_description" : "weapon_rack_range_description",
+                "special" : "weapon_rack_special"
+            },
+            "set" : {
+                "name" : "equipment_weapon_name",
+                "damage_dices_count" : "equipment_weapon_dices_count",
+                "damage_dices" : "equipment_weapon_dices",
+                "damage_critic" : "equipment_weapon_critic",
+                "damage_critic_multiplier" : "equipment_weapon_critic_multiplier",
+                "range" : "equipment_weapon_range",
+                "range_description" : "equipment_weapon_range_description",
+                "damage_type": "equipment_weapon_damage_type",
+                "weight": "equipment_weapon_weight",
+                "special" : "equipment_weapon_special"
+            }
+        };
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_weapon_"+generateRowID()+"_" );
+
+                // prepare payload
+                let payload = {};
+                payload[field.set.name] = user_string[ field.getString.name ];
+                payload[field.set.damage_dices_count] = user_number[ field.getNumber.damage_dices_count ];
+                payload[field.set.damage_dices] = user_number[ field.getNumber.damage_dices ];
+                payload[field.set.damage_critic] = user_number[ field.getNumber.damage_critic ];
+                payload[field.set.damage_critic_multiplier] = user_number[ field.getNumber.damage_critic_multiplier];
+                payload[field.set.range] = user_number[ field.getNumber.range ];
+                payload[field.set.range_description] = user_string[ field.getString.range_description ];
+                payload[field.set.damage_type] = user_number[ field.getNumber.damage_type ];
+                payload[field.set.weight] = user_number[ field.getNumber.weight ];
+                payload[field.set.special] = user_string[ field.getString.special ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // remove object in equipment
+                removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                // note  removeRepeatingRow() don't trigger on("remove:repeating_equipment")
+                setAttrs(payload);
+            });
+        })
+    }
+
     // transfert object to "repeating_equipment"
     on( "clicked:repeating_deposit:deposit-to-inventory", deposit_to_equipment_repeating );
     function deposit_to_equipment_repeating(event) {
@@ -3218,7 +3372,7 @@
                 removeRepeatingRow(source.slice(0, -1));
 
                 // send payload
-                setAttrs(payload, {silent:true}, equipment_armor);
+                setAttrs(payload);
             });
         });
     }
@@ -5472,12 +5626,9 @@
                                                         </div>
                                                     </li>
                                                 </ul>
-                                                <div class="input-group">
-                                                    <div class="input-group-text">
-                                                        <span data-i18n="character-language-other-h1"></span>
-                                                    </div>
-                                                    <input type="text" name="attr_character_language_other" title="" value="" />
-                                                </div>
+
+                                                <h2 data-i18n="character-language-other-h1"></h2>
+                                                <input type="text" name="attr_character_language_other" title="" value="" />
                                             </div>
                                         </div>
                                     </td>
@@ -5933,7 +6084,7 @@
                         </tbody>
                     </table>
 
-                    <textarea name="attr_weapon_proficiency_description" title=""></textarea>
+                    <textarea name="attr_equipment_proficiency_description" title=""></textarea>
                 </div>
             </div>
         </div>
@@ -6000,6 +6151,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_initiative_note" title=""></textarea>
                 </div>
 
@@ -6074,6 +6226,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_combat_maneuver_bonus_note" title=""></textarea>
                 </div>
 
@@ -6479,20 +6632,21 @@
                                 </tr>
                                 </tbody>
                             </table>
+
                             <textarea name="attr_caster_level_note" title=""></textarea>
                         </div>
                     </div>
                     <div class="flex-col6">
-                        <h1 data-i18n="spell-arcane-spell-failure-chance-h1"></h1>
-                        <div class="spell-failure section">
+                        <h1 data-i18n="spell-risk-failure-arcane-spell-h1"></h1>
+                        <div class="spell-risk-failure-arcane-spell section">
                             <table>
                                 <thead>
                                 <tr>
                                     <th width="25%">
-                                        <span data-i18n="total" data-i18n-title="spell-arcane-spell-failure-chance-total-title"></span>
+                                        <span data-i18n="total" data-i18n-title="spell-risk-failure-arcane-spell-total-title"></span>
                                     </th>
                                     <th width="25%">
-                                        <span data-i18n="spell-arcane-spell-failure-chance-armor-short" data-i18n-title="spell-arcane-spell-failure-chance-armor-title"></span>
+                                        <span data-i18n="spell-risk-failure-arcane-spell-armor-short" data-i18n-title="spell-risk-failure-arcane-spell-armor-title"></span>
                                     </th>
                                     <th width="25%">
                                         <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -7441,7 +7595,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -8324,7 +8478,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -9207,7 +9361,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -10090,7 +10244,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -10973,7 +11127,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -11856,7 +12010,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -12739,7 +12893,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -13622,7 +13776,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -14505,7 +14659,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -15388,7 +15542,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -16271,7 +16425,7 @@
                                                                             <span data-i18n="spell-resistance-short" data-i18n-title="spell-resistance-question-title"></span>
                                                                         </th>
                                                                         <th width="20%">
-                                                                            <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="spell-resistance-arcane-spell-failure-chance-title"></span>
+                                                                            <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="spell-resistance-risk-failure-arcane-spell-title"></span>
                                                                         </th>
                                                                     </tr>
                                                                     </thead>
@@ -16591,12 +16745,13 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_saves_note" title=""></textarea>
                 </div>
 
                 <h1 data-i18n="armor-class-h1"></h1>
                 <div class="section">
-                    <table class="defense-armor-class">
+                    <table class="armor-class">
                         <thead>
                         <tr>
                             <th width="25%" colspan="2">
@@ -16643,7 +16798,7 @@
                         </tbody>
                     </table>
 
-                    <table class="defense-armor-class-detail">
+                    <table class="armor-class-detail">
                         <thead>
                         <tr>
                             <th width="11.111111%">
@@ -16708,7 +16863,7 @@
                         </tbody>
                     </table>
 
-                    <textarea name="attr_equipment_summary_note" title=""></textarea>
+                    <textarea name="attr_armor_class_note" title=""></textarea>
                 </div>
 
                 <h1 data-i18n="combat-maneuver-defense-h1"></h1>
@@ -16789,6 +16944,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_combat_maneuver_defense_note" title=""></textarea>
                 </div>
 
@@ -16851,6 +17007,7 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <textarea name="attr_spell_resistance_note" title=""></textarea>
                 </div>
             </div>
@@ -16887,7 +17044,7 @@
                         </tbody>
                     </table>
 
-                    <textarea name="attr_skill_note" title=""></textarea>
+                    <textarea name="attr_skill_summary_note" title=""></textarea>
                 </div>
 
                 <h1 data-i18n="skill-h1"></h1>
@@ -18909,7 +19066,7 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
-                        <div class="inventory-currency section">
+                        <div class="purse section">
                             <table>
                                 <thead>
                                 <tr>
@@ -18946,7 +19103,7 @@
                         </div>
                     </div>
                     <div class="flex-col6">
-                        <div class="inventory-encumbrance section">
+                        <div class="encumbrance section">
                             <table>
                                 <thead>
                                 <tr>
@@ -18995,8 +19152,8 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="equipment-weapon-h1"></h1>
-                <div class="equipment-weapon section">
+                <h1 data-i18n="weapon-h1"></h1>
+                <div class="weapon section">
                     <table>
                         <thead>
                         <tr>
@@ -19007,16 +19164,16 @@
                                 <span data-i18n="damage"></span>
                             </th>
                             <th width="14.285714%">
-                                <span data-i18n="critic-short" data-i18n-title="equipment-weapon-critic-title"></span>
+                                <span data-i18n="critic-short" data-i18n-title="weapon-critic-title"></span>
                             </th>
                             <th width="14.285714%">
-                                <span data-i18n="range" data-i18n-title="equipment-weapon-range-title"></span>
+                                <span data-i18n="range" data-i18n-title="weapon-range-title"></span>
                             </th>
                             <th width="7.142857%">
                                 <span data-i18n="weight"></span>
                             </th>
                             <th width="7.142857%">
-                                <span data-i18n="equipment-weapon-damage-type-short" data-i18n-title="equipment-weapon-damage-type-title"></span>
+                                <span data-i18n="weapon-damage-type-short" data-i18n-title="weapon-damage-type-title"></span>
                             </th>
                             <th width="21.428571%">
                                 <span data-i18n="special"></span>
@@ -19029,8 +19186,9 @@
                         <tbody>
                         </tbody>
                     </table>
-                    <fieldset class="repeating_equipmentweapon">
-                        <div class="equipment-weapon-content">
+
+                    <fieldset class="repeating_weapon">
+                        <div class="weapon-content">
                             <table>
                                 <tbody>
                                 <tr>
@@ -19088,7 +19246,7 @@
                                     </td>
                                     <td width="14.285714%">
                                         <div class="input-group">
-                                            <select class="fixed-small" name="attr_equipment_weapon_range" title="" data-i18n-list="equipment-weapon-range-list">
+                                            <select class="fixed-small" name="attr_equipment_weapon_range" title="" data-i18n-list="weapon-range-list">
                                                 <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
                                                 <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
                                             </select>
@@ -19100,16 +19258,16 @@
                                     </td>
                                     <td width="7.142857%">
                                         <select name="attr_equipment_weapon_damage_type" title="">
-                                            <option data-i18n="equipment-weapon-inapplicable" value="1" selected="selected"></option>
-                                            <option data-i18n="equipment-weapon-blunt" value="2"></option>
-                                            <option data-i18n="equipment-weapon-piercing" value="3"></option>
-                                            <option data-i18n="equipment-weapon-sharp" value="4"></option>
-                                            <option data-i18n="equipment-weapon-blunt-or-piercing" value="5"></option>
-                                            <option data-i18n="equipment-weapon-blunt-or-sharp" value="6"></option>
-                                            <option data-i18n="equipment-weapon-piercing-or-sharp" value="7"></option>
-                                            <option data-i18n="equipment-weapon-blunt-and-piercing" value="8"></option>
-                                            <option data-i18n="equipment-weapon-blunt-and-sharp" value="9"></option>
-                                            <option data-i18n="equipment-weapon-piercing-and-sharp" value="10"></option>
+                                            <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
+                                            <option data-i18n="weapon-blunt" value="2"></option>
+                                            <option data-i18n="weapon-piercing" value="3"></option>
+                                            <option data-i18n="weapon-sharp" value="4"></option>
+                                            <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
+                                            <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
+                                            <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
+                                            <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
+                                            <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
+                                            <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
                                         </select>
                                     </td>
                                     <td width="21.428571%">
@@ -19125,16 +19283,27 @@
                                             <span class="chain"></span>
                                         </button>
                                     </td>
+                                    <td>
+                                        <button
+                                                type="action"
+                                                name="act_weapon-to-racks"
+                                                class="button button-small"
+                                                data-i18n-title="equipment-inventory-to-deposit-title"
+                                        >
+                                            <span class="chain"></span>
+                                        </button>
+                                    </td>
                                 </tr>
                                 </tbody>
                             </table>
                         </div>
                     </fieldset>
-                    <textarea name="attr_equipment_weapon_note" title=""></textarea>
+
+                    <textarea name="attr_weapon_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="equipment-armor-h1"></h1>
-                <div class="equipment-armor section">
+                <h1 data-i18n="armor-h1"></h1>
+                <div class="armor section">
                     <table>
                         <thead>
                         <tr>
@@ -19145,19 +19314,19 @@
                                 <span data-i18n="name"></span>
                             </th>
                             <th width="9%">
-                                <span data-i18n="type" data-i18n-title="equipment-armor-type-title"></span>
+                                <span data-i18n="type" data-i18n-title="armor-type-title"></span>
                             </th>
                             <th width="9%">
                                 <span data-i18n="armor-bonus-short" data-i18n-title="armor-bonus-title"></span>
                             </th>
                             <th width="9%">
-                                <span data-i18n="dexterity-ceiling-short" data-i18n-title="equipment-armor-dexterity-max-title"></span>
+                                <span data-i18n="dexterity-ceiling-short" data-i18n-title="armor-dexterity-max-title"></span>
                             </th>
                             <th width="9%">
-                                <span data-i18n="penalty" data-i18n-title="equipment-armor-penalty-title"></span>
+                                <span data-i18n="penalty" data-i18n-title="armor-penalty-title"></span>
                             </th>
                             <th width="9%">
-                                <span data-i18n="spell-arcane-spell-failure-chance-short" data-i18n-title="equipment-armor-arcane-spell-failure-chance-title"></span>
+                                <span data-i18n="spell-risk-failure-arcane-spell-short" data-i18n-title="armor-risk-failure-arcane-spell-title"></span>
                             </th>
                             <th width="9%">
                                 <span data-i18n="weight"></span>
@@ -19170,7 +19339,8 @@
                         <tbody>
                         </tbody>
                     </table>
-                    <fieldset class="repeating_equipmentarmor">
+
+                    <fieldset class="repeating_armor">
                         <table>
                             <tbody>
                             <tr>
@@ -19187,9 +19357,9 @@
                                 <td width="9%">
                                     <select name="attr_equipment_armor_type" title="">
                                         <optgroup label="" data-i18n-label="armor">
-                                            <option data-i18n="equipment-armor-light" value="1"></option>
-                                            <option data-i18n="equipment-armor-medium" value="2"></option>
-                                            <option data-i18n="equipment-armor-heavy" value="3"></option>
+                                            <option data-i18n="armor-light" value="1"></option>
+                                            <option data-i18n="armor-medium" value="2"></option>
+                                            <option data-i18n="armor-heavy" value="3"></option>
                                         </optgroup>
                                         <optgroup label="" data-i18n-label="other">
                                             <option data-i18n="equipment-shield" value="4"></option>
@@ -19222,7 +19392,8 @@
                             </tbody>
                         </table>
                     </fieldset>
-                    <textarea name="attr_equipment_armor_note" title=""></textarea>
+
+                    <textarea name="attr_armor_note" title=""></textarea>
                 </div>
 
                 <div class="flex-row">
@@ -19249,6 +19420,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
+
                             <fieldset class="repeating_equipment">
                                 <table>
                                     <tbody>
@@ -19521,6 +19693,144 @@
             <div class="paper">
                 <span class="sheet-status-alert"></span>
 
+                <h1 data-i18n="weapon-racks-h1"></h1>
+                <div class="weapon_rack section">
+                    <table>
+                        <thead>
+                        <tr>
+                            <th width="21.428571%">
+                                <span data-i18n="name"></span>
+                            </th>
+                            <th width="14.285714%">
+                                <span data-i18n="damage"></span>
+                            </th>
+                            <th width="14.285714%">
+                                <span data-i18n="critic-short" data-i18n-title="weapon-critic-title"></span>
+                            </th>
+                            <th width="14.285714%">
+                                <span data-i18n="range" data-i18n-title="weapon-range-title"></span>
+                            </th>
+                            <th width="7.142857%">
+                                <span data-i18n="weight"></span>
+                            </th>
+                            <th width="7.142857%">
+                                <span data-i18n="weapon-damage-type-short" data-i18n-title="weapon-damage-type-title"></span>
+                            </th>
+                            <th width="21.428571%">
+                                <span data-i18n="special"></span>
+                            </th>
+                            <th>
+                                <div class="button-fake"></div>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+
+                    <fieldset class="repeating_weaponrack">
+                        <div class="weapon-content">
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td width="21.428571%">
+                                        <input type="text" name="attr_weapon_rack_name" title=""/>
+                                    </td>
+                                    <td width="14.285714%">
+                                        <div class="input-group">
+                                            <input type="number" name="attr_weapon_rack_dices_count" title="" min="1" step="1" value="1"/>
+                                            <div class="input-group-text">
+                                                <span data-i18n="dice-short"></span>
+                                            </div>
+                                            <select class="fixed-small" name="attr_weapon_rack_dices" title="">
+                                                <option value="2" selected="selected">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="6">6</option>
+                                                <option value="8">8</option>
+                                                <option value="10">10</option>
+                                                <option value="12">12</option>
+                                                <option value="20">20</option>
+                                                <option value="100">100</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td width="14.285714%">
+                                        <div class="input-group">
+                                            <select name="attr_weapon_rack_critic" title="">
+                                                <option data-i18n="1-20" value="1"></option>
+                                                <option data-i18n="2-20" value="2"></option>
+                                                <option data-i18n="3-20" value="3"></option>
+                                                <option data-i18n="4-20" value="4"></option>
+                                                <option data-i18n="5-20" value="5"></option>
+                                                <option data-i18n="6-20" value="6"></option>
+                                                <option data-i18n="7-20" value="7"></option>
+                                                <option data-i18n="8-20" value="8"></option>
+                                                <option data-i18n="9-20" value="9"></option>
+                                                <option data-i18n="10-20" value="10"></option>
+                                                <option data-i18n="11-20" value="11"></option>
+                                                <option data-i18n="12-20" value="12"></option>
+                                                <option data-i18n="13-20" value="13"></option>
+                                                <option data-i18n="14-20" value="14"></option>
+                                                <option data-i18n="15-20" value="15"></option>
+                                                <option data-i18n="16-20" value="16"></option>
+                                                <option data-i18n="17-20" value="17"></option>
+                                                <option data-i18n="18-20" value="18"></option>
+                                                <option data-i18n="19-20" value="19"></option>
+                                                <option value="20" selected="selected">20</option>
+                                            </select>
+                                            <div class="input-group-text">
+                                                <span data-i18n="sign-mutiplication"></span>
+                                            </div>
+                                            <input type="number" name="attr_weapon_rack_critic_multiplier" title="" min="0" step="1" value="2"/>
+                                        </div>
+                                    </td>
+                                    <td width="14.285714%">
+                                        <div class="input-group">
+                                            <select class="fixed-small" name="attr_weapon_rack_range" title="" data-i18n-list="weapon-range-list">
+                                                <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
+                                                <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
+                                            </select>
+                                            <input type="text" name="attr_weapon_rack_range_description" title="" value=""/>
+                                        </div>
+                                    </td>
+                                    <td width="7.142857%">
+                                        <input type="number" name="attr_weapon_rack_weight" title="" min="0" step="0.01" value="0"/>
+                                    </td>
+                                    <td width="7.142857%">
+                                        <select name="attr_weapon_rack_damage_type" title="">
+                                            <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
+                                            <option data-i18n="weapon-blunt" value="2"></option>
+                                            <option data-i18n="weapon-piercing" value="3"></option>
+                                            <option data-i18n="weapon-sharp" value="4"></option>
+                                            <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
+                                            <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
+                                            <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
+                                            <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
+                                            <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
+                                            <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
+                                        </select>
+                                    </td>
+                                    <td width="21.428571%">
+                                        <input type="text" name="attr_weapon_rack_special" title=""/>
+                                    </td>
+                                    <td>
+                                        <button
+                                                type="action"
+                                                name="act_racks-to-weapon"
+                                                class="button button-small"
+                                                data-i18n-title="deposit-deposit-to-inventory-title"
+                                        >
+                                            <span class="chain"></span>
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </fieldset>
+                </div>
+
                 <div class="flex-row">
                     <div class="flex-col6">
                         <h1 data-i18n="note-h1"></h1>
@@ -19594,6 +19904,7 @@
                                 <tbody>
                                 </tbody>
                             </table>
+                            
                             <fieldset class="repeating_deposit">
                                 <table>
                                     <tbody>
@@ -19988,7 +20299,7 @@
             {{#^rollGreater() failure_spell failure_spell_total}}
             <p>
                 <b>{{label}}</b><br />
-                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
+                <b><span data-i18n="rt-risk-failure-arcane-spell-short" data-i18n-title="rt-risk-failure-arcane-spell-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
                 <span data-i18n="rt-incantation-failed"></span>
             </p>
             {{/^rollGreater() failure_spell failure_spell_total}}
@@ -20000,7 +20311,7 @@
             <p>
                 <b>{{label}}</b><br />
                 {{#rollTotal() spell_failure_used 1}}
-                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
+                <b><span data-i18n="rt-risk-failure-arcane-spell-short" data-i18n-title="rt-risk-failure-arcane-spell-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
                 <span data-i18n="rt-incantation-success"></span><br />
                 {{/rollTotal() spell_failure_used 1}}
             </p>
@@ -20017,7 +20328,7 @@
         </div>
         <div class="sheet-footer">
             <p>
-                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-chance-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
+                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-risk-failure-arcane-spell-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
         </div>
@@ -20043,7 +20354,7 @@
         <div class="sheet-body">
             <p>
                 <b>{{label}}</b><br />
-                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
+                <b><span data-i18n="rt-risk-failure-arcane-spell-short" data-i18n-title="rt-risk-failure-arcane-spell-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
                 <span data-i18n="rt-incantation-failed"></span>
             </p>
         </div>
@@ -20057,7 +20368,7 @@
             <p>
                 <b>{{label}}</b><br />
                 {{#rollTotal() spell_failure_used 1}}
-                <b><span data-i18n="rt-arcane-spell-failure-chance-short" data-i18n-title="rt-arcane-spell-failure-chance-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
+                <b><span data-i18n="rt-risk-failure-arcane-spell-short" data-i18n-title="rt-risk-failure-arcane-spell-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
                 <span data-i18n="rt-incantation-success"></span><br />
                 {{/rollTotal() spell_failure_used 1}}
             </p>
@@ -20118,7 +20429,7 @@
 
         <div class="sheet-footer">
             <p>
-                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-chance-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
+                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-risk-failure-arcane-spell-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
         </div>
