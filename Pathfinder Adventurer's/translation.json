@@ -239,7 +239,7 @@
   "status-class-barbarian-rage": "Barbarian rage",
   "status-class-barbarian-rage-title": "+4 to the Strength\n+4 to the Constitution\n+2 to the Willpower\n-2 to the AC\nno skills available ( Charisma, Dexterity or Intelligence )",
   "status-class-crane-short": "the Crane",
-  "status-class-monk-crane-title": "All these effects are active only for Fighting defensively or Total defense\n\nCrane style :\n -2 to attack rolls ( cancel the panalty from Fighting defensively )\n +1 to the AC\n\nCrane wing : \n -2 to attack rolls ( cancel the panalty from Fighting defensively )\n +1 to the AC\n +4 to the melee AC for melee attacks\n\nCrane riposte :\n -1 to attack rolls ( cancel the panalty from Fighting defensively )\n +1 to the AC\n +4 to the AC for melee attacks",
+  "status-class-monk-crane-title": "All these effects are active only for Fighting defensively or Total defense\n\nCrane style :\n -2 to attack rolls ( cancel the penalty from Fighting defensively )\n +1 to the AC\n\nCrane wing : \n -2 to attack rolls ( cancel the penalty from Fighting defensively )\n +1 to the AC\n +4 to the melee AC for melee attacks\n\nCrane riposte :\n -1 to attack rolls ( cancel the penalty from Fighting defensively )\n +1 to the AC\n +4 to the AC for melee attacks",
   "status-class-monk-crane-unknown": "Unknown",
   "status-class-monk-crane-style": "Crane style",
   "status-class-monk-crane-wing": "Crane wing",
