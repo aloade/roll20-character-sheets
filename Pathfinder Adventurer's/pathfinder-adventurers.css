@@ -1,7 +1,7 @@
 /* url
 alpha   https://raw.githubusercontent.com/aloade/pathfinder/master/image/
-dev.    https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer's/image/
-prod.   https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Pathfinder%20Adventurer's/image/
+dev.    https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
+prod.   https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
 */
 /* --------------------------------------------------- */
 /* roll20 fixed */
@@ -76,13 +76,13 @@ html, body {
 /* --------------------------------------------------- */
 /* force download for not visible images */
 .sheet-locale {
-    background-image: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/button.jpg")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/select_dropdown.png")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/dice.png")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/wax_seal.png")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/title.png")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/sheets-static.png")
-    , url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/modal.jpg");
+    background-image: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/dice.png")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/wax_seal.png")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/title.png")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets-static.png")
+    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/modal.jpg");
     width: 0;
     height: 0;
     display: inline;
@@ -121,25 +121,25 @@ input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div td.sheet-templ
 /* --------------------------------------------------- */
 /* option - roll attack */
 /* --------------------------------------------------- */
-.sheet-template-no-target,
-.sheet-template-target {
+.sheet-template-no-aiming,
+.sheet-template-aiming {
     display: none;
 }
 
-input.sheet-toggle[name="attr_option_attack_roll"][value="no-target"] ~ div .sheet-template-no-target,
-input[name="attr_option_attack_roll"][value="target"] ~ div .sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="no-aiming"] ~ div .sheet-template-no-aiming,
+input[name="attr_option_attack_roll"][value="aiming"] ~ div .sheet-template-aiming {
     display: block;
 }
 
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div tr.sheet-template-no-target,
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div tr.sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-aiming {
     display: table-row;
 }
 
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div th.sheet-template-no-target,
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div td.sheet-template-no-target,
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div th.sheet-template-target,
-input.sheet-toggle[name="attr_option_attack_roll"][value="target"] ~ div td.sheet-template-target {
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-aiming {
     display: table-cell;
 }
 
@@ -261,13 +261,18 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     line-height: 23px;
 }
 
+.charsheet input[type="number"]:-moz-read-only, .charsheet input[type="text"]:-moz-read-only,
+.charsheet input[type="number"][read-only], .charsheet input[type="text"][read-only] {
+    cursor: default;
+}
+
 /* "text-align-last:center; " chrome hack for 'text-align: center' */
 .charsheet select {
     text-align-last:center;
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
     appearance: textfield;
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/select_dropdown.png") no-repeat center right;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png") no-repeat center right;
     padding-right: 9px !important;
     cursor: pointer;
 }
@@ -321,7 +326,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     padding: 0;
     margin: 0;
     border: none;
-    background: transparent url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/dice.png") no-repeat;
+    background: transparent url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/dice.png") no-repeat;
     background-size: 30px 30px;
     cursor: pointer;
 }
@@ -333,6 +338,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 .sheet-button,
 .sheet-button-fake {
     min-width: 26px;
+    display: block;
 }
 
 .sheet-button::before {
@@ -359,7 +365,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     color: rgb(246, 226, 195);
     background-color: rgb(75, 38, 22);
     border: 2px solid rgb(150, 120, 50);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/button.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg");
     border-image-slice: 49 fill;
     border-image-width: 15px;
     border-image-repeat: round;
@@ -454,13 +460,13 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    margin: 0 -6px 15px;
+    margin: 0 -4px 15px;
     padding: 0;
 }
 
 .charsheet .sheet-horizontal-button-group > li {
     list-style: none;
-    margin: 0 6px 8px;
+    margin: 0 4px 8px;
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
@@ -500,7 +506,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     background-image: none;
     border-radius: 0;
     border: 2px solid rgb(150, 120, 50);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/button.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg");
     border-image-slice: 49 fill;
     border-image-width: 15px;
     border-image-repeat: round;
@@ -582,51 +588,143 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 /* modal */
-.sheet-modal {
+.charsheet .sheet-modal {
     position: relative;
 }
 
-.sheet-modal-checkbox {
-    position: absolute;
+.charsheet .sheet-modal-checkbox {
+    position: fixed;
     display: block;
     top: 0;
     left: 0;
     width: 100% !important;
     height: 100% !important;
     opacity: 0;
-    z-index: 2;
+    z-index: 11;
     cursor: pointer;
-}
-
-.sheet-modal-checkbox:checked {
-    position: fixed;
-}
-
-.charsheet .sheet-modal-checkbox:checked ~ .sheet-modal-content {
-    opacity: 1;
-    visibility: visible;
 }
 
 .sheet-modal-label {
 }
 
-.sheet-modal-content {
-    position: absolute;
-    z-index: 1;
+.charsheet .sheet-modal-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.15s ease, visibility 0.15s ease;
+}
+
+.charsheet .sheet-modal-dialog {
+    position: fixed;
+    top: 50%;
+    left: 50%;
     background-color: rgb(77,57,42);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/modal.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/modal.jpg");
     border-image-slice: 60 fill;
     border-image-width: 30px;
     border-image-repeat: stretch;
+    width: calc(100% - 20px);
     padding: 30px;
-    transform: translate(0, calc(100% + 8px) );
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: 0 0 9px rgb(20, 20, 20);
-    opacity: 0;
+    visibility: visible;
+    opacity: 1;
+    z-index: 12;
+    transform: translate(-50%, -50.5%);
+    transition: opacity 0.15s ease, visibility 0.15s ease, transform 0.15s ease;
+}
+
+.sheet-modal-checkbox:not(:checked) {
+    position: absolute;
+    z-index: 2;
+}
+
+.charsheet .sheet-modal-checkbox:not(:checked) ~ .sheet-modal-background {
     visibility: hidden;
-    transition: opacity 0.15s ease, visibility 0.15s ease;
-    z-index: 5;
+    opacity: 0;
+}
+
+.charsheet .sheet-modal-checkbox:not(:checked) ~ .sheet-modal-dialog {
+    transform: translate(-50%, -40%);
+    visibility: hidden;
+    opacity: 0;
+}
+
+.charsheet .sheet-modal-dialog.sheet-modal-small {
+    max-width: 460px;
+}
+
+.charsheet .sheet-modal-dialog.sheet-modal-medium {
+    max-width: 680px;
+}
+
+.charsheet .sheet-modal-dialog.sheet-modal-large {
+    max-width: 880px;
+}
+
+.charsheet .sheet-modal-title span {
+    display: block;
+    text-align: center;
+    color: rgb(200, 200, 200);
+    font-size: 150%;
+    line-height: 14px;
+    font-weight: bold;
+}
+
+.charsheet .sheet-modal-title:after {
+    content: "";
+    display: block;
+    width: 60%;
+    border: 0;
+    height: 2px;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0));
+    margin: 5px 20% 0;
+}
+
+.charsheet .sheet-modal-dialog h2 {
+    text-align: center;
+    color: rgb(200, 200, 200);
+    font-size: 100%;
+    line-height: 26px;
+    height: 26px;
+    margin: 10px 0;
+    font-weight: bold;
+}
+
+.charsheet .sheet-modal-dialog ul {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: flex-start;
+    padding: 0;
+    margin: 0 -5px -10px;
+}
+
+.charsheet .sheet-modal-dialog li {
+    list-style: none;
+    width: 100%;
+    margin: 0 5px 10px;
+    max-width : 200px;
+}
+
+.charsheet .sheet-modal-dialog .sheet-input-group {
+    height: 26px;
+}
+
+.charsheet .sheet-modal-dialog span:not(.sheet-button-switch-label),
+.charsheet .sheet-modal-dialog input {
+    color: rgb(200, 200, 200);
+}
+
+.charsheet .sheet-modal-dialog input {
+    border-bottom: 1px solid rgb(100, 100, 100);
 }
 
 /* accordion */
@@ -792,7 +890,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-waxseal-on {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/wax_seal.png") no-repeat center;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/wax_seal.png") no-repeat center;
     background-size: 100% 100%;
     opacity: 1;
     color: rgb(70, 0, 3);
@@ -898,7 +996,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     position: relative;
     padding: 20px 30px;
     background-color: rgb(42, 31, 26);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/header_frame.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/header_frame.jpg");
     border-image-slice: 100 130 fill;
     border-image-width: 60px;
     border-image-repeat: stretch;
@@ -967,7 +1065,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     height: 32px;
     background-color: rgb(50, 36, 37);
     border: 2px solid rgb(50, 50, 50);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/menu_background.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/menu_background.jpg");
     border-image-slice: 38 fill;
     border-image-width: 36px;
     border-image-repeat: round;
@@ -982,7 +1080,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     width: 11.111111%;
     max-width: 180px;
     height: 32px;
-    background-image: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/menu_slider.png");
+    background-image: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/menu_slider.png");
     background-repeat:no-repeat;
     background-size: 100% 100%;
     color: rgb(255, 255, 255);
@@ -1084,7 +1182,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     min-height: 600px;
     background-color: rgb(42, 31, 26);
     border: 8px solid rgb(20, 20, 20);
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/body_frame.jpg");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/body_frame.jpg");
     border-image-slice: 100 130 fill;
     border-image-width: 60px;
     border-image-repeat: round;
@@ -1093,7 +1191,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 
 /* content */
 .charsheet .sheet-paper {
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/sheets.png");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets.png");
     border-image-slice: 110 fill;
     border-image-width: 105px;
     border-image-repeat: stretch;
@@ -1116,7 +1214,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     display: block;
     width: 100%;
     height: 9px;
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/title.png") center no-repeat;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/title.png") center no-repeat;
     background-size: contain;
 }
 
@@ -1296,56 +1394,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-character-language-modal .sheet-modal-label {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/select_dropdown.png") no-repeat center right;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content {
-    left: 50%;
-    bottom: 0;
-    width: 584px;
-    transform: translate(-50%, 100%);
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content h1 {
-    text-align: center;
-    color: rgb(200, 200, 200);
-    font-size: 100%;
-    line-height: 32px;
-    height: 26px;
-    margin: 0 0 8px;
-    font-weight: bold;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content h1::after {
-    content: none;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content ul {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 0;
-    margin: 0 -8px -8px;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content li {
-    list-style: none;
-    min-width: 180px;
-    padding: 0 8px 8px;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content .sheet-input-group {
-    margin-top: 26px;
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content span:not(.sheet-button-switch-label),
-.charsheet .sheet-character-language-modal .sheet-modal-content input {
-    color: rgb(200, 200, 200);
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-content input {
-    border-bottom: 1px solid rgb(100, 100, 100);
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png") no-repeat center right;
 }
 
 .charsheet .sheet-character-height {
@@ -1420,72 +1469,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     display: block;
 }
 
-/* weapon proficiency */
-.charsheet .sheet-weapon-proficiency {
-    max-width: 360px;
+/* equipment proficiency */
+.charsheet .sheet-equipment-proficiency table {
+    max-width: 7200px;
     margin-bottom: 15px;
-}
-
-.charsheet .sheet-weapon-proficiency-modal .sheet-modal-label {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/select_dropdown.png") no-repeat center right;
-}
-
-.charsheet .sheet-weapon-proficiency-modal .sheet-modal-content {
-    left: 50%;
-    bottom: 0;
-    width: 240px;
-    transform: translate(-50%, 100%);
-}
-
-.charsheet .sheet-weapon-proficiency-modal .sheet-modal-content ul {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 0;
-    margin: 0 -8px -8px;
-}
-
-.charsheet .sheet-weapon-proficiency-modal .sheet-modal-content li {
-    list-style: none;
-    width: 100%;
-    padding: 0 8px 8px;
-}
-
-/* armor proficiency */
-.charsheet .sheet-armor-proficiency li {
-    max-width: 240px;
-}
-
-.charsheet .sheet-armor-proficiency {
-    max-width: 360px;
-    margin-bottom: 15px;
-}
-
-.charsheet .sheet-armor-proficiency .sheet-modal-label {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/select_dropdown.png") no-repeat center right;
-}
-
-.charsheet .sheet-armor-proficiency .sheet-modal-content {
-    left: 50%;
-    bottom: 0;
-    width: 240px;
-    transform: translate(-50%, 100%);
-}
-
-.charsheet .sheet-armor-proficiency .sheet-modal-content ul {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    justify-content: flex-start;
-    padding: 0;
-    margin: 0 -8px -8px;
-}
-
-.charsheet .sheet-armor-proficiency .sheet-modal-content li {
-    list-style: none;
-    width: 100%;
-    padding: 0 8px 8px;
 }
 
 /* class favorite */
@@ -1592,7 +1579,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 1245px;
     min-height: 620px;
     padding: 30px 45px 55px;
-    border-image-source: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/sheets-static.png");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets-static.png");
     border-image-slice: 100 fill;
     border-image-width: 94px;
     border-image-repeat: stretch;
@@ -2123,100 +2110,39 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     width: 100%;
 }
 
-.charsheet .sheet-option .sheet-modal-content {
-    right: 0;
-    bottom: 0;
-    width: 436px;
-}
-
-.charsheet .sheet-option .sheet-modal-content h1 {
-    text-align: center;
-    color: rgb(200, 200, 200);
-    font-size: 100%;
-    line-height: 32px;
-    height: 26px;
-    margin: 0 0 8px;
-    font-weight: bold;
-}
-
-.charsheet .sheet-option .sheet-modal-content ul {
-    padding: 0;
-    margin: 0;
-}
-
-.charsheet .sheet-option .sheet-modal-content li {
-    list-style: none;
-    margin-bottom: 8px;
-}
-
 /* --------------------------------------------------- */
 /* status */
 /* --------------------------------------------------- */
 .charsheet .sheet-status {
     width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
     max-width: 630px;
     margin: 0 auto;
 }
 
-.charsheet .sheet-status .sheet-modal-checkbox {
-    width: 90px !important;
+.charsheet .sheet-status-button {
+    flex: 0 1 0;
 }
 
-.charsheet .sheet-status .sheet-modal-status-fake-button {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 90px !important;
-    z-index: 1;
+.charsheet .sheet-status-button .sheet-modal {
+    width: 90px;
+    height: 26px;
 }
 
-.charsheet .sheet-status .sheet-modal-label {
-    height: 25px;
-    line-height: 25px;
-    color: rgb(150, 150, 150);
+.charsheet .sheet-status-resume {
+    width: auto;
+    flex: 0 1 auto;
+    height: 26px;
+}
+
+.charsheet .sheet-status-resume input {
+    height: 26px;
+    line-height: 26px;
+    color: rgb(200, 200, 200);
     background: rgba(0, 0, 0, 0.4);
     border-radius: 4px;
-}
-
-.charsheet .sheet-modal-status-resume {
-    margin-let: 90px;
-    cursor: default;
-}
-
-.charsheet .sheet-status .sheet-modal-content {
-    left: 0;
-    bottom: 0;
-    width: 630px;
-}
-
-.charsheet .sheet-status .sheet-modal-content h1 {
-    text-align: center;
-    color: rgb(200, 200, 200);
-    font-size: 100%;
-    line-height: 32px;
-    height: 26px;
-    margin: 0 0 8px;
-    font-weight: bold;
-}
-
-.charsheet .sheet-status .sheet-modal-content input {
-    border-bottom: 1px solid rgb(100, 100, 100);
-}
-
-.charsheet .sheet-status .sheet-modal-content .sheet-input-group {
-    height: 26px;
-    margin-bottom: 8px;
-}
-
-.charsheet .sheet-status .sheet-modal-content ul {
-    padding: 0;
-    margin: 0;
-}
-
-.charsheet .sheet-status .sheet-modal-content li {
-    list-style: none;
-    width: 180px;
-    margin-bottom: 8px;
 }
 
 .charsheet .sheet-status-negative-level .sheet-input-group-text span, .charsheet .sheet-status-negative-level input,
@@ -2229,7 +2155,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     border: none;
     background: transparent;
     resize: none;
-    height: calc(100% - 68px);
+    height: calc(100% - 36px);
     overflow-y: auto;
     padding: 0;
     cursor: default;
@@ -2245,7 +2171,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .sheet-rolltemplate-roll {
     padding: 12px;
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/paper_rolled.png") no-repeat;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/paper_rolled.png") no-repeat;
     background-size: 100% 100%;
 }
 
@@ -2340,7 +2266,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .sheet-rolltemplate-roll .sheet-critic {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/critical_hit.png") no-repeat center;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/critical_hit.png") no-repeat center;
     background-size: contain;
 }
 
@@ -2359,12 +2285,12 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 /* template - battle */
 .sheet-rolltemplate-roll .sheet-battle {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/versus.png") no-repeat center;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/versus.png") no-repeat center;
     background-size: contain;
 }
 
 /* template - magic */
 .sheet-rolltemplate-roll .sheet-magic {
-    background: url("https://raw.githubusercontent.com/aloade/pathfinder/master/image/pentacle.png") no-repeat center;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/pentacle.png") no-repeat center;
     background-size: contain;
 }
