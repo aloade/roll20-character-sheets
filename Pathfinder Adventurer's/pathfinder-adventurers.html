@@ -142,12 +142,12 @@
 
         // inline's rolls
         let payload = {
-            "label_strength": getTranslationByKey("character-strength-label"),
-            "label_dexterity": getTranslationByKey("character-dexterity-label"),
-            "label_constitution": getTranslationByKey("character-constitution-label"),
-            "label_intelligence": getTranslationByKey("character-intelligence-label"),
-            "label_wisdom": getTranslationByKey("character-wisdom-label"),
-            "label_charisma": getTranslationByKey("character-charisma-label"),
+            "label_strength": getTranslationByKey("attribute-strength-label"),
+            "label_dexterity": getTranslationByKey("attribute-dexterity-label"),
+            "label_constitution": getTranslationByKey("attribute-constitution-label"),
+            "label_intelligence": getTranslationByKey("attribute-intelligence-label"),
+            "label_wisdom": getTranslationByKey("attribute-wisdom-label"),
+            "label_charisma": getTranslationByKey("attribute-charisma-label"),
 
             "label_initiative": getTranslationByKey("initiative-label"),
             "label_combat_maneuver_bonus": getTranslationByKey("combat-maneuver-bonus-label"),
@@ -362,24 +362,28 @@
                     case "monster":
                         // head
                         payload["character_name"] = user_string.compendium_name;
-                        payload["monster_challenge_rating"] = user_string.compendium_challenge_rating; // CR <number>
-                        payload["monster_experience"] = parseInt(user_string.compendium_experience.replace(",", "") );
-                        payload["monster_hit_points"] = user_string.compendium_hit_points; // <number> (<string>)
-                        payload["monster_treasure"] = user_string.compendium_treasure;
+                        payload["npc_challenge_rating"] = user_string.compendium_challenge_rating; // CR <number>
+                        payload["npc_experience"] = parseInt(user_string.compendium_experience.replace(/,/g, "") );
+                        payload["npc_hit_points"] = user_string.compendium_hit_points; // <number> (<string>)
+                        let hitpoints = parseInt(user_string.compendium_hit_points);
+                        payload["character_hit_points_base"] = hitpoints;
+                        payload["character_hit_points_ceiling"] = hitpoints;
+                        payload["character_nonlethal_damage_base"] = hitpoints;
+                        payload["npc_treasure"] = user_string.compendium_treasure;
 
                         // attributes
-                        payload["monster_aura"] = user_string.compendium_aura;
-                        payload["monster_charisma"] = parseInt(user_string.compendium_charisma);
-                        payload["monster_constitution"] = parseInt(user_string.compendium_constitution);
-                        payload["monster_dexterity"] = parseInt(user_string.compendium_dexterity);
-                        payload["monster_intelligence"] = parseInt(user_string.compendium_intelligence);
-                        payload["monster_reach"] = user_string.compendium_reach;
-                        payload["monster_strength"] = parseInt(user_string.compendium_strength);
-                        payload["monster_wisdom"] = parseInt(user_string.compendium_wisdom);
-                        payload["monster_sense"] = user_string.compendium_sense;
-                        payload["monster_space"] = user_string.compendium_space;
-                        payload["monster_speed"] = user_string.compendium_speed;
-                        payload["monster_size"] = user_string.compendium_size;
+                        payload["npc_aura"] = user_string.compendium_aura;
+                        payload["npc_charisma"] = parseInt(user_string.compendium_charisma);
+                        payload["npc_constitution"] = parseInt(user_string.compendium_constitution);
+                        payload["npc_dexterity"] = parseInt(user_string.compendium_dexterity);
+                        payload["npc_intelligence"] = parseInt(user_string.compendium_intelligence);
+                        payload["npc_reach"] = user_string.compendium_reach;
+                        payload["npc_strength"] = parseInt(user_string.compendium_strength);
+                        payload["npc_wisdom"] = parseInt(user_string.compendium_wisdom);
+                        payload["npc_sense"] = user_string.compendium_sense;
+                        payload["npc_space"] = user_string.compendium_space;
+                        payload["npc_speed"] = user_string.compendium_speed;
+                        payload["npc_size"] = user_string.compendium_size;
 
                         // background
                         if ( user_string.compendium_alignment !== "") {
@@ -395,46 +399,46 @@
                                 case "g" : alignment.push("good"); break;
                                 case "n" : alignment.push("neutral"); break;
                             }
-                            payload["monster_alignment"] = alignment.join(" "); // [CLN][gne]
+                            payload["npc_alignment"] = alignment.join(" "); // [CLN][gne]
                         }
-                        payload["monster_content"] = user_string.compendium_content;
-                        payload["monster_creature_type"] = user_string.compendium_creature_type;
-                        payload["monster_environment"] = user_string.compendium_environment;
-                        payload["monster_languages"] = user_string.compendium_languages;
-                        payload["monster_monster_class"] = user_string.compendium_monster_class;
+                        payload["npc_content"] = user_string.compendium_content;
+                        payload["npc_creature_type"] = user_string.compendium_creature_type;
+                        payload["npc_environment"] = user_string.compendium_environment;
+                        payload["npc_languages"] = user_string.compendium_languages;
+                        payload["npc_monster_class"] = user_string.compendium_monster_class;
 
                         // attack
-                        payload["monster_base_attack_bonus"] = user_string.compendium_base_attack_bonus;
-                        payload["monster_combat_maneuver_bonus"] = user_string.compendium_combat_maneuver_bonus; // <number> (<string>)
-                        payload["monster_initiative"] = parseInt(user_string.compendium_initiative);
-                        payload["monster_melee_attack"] = user_string.compendium_melee_attack;
-                        payload["monster_ranged_attack"] = user_string.compendium_ranged_attack;
-                        payload["monster_special_attack"] = user_string.compendium_special_attack;
+                        payload["npc_base_attack_bonus"] = user_string.compendium_base_attack_bonus;
+                        payload["npc_combat_maneuver_bonus"] = user_string.compendium_combat_maneuver_bonus; // <number> (<string>)
+                        payload["npc_initiative"] = parseInt(user_string.compendium_initiative);
+                        payload["npc_melee_attack"] = user_string.compendium_melee_attack;
+                        payload["npc_ranged_attack"] = user_string.compendium_ranged_attack;
+                        payload["npc_special_attack"] = user_string.compendium_special_attack;
 
                         // magic
-                        payload["monster_cleric_spell_prepared"] = user_string.compendium_cleric_spell_prepared;
-                        payload["monster_spell_known"] = user_string.compendium_spell_known;
-                        payload["monster_spell_like_ability"] = user_string.compendium_spell_like_ability;
+                        payload["npc_cleric_spell_prepared"] = user_string.compendium_cleric_spell_prepared;
+                        payload["npc_spell_known"] = user_string.compendium_spell_known;
+                        payload["npc_spell_like_ability"] = user_string.compendium_spell_like_ability;
 
                         // defenses
-                        payload["monster_armor_class"] = user_string.compendium_armor_class;
-                        payload["monster_combat_maneuver_defense"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
-                        payload["monster_damage_resistance"] = user_string.compendium_damage_resistance;
-                        payload["monster_defensive_ability"] = user_string.compendium_defensive_ability;
-                        payload["monster_fortitude"] = parseInt(user_string.compendium_fortitude);
-                        payload["monster_immune"] = user_string.compendium_immune;
-                        payload["monster_racial_modifier"] = user_string.compendium_racial_modifier;
-                        payload["monster_weakness"] = user_string.compendium_weakness;
-                        payload["monster_reflex"] = parseInt(user_string.compendium_reflex);
-                        payload["monster_resistance"] = user_string.compendium_resistance;
-                        payload["monster_willpower"] = parseInt(user_string.compendium_willpower);
+                        payload["npc_armor_class"] = user_string.compendium_armor_class;
+                        payload["npc_combat_maneuver_defense"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
+                        payload["npc_damage_resistance"] = user_string.compendium_damage_resistance;
+                        payload["npc_defensive_ability"] = user_string.compendium_defensive_ability;
+                        payload["npc_fortitude"] = parseInt(user_string.compendium_fortitude);
+                        payload["npc_immune"] = user_string.compendium_immune;
+                        payload["npc_racial_modifier"] = user_string.compendium_racial_modifier;
+                        payload["npc_weakness"] = user_string.compendium_weakness;
+                        payload["npc_reflex"] = parseInt(user_string.compendium_reflex);
+                        payload["npc_resistance"] = user_string.compendium_resistance;
+                        payload["npc_willpower"] = parseInt(user_string.compendium_willpower);
 
                         // feat
-                        payload["monster_feat"] = user_string.compendium_feat;
-                        payload["monster_skill"] = user_string.compendium_skill;
+                        payload["npc_feat"] = user_string.compendium_feat;
+                        payload["npc_skill"] = user_string.compendium_skill;
 
-                        payload["monster_organization"] = user_string.compendium_organization;
-                        payload["monster_special_quality"] = user_string.compendium_special_quality;
+                        payload["npc_organization"] = user_string.compendium_organization;
+                        payload["npc_special_quality"] = user_string.compendium_special_quality;
                         break;
 
                     case "other":
@@ -1578,8 +1582,8 @@
                             // aging
                             // need "option_template"
                             // ------------------------------------------
-                            switch( user_string.option_template) {
-                                case "companion" : // companion
+                            switch( user_string.option_template ) {
+                                case "pet" : // companion
                                     if ( user_number.option_status_aging === 1 ) {
                                         if ( user_number.character_age_select === 1 ) { // youth
                                             cache.aging_dexterity = 2;
@@ -3534,12 +3538,12 @@
     <span data-i18n="status-tired"></span>
     <span data-i18n="status-void"></span>
 
-    <span data-i18n="character-strength-label"></span>
-    <span data-i18n="character-dexterity-label"></span>
-    <span data-i18n="character-constitution-label"></span>
-    <span data-i18n="character-intelligence-label"></span>
-    <span data-i18n="character-wisdom-label"></span>
-    <span data-i18n="character-charisma-label"></span>
+    <span data-i18n="attribute-strength-label"></span>
+    <span data-i18n="attribute-dexterity-label"></span>
+    <span data-i18n="attribute-constitution-label"></span>
+    <span data-i18n="attribute-intelligence-label"></span>
+    <span data-i18n="attribute-wisdom-label"></span>
+    <span data-i18n="attribute-charisma-label"></span>
 
     <span data-i18n="initiative-label"></span>
     <span data-i18n="combat-maneuver-bonus-label"></span>
@@ -3788,7 +3792,7 @@
                             <tbody>
                             <tr>
                                 <th width="66.666666%">
-                                    <span data-i18n="character-hit-points"></span>
+                                    <span data-i18n="health-hit-points"></span>
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
@@ -3802,15 +3806,15 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <span data-i18n="character-nonlethal-damage-h1"></span>
+                                    <span data-i18n="health-nonlethal-damage-h1"></span>
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_health_nonlethal_damage" title="" data-i18n-title="character-nonlethal-damage-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_nonlethal_damage" title="" data-i18n-title="health-nonlethal-damage-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_nonlethal_damage_max" title="" data-i18n-title="character-nonlethal-damage-max-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_nonlethal_damage_max" title="" data-i18n-title="health-nonlethal-damage-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -3822,29 +3826,29 @@
                             <tbody>
                             <tr>
                                 <th width="66.666666%">
-                                    <span data-i18n="character-wound-points"></span>
+                                    <span data-i18n="health-wound-points"></span>
                                 </th>
                                 <td width="33.333333%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_health_wound_points" title="" data-i18n-title="character-wound-points-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_wound_points" title="" data-i18n-title="health-wound-points-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_wound_points_max" title="" data-i18n-title="character-wound-points-max-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_wound_points_max" title="" data-i18n-title="health-wound-points-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
                             <tr>
                                 <th>
-                                    <span data-i18n="character-vigor"></span>
+                                    <span data-i18n="health-vigor"></span>
                                 </th>
                                 <td>
                                     <div class="input-group">
-                                        <input type="number" name="attr_health_vigor" title="" data-i18n-title="character-vigor-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_vigor" title="" data-i18n-title="health-vigor-title" value="0" readonly="readonly" />
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_vigor_max" title="" data-i18n-title="character-vigor-max-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_vigor_max" title="" data-i18n-title="health-vigor-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4386,8 +4390,8 @@
                 <div class="section template-health-standard">
                     <div class="flex-row">
                         <div class="flex-col7">
-                            <h1 data-i18n="character-hit-points"></h1>
-                            <table class="character-hit-points">
+                            <h1 data-i18n="health-hit-points"></h1>
+                            <table class="health-hit-points">
                                 <thead>
                                 <tr>
                                     <th width="20%">
@@ -4401,7 +4405,7 @@
                                     </th>
                                     <td></td>
                                     <th width="20%">
-                                        <span data-i18n="max-short" data-i18n-title="character-hit-points-max-title"></span>
+                                        <span data-i18n="max-short" data-i18n-title="health-hit-points-max-title"></span>
                                     </th>
                                     <td></td>
                                     <th width="20%">
@@ -4435,8 +4439,8 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="character-nonlethal-damage-h1"></h1>
-                            <table class="character-nonlethal-damage">
+                            <h1 data-i18n="health-nonlethal-damage-h1"></h1>
+                            <table class="health-nonlethal-damage">
                                 <thead>
                                 <tr>
                                     <th width="33.333333%">
@@ -4447,7 +4451,7 @@
                                     </th>
                                     <td></td>
                                     <th width="33.333333%">
-                                        <span data-i18n="max-short" data-i18n-title="character-nonlethal-damage-max-title"></span>
+                                        <span data-i18n="max-short" data-i18n-title="health-nonlethal-damage-max-title"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -4474,8 +4478,8 @@
                 <div class="section template-health-alternative">
                     <div class="flex-row">
                         <div class="flex-col7">
-                            <h1 data-i18n="character-wound-points-h1"></h1>
-                            <table class="character-wound-points">
+                            <h1 data-i18n="health-wound-points-h1"></h1>
+                            <table class="health-wound-points">
                                 <thead>
                                 <tr>
                                     <th width="33.333333%">
@@ -4486,7 +4490,7 @@
                                     </th>
                                     <td></td>
                                     <th width="33.333333%">
-                                        <span data-i18n="max-short" data-i18n-title="character-wound-points-max-title"></span>
+                                        <span data-i18n="max-short" data-i18n-title="health-wound-points-max-title"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -4509,8 +4513,8 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="character-vigor-h1"></h1>
-                            <table class="character-vigor">
+                            <h1 data-i18n="health-vigor-h1"></h1>
+                            <table class="health-vigor">
                                 <thead>
                                 <tr>
                                     <th width="33.333333%">
@@ -4521,7 +4525,7 @@
                                     </th>
                                     <td></td>
                                     <th width="33.333333%">
-                                        <span data-i18n="max-short" data-i18n-title="character-vigor-max-title"></span>
+                                        <span data-i18n="max-short" data-i18n-title="health-vigor-max-title"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -4648,7 +4652,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="attributes-h1"></h1>
+                <h1 data-i18n="attribute-h1"></h1>
                 <div class="character-attribute section">
                     <table>
                         <thead>
@@ -4691,14 +4695,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_strength"
+                                        name="roll_attribute_strength"
                                         type="roll"
-                                        data-i18n-title="character-strength-roll-title"
+                                        data-i18n-title="attribute-strength-roll-title"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_strength}}} {{test=[[1d20+@{foo_character_strength_mod}+@{foo_status_encumbrance_proficiency}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-strength"></span>
+                                <span data-i18n="attribute-strength"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_strength_total" title="" class="text-strong" value="@{foo_character_strength_total}" disabled="disabled" />
@@ -4734,14 +4738,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_dexterity"
+                                        name="roll_attribute_dexterity"
                                         type="roll"
-                                        data-i18n-title="character-dexterity-roll-title"
+                                        data-i18n-title="attribute-dexterity-roll-title"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_character_dexterity_mod}+@{foo_status_encumbrance_proficiency}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-dexterity"></span>
+                                <span data-i18n="attribute-dexterity"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_dexterity_total" title="" class="text-strong" value="@{foo_character_dexterity_total}" disabled="disabled" />
@@ -4777,14 +4781,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_constitution"
+                                        name="roll_attribute_constitution"
                                         type="roll"
-                                        data-i18n-title="character-constitution-roll-title"
+                                        data-i18n-title="attribute-constitution-roll-title"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_constitution}}} {{test=[[1d20+@{character_constitution_mod}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-constitution"></span>
+                                <span data-i18n="attribute-constitution"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_constitution_total" title="" class="text-strong" value="(@{foo_character_aging_constitution}+@{foo_status_constitution}+@{character_constitution_base}+@{character_constitution_race}+@{character_constitution_bonus}-abs(@{character_constitution_penalty})+@{character_constitution_temporary})" disabled="disabled"/>
@@ -4817,14 +4821,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_intelligence"
+                                        name="roll_attribute_intelligence"
                                         type="roll"
-                                        data-i18n-title="character-intelligence-roll-title"
+                                        data-i18n-title="attribute-intelligence-roll-title"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_intelligence}}} {{test=[[1d20+@{character_intelligence_mod}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-intelligence"></span>
+                                <span data-i18n="attribute-intelligence"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_intelligence_total" title="" class="text-strong" value="(@{foo_character_aging_intelligence}+@{foo_status_intelligence}+@{character_intelligence_base}+@{character_intelligence_race}+@{character_intelligence_bonus}-abs(@{character_intelligence_penalty})+@{character_intelligence_temporary})" disabled="disabled"/>
@@ -4857,14 +4861,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_wisdom"
+                                        name="roll_attribute_wisdom"
                                         type="roll"
-                                        data-i18n-title="character-wisdom-roll-title"
+                                        data-i18n-title="attribute-wisdom-roll-title"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_wisdom}}} {{test=[[1d20+@{character_wisdom_mod}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-wisdom"></span>
+                                <span data-i18n="attribute-wisdom"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_wisdom_total" title="" class="text-strong" value="(@{foo_character_aging_wisdom}+@{foo_status_wisdom}+@{character_wisdom_base}+@{character_wisdom_race}+@{character_wisdom_bonus}-abs(@{character_wisdom_penalty})+@{character_wisdom_temporary})" disabled="disabled"/>
@@ -4897,14 +4901,14 @@
                         <tr>
                             <td>
                                 <button
-                                        name="roll_character_charisma"
+                                        name="roll_attribute_charisma"
                                         type="roll"
-                                        data-i18n-title="character-charisma-roll-title"
+                                        data-i18n-title="attribute-charisma-roll-title"
                                         value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_charisma}}} {{test=[[1d20+@{character_charisma_mod}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
-                                <span data-i18n="character-charisma"></span>
+                                <span data-i18n="attribute-charisma"></span>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_charisma_total" title="" class="text-strong" value="(@{character_charisma_base}+@{foo_character_aging_charisma}+@{foo_status_charisma}+@{character_charisma_race}+@{character_charisma_bonus}-abs(@{character_charisma_penalty})+@{character_charisma_temporary})" disabled="disabled"/>
@@ -5437,17 +5441,20 @@
                             <table class="character-language">
                                 <thead>
                                 <tr>
-                                    <th>
+                                    <th colspan="2">
                                         <span data-i18n="character-language"></span>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
+                                    <td width="100%">
+                                        <input type="text" class="modal-label" name="attr_character_language" title="" readonly="readonly"/>
+                                    </td>
                                     <td>
                                         <div class="modal character-language-modal">
                                             <input title="" class="modal-checkbox" type="checkbox" />
-                                            <input type="text" class="modal-label " name="attr_character_language" title="" readonly="readonly"/>
+                                            <span class="modal-label button" data-i18n="equipment-proficiency-modify"></span>
                                             <div class="modal-background"></div>
                                             <div class="modal-dialog modal-medium">
                                                 <div class="modal-title">
@@ -5529,7 +5536,7 @@
                                                         <div class="button-switch">
                                                             <input type="checkbox" name="attr_character_language_undercommon" title="" data-i18n-title="character-language-undercommon" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-undercommon-short" data-i18n-title="character-language-undercommon"></span>
+                                                            <span class="button-switch-label" data-i18n="character-language-undercommon"></span>
                                                         </div>
                                                     </li>
                                                 </ul>
@@ -5988,7 +5995,7 @@
                             <th width="50%">
                                 <span data-i18n="armor-proficiency"></span>
                             </th>
-                            <td></td>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
@@ -6108,7 +6115,7 @@
                                 <span data-i18n="initiative" data-i18n-title="initiative-title"></span>
                             </th>
                             <th width="25%">
-                                <span data-i18n="character-dexterity-short" data-i18n-title="initiative-modifier-dexterity-title"></span>
+                                <span data-i18n="attribute-dexterity-short" data-i18n-title="initiative-modifier-dexterity-title"></span>
                             </th>
                             <th width="25%">
                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
@@ -6338,8 +6345,8 @@
                                                                 <div class="input-group">
                                                                     <input type="number" class="disabled" name="attr_battle_mod_attribute" title="" value="0" readonly="readonly" />
                                                                     <select class="fixed-small" name="attr_battle_mod_attribute_select" title="" data-i18n-list="battle-modifier-attribute-list">
-                                                                        <option data-i18n="character-dexterity-short" value="1" data-i18n-list-item="dexterity"></option>
-                                                                        <option data-i18n="character-strength-short" selected="selected" value="2" data-i18n-list-item="strength"></option>
+                                                                        <option data-i18n="attribute-dexterity-short" value="1" data-i18n-list-item="dexterity"></option>
+                                                                        <option data-i18n="attribute-strength-short" selected="selected" value="2" data-i18n-list-item="strength"></option>
                                                                     </select>
                                                                 </div>
                                                             </td>
@@ -6426,8 +6433,8 @@
                                                                     <input type="number" name="attr_battle_damage_mod_attribute" title="" value="@{battle_damage_mod_attribute_select}" disabled="disabled"/>
                                                                     <select class="fixed-small" name="attr_battle_damage_mod_attribute_select" title="" data-i18n-list="battle-damage-modifier-attribute-list">
                                                                         <option data-i18n="none" value="0" data-i18n-list-item="none"></option>
-                                                                        <option data-i18n="character-dexterity-short" value="@{foo_character_dexterity_mod}" data-i18n-list-item="dexterity"></option>
-                                                                        <option data-i18n="character-strength-short" selected="selected" value="@{foo_character_strength_mod}" data-i18n-list-item="strength"></option>
+                                                                        <option data-i18n="attribute-dexterity-short" value="@{foo_character_dexterity_mod}" data-i18n-list-item="dexterity"></option>
+                                                                        <option data-i18n="attribute-strength-short" selected="selected" value="@{foo_character_strength_mod}" data-i18n-list-item="strength"></option>
                                                                     </select>
                                                                 </div>
                                                             </td>
@@ -7209,9 +7216,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spellcustom_attribute_mod" title="" value="@{spellcustom_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spellcustom_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -7454,9 +7461,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spellcustom_degree_of_difficulty_attribute_mod" title="" value="@{spellcustom_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spellcustom_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -8079,9 +8086,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell0_attribute_mod" title="" value="@{spell0_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell0_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -8337,9 +8344,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell0_degree_of_difficulty_attribute_mod" title="" value="@{spell0_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell0_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -8962,9 +8969,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell1_attribute_mod" title="" value="@{spell1_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell1_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -9220,9 +9227,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell1_degree_of_difficulty_attribute_mod" title="" value="@{spell1_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell1_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -9845,9 +9852,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell2_attribute_mod" title="" value="@{spell2_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell2_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -10103,9 +10110,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell2_degree_of_difficulty_attribute_mod" title="" value="@{spell2_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell2_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -10728,9 +10735,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell3_attribute_mod" title="" value="@{spell3_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell3_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -10986,9 +10993,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell3_degree_of_difficulty_attribute_mod" title="" value="@{spell3_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell3_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -11611,9 +11618,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell4_attribute_mod" title="" value="@{spell4_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell4_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -11869,9 +11876,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell4_degree_of_difficulty_attribute_mod" title="" value="@{spell4_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell4_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -12494,9 +12501,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell5_attribute_mod" title="" value="@{spell5_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell5_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -12752,9 +12759,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell5_degree_of_difficulty_attribute_mod" title="" value="@{spell5_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell5_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -13377,9 +13384,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell6_attribute_mod" title="" value="@{spell6_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell6_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -13635,9 +13642,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell6_degree_of_difficulty_attribute_mod" title="" value="@{spell6_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell6_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -14260,9 +14267,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell7_attribute_mod" title="" value="@{spell7_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell7_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -14518,9 +14525,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell7_degree_of_difficulty_attribute_mod" title="" value="@{spell7_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell7_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -15143,9 +15150,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell8_attribute_mod" title="" value="@{spell8_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell8_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -15401,9 +15408,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell8_degree_of_difficulty_attribute_mod" title="" value="@{spell8_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell8_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -16026,9 +16033,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell9_attribute_mod" title="" value="@{spell9_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell9_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -16284,9 +16291,9 @@
                                                                                 <div class="input-group">
                                                                                     <input type="number" name="attr_spell9_degree_of_difficulty_attribute_mod" title="" value="@{spell9_degree_of_difficulty_attribute_mod_select}" disabled="disabled"/>
                                                                                     <select class="fixed-small" name="attr_spell9_degree_of_difficulty_attribute_mod_select" title="" data-i18n-list="spell-attribute-list">
-                                                                                        <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                                                                        <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
-                                                                                        <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                                                                        <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                                                                        <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence" selected="selected"></option>
+                                                                                        <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                                                                     </select>
                                                                                 </div>
                                                                             </td>
@@ -16592,13 +16599,13 @@
                                 <span data-i18n="type"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="total" data-i18n-title="spell-save-total-title"></span>
+                                <span data-i18n="total" data-i18n-title="save-pc-total-title"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="base"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="modifier-short" data-i18n-title="spell-save-modifier-title"></span>
+                                <span data-i18n="modifier-short" data-i18n-title="save-modifier-title"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
@@ -16613,7 +16620,7 @@
                                 <span data-i18n="penalty"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
@@ -16621,17 +16628,17 @@
                         <tr>
                             <td>
                                 <button
+                                        name="roll_save_reflex"
                                         data-i18n-title="save-reflex-roll-title"
                                         type="roll"
                                         value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_reflex}}} {{test=[[1d20+@{reflex_total}]]}}"
-                                        name="roll_reflex"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="save-reflex"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_miscellaneous}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_base" title="" value="@{class_reflex_total}" disabled="disabled" />
@@ -16640,7 +16647,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_reflex_attribute" title="" value="@{foo_character_dexterity_mod}" disabled="disabled" />
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -16657,23 +16664,23 @@
                                 <input type="number" name="attr_reflex_penalty" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_miscellaneous" title="" step="1" value="0"/>
+                                <input type="number" name="attr_reflex_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <button
+                                        name="roll_save_fortitude"
                                         type="roll"
                                         data-i18n-title="save-fortitude-roll-title"
                                         value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_fortitude}}} {{test=[[1d20+@{fortitude_total}]]}}"
-                                        name="roll_fortitude"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="save-fortitude"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_fortitude_total" title="" class="text-strong" value="@{fortitude_base}+@{fortitude_attribute}+@{foo_status_fortitude}+@{fortitude_feat}+@{fortitude_bonus}-abs(@{fortitude_penalty})+@{fortitude_miscellaneous}" disabled="disabled"/>
+                                <input type="number" name="attr_fortitude_total" title="" class="text-strong" value="@{fortitude_base}+@{fortitude_attribute}+@{foo_status_fortitude}+@{fortitude_feat}+@{fortitude_bonus}-abs(@{fortitude_penalty})+@{fortitude_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_fortitude_base" title="" value="@{class_fortitude_total}" disabled="disabled"/>
@@ -16682,7 +16689,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_fortitude_attribute" title="" value="@{character_constitution_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-constitution-short"></span>
+                                        <span data-i18n="attribute-constitution-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -16699,23 +16706,23 @@
                                 <input type="number" name="attr_fortitude_penalty" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_fortitude_miscellaneous" title="" step="1" value="0"/>
+                                <input type="number" name="attr_fortitude_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr>
                             <td>
                                 <button
+                                        name="roll_save_willpower"
                                         type="roll"
                                         data-i18n-title="save-willpower-roll-title"
                                         value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_willpower}}} {{test=[[1d20+@{willpower_total}]]}}"
-                                        name="roll_willpower"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="save-willpower"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_willpower_total" title="" class="text-strong" value="@{willpower_base}+@{willpower_attribute}+@{foo_status_willpower}+@{willpower_feat}+@{willpower_bonus}-abs(@{willpower_penalty})+@{willpower_miscellaneous}" disabled="disabled"/>
+                                <input type="number" name="attr_willpower_total" title="" class="text-strong" value="@{willpower_base}+@{willpower_attribute}+@{foo_status_willpower}+@{willpower_feat}+@{willpower_bonus}-abs(@{willpower_penalty})+@{willpower_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_willpower_base" title="" value="@{class_willpower_total}" disabled="disabled"/>
@@ -16724,7 +16731,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_willpower_attribute" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -16741,7 +16748,7 @@
                                 <input type="number" name="attr_willpower_penalty" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_willpower_miscellaneous" title="" step="1" value="0"/>
+                                <input type="number" name="attr_willpower_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         </tbody>
@@ -16809,7 +16816,7 @@
                                 <span data-i18n="armor" data-i18n-title="armor-class-armor-title"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="character-dexterity-short" data-i18n-title="armor-class-modifier-dexterity-title"></span>
+                                <span data-i18n="attribute-dexterity-short" data-i18n-title="armor-class-modifier-dexterity-title"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
@@ -16885,10 +16892,10 @@
                                 <span data-i18n="modifier-special-height-short" data-i18n-title="modifier-special-height-title"></span>
                             </th>
                             <th width="9.090909%">
-                                <span data-i18n="character-strength-short" data-i18n-title="modifier-strength-title"></span>
+                                <span data-i18n="attribute-strength-short" data-i18n-title="modifier-strength-title"></span>
                             </th>
                             <th width="9.090909%">
-                                <span data-i18n="character-dexterity-short" data-i18n-title="combat-maneuver-defense-modifier-dexterity-title"></span>
+                                <span data-i18n="attribute-dexterity-short" data-i18n-title="combat-maneuver-defense-modifier-dexterity-title"></span>
                             </th>
                             <th width="9.090909%">
                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
@@ -17121,7 +17128,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_acrobatics_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17171,7 +17178,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_animal_training_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17220,7 +17227,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_appraise_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17274,7 +17281,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_artistry_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17323,7 +17330,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_bluff_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17377,7 +17384,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_career_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17426,7 +17433,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_climbing_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-strength-short"></span>
+                                        <span data-i18n="attribute-strength-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17480,7 +17487,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_craft_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17529,7 +17536,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_disguise_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17578,7 +17585,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_diplomacy_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17627,7 +17634,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_escape_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17676,7 +17683,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_first_aid_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17725,7 +17732,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_fly_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17774,7 +17781,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_horseback_riding_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17823,7 +17830,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_intimidate_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17873,7 +17880,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_arcana_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17923,7 +17930,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_dungeon_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -17973,7 +17980,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_engineering_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18023,7 +18030,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_geography_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18073,7 +18080,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_history_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18123,7 +18130,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_local_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18173,7 +18180,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_nature_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18223,7 +18230,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_nobility_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18273,7 +18280,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_plans_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18323,7 +18330,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_knowledge_religion_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18373,7 +18380,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_linguistics_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18422,7 +18429,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_perception_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18472,7 +18479,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_pick_pocketing_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18521,7 +18528,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_psychology_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18571,7 +18578,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_sabotage_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18622,7 +18629,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_spell_craft_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-intelligence-short"></span>
+                                        <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18671,7 +18678,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_stealth_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-dexterity-short"></span>
+                                        <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18720,7 +18727,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_survival_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-wisdom-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18769,7 +18776,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_swimming_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-strength-short"></span>
+                                        <span data-i18n="attribute-strength-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18819,7 +18826,7 @@
                                 <div class="input-group disabled">
                                     <input type="number" name="attr_skill_use_of_magic_objects_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="character-charisma-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
@@ -18925,7 +18932,7 @@
                                         <div class="input-group disabled">
                                             <input type="number" name="attr_skill_representation_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                             <div class="input-group-text">
-                                                <span data-i18n="character-charisma-short"></span>
+                                                <span data-i18n="attribute-charisma-short"></span>
                                             </div>
                                         </div>
                                     </td>
@@ -19029,12 +19036,12 @@
                                     <div class="input-group">
                                         <input type="number" name="attr_skill_custom_mod_attribute" title="" value="@{skill_custom_mod_attribute_select}" disabled="disabled"/>
                                         <select name="attr_skill_custom_mod_attribute_select" title="" class="fixed-small" data-i18n-list="skill-custom-attribute-list">
-                                            <option data-i18n="character-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
-                                            <option data-i18n="character-constitution-short" value="@{character_constitution_mod}" data-i18n-list-item="constitution"></option>
-                                            <option data-i18n="character-dexterity-short" value="@{foo_character_dexterity_mod}" data-i18n-list-item="dexterity"></option>
-                                            <option data-i18n="character-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence"></option>
-                                            <option data-i18n="character-strength-short" value="@{foo_character_strength_mod}" data-i18n-list-item="strength"></option>
-                                            <option data-i18n="character-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
+                                            <option data-i18n="attribute-charisma-short" value="@{character_charisma_mod}" data-i18n-list-item="charisma"></option>
+                                            <option data-i18n="attribute-constitution-short" value="@{character_constitution_mod}" data-i18n-list-item="constitution"></option>
+                                            <option data-i18n="attribute-dexterity-short" value="@{foo_character_dexterity_mod}" data-i18n-list-item="dexterity"></option>
+                                            <option data-i18n="attribute-intelligence-short" value="@{character_intelligence_mod}" data-i18n-list-item="intelligence"></option>
+                                            <option data-i18n="attribute-strength-short" value="@{foo_character_strength_mod}" data-i18n-list-item="strength"></option>
+                                            <option data-i18n="attribute-wisdom-short" value="@{character_wisdom_mod}" data-i18n-list-item="wisdom"></option>
                                         </select>
                                     </div>
                                 </td>
@@ -19946,8 +19953,9 @@
     <div class="template-non-playable-character main tab">
         <span class="main-menu"></span>
 
-        <input class="tab-input" type="radio" name="attr_nav2_tab" title="" value="character" checked="checked">
-        <input class="tab-input" type="radio" name="attr_nav2_tab" title="" value="note">
+        <input class="tab-input" type="radio" name="attr_nav_npc" title="" value="character" checked="checked">
+        <input class="tab-input" type="radio" name="attr_nav_npc" title="" value="description">
+        <input class="tab-input" type="radio" name="attr_nav_npc" title="" value="note">
 
         <span class="main-slider"></span>
 
@@ -19956,139 +19964,674 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <h1>entête</h1>
                 <p>
-                    points de vie <input type="text" name="attr_monster_hit_points" title="" /><br />
-                </p>
-                <p>
-                    facteur de puissance <input type="text" name="attr_monster_challenge_rating" title="" /><br />
-                    expérience <input type="text" name="attr_monster_experience" title="" /><br />
-                    trésor <input type="text" name="attr_monster_treasure" title="" /><br />
+                    points de vie <input type="text" name="attr_npc_hit_points" title="" /><br />
                 </p>
 
-                <div class="flex-row">
-                    <div class="flex-col8">
-                        <h1>Caractéristiques</h1>
-                        <table>
-                            <thead>
-                            <tr>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-strength"></span>
-                                </th>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-dexterity"></span>
-                                </th>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-constitution"></span>
-                                </th>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-intelligence"></span>
-                                </th>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-wisdom"></span>
-                                </th>
-                                <th width="16.666666%">
-                                    <span data-i18n="character-charisma"></span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <input type="text" name="attr_monster_strength" title="" />
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_monster_dexterity" title="" />
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_monster_constitution" title="" />
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_monster_intelligence" title="" />
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_monster_wisdom" title="" />
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_monster_charisma" title="" />
-                                </td>
-
-                            </tr>
-                            </tbody>
-                        </table>
-                        <h1>Physionomie</h1>
-                        <p>
-                            Taille <input type="text" name="attr_monster_size" title="" /><br />
-                            aura <input type="text" name="attr_monster_aura" title="" /><br />
-                            langues parlées <input type="text" name="attr_monster_languages" title="" /><br />
-                            alignement <input type="text" name="attr_monster_alignment" title="" /><br />
-                            sense <input type="text" name="attr_monster_sense" title="" /><br />
-                            type <input type="text" name="attr_monster_creature_type" title="" /><br />
-                            class <input type="text" name="attr_monster_monster_class" title="" /><br />
-                        </p>
-
-                        <h1>Mouvements</h1>
-                        <p>
-                            Espace occupé  <input type="text" name="attr_monster_space" title="" /><br />
-                            Allonge <input type="text" name="attr_monster_reach" title="" /><br />
-                            vitesse <input type="text" name="attr_monster_speed" title="" /><br />
-                        </p>
-
-                        <h1>Attaque</h1>
-                        <p>
-                            initiative <input type="text" name="attr_monster_initiative" title="" /><br />
-                            BBA <input type="text" name="attr_monster_base_attack_bonus" title="" /><br />
-                            melee attacks <input type="text" name="attr_monster_melee_attack" title="" /><br />
-                            ranged attacks <input type="text" name="attr_monster_ranged_attack" title="" /><br />
-                            special attacks <input type="text" name="attr_monster_special_attack" title="" /><br />
-                        </p>
-
-                        <h1>Magie</h1>
-                        <p>
-                            spell like ability <input type="text" name="attr_monster_spell_like_ability" title="" /><br />
-                            Spells prepared <input type="text" name="attr_monster_cleric_spell_prepared" title="" /><br />
-                            spell known <input type="text" name="attr_monster_spell_known" title="" /><br />
-                        </p>
-
-                        <h1>Défense</h1>
-                        <p>
-                            vigueur <input type="text" name="attr_monster_fortitude" title="" /><br />
-                            reflexes <input type="text" name="attr_monster_reflex" title="" /><br />
-                            volonté <input type="text" name="attr_monster_willpower" title="" /><br />
-                            <br />
-                            classe d'armure <input type="text" name="attr_monster_armor_class" title="" /><br />
-                            BMO <input type="text" name="attr_monster_combat_maneuver_bonus" title="" /><br />
-                            DMD <input type="text" name="attr_monster_combat_maneuver_defense" title="" /><br />
-                            <br />
-                            résistance <input type="text" name="attr_monster_resistance" title="" /><br />
-                            damage resistance <input type="text" name="attr_monster_damage_resistance" title="" /><br />
-                            immune <input type="text" name="attr_monster_immune" title="" /><br />
-                            weakness <input type="text" name="attr_monster_weakness" title="" /><br />
-                            defense ability <input type="text" name="attr_monster_defensive_ability" title="" />
-                        </p>
-
-                        <h1>Dons</h1>
-                        <p>
-                            feat <input type="text" name="attr_monster_feat" title="" /><br />
-                            racial modifier <input type="text" name="attr_monster_racial_modifier" title="" /><br />
-                            special quality <input type="text" name="attr_monster_special_quality" title="" /><br />
-                        </p>
-
-                        <h1>Compétences</h1>
-                        <p>
-                            skill <input type="text" name="attr_monster_skill" title="" /><br />
-                        </p>
-                    </div>
-                    <div class="flex-col4">
-                        <h1>Description</h1>
-                        <p>
-                            Environment <input type="text" name="attr_monster_environment" title="" /><br />
-                            Organisation <input type="text" name="attr_monster_organization" title="" /><br />
-                            Description <textarea name="attr_monster_content" title=""></textarea><br />
-                        </p>
-
+                <div class="section template-health-standard">
+                    <div class="flex-row">
+                        <div class="flex-col7">
+                            <h1 data-i18n="health-hit-points"></h1>
+                            <table class="health-hit-points">
+                                <thead>
+                                <tr>
+                                    <th width="20%">
+                                        <span data-i18n="base"></span>
+                                    </th>
+                                    <th width="20%">
+                                        <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
+                                    </th>
+                                    <th width="20%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                    <td></td>
+                                    <th width="20%">
+                                        <span data-i18n="max-short" data-i18n-title="health-hit-points-max-title"></span>
+                                    </th>
+                                    <td></td>
+                                    <th width="20%">
+                                        <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="attr_character_hit_points_base" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_hit_points_miscellaneous" title="" min="0" step="1" value="0"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_hit_points_temporary" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <span data-i18n="sign-separator"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_hit_points_ceiling" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td></td>
+                                    <td>
+                                        <input type="number" name="attr_character_hit_points_status" title="" value="@{foo_status_hit_points}" disabled="disabled"/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex-col5">
+                            <h1 data-i18n="health-nonlethal-damage-h1"></h1>
+                            <table class="health-nonlethal-damage">
+                                <thead>
+                                <tr>
+                                    <th width="33.333333%">
+                                        <span data-i18n="base"></span>
+                                    </th>
+                                    <th width="33.333333%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                    <td></td>
+                                    <th width="33.333333%">
+                                        <span data-i18n="max-short" data-i18n-title="health-nonlethal-damage-max-title"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="attr_character_nonlethal_damage_base" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_nonlethal_damage_temporary" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <span data-i18n="sign-separator"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
+                <div class="section template-health-alternative">
+                    <div class="flex-row">
+                        <div class="flex-col7">
+                            <h1 data-i18n="health-wound-points-h1"></h1>
+                            <table class="health-wound-points">
+                                <thead>
+                                <tr>
+                                    <th width="33.333333%">
+                                        <span data-i18n="base"></span>
+                                    </th>
+                                    <th width="33.333333%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                    <td></td>
+                                    <th width="33.333333%">
+                                        <span data-i18n="max-short" data-i18n-title="health-wound-points-max-title"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="attr_character_wound_points_base" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_wound_points_temporary" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <span data-i18n="sign-separator"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_wound_points_ceiling" title="" min="0" step="1" value="0" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="flex-col5">
+                            <h1 data-i18n="health-vigor-h1"></h1>
+                            <table class="health-vigor">
+                                <thead>
+                                <tr>
+                                    <th width="33.333333%">
+                                        <span data-i18n="base"></span>
+                                    </th>
+                                    <th width="33.333333%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                    <td></td>
+                                    <th width="33.333333%">
+                                        <span data-i18n="max-short" data-i18n-title="health-vigor-max-title"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="attr_character_vigor_base" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_vigor_temporary" title="" min="0" step="1" value="0" />
+                                    </td>
+                                    <td>
+                                        <span data-i18n="sign-separator"></span>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_character_vigor_ceiling" title="" min="0" step="1" value="0"/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="npc-challenge-rating">
+                    <thead>
+                    <tr>
+                        <th>
+                            <span>Facteur de puissance</span>
+                        </th>
+                        <th>
+                            <span>Expérience</span>
+                        </th>
+                        <th>
+                            <span>Trésor</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="attr_npc_challenge_rating" title="" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_experience" title="" />
+                        </td>
+                        <td>
+                            <input type="text" name="attr_npc_treasure" title="" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h1>Caractéristiques</h1>
+                <table class="npc-attribute">
+                    <thead>
+                    <tr>
+                        <td width="1%">
+                            <div class="fake-button-roll"></div>
+                        </td>
+                        <th width="14.285714%">
+                            <span data-i18n="attribute-short" data-i18n-title="attribute-title"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="modifier-short" data-i18n-title="attribute-modifier-title"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="base"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="bonus"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="penalty"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_strength"
+                                    type="roll"
+                                    data-i18n-title="attribute-strength-roll-title"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_strength}}} {{test=[[1d20+@{npc_strength_mod}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-strength"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength_mod" title="" class="text-strong" value="@{foo_npc_strength_mod}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength_modifier_status" title="" value="@{foo_status_strength}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength" title="" min="0" step="1" value="10"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_strength_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_dexterity"
+                                    type="roll"
+                                    data-i18n-title="attribute-dexterity-roll-title"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_npc_dexterity_mod}+@{foo_status_encumbrance_proficiency}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-dexterity"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity_mod" title="" class="text-strong" value="@{foo_npc_dexterity_mod}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity_modifier_status" title="" value="@{foo_status_dexterity}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity" title="" min="0" step="1" value="10"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_dexterity_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_constitution"
+                                    type="roll"
+                                    data-i18n-title="attribute-constitution-roll-title"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_constitution}}} {{test=[[1d20+@{npc_constitution_mod}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-constitution"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution_mod" title="" class="text-strong" value="@{npc_constitution_status}+@{npc_constitution}+@{npc_constitution_bonus}+@{npc_constitution_penalty}+@{npc_constitution_temporary}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution_status" title="" value="@{foo_status_constitution}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution" title="" min="0" step="1" value="10"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_constitution_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_intelligence"
+                                    type="roll"
+                                    data-i18n-title="attribute-intelligence-roll-title"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_intelligence}}} {{test=[[1d20+@{npc_intelligence_mod}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-intelligence"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence_mod" title="" class="text-strong" value="@{npc_intelligence_status}+@{npc_intelligence}+@{npc_intelligence_bonus}+@{npc_intelligence_penalty}+@{npc_intelligence_temporary}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence_status" title="" value="@{foo_status_intelligence}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence" title="" min="0" step="1" value="10"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_intelligence_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_wisdom"
+                                    type="roll"
+                                    data-i18n-title="attribute-wisdom-roll-title"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_wisdom}}} {{test=[[1d20+@{npc_wisdom_mod}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-wisdom"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom_mod" title="" class="text-strong" value="@{npc_wisdom_status}+@{npc_wisdom}+@{npc_wisdom_bonus}+@{npc_wisdom_penalty}+@{npc_wisdom_temporary}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom_status" title="" value="@{foo_status_wisdom}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom" title="" min="0" step="1" value="10" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_wisdom_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_attribute_charisma"
+                                    type="roll"
+                                    data-i18n-title="attribute-charisma-roll-title"
+                                    value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_charisma}}} {{test=[[1d20+@{npc_charisma_mod}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="attribute-charisma"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma_mod" title="" class="text-strong" value="@{npc_charisma_status}+@{npc_charisma}+@{npc_charisma_bonus}+@{npc_charisma_penalty}+@{npc_charisma_temporary}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma_status" title="" value="@{foo_status_charisma}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma" title="" min="0" step="1" value="10"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma_penalty" title="" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_charisma_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <h1>Physionomie</h1>
+                <p>
+                    Taille <input type="text" name="attr_npc_size" title="" /><br />
+                    aura <input type="text" name="attr_npc_aura" title="" /><br />
+                    langues parlées <input type="text" name="attr_npc_languages" title="" /><br />
+                    alignement <input type="text" name="attr_npc_alignment" title="" /><br />
+                    sense <input type="text" name="attr_npc_sense" title="" /><br />
+                    type <input type="text" name="attr_npc_creature_type" title="" /><br />
+                    class <input type="text" name="attr_npc_npc_class" title="" /><br />
+                </p>
+
+                <h1>Mouvements</h1>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <span>Espace occupé</span>
+                        </th>
+                        <th>
+                            <span>Allonge</span>
+                        </th>
+                        <th>
+                            <span>vitesse</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="attr_npc_space" title="" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reach" title="" />
+                        </td>
+                        <td>
+                            <input type="text" name="attr_npc_speed" title="" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <h1>Attaque</h1>
+                <p>
+                    initiative <input type="text" name="attr_npc_initiative" title="" /><br />
+                    BBA <input type="text" name="attr_npc_base_attack_bonus" title="" /><br />
+                    melee attacks <input type="text" name="attr_npc_melee_attack" title="" /><br />
+                    ranged attacks <input type="text" name="attr_npc_ranged_attack" title="" /><br />
+                    special attacks <input type="text" name="attr_npc_special_attack" title="" /><br />
+                </p>
+
+                <h1>Magie</h1>
+                <p>
+                    spell like ability <input type="text" name="attr_npc_spell_like_ability" title="" /><br />
+                    Spells prepared <input type="text" name="attr_npc_cleric_spell_prepared" title="" /><br />
+                    spell known <input type="text" name="attr_npc_spell_known" title="" /><br />
+                </p>
+
+                <h1 data-i18n="saves-h1"></h1>
+                <table class="monster-saves">
+                    <thead>
+                    <tr>
+                        <td width="1%">
+                            <div class="fake-button-roll"></div>
+                        </td>
+                        <th width="14.285714%">
+                            <span data-i18n="type"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="total" data-i18n-title="save-npc-total-title"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="base"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="bonus"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="penalty"></span>
+                        </th>
+                        <th width="14.285714%">
+                            <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_save_reflex"
+                                    data-i18n-title="save-reflex-roll-title"
+                                    type="roll"
+                                    value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_reflex}}} {{test=[[1d20+@{npc_reflex_total}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="save-reflex"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex_total" title="" class="text-strong" value="@{foo_status_reflex}+@{npc_reflex}+@{npc_reflex_bonus}-abs(@{npc_reflex_penalty})+@{npc_reflex_temporary}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex_status" title="" step="1" value="@{foo_status_reflex}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex" title="" value="0" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex_penalty" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_reflex_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_save_fortitude"
+                                    type="roll"
+                                    data-i18n-title="save-fortitude-roll-title"
+                                    value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_fortitude}}} {{test=[[1d20+@{npc_fortitude_total}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="save-fortitude"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude_total" title="" class="text-strong" value="@{foo_status_fortitude}+@{npc_fortitude}+@{npc_fortitude_bonus}-abs(@{npc_fortitude_penalty})+@{npc_fortitude_temporary}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude_status" title="" step="1" value="@{foo_status_fortitude}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude" title="" value="0" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude_penalty" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_fortitude_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <button
+                                    name="roll_npc_save_willpower"
+                                    type="roll"
+                                    data-i18n-title="save-willpower-roll-title"
+                                    value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{character_status}}} {{label=@{label_willpower}}} {{test=[[1d20+@{npc_willpower_total}]]}}"
+                            ></button>
+                        </td>
+                        <td class="text-center">
+                            <span data-i18n="save-willpower"></span>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower_total" title="" class="text-strong" value="@{foo_status_willpower}+@{npc_willpower}+@{npc_willpower_bonus}-abs(@{npc_willpower_penalty})+@{npc_willpower_temporary}" disabled="disabled"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower_status" title="" step="1" value="@{foo_status_willpower}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower" title="" value="0" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower_bonus" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower_penalty" title="" min="0" step="1" value="0"/>
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_willpower_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <p>
+                    classe d'armure <input type="text" name="attr_npc_armor_class" title="" /><br />
+                    BMO <input type="text" name="attr_npc_combat_maneuver_bonus" title="" /><br />
+                    DMD <input type="text" name="attr_npc_combat_maneuver_defense" title="" /><br />
+                    <br />
+                    résistance <input type="text" name="attr_npc_resistance" title="" /><br />
+                    damage resistance <input type="text" name="attr_npc_damage_resistance" title="" /><br />
+                    immune <input type="text" name="attr_npc_immune" title="" /><br />
+                    weakness <input type="text" name="attr_npc_weakness" title="" /><br />
+                    defense ability <input type="text" name="attr_npc_defensive_ability" title="" />
+                </p>
+
+                <h1>Dons</h1>
+                <p>
+                    feat <input type="text" name="attr_npc_feat" title="" /><br />
+                    racial modifier <input type="text" name="attr_npc_racial_modifier" title="" /><br />
+                    special quality <input type="text" name="attr_npc_special_quality" title="" /><br />
+                </p>
+
+                <h1>Compétences</h1>
+                <p>
+                    skill <input type="text" name="attr_npc_skill" title="" /><br />
+                </p>
+            </div>
+        </div>
+
+        <label class="tab-label">
+            <span data-i18n="note-nav"></span>
+        </label>
+        <div class="tab-content">
+            <div class="paper">
+                <table>
+                    <thead>
+                    <tr>
+                        <th width="50%">
+                            <span>Environment</span>
+                        </th>
+                        <th width="50%">
+                            <span>Organisation</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="text" name="attr_npc_environment" title="" />
+                        </td>
+                        <td>
+                            <input type="text" name="attr_npc_organization" title="" />
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th>
+                            <span>Description</span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <textarea name="attr_npc_content" title=""></textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
             </div>
         </div>
 
