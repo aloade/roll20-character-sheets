@@ -723,7 +723,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     color: rgb(200, 200, 200);
 }
 
-.charsheet .sheet-modal-dialog input {
+.charsheet .sheet-modal-dialog input:not([readonly]) {
     border-bottom: 1px solid rgb(100, 100, 100) !important;
 }
 
