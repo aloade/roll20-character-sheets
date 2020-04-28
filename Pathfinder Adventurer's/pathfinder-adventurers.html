@@ -387,17 +387,25 @@
 
                         // background
                         if ( user_string.compendium_alignment !== "") {
-                            let regex = user_string.compendium_alignment.match(/([cln])([gne])/i);
+                            let regex = user_string.compendium_alignment.match(/([cln])([gne]?)/i);
                             let alignment = [];
                             switch( regex[1].toLowerCase() ) {
                                 case "c" : alignment.push("chaotic"); break;
                                 case "l" : alignment.push("lawful"); break;
                                 case "n" : alignment.push("neutral"); break;
                             }
-                            switch( regex[2].toLowerCase() ) {
-                                case "e" : alignment.push("evil"); break;
-                                case "g" : alignment.push("good"); break;
-                                case "n" : alignment.push("neutral"); break;
+                            if ( regex[2] !== null) {
+                                switch (regex[2].toLowerCase()) {
+                                    case "e" :
+                                        alignment.push("evil");
+                                        break;
+                                    case "g" :
+                                        alignment.push("good");
+                                        break;
+                                    case "n" :
+                                        alignment.push("neutral");
+                                        break;
+                                }
                             }
                             payload["npc_alignment"] = alignment.join(" "); // [CLN][gne]
                         }
