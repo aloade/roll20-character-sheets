@@ -245,8 +245,8 @@
     on( "change:compendium_name", compendium_drop );
     function compendium_drop() {
         getAttrsNumber([
-            "compendium_category_height_active", "compendium_unit_active", "option_unit_height", "option_unit_weight",
-            "character_category_height_select"
+            "compendium_height_category_active", "compendium_unit_active", "option_unit_height", "option_unit_weight",
+            "character_height_category_select"
         ], (user_number) => {
             getAttrs([
                 "option_template",
@@ -277,7 +277,7 @@
                     }
                 }
                 if ( user_string.compendium_weight !== "") {
-                    if ( user_number.compendium_category_height_active === 1 ) user_string.compendium_weight = local.weight_factor[user_number.character_category_height_select] * user_string.compendium_weight;
+                    if ( user_number.compendium_height_category_active === 1 ) user_string.compendium_weight = local.weight_factor[user_number.character_height_category_select] * user_string.compendium_weight;
                     if ( user_number.compendium_unit_active === 1 && user_number.option_unit_weight === 1 ) {
                         user_string.compendium_weight = convertUnit(user_string.compendium_weight, "lb2kg");
                         user_string.compendium_weight = formatNumber(user_string.compendium_weight, 0.01); // dont voluntarily apply local decimals
@@ -714,7 +714,7 @@
                         }
                         // damage
                         if ( user_string.compendium_damage_small !== "" || user_string.compendium_damage_medium !== "" ) {
-                            let damage = (user_number.compendium_category_height_active === 1 && user_number.character_category_height_select > 0 ? user_string.compendium_damage_small : user_string.compendium_damage_medium);
+                            let damage = (user_number.compendium_height_category_active === 1 && user_number.character_height_category_select > 0 ? user_string.compendium_damage_small : user_string.compendium_damage_medium);
                             if (damage !== "") {
                                 let regex = damage.match(/([0-9]+)d([0-9]+)/);
                                 if (regex !== null) {
@@ -865,8 +865,10 @@
     // ------------------------------------------
     // commmon
     // ------------------------------------------
-    // unit + wound threshold + status + aging + armor proficiency + equipment's weight + encumbrance + movement + caster level + template
-    // ( all these attributes are all linked to dexterity )
+    // unit + status + temple
+    // + status ( wound threshold + aging + armor proficiency + equipment's weight + encumbrance )
+    // + movement + caster level + skill acrobatics
+    // ( all these attributes are all linked to dexterity or strnength )
     on(
         " change:option_template change:option_health change:option_unit_decimal change:option_unit_thousand change:option_unit_movement change:option_unit_weight"
         + " change:option_status_aging change:option_status_armor_penalty change:option_status_encumbrance change:option_status change:option_status_wound_threshold"
@@ -880,9 +882,10 @@
         + " change:health_wound_points_base change:health_wound_points_temporary change:health_wound_points_ceiling change:health_vigor_base change:health_vigor_temporary change:health_vigor_ceiling"
         + " change:character_strength_base change:character_strength_race change:character_strength_bonus change:character_strength_penalty change:character_strength_temp"
         + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_penalty change:character_dexterity_temp"
-        + " change:character_stance change:character_category_height_select change:character_movement_base"
+        + " change:character_stance change:character_height_category_select change:character_movement_base"
         + " change:character_age change:character_race change:character_age_select"
         + " change:caster_level_rank change:caster_level_miscellaneous change:caster_level_temporary"
+        + " change:skill_acrobatics_ranks"
         + " change:armor_class_mod_dodge"
         + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
@@ -905,9 +908,10 @@
             "health_wound_points_base", "health_wound_points_temporary", "health_wound_points_ceiling", "health_vigor_base", "health_vigor_temporary", "health_vigor_ceiling",
             "character_strength_base", "character_strength_race", "character_strength_bonus", "character_strength_penalty", "character_strength_temporary",
             "character_dexterity_base", "character_dexterity_race", "character_dexterity_bonus", "character_dexterity_penalty", "character_dexterity_temporary",
-            "character_stance", "character_category_height_select", "character_movement_base",
+            "character_stance", "character_height_category_select", "character_movement_base",
             "character_age", "character_race", "character_age_select",
             "caster_level_rank", "caster_level_miscellaneous", "caster_level_temporary",
+            "skill_acrobatics_ranks",
             "armor_class_mod_dodge",
             "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "armor_proficiency_shield", "armor_proficiency_shield_tower",
             "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
@@ -1031,15 +1035,17 @@
                                 "status_fortitude": 0,
                                 "status_reflex": 0,
                                 "status_willpower": 0,
-                                "status_ac_melee" : 0,
-                                "status_ac_ranged" : 0,
+                                "status_ac_melee": 0,
+                                "status_ac_ranged": 0,
+                                "status_ac_dodge": 0,
                                 "status_ac_dexterity_ceiling": Infinity,
-                                "status_cmd" : 0,
+                                "status_cmd": 0,
                                 "status_cmd_dexterity_ceiling": Infinity,
                                 "status_immune_physical_attack": false,
                                 "status_half_dammage_magic": false,
                                 "status_skill": 0,
                                 "status_skill_sight": false,
+                                "status_skill_acrobatics": 0,
                                 "status_skill_perception": 0,
                                 "status_skill_reactive": 0,
                                 "status_skill_rage": false,
@@ -1125,21 +1131,21 @@
                                 case 3: // unconsicious
                                     cache.status_resume.push(getTranslationByKey("status-unconscious"));
                                     if ( user_number.option_status === 1 ) cache.status_action = true;
-                                    //cache.status_dexterity_ceiling = 0;
+                                    //cache.status_ac_dexterity_ceiling = 0;
                                     //cache.status_ac_melee -= 4;
                                     break;
 
                                 case 4: // dying
                                     cache.status_resume.push(getTranslationByKey("status-dying"));
                                     if ( user_number.option_status === 1 ) cache.status_action = true;
-                                    //cache.status_dexterity_ceiling = 0;
+                                    //cache.status_ac_dexterity_ceiling = 0;
                                     //cache.status_ac_melee -= 4;
                                     break;
 
                                 case 5: // stable
                                     cache.status_resume.push(getTranslationByKey("status-stable"));
                                     if ( user_number.option_status === 1 ) cache.status_action = true;
-                                    //cache.status_dexterity_ceiling = 0;
+                                    //cache.status_ac_dexterity_ceiling = 0;
                                     //cache.status_ac_melee -= 4;
                                     break;
 
@@ -1287,8 +1293,7 @@
                                 cache.status_resume.push(getTranslationByKey("status-cowering"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_action = true;
-                                    cache.status_ac_melee -= 2;
-                                    cache.status_ac_ranged -= 2;
+                                    cache.status_ac_dodge -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                 }
                             }
@@ -1298,7 +1303,7 @@
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_sneak_attack = true;
                                     cache.status_dexterity_ceiling = 0;
-                                    cache.status_ac_melee -= 4;
+                                    cache.status_ac_melee += 4;
                                 }
                             }
 
@@ -1315,8 +1320,8 @@
                                 cache.status_resume.push(getTranslationByKey("status-fighting-defensively"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_attack -= 4;
-                                    cache.status_ac_melee += 2;
-                                    cache.status_ac_ranged += 2;
+                                    cache.status_ac_dodge += 2;
+                                    if ( user_number.skill_acrobatics_ranks > 2 ) cache.status_skill_acrobatics += 1;
                                 }
                             }
 
@@ -1338,9 +1343,8 @@
                                     cache.status_resume.push(getTranslationByKey("status-movement-charge"));
                                     if ( user_number.option_status === 1 ) {
                                         cache.status_attack += 2;
+                                        cache.status_ac_dodge -= 2;
                                         cache.status_ac_dexterity_ceiling = 0;
-                                        cache.status_ac_melee -= 2;
-                                        cache.status_ac_ranged -= 2;
                                         cache.status_rush = true;
                                     }
                                     break;
@@ -1367,8 +1371,7 @@
                                         cache.move_tactic = 0;
                                         cache.status_action_full_round = true;
                                         cache.status_dexterity_mod_ceiling = 0;
-                                        cache.status_ac_melee -= 4;
-                                        cache.status_ac_ranged -= 4;
+                                        cache.status_ac_dodge -= 2;
                                         cache.status_ac_dexterity_ceiling = 0;
                                         cache.status_spell_somatic_material = true;
                                     }
@@ -1393,8 +1396,8 @@
                                 if ( user_number.option_status === 1 ) {
                                     // crane ripost on total defense permit attack of opportunity
                                     if ( user_number.status_class_monk_crane !== 4 ) cache.status_attack_opportunity = true;
-                                    cache.status_ac_melee += 4;
-                                    cache.status_ac_ranged += 4;
+                                    cache.status_ac_dodge += 4;
+                                    if ( user_number.skill_acrobatics_ranks > 2 ) cache.status_skill_acrobatics += 2;
                                 }
                             }
 
@@ -1406,8 +1409,7 @@
                                     cache.move_tactic = Math.min(0.5, cache.move_tactic);
                                     cache.status_strength -= 4;
                                     cache.status_dexterity -= 4;
-                                    cache.status_ac_melee -= 2;
-                                    cache.status_ac_ranged -= 2;
+                                    cache.status_ac_dodge -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                     cache.status_skill_sight = true;
                                     cache.status_skill_perception -= 4;
@@ -1449,8 +1451,7 @@
                                 cache.status_resume.push(getTranslationByKey("status-stunned"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_action = true;
-                                    cache.status_ac_melee -= 2;
-                                    cache.status_ac_ranged -= 2;
+                                    cache.status_ac_dodge -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                     cache.status_cmd -= 4;
                                 }
@@ -1558,6 +1559,7 @@
                                                 cache.status_attack += 4; // cancel status_fighting_defensively status
                                                 cache.status_attack -= 2;
                                             }
+                                            cache.status_ac_dodge += 1;
                                         }
                                         break;
 
@@ -1569,8 +1571,7 @@
                                                 cache.status_attack -= 2;
                                                 cache.status_ac_melee += 4;
                                             }
-                                            cache.status_ac_melee += 1;
-                                            cache.status_ac_ranged += 1;
+                                            cache.status_ac_dodge += 1;
                                         }
                                         break;
 
@@ -1582,8 +1583,7 @@
                                                 cache.status_attack -= 1;
                                                 cache.status_ac_melee += 4;
                                             }
-                                            cache.status_ac_melee += 1;
-                                            cache.status_ac_ranged += 1;
+                                            cache.status_ac_dodge += 1;
                                         }
                                         break;
                                 }
@@ -1855,25 +1855,28 @@
 
                             // ------------------------------------------
                             // amor class dodge bonus
-                            // need "cache.status_dexterity_ceiling"
+                            // need calculated "cache.status_ac_dexterity_ceiling", "cache.armor_class_mod_dodge" ,"cache.status_ac_dodge"
                             // ------------------------------------------
-                            if ( cache.status_dexterity_ceiling === 0 ) {
-                                cache.armor_class_mod_dodge = 0;
+                            if ( cache.status_ac_dexterity_ceiling === 0 ) {
+                                cache.armor_class_mod_dodge = Math.min(cache.status_ac_dodge, 0) + Math.min(cache.armor_class_mod_dodge, 0);
+                            }
+                            else {
+                                cache.armor_class_mod_dodge += cache.status_ac_dodge;
                             }
 
                             // ------------------------------------------
                             // CMB height
                             // need calculated "cache.dexterity_mod"
                             // ------------------------------------------
-                            switch (user_number.character_category_height_select) {
+                            switch (user_number.character_height_category_select) {
                                 case 8: // very tiny
                                 case 4: // tiny
                                 case 2: // very small
-                                    cache.cmb_category_height = cache.dexterity_mod;
+                                    cache.cmb_height_category = cache.dexterity_mod;
                                     break;
 
                                 default: // small, standard, big, very big, gigantic, huge
-                                    cache.cmb_category_height = cache.strength_mod;
+                                    cache.cmb_height_category = cache.strength_mod;
                                     break;
                             }
 
@@ -1903,7 +1906,7 @@
                             }
 
                             // encumbrance max + height & stance
-                            cache.encumbrance_charge_heavy *= local.encumbrance_factor[user_number.character_category_height_select][user_number.character_stance];
+                            cache.encumbrance_charge_heavy *= local.encumbrance_factor[user_number.character_height_category_select][user_number.character_stance];
 
                             //  overcharge
                             if ( cache.encumbrance_charge_heavy === 0 ) {
@@ -2066,6 +2069,7 @@
                                     if ( cache.status_ac_melee !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-melee"), cache.status_ac_melee));
                                     if ( cache.status_ac_ranged !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-ranged"), cache.status_ac_ranged));
                                 }
+                                if ( cache.status_ac_dodge !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-dodge"), cache.status_ac_dodge));
                                 if ( cache.status_ac_dexterity_ceiling === 0 && cache.status_dexterity_mod_ceiling > 0 ) cache.status_effect.push(getTranslationByKey("status-effect-armor-class-dexterity-bonus-none"));
 
                                 // combat maneuver bonus
@@ -2080,6 +2084,7 @@
                                 if ( cache.status_skill !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill"), cache.status_skill));
                                 if ( cache.status_skill_sight === true ) cache.status_effect.push(getTranslationByKey("status-effect-skill-sight"));
                                 if ( cache.status_skill_perception !== 0 && cache.status_skill !== cache.status_skill_perception ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-perception"), cache.status_skill_perception));
+                                if ( cache.status_skill_acrobatics !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-acrobatics"), cache.status_skill_acrobatics));
                                 if ( cache.status_skill_reactive !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-skill-reactive"), cache.status_skill_reactive));
 
                                 // encumbrance
@@ -2203,7 +2208,8 @@
 
                             payload["foo_status_armor_class_melee"] = cache.status_ac_melee;
                             payload["foo_status_armor_class_ranged"] = cache.status_ac_ranged;
-                            payload["foo_status_armor_class_mod_dodge"] = cache.armor_class_mod_dodge;
+                            payload["foo_status_armor_class_dodge"] = cache.status_ac_dodge;
+                            payload["foo_armor_class_mod_dodge"] = cache.armor_class_mod_dodge;
                             payload["foo_status_combat_maneuver_defense"] = cache.status_cmd;
                             payload["foo_status_skill"] = cache.status_skill;
                             payload["foo_status_skill_perception"] = cache.status_skill_perception;
@@ -2230,7 +2236,7 @@
 
                             payload["foo_armor_class_dexterity"] = Math.min(cache.dexterity_mod, cache.status_ac_dexterity_ceiling);
                             payload["foo_armor_class_dexterity_alert"] = ( cache.status_ac_dexterity_ceiling === 0 && cache.dexterity_mod >= 0 ? "show" : "hide" );
-                            payload["foo_combat_maneuver_bonus_category_height"] = cache.cmb_category_height;
+                            payload["foo_combat_maneuver_bonus_height_category"] = cache.cmb_height_category;
 
                             payload["foo_combat_maneuver_defense_dexterity"] = Math.min(cache.dexterity_mod, cache.status_cmd_dexterity_ceiling);
                             payload["foo_combat_maneuver_defense_alert"] = ( cache.status_cmd_dexterity_ceiling === 0 && cache.dexterity_mod >= 0 ? "show" : "hide" );
@@ -2334,7 +2340,7 @@
         });
     }
 
-    // character height + character weight + character race
+    // character weight + character race
     on(
         " change:option_unit_decimal change:option_unit_thousand change:option_unit_height change:option_unit_weight"
         + " change:character_race change:character_sex"
@@ -2399,6 +2405,7 @@
                 cache.weight = local.race[user.character_race][3+cache.offset];
                 cache.weight_total = cache.weight + user.character_weight_mod * cache.weight_mod_factor;
 
+                // unit
                 switch(user.option_unit_decimal) {
                     case 1 : // comma
                         cache.unit_decimal = ",";
@@ -3649,7 +3656,7 @@
 
     <input type="hidden" name="attr_foo_status_armor_class_melee" value="0" />
     <input type="hidden" name="attr_foo_status_armor_class_ranged" value="0" />
-    <input type="hidden" name="attr_foo_status_armor_class_mod_dodge" value="0" />
+    <input type="hidden" name="attr_foo_status_armor_class_dodge" value="0" />
     <input type="hidden" name="attr_foo_status_combat_maneuver_defense" value="0" />
     <input type="hidden" name="attr_foo_status_skill" value="0" />
     <input type="hidden" name="attr_foo_status_skill_perception" value="0" />
@@ -3678,7 +3685,8 @@
     <input type="hidden" name="attr_foo_class_willpower_total" value="0" />
     <input type="hidden" name="attr_foo_class_level_total" value="0" />
 
-    <input type="hidden" name="attr_foo_combat_maneuver_bonus_category_height" value="0" />
+    <input type="hidden" name="attr_foo_combat_maneuver_bonus_height_category" value="0" />
+    <input type="hidden" name="attr_foo_armor_class_mod_dodge" value="0" />
 
     <input type="hidden" name="attr_foo_caster_level_total_corrected" value="0" />
     <input type="hidden" name="attr_foo_arcane_spell_failure_total" value="0" />
@@ -4189,7 +4197,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="flex-col-auto">
-                                                                <span class="cog"></span>
+                                                            <span class="cog"></span>
                                                         </div>
                                                     </div>
                                                     <div>
@@ -4326,7 +4334,7 @@
                                 <ul data-i18n-list="option-compendium-list">
                                     <li data-i18n-list-item="height">
                                         <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_category_height_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
+                                            <input type="checkbox" name="attr_compendium_height_category_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
                                             <span class="button-switch-face"></span>
                                             <span class="button-switch-label" data-i18n="option-compendium-height"></span>
                                         </div>
@@ -4525,7 +4533,7 @@
                                 <ul data-i18n-list="option-compendium-list">
                                     <li data-i18n-list-item="height">
                                         <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_category_height_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
+                                            <input type="checkbox" name="attr_compendium_height_category_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
                                             <span class="button-switch-face"></span>
                                             <span class="button-switch-label" data-i18n="option-compendium-height"></span>
                                         </div>
@@ -5445,7 +5453,7 @@
                                         <span data-i18n="character-sex"></span>
                                     </th>
                                     <th width="33.333333%">
-                                        <span data-i18n="character-category-height-short" data-i18n-title="character-category-height-title"></span>
+                                        <span data-i18n="character-height-category-short" data-i18n-title="character-height-category-title"></span>
                                     </th>
                                     <th width="33.333333%">
                                         <span data-i18n="character-stance"></span>
@@ -5461,16 +5469,16 @@
                                         </select>
                                     </td>
                                     <td>
-                                        <select name="attr_character_category_height_select" title="">
-                                            <option data-i18n="character-category-height-very-tiny" value="8"></option>
-                                            <option data-i18n="character-category-height-tiny" value="4"></option>
-                                            <option data-i18n="character-category-height-very-small" value="2"></option>
-                                            <option data-i18n="character-category-height-small" value="1"></option>
-                                            <option data-i18n="character-category-height-medium" value="0" selected="selected"></option>
-                                            <option data-i18n="character-category-height-big" value="-1"></option>
-                                            <option data-i18n="character-category-height-very-big" value="-2"></option>
-                                            <option data-i18n="character-category-height-gigantic" value="-4"></option>
-                                            <option data-i18n="character-category-height-huge" value="-8"></option>
+                                        <select name="attr_character_height_category_select" title="">
+                                            <option data-i18n="character-height-category-very-tiny" value="8"></option>
+                                            <option data-i18n="character-height-category-tiny" value="4"></option>
+                                            <option data-i18n="character-height-category-very-small" value="2"></option>
+                                            <option data-i18n="character-height-category-small" value="1"></option>
+                                            <option data-i18n="character-height-category-medium" value="0" selected="selected"></option>
+                                            <option data-i18n="character-height-category-big" value="-1"></option>
+                                            <option data-i18n="character-height-category-very-big" value="-2"></option>
+                                            <option data-i18n="character-height-category-gigantic" value="-4"></option>
+                                            <option data-i18n="character-height-category-huge" value="-8"></option>
                                         </select>
                                     </td>
                                     <td>
@@ -6459,16 +6467,16 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_combat_maneuver_bonus_category_height}+@{foo_status_cmb}+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_height_category_select})+@{foo_combat_maneuver_bonus_height_category}+@{foo_status_cmb}+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_base_attack_bonus" title="" value="@{foo_class_base_attack_bonus1_total}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_mod_height_special" title="" value=-(@{character_category_height_select})" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_mod_height_special" title="" value=-(@{character_height_category_select})" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_mod_height" title="" value="@{foo_combat_maneuver_bonus_category_height}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_mod_height" title="" value="@{foo_combat_maneuver_bonus_height_category}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_mod_status" title="" value="@{foo_status_cmb}" disabled="disabled"/>
@@ -6580,7 +6588,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_category_height_select}+(@{foo_status_encumbrance_proficiency}+@{foo_status_attack})+@{battle_mod_miscellaneous}+@{battle_mod_temporary}" disabled="disabled" />
+                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_height_category_select}+(@{foo_status_encumbrance_proficiency}+@{foo_status_attack})+@{battle_mod_miscellaneous}+@{battle_mod_temporary}" disabled="disabled" />
                                                             </td>
                                                             <td>
                                                                 <div class="input-group">
@@ -6603,7 +6611,7 @@
                                                                 </div>
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="attr_battle_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                <input type="number" name="attr_battle_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                             </td>
                                                             <td>
                                                                 <input type="number" name="attr_battle_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_attack}" disabled="disabled" />
@@ -7271,7 +7279,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_melee_touch_total" title="" class="text-strong" value="@{spellcustom_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spellcustom_melee_touch_mod_miscellaneous}+@{spellcustom_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_melee_touch_total" title="" class="text-strong" value="@{spellcustom_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spellcustom_melee_touch_mod_miscellaneous}+@{spellcustom_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -7288,7 +7296,7 @@
                                                                                 <input type="number" name="attr_spellcustom_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spellcustom_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -7333,7 +7341,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_ranged_touch_total" title="" class="text-strong" value="@{spellcustom_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spellcustom_ranged_touch_mod_miscellaneous}+@{spellcustom_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_ranged_touch_total" title="" class="text-strong" value="@{spellcustom_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spellcustom_ranged_touch_mod_miscellaneous}+@{spellcustom_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -7350,7 +7358,7 @@
                                                                                 <input type="number" name="attr_spellcustom_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spellcustom_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -8168,7 +8176,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_melee_touch_total" title="" class="text-strong" value="@{spell0_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell0_melee_touch_mod_misc}+@{spell0_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_melee_touch_total" title="" class="text-strong" value="@{spell0_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell0_melee_touch_mod_misc}+@{spell0_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -8185,7 +8193,7 @@
                                                                                 <input type="number" name="attr_spell0_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell0_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -8230,7 +8238,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_ranged_touch_total" title="" class="text-strong" value="@{spell0_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell0_ranged_touch_mod_misc}+@{spell0_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_ranged_touch_total" title="" class="text-strong" value="@{spell0_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell0_ranged_touch_mod_misc}+@{spell0_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -8247,7 +8255,7 @@
                                                                                 <input type="number" name="attr_spell0_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell0_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -9051,7 +9059,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_melee_touch_total" title="" class="text-strong" value="@{spell1_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell1_melee_touch_mod_misc}+@{spell1_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_melee_touch_total" title="" class="text-strong" value="@{spell1_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell1_melee_touch_mod_misc}+@{spell1_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -9068,7 +9076,7 @@
                                                                                 <input type="number" name="attr_spell1_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell1_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -9113,7 +9121,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_ranged_touch_total" title="" class="text-strong" value="@{spell1_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell1_ranged_touch_mod_misc}+@{spell1_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_ranged_touch_total" title="" class="text-strong" value="@{spell1_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell1_ranged_touch_mod_misc}+@{spell1_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -9130,7 +9138,7 @@
                                                                                 <input type="number" name="attr_spell1_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell1_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -9934,7 +9942,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_melee_touch_total" title="" class="text-strong" value="@{spell2_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell2_melee_touch_mod_misc}+@{spell2_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_melee_touch_total" title="" class="text-strong" value="@{spell2_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell2_melee_touch_mod_misc}+@{spell2_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -9951,7 +9959,7 @@
                                                                                 <input type="number" name="attr_spell2_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell2_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -9996,7 +10004,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_ranged_touch_total" title="" class="text-strong" value="@{spell2_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell2_ranged_touch_mod_misc}+@{spell2_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_ranged_touch_total" title="" class="text-strong" value="@{spell2_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell2_ranged_touch_mod_misc}+@{spell2_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -10013,7 +10021,7 @@
                                                                                 <input type="number" name="attr_spell2_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell2_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -10817,7 +10825,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_melee_touch_total" title="" class="text-strong" value="@{spell3_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell3_melee_touch_mod_misc}+@{spell3_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_melee_touch_total" title="" class="text-strong" value="@{spell3_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell3_melee_touch_mod_misc}+@{spell3_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -10834,7 +10842,7 @@
                                                                                 <input type="number" name="attr_spell3_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell3_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -10879,7 +10887,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_ranged_touch_total" title="" class="text-strong" value="@{spell3_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell3_ranged_touch_mod_misc}+@{spell3_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_ranged_touch_total" title="" class="text-strong" value="@{spell3_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell3_ranged_touch_mod_misc}+@{spell3_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -10896,7 +10904,7 @@
                                                                                 <input type="number" name="attr_spell3_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell3_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -11700,7 +11708,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_melee_touch_total" title="" class="text-strong" value="@{spell4_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell4_melee_touch_mod_misc}+@{spell4_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_melee_touch_total" title="" class="text-strong" value="@{spell4_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell4_melee_touch_mod_misc}+@{spell4_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -11717,7 +11725,7 @@
                                                                                 <input type="number" name="attr_spell4_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell4_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -11762,7 +11770,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_ranged_touch_total" title="" class="text-strong" value="@{spell4_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell4_ranged_touch_mod_misc}+@{spell4_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_ranged_touch_total" title="" class="text-strong" value="@{spell4_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell4_ranged_touch_mod_misc}+@{spell4_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -11779,7 +11787,7 @@
                                                                                 <input type="number" name="attr_spell4_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell4_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -12583,7 +12591,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_melee_touch_total" title="" class="text-strong" value="@{spell5_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell5_melee_touch_mod_misc}+@{spell5_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_melee_touch_total" title="" class="text-strong" value="@{spell5_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell5_melee_touch_mod_misc}+@{spell5_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12600,7 +12608,7 @@
                                                                                 <input type="number" name="attr_spell5_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell5_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -12645,7 +12653,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_ranged_touch_total" title="" class="text-strong" value="@{spell5_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell5_ranged_touch_mod_misc}+@{spell5_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_ranged_touch_total" title="" class="text-strong" value="@{spell5_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell5_ranged_touch_mod_misc}+@{spell5_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12662,7 +12670,7 @@
                                                                                 <input type="number" name="attr_spell5_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell5_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -13466,7 +13474,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_melee_touch_total" title="" class="text-strong" value="@{spell6_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell6_melee_touch_mod_misc}+@{spell6_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_melee_touch_total" title="" class="text-strong" value="@{spell6_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell6_melee_touch_mod_misc}+@{spell6_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -13483,7 +13491,7 @@
                                                                                 <input type="number" name="attr_spell6_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell6_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -13528,7 +13536,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_ranged_touch_total" title="" class="text-strong" value="@{spell6_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell6_ranged_touch_mod_misc}+@{spell6_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_ranged_touch_total" title="" class="text-strong" value="@{spell6_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell6_ranged_touch_mod_misc}+@{spell6_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -13545,7 +13553,7 @@
                                                                                 <input type="number" name="attr_spell6_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell6_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -14349,7 +14357,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_melee_touch_total" title="" class="text-strong" value="@{spell7_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell7_melee_touch_mod_misc}+@{spell7_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_melee_touch_total" title="" class="text-strong" value="@{spell7_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell7_melee_touch_mod_misc}+@{spell7_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -14366,7 +14374,7 @@
                                                                                 <input type="number" name="attr_spell7_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell7_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -14411,7 +14419,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_ranged_touch_total" title="" class="text-strong" value="@{spell7_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell7_ranged_touch_mod_misc}+@{spell7_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_ranged_touch_total" title="" class="text-strong" value="@{spell7_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell7_ranged_touch_mod_misc}+@{spell7_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -14428,7 +14436,7 @@
                                                                                 <input type="number" name="attr_spell7_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell7_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -15232,7 +15240,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_melee_touch_total" title="" class="text-strong" value="@{spell8_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell8_melee_touch_mod_misc}+@{spell8_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_melee_touch_total" title="" class="text-strong" value="@{spell8_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell8_melee_touch_mod_misc}+@{spell8_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -15249,7 +15257,7 @@
                                                                                 <input type="number" name="attr_spell8_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell8_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -15294,7 +15302,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_ranged_touch_total" title="" class="text-strong" value="@{spell8_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell8_ranged_touch_mod_misc}+@{spell8_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_ranged_touch_total" title="" class="text-strong" value="@{spell8_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell8_ranged_touch_mod_misc}+@{spell8_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -15311,7 +15319,7 @@
                                                                                 <input type="number" name="attr_spell8_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell8_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -16115,7 +16123,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_melee_touch_total" title="" class="text-strong" value="@{spell9_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell9_melee_touch_mod_misc}+@{spell9_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_melee_touch_total" title="" class="text-strong" value="@{spell9_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell9_melee_touch_mod_misc}+@{spell9_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -16132,7 +16140,7 @@
                                                                                 <input type="number" name="attr_spell9_melee_touch_attribute_mod" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_melee_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_melee_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell9_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -16177,7 +16185,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_ranged_touch_total" title="" class="text-strong" value="@{spell9_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_category_height_select}+@{foo_status_encumbrance_proficiency}+@{spell9_ranged_touch_mod_misc}+@{spell9_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_ranged_touch_total" title="" class="text-strong" value="@{spell9_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_height_category_select}+@{foo_status_encumbrance_proficiency}+@{spell9_ranged_touch_mod_misc}+@{spell9_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -16194,7 +16202,7 @@
                                                                                 <input type="number" name="attr_spell9_ranged_touch_attribute_mod" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_ranged_touch_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_ranged_touch_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
                                                                                 <input type="number" name="attr_spell9_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
@@ -17034,25 +17042,25 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_melee}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_height_category_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_melee}" disabled="disabled"/>
                             </td>
-                            <td>
-                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_armor_class_melee}" data-i18n-title="modifier-status-title" disabled="disabled"/>
-                            </td>
-                            <td></td>
-                            <td>
-                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_ranged}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" data-i18n-title="modifier-status-title" disabled="disabled"/>
+                            <td data-i18n-title="modifier-status-title">
+                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_armor_class_melee}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_status_dexterity_flatfooted}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_height_category_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_ranged}" disabled="disabled"/>
+                            </td>
+                            <td data-i18n-title="modifier-status-title">
+                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_status_dexterity_flatfooted}+@{character_height_category_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_height_category_select}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -17076,7 +17084,7 @@
                             <th width="11.111111%">
                                 <span data-i18n="armor-class-natural-armor-short" data-i18n-title="armor-class-natural-armor-title"></span>
                             </th>
-                            <th width="11.111111%">
+                            <th width="11.111111%" colspan="2">
                                 <span data-i18n="defense-dodge"></span>
                             </th>
                             <th width="11.111111%">
@@ -17102,10 +17110,13 @@
                                 <input type="number" name="attr_armor_class_dexterity" title="" value="@{foo_armor_class_dexterity}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_mod_height" title="" value="@{character_category_height_select}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_mod_height" title="" value="@{character_height_category_select}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_mod_race" title="" min="0" step="1" value="0"/>
+                            </td>
+                            <td data-i18n-title="modifier-status-title">
+                                <input type="number" name="attr_armor_class_dodge_status" title="" value="@{foo_status_armor_class_dodge}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_mod_dodge" title="" step="1" value="0"/>
@@ -17169,7 +17180,7 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_category_height_select})+@{foo_character_strength_mod}+@{foo_combat_maneuver_defense_dexterity}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_dodge}+@{combat_maneuver_defense_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_height_category_select})+@{foo_character_strength_mod}+@{foo_combat_maneuver_defense_dexterity}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_dodge}+@{combat_maneuver_defense_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_base" title="" value="10" disabled="disabled"/>
@@ -17178,7 +17189,7 @@
                                 <input type="number" name="attr_combat_maneuver_defense_base_attack_bonus" title="" value="@{foo_class_base_attack_bonus1_total}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_height_special" title="" value="-(@{character_category_height_select})" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_height_special" title="" value="-(@{character_height_category_select})" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_strength" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
@@ -17975,7 +17986,7 @@
                                 <input type="number" name="attr_skill_fly_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_fly_total" title="" disabled="disabled" class="text-strong" value="@{skill_fly_ranks}+@{skill_fly_cc}+@{skill_fly_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_fly_trait}+@{skill_fly_gift}+@{skill_fly_temporary}"/>
+                                <input type="number" name="attr_skill_fly_total" title="" disabled="disabled" class="text-strong" value="@{skill_fly_ranks}+@{skill_fly_cc}+@{skill_fly_stat}+(@{foo_status_skill}+@{character_height_category_select}+@{foo_status_encumbrance})+@{skill_fly_trait}+@{skill_fly_gift}+@{skill_fly_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_fly_class" title="" value="@{skill_fly_cc}" disabled="disabled"/>
@@ -17988,8 +17999,8 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <input type="number" name="attr_skill_fly_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                            <td data-i18n-title="skill-fly-title">
+                                <input type="number" name="attr_skill_fly_penalty" title="" value="@{foo_status_skill}+@{character_height_category_select}+@{foo_status_encumbrance}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_fly_trait" title="" step="1" value="0"/>
