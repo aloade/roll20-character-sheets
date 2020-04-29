@@ -137,7 +137,7 @@
 
         // language
         // based on 2 characters code ( ISO 639-1 )
-        local.language = getTranslationByKey("language");
+        local.language = getTranslationByKey("gui-language");
         if ( local.language === false ) local.language = "en";
 
         // inline's rolls
@@ -161,9 +161,9 @@
             "label_spell_concentration_pinned": getTranslationByKey("spell-concentration-pinned-label"),
             "label_spell_concentration_wound": getTranslationByKey("spell-concentration-wound-label"),
 
-            "label_fortitude": getTranslationByKey("fortitude-label"),
-            "label_reflex": getTranslationByKey("reflex-label"),
-            "label_willpower": getTranslationByKey("willpower-label"),
+            "label_fortitude": getTranslationByKey("save-fortitude-label"),
+            "label_reflex": getTranslationByKey("save-reflex-label"),
+            "label_willpower": getTranslationByKey("save-willpower-label"),
 
             "label_skill_acrobatics": getTranslationByKey("skill-acrobatics-label"),
             "label_skill_animal_training": getTranslationByKey("skill-animal-training-label"),
@@ -366,9 +366,9 @@
                         payload["npc_experience"] = parseInt(user_string.compendium_experience.replace(/,/g, "") );
                         payload["npc_hit_points"] = user_string.compendium_hit_points; // <number> (<string>)
                         let hitpoints = parseInt(user_string.compendium_hit_points);
-                        payload["character_hit_points_base"] = hitpoints;
-                        payload["character_hit_points_ceiling"] = hitpoints;
-                        payload["character_nonlethal_damage_base"] = hitpoints;
+                        payload["health_hit_points_base"] = hitpoints;
+                        payload["health_hit_points_ceiling"] = hitpoints;
+                        payload["health_nonlethal_damage_base"] = hitpoints;
                         payload["npc_treasure"] = user_string.compendium_treasure;
 
                         // attributes
@@ -865,24 +865,25 @@
     // ------------------------------------------
     // commmon
     // ------------------------------------------
-    // unit + wound thresold + aging + armor proficiency + equipment's weight + encumbrance + movement + caster level + template
+    // unit + wound threshold + status + aging + armor proficiency + equipment's weight + encumbrance + movement + caster level + template
     // ( all these attributes are all linked to dexterity )
     on(
         " change:option_template change:option_health change:option_unit_decimal change:option_unit_thousand change:option_unit_movement change:option_unit_weight"
         + " change:option_status_aging change:option_status_armor_penalty change:option_status_encumbrance change:option_status change:option_status_wound_threshold"
         + " change:status_health change:status_bleed change:status_negative_level_temporary change:status_negative_level change:status_mental_health change:status_stamina"
         + " change:status_cowering change:status_dazed change:status_helpless change:status_prone change:status_fighting_defensively change:status_movement change:status_flat_footed change:status_total_defense"
-        + " change:status_deafened change:status_dazzled change:status_blinded change:status_confused change:status_stunded change:status_paralyzed"
+        + " change:status_deafened change:status_dazzled change:status_blinded change:status_confused change:status_stunned change:status_paralyzed"
         + " change:status_nauseated change:status_sickened"
         + " change:status_mesmerized change:status_incorporeal change:status_invisible change:status_petrified"
         + " change:status_class_barbarian_rage change:status_class_monk_crane"
-        + " change:character_hit_points_base change:character_hit_points_miscellaneous change:character_hit_points_temporary change:character_hit_points_ceiling" + " change:character_nonlethal_damage_base change:character_nonlethal_damage_temporary"
-        + " change:character_wound_points_base change:character_wound_points_temporary change:character_wound_points_ceiling change:character_vigor_base change:character_vigor_temporary change:character_vigor_ceiling"
+        + " change:health_hit_points_base change:health_hit_points_miscellaneous change:health_hit_points_temporary change:health_hit_points_ceiling change:health_nonlethal_damage_base change:health_nonlethal_damage_temporary"
+        + " change:health_wound_points_base change:health_wound_points_temporary change:health_wound_points_ceiling change:health_vigor_base change:health_vigor_temporary change:health_vigor_ceiling"
         + " change:character_strength_base change:character_strength_race change:character_strength_bonus change:character_strength_penalty change:character_strength_temp"
         + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_penalty change:character_dexterity_temp"
         + " change:character_stance change:character_category_height_select change:character_movement_base"
         + " change:character_age change:character_race change:character_age_select"
         + " change:caster_level_rank change:caster_level_miscellaneous change:caster_level_temporary"
+        + " change:armor_class_mod_dodge"
         + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_weapon:equipment_weapon_weight remove:repeating_weapon"
@@ -900,13 +901,14 @@
             "status_nauseated", "status_sickened",
             "status_mesmerized", "status_incorporeal", "status_invisible", "status_petrified",
             "status_class_barbarian_rage", "status_class_monk_crane",
-            "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling", "character_nonlethal_damage_base", "character_nonlethal_damage_temporary",
-            "character_wound_points_base", "character_wound_points_temporary", "character_wound_points_ceiling", "character_vigor_base", "character_vigor_temporary", "character_vigor_ceiling",
+            "health_hit_points_base", "health_hit_points_miscellaneous", "health_hit_points_temporary", "health_hit_points_ceiling", "health_nonlethal_damage_base", "health_nonlethal_damage_temporary",
+            "health_wound_points_base", "health_wound_points_temporary", "health_wound_points_ceiling", "health_vigor_base", "health_vigor_temporary", "health_vigor_ceiling",
             "character_strength_base", "character_strength_race", "character_strength_bonus", "character_strength_penalty", "character_strength_temporary",
             "character_dexterity_base", "character_dexterity_race", "character_dexterity_bonus", "character_dexterity_penalty", "character_dexterity_temporary",
             "character_stance", "character_category_height_select", "character_movement_base",
             "character_age", "character_race", "character_age_select",
             "caster_level_rank", "caster_level_miscellaneous", "caster_level_temporary",
+            "armor_class_mod_dodge",
             "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "armor_proficiency_shield", "armor_proficiency_shield_tower",
             "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
             "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight"
@@ -973,6 +975,7 @@
                                 "move_base" : (user_number.character_movement_base < 0 ? 0 : user_number.character_movement_base ),
                                 "move_tactic" : 1,
                                 "move_run" : 4,
+                                "armor_class_mod_dodge" : user_number.armor_class_mod_dodge,
                                 "encumbrance_armor_penalty": 0,
                                 "encumbrance_armor_penalty_proficiency": 0,
                                 "encumbrance_total" : 0,
@@ -1749,15 +1752,15 @@
                             // ( next statuses need calculated values )
                             // ------------------------------------------
 
-                            cache.health_hit_points = user_number.character_hit_points_base + user_number.character_hit_points_miscellaneous + user_number.character_hit_points_temporary + cache.status_hit_points;
-                            cache.health_hit_points_ceiling = user_number.character_hit_points_ceiling + cache.status_hit_points;
-                            cache.health_nonlethal_damage = user_number.character_nonlethal_damage_base + user_number.character_nonlethal_damage_temporary;
+                            cache.health_hit_points = user_number.health_hit_points_base + user_number.health_hit_points_miscellaneous + user_number.health_hit_points_temporary + cache.status_hit_points;
+                            cache.health_hit_points_ceiling = user_number.health_hit_points_ceiling + cache.status_hit_points;
+                            cache.health_nonlethal_damage = user_number.health_nonlethal_damage_base + user_number.health_nonlethal_damage_temporary;
                             cache.health_nonlethal_damage_ceiling = cache.health_hit_points;
 
-                            cache.health_wound_points = user_number.character_wound_points_base + user_number.character_wound_points_temporary ;
-                            cache.health_wound_points_ceiling = user_number.character_wound_points_ceiling;
-                            cache.health_vigor = user_number.character_vigor_base + user_number.character_vigor_temporary ;
-                            cache.health_vigor_ceiling = user_number.character_vigor_ceiling;
+                            cache.health_wound_points = user_number.health_wound_points_base + user_number.health_wound_points_temporary ;
+                            cache.health_wound_points_ceiling = user_number.health_wound_points_ceiling;
+                            cache.health_vigor = user_number.health_vigor_base + user_number.health_vigor_temporary ;
+                            cache.health_vigor_ceiling = user_number.health_vigor_ceiling;
 
                             cache.strength += cache.status_strength + cache.aging_strength;
                             cache.dexterity += cache.status_dexterity + cache.aging_dexterity;
@@ -1770,7 +1773,7 @@
                             // ------------------------------------------
                             // wound threshold
                             // need "cache.status_hit_points"
-                            // need "option_template", "option_health", "option_status_wound_threshold", "character_hit_points_base", "character_hit_points_miscellaneous", "character_hit_points_temporary", "character_hit_points_ceiling"
+                            // need "option_template", "option_health", "option_status_wound_threshold", "health_hit_points_base", "health_hit_points_miscellaneous", "health_hit_points_temporary", "health_hit_points_ceiling"
                             // ------------------------------------------
                             if ( (user_string.option_template === "pc" || user_string.option_template === "npc" ) && user_string.option_health === "standard") {
                                 if ( user_number.option_status_wound_threshold === 1 ) {
@@ -1849,6 +1852,36 @@
                                     delete(current);
                                 }
                             }
+
+                            // ------------------------------------------
+                            // amor class dodge bonus
+                            // need "cache.status_dexterity_ceiling"
+                            // ------------------------------------------
+                            if ( cache.status_dexterity_ceiling === 0 ) {
+                                cache.armor_class_mod_dodge = 0;
+                            }
+
+                            // ------------------------------------------
+                            // CMB height
+                            // need calculated "cache.dexterity_mod"
+                            // ------------------------------------------
+                            switch (user_number.character_category_height_select) {
+                                case 8: // very tiny
+                                case 4: // tiny
+                                case 2: // very small
+                                    cache.cmb_category_height = cache.dexterity_mod;
+                                    break;
+
+                                default: // small, standard, big, very big, gigantic, huge
+                                    cache.cmb_category_height = cache.strength_mod;
+                                    break;
+                            }
+
+                            // ------------------------------------------
+                            // caster level corrected
+                            // need calculated "cache.status_caster_level"
+                            // ------------------------------------------
+                            cache.caster_level = Math.max(user_number.caster_level_rank + user_number.caster_level_miscellaneous + user_number.caster_level_temporary + cache.status_caster_level, 0);
 
                             // ------------------------------------------
                             // encumbrance
@@ -1934,28 +1967,6 @@
                             cache.status_cmd_dexterity_ceiling = Math.min(cache.status_cmd_dexterity_ceiling, cache.encumbrance_dexterity_ceiling);
 
                             if ( user_number.option_status_armor_penalty === 1 && cache.encumbrance_armor_penalty_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
-
-                            // ------------------------------------------
-                            // CMB height
-                            // need calculated "cache.dexterity_mod"
-                            // ------------------------------------------
-                            switch (user_number.character_category_height_select) {
-                                case 8: // very tiny
-                                case 4: // tiny
-                                case 2: // very small
-                                    cache.cmb_category_height = cache.dexterity_mod;
-                                    break;
-
-                                default: // small, standard, big, very big, gigantic, huge
-                                    cache.cmb_category_height = cache.strength_mod;
-                                    break;
-                            }
-
-                            // ------------------------------------------
-                            // caster level corrected
-                            // need calculated "cache.status_caster_level"
-                            // ------------------------------------------
-                            cache.caster_level = Math.max(user_number.caster_level_rank + user_number.caster_level_miscellaneous + user_number.caster_level_temporary + cache.status_caster_level, 0);
 
                             // ------------------------------------------
                             // status effects
@@ -2190,8 +2201,9 @@
                             payload["foo_status_reflex"] = cache.status_reflex;
                             payload["foo_status_willpower"] = cache.status_willpower;
 
-                            payload["foo_status_ac_melee"] = cache.status_ac_melee;
-                            payload["foo_status_ac_ranged"] = cache.status_ac_ranged;
+                            payload["foo_status_armor_class_melee"] = cache.status_ac_melee;
+                            payload["foo_status_armor_class_ranged"] = cache.status_ac_ranged;
+                            payload["foo_status_armor_class_mod_dodge"] = cache.armor_class_mod_dodge;
                             payload["foo_status_combat_maneuver_defense"] = cache.status_cmd;
                             payload["foo_status_skill"] = cache.status_skill;
                             payload["foo_status_skill_perception"] = cache.status_skill_perception;
@@ -2258,61 +2270,61 @@
     // ------------------------------------------
     // spoken languages
     on(
-        "change:character_language_common change:character_language_draconic change:character_language_dwarven change:character_language_elven change:character_language_gnomish change:character_language_goblin change:character_language_halfling change:character_language_jotun change:character_language_orcish change:character_language_sylvan change:character_language_undercommon"
-        + " change:character_language_abyssal change:character_language_aklo change:character_language_alghollthu change:character_language_amurrun change:character_language_anadi change:character_language_aquan change:character_language_arboreal change:character_language_auran change:character_language_azlanti change:character_language_boggard change:character_language_caligni change:character_language_celestial change:character_language_cyclops change:character_language_daemonic change:character_language_garundi change:character_language_gnoll change:character_language_grippli change:character_language_hallit change:character_language_ignan change:character_language_infernal change:character_language_iruxi change:character_language_kelish change:character_language_mwangi change:character_language_necril change:character_language_osiriani change:character_language_protean change:character_language_requian change:character_language_shadowtongue change:character_language_shoanti change:character_language_skald change:character_language_sphinx change:character_language_strix change:character_language_tengu change:character_language_terran change:character_language_thassilonian change:character_language_tien change:character_language_utopian change:character_language_varisian change:character_language_vudrani"
-        + " change:character_language_druidic"
-        + " change:character_language_other"
+        "change:language_common change:language_draconic change:language_dwarven change:language_elven change:language_gnomish change:language_goblin change:language_halfling change:language_jotun change:language_orcish change:language_sylvan change:language_undercommon"
+        + " change:language_abyssal change:language_aklo change:language_aquan change:language_auran change:language_celestial change:language_gnoll change:language_ignan change:language_infernal change:language_necril change:language_shadowtongue change:language_terran"
+        + " change:language_druidic"
+        + " change:language_other"
         , character_spoken_language );
     function character_spoken_language() {
         getAttrsNumber([
-            "character_language_common", "character_language_draconic", "character_language_dwarven", "character_language_elven", "character_language_gnomish", "character_language_goblin", "character_language_halfling", "character_language_jotun", "character_language_orcish", "character_language_sylvan", "character_language_undercommon",
-            "character_language_abyssal", "character_language_aklo", "character_language_alghollthu", "character_language_amurrun", "character_language_anadi", "character_language_aquan", "character_language_arboreal", "character_language_auran", "character_language_azlanti", "character_language_boggard", "character_language_caligni", "character_language_celestial", "character_language_cyclops", "character_language_daemonic", "character_language_garundi", "character_language_gnoll", "character_language_grippli", "character_language_hallit", "character_language_ignan", "character_language_infernal", "character_language_iruxi", "character_language_kelish", "character_language_mwangi", "character_language_necril", "character_language_osiriani", "character_language_protean", "character_language_requian", "character_language_shadowtongue", "character_language_shoanti", "character_language_skald", "character_language_sphinx", "character_language_strix", "character_language_tengu", "character_language_terran", "character_language_thassilonian", "character_language_tien", "character_language_utopian", "character_language_varisian", "character_language_vudrani",
-            "character_language_druidic",
-            "character_language_other"
+            "language_common", "language_draconic", "language_dwarven", "language_elven", "language_gnomish", "language_goblin", "language_halfling", "language_jotun", "language_orcish", "language_sylvan", "language_undercommon",
+            "language_abyssal", "language_aklo", "language_aquan", "language_auran", "language_celestial", "language_gnoll", "language_ignan", "language_infernal", "language_necril", "language_shadowtongue", "language_terran",
+            "language_druidic",
+            "language_other"
         ], (user_number) => {
             getAttrs([
-                "character_language_other"
+                "language_other"
             ], (user_string) => {
                 let languages = [];
                 // common languages
-                if (user_number.character_language_common === 1) languages.push(getTranslationByKey("character-language-common"));
-                if (user_number.character_language_draconic === 1) languages.push(getTranslationByKey("character-language-draconic"));
-                if (user_number.character_language_dwarven === 1) languages.push(getTranslationByKey("character-language-dwarven"));
-                if (user_number.character_language_elven === 1) languages.push(getTranslationByKey("character-language-elven"));
-                if (user_number.character_language_gnomish === 1) languages.push(getTranslationByKey("character-language-gnomish"));
-                if (user_number.character_language_goblin === 1) languages.push(getTranslationByKey("character-language-goblin"));
-                if (user_number.character_language_halfling === 1) languages.push(getTranslationByKey("character-language-halfling"));
-                if (user_number.character_language_jotun === 1) languages.push(getTranslationByKey("character-language-jotun"));
-                if (user_number.character_language_orcish === 1) languages.push(getTranslationByKey("character-language-orcish"));
-                if (user_number.character_language_sylvan === 1) languages.push(getTranslationByKey("character-language-sylvan"));
-                if (user_number.character_language_undercommon === 1) languages.push(getTranslationByKey("character-language-undercommon"));
+                if (user_number.language_common === 1) languages.push(getTranslationByKey("language-common"));
+                if (user_number.language_draconic === 1) languages.push(getTranslationByKey("language-draconic"));
+                if (user_number.language_dwarven === 1) languages.push(getTranslationByKey("language-dwarven"));
+                if (user_number.language_elven === 1) languages.push(getTranslationByKey("language-elven"));
+                if (user_number.language_gnomish === 1) languages.push(getTranslationByKey("language-gnomish"));
+                if (user_number.language_goblin === 1) languages.push(getTranslationByKey("language-goblin"));
+                if (user_number.language_halfling === 1) languages.push(getTranslationByKey("language-halfling"));
+                if (user_number.language_jotun === 1) languages.push(getTranslationByKey("language-jotun"));
+                if (user_number.language_orcish === 1) languages.push(getTranslationByKey("language-orcish"));
+                if (user_number.language_sylvan === 1) languages.push(getTranslationByKey("language-sylvan"));
+                if (user_number.language_undercommon === 1) languages.push(getTranslationByKey("language-undercommon"));
 
                 // rare languages
-                if (user_number.character_language_abyssal === 1) languages.push(getTranslationByKey("character-language-abyssal"));
-                if (user_number.character_language_aklo === 1) languages.push(getTranslationByKey("character-language-aklo"));
-                if (user_number.character_language_aquan === 1) languages.push(getTranslationByKey("character-language-aquan"));
-                if (user_number.character_language_auran === 1) languages.push(getTranslationByKey("character-language-auran"));
-                if (user_number.character_language_celestial === 1) languages.push(getTranslationByKey("character-language-celestial"));
-                if (user_number.character_language_gnoll === 1) languages.push(getTranslationByKey("character-language-gnoll"));
-                if (user_number.character_language_ignan === 1) languages.push(getTranslationByKey("character-language-ignan"));
-                if (user_number.character_language_infernal === 1) languages.push(getTranslationByKey("character-language-infernal"));
-                if (user_number.character_language_necril === 1) languages.push(getTranslationByKey("character-language-necril"));
-                if (user_number.character_language_shadowtongue === 1) languages.push(getTranslationByKey("character-language-shadowtongue"));
-                if (user_number.character_language_terran === 1) languages.push(getTranslationByKey("character-language-terran"));
+                if (user_number.language_abyssal === 1) languages.push(getTranslationByKey("language-abyssal"));
+                if (user_number.language_aklo === 1) languages.push(getTranslationByKey("language-aklo"));
+                if (user_number.language_aquan === 1) languages.push(getTranslationByKey("language-aquan"));
+                if (user_number.language_auran === 1) languages.push(getTranslationByKey("language-auran"));
+                if (user_number.language_celestial === 1) languages.push(getTranslationByKey("language-celestial"));
+                if (user_number.language_gnoll === 1) languages.push(getTranslationByKey("language-gnoll"));
+                if (user_number.language_ignan === 1) languages.push(getTranslationByKey("language-ignan"));
+                if (user_number.language_infernal === 1) languages.push(getTranslationByKey("language-infernal"));
+                if (user_number.language_necril === 1) languages.push(getTranslationByKey("language-necril"));
+                if (user_number.language_shadowtongue === 1) languages.push(getTranslationByKey("language-shadowtongue"));
+                if (user_number.language_terran === 1) languages.push(getTranslationByKey("language-terran"));
 
                 // secrets languages
-                if (user_number.character_language_druidic === 1) languages.push(getTranslationByKey("character-language-druidic"));
+                if (user_number.language_druidic === 1) languages.push(getTranslationByKey("language-druidic"));
 
                 // user languages
-                if (user_string.character_language_other !== "") languages.push(user_string.character_language_other);
+                if (user_string.language_other !== "") languages.push(user_string.language_other);
 
                 // sum
-                if (languages.length === 0) languages.push(getTranslationByKey("character-language-none"));
+                if (languages.length === 0) languages.push(getTranslationByKey("language-none"));
                 languages = sortLocale(languages);
 
                 // prepare payload
                 let payload = {};
-                payload["character_language"] = languages.join(", ");
+                payload["language"] = languages.join(", ");
                 delete(user_number);
                 delete(user_string);
 
@@ -3572,9 +3584,9 @@
     <span data-i18n="spell-concentration-wound-label"></span>
     <span data-i18n="spell-concentration-damage-label"></span>
 
-    <span data-i18n="fortitude-label"></span>
-    <span data-i18n="reflex-label"></span>
-    <span data-i18n="willpower-label"></span>
+    <span data-i18n="save-fortitude-label"></span>
+    <span data-i18n="save-reflex-label"></span>
+    <span data-i18n="save-willpower-label"></span>
 
     <span data-i18n="skill-status-reactive"></span>
     <span data-i18n="skill-status-sight"></span>
@@ -3635,8 +3647,9 @@
     <input type="hidden" name="attr_foo_status_reflex" value="0" />
     <input type="hidden" name="attr_foo_status_willpower" value="0" />
 
-    <input type="hidden" name="attr_foo_status_ac_melee" value="0" />
-    <input type="hidden" name="attr_foo_status_ac_ranged" value="0" />
+    <input type="hidden" name="attr_foo_status_armor_class_melee" value="0" />
+    <input type="hidden" name="attr_foo_status_armor_class_ranged" value="0" />
+    <input type="hidden" name="attr_foo_status_armor_class_mod_dodge" value="0" />
     <input type="hidden" name="attr_foo_status_combat_maneuver_defense" value="0" />
     <input type="hidden" name="attr_foo_status_skill" value="0" />
     <input type="hidden" name="attr_foo_status_skill_perception" value="0" />
@@ -4010,9 +4023,47 @@
                                                 </div>
                                             </li>
                                         </ul>
+
+                                        <h2 data-i18n="status-deseases-h1"></h2>
+                                        <ul data-i18n-list="status-deseases-list">
+                                            <li data-i18n-list-item="sickened">
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_status_sickened" title="" data-i18n-title="status-sickened-title" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="status-sickened"></span>
+                                                </div>
+                                            </li>
+                                            <li data-i18n-list-item="nauseated">
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_status_nauseated" title="" data-i18n-title="status-nauseated-title" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="status-nauseated"></span>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
 
                                     <div class="flex-col">
+                                        <h2 data-i18n="status-negative-level-h1"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="status-negative-level input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="permanent"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_negative_level" title="" min="0" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="status-negative-level input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="temporary"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_negative_level_temporary" title="" min="0" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+
                                         <h2 data-i18n="status-sens-h1"></h2>
                                         <ul data-i18n-list="status-sens-list">
                                             <li data-i18n-list-item="blinded">
@@ -4059,46 +4110,6 @@
                                             </li>
                                         </ul>
 
-                                        <h2 data-i18n="status-negative-level-h1"></h2>
-                                        <ul>
-                                            <li>
-                                                <div class="status-negative-level input-group">
-                                                    <div class="input-group-text">
-                                                        <span data-i18n="permanent"></span>
-                                                    </div>
-                                                    <input type="number" name="attr_status_negative_level" title="" min="0" step="1" value="0" />
-                                                </div>
-                                            </li>
-                                            <li>
-                                                <div class="status-negative-level input-group">
-                                                    <div class="input-group-text">
-                                                        <span data-i18n="temporary"></span>
-                                                    </div>
-                                                    <input type="number" name="attr_status_negative_level_temporary" title="" min="0" step="1" value="0" />
-                                                </div>
-                                            </li>
-                                        </ul>
-
-                                        <h2 data-i18n="status-deseases-h1"></h2>
-                                        <ul data-i18n-list="status-deseases-list">
-                                            <li data-i18n-list-item="sickened">
-                                                <div class="button-switch">
-                                                    <input type="checkbox" name="attr_status_sickened" title="" data-i18n-title="status-sickened-title" />
-                                                    <span class="button-switch-face"></span>
-                                                    <span class="button-switch-label" data-i18n="status-sickened"></span>
-                                                </div>
-                                            </li>
-                                            <li data-i18n-list-item="nauseated">
-                                                <div class="button-switch">
-                                                    <input type="checkbox" name="attr_status_nauseated" title="" data-i18n-title="status-nauseated-title" />
-                                                    <span class="button-switch-face"></span>
-                                                    <span class="button-switch-label" data-i18n="status-nauseated"></span>
-                                                </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-
-                                    <div class="flex-col">
                                         <h2 data-i18n="status-spell-h1"></h2>
                                         <ul data-i18n-list="status-spell-list">
                                             <li data-i18n-list-item="incorporeal">
@@ -4137,7 +4148,9 @@
                                                 </div>
                                             </li>
                                         </ul>
+                                    </div>
 
+                                    <div class="flex-col">
                                         <h2 data-i18n="status-class-h1"></h2>
                                         <ul>
                                             <li>
@@ -4163,6 +4176,29 @@
                                                 </div>
                                             </li>
                                         </ul>
+
+                                        <div class="status-custom">
+                                            <fieldset class="repeating_statuscustom">
+                                                <div class="status-custom-item">
+                                                    <div class="flex-row">
+                                                        <div class="flex-col">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_status_class_custom" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <input type="text" class="button-switch-label" title="" value="@{status_custom_label}" readonly="readonly"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex-col-auto">
+                                                                <span class="cog"></span>
+                                                        </div>
+                                                    </div>
+                                                    <div>
+                                                        <input type="text" name="attr_status_custom_label" title="" data-i18n-placeholder="counter-placeholder" value="" />
+                                                        <input type="text" name="attr_status_custom_formula" title="" value="" />
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                        </div>
                                     </div>
 
                                     <div class="flex-col">
@@ -4180,6 +4216,205 @@
             </div>
             <div class="flex-col3">
                 <div class="modal option">
+                    <input title="" class="modal-checkbox" type="checkbox" />
+                    <span class="modal-label button" data-i18n="option"></span>
+                    <div class="modal-background"></div>
+                    <div class="modal-dialog modal-small">
+                        <div class="modal-title">
+                            <span data-i18n="option"></span>
+                        </div>
+                        <div class="flex-row">
+                            <div class="flex-col6">
+                                <h2 data-i18n="option-general-h1"></h2>
+                                <ul>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-template-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-template-short"></span>
+                                                </div>
+                                                <select name="attr_option_template" title="" data-i18n-list="option-template-list">
+                                                    <option value="pet" data-i18n="option-template-companion" data-i18n-list-item="companion"></option>
+                                                    <option value="npc" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
+                                                    <option value="pc" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-template-life-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-template-life-short"></span>
+                                                </div>
+                                                <select name="attr_option_health" title="">
+                                                    <option value="standard" selected="selected" data-i18n="option-template-life-standard"></option>
+                                                    <option value="alternative" data-i18n="option-template-life-alternative"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-whisper-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-whisper-short"></span>
+                                                </div>
+                                                <select name="attr_option_whisper" title="" data-i18n-list="option-whisper-list">
+                                                    <option value="" data-i18n="option-whisper-everyone" selected="selected" data-i18n-list-item="all"></option>
+                                                    <option value="/w gm" data-i18n="option-whisper-game-master" data-i18n-list-item="gm"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-attack-roll-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-attack-roll-short"></span>
+                                                </div>
+                                                <select name="attr_option_attack_roll" title="" data-i18n-list="option-attack-roll-list">
+                                                    <option value="no-aiming" selected="selected" data-i18n="option-attack-roll-no-aiming" data-i18n-list-item="no-aiming"></option>
+                                                    <option value="aiming" selected="selected" data-i18n="option-attack-roll-aiming" data-i18n-list-item="aiming"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <h2 data-i18n="option-status-h1"></h2>
+                                <ul>
+                                    <li>
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_option_status" title="" data-i18n-title="option-status-all-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-status-all"></span>
+                                        </div>
+                                    </li>
+                                    <li class="template-health-standard">
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_option_status_wound_threshold" title="" data-i18n-title="option-status-wound-threshold-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-status-wound-threshold"></span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_option_status_aging" title="" data-i18n-title="option-status-aging-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-status-aging"></span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_option_status_armor_penalty" title="" data-i18n-title="option-status-armor-penalty-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-status-armor-penalty"></span>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_option_status_encumbrance" title="" data-i18n-title="option-status-encumbrance-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-status-encumbrance"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="flex-col6">
+                                <h2 data-i18n="option-compendium-h1"></h2>
+                                <ul data-i18n-list="option-compendium-list">
+                                    <li data-i18n-list-item="height">
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_compendium_category_height_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-compendium-height"></span>
+                                        </div>
+                                    </li>
+                                    <li data-i18n-list-item="unit">
+                                        <div class="button-switch">
+                                            <input type="checkbox" name="attr_compendium_unit_active" title="" data-i18n-title="option-compendium-unit-title" checked="checked" />
+                                            <span class="button-switch-face"></span>
+                                            <span class="button-switch-label" data-i18n="option-compendium-unit"></span>
+                                        </div>
+                                    </li>
+                                </ul>
+
+                                <h2 data-i18n="option-unit-h1"></h2>
+                                <ul>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-unit-movement-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-unit-movement-short"></span>
+                                                </div>
+                                                <select name="attr_option_unit_movement" title="" data-i18n-list="option-unit-movement-list">
+                                                    <option value="3" data-i18n="option-unit-meter" data-i18n-list-item="meter" selected="selected"></option>
+                                                    <option value="1" data-i18n="option-unit-case" data-i18n-list-item="case"></option>
+                                                    <option value="2" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-unit-height-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-unit-height-short"></span>
+                                                </div>
+                                                <select name="attr_option_unit_height" title="" data-i18n-list="option-unit-height-list">
+                                                    <option value="1" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
+                                                    <option value="2" selected="selected" data-i18n="option-unit-meter" data-i18n-list-item="meter"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-unit-weight-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-unit-weight-short"></span>
+                                                </div>
+                                                <select name="attr_option_unit_weight" title="" data-i18n-list="option-unit-weight-list">
+                                                    <option value="1" selected="selected" data-i18n="option-unit-kilogram" data-i18n-list-item="kilogram"></option>
+                                                    <option value="2" data-i18n="option-unit-pound" data-i18n-list-item="pound"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-unit-decimal-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-unit-decimal-short"></span>
+                                                </div>
+                                                <select name="attr_option_unit_decimal" title="" data-i18n-list="option-unit-decimal-list">
+                                                    <option value="1" selected="selected" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
+                                                    <option value="2" data-i18n="option-unit-dot" data-i18n-list-item="dot"></option>
+                                                    <option value="3" data-i18n="option-unit-momayyez" data-i18n-list-item="momayyez"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="button" data-i18n-title="option-unit-thousand-title">
+                                            <div class="input-group">
+                                                <div class="input-group-text">
+                                                    <span data-i18n="option-unit-thousand-short"></span>
+                                                </div>
+                                                <select name="attr_option_unit_thousand" title="" data-i18n-list="option-unit-thousand-list">
+                                                    <option value="1" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
+                                                    <option value="2" selected="selected" data-i18n="option-unit-space" data-i18n-list-item="space"></option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal status_custom">
                     <input title="" class="modal-checkbox" type="checkbox" />
                     <span class="modal-label button" data-i18n="option"></span>
                     <div class="modal-background"></div>
@@ -4433,19 +4668,19 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_miscellaneous" title="" min="0" step="1" value="0"/>
+                                        <input type="number" name="attr_health_hit_points_miscellaneous" title="" min="0" step="1" value="0"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_ceiling" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_ceiling" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td></td>
                                     <td>
@@ -4475,16 +4710,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_nonlethal_damage_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_nonlethal_damage_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
+                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{health_hit_points_base}+@{health_hit_points_miscellaneous}+@{health_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -4514,16 +4749,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_ceiling" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_ceiling" title="" min="0" step="1" value="0" />
                                     </td>
                                 </tr>
                                 </tbody>
@@ -4549,16 +4784,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_vigor_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_vigor_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_ceiling" title="" min="0" step="1" value="0"/>
+                                        <input type="number" name="attr_health_vigor_ceiling" title="" min="0" step="1" value="0"/>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -5455,203 +5690,203 @@
                             </table>
                         </div>
                         <div class="flex-col6">
-                            <table class="character-language">
+                            <table class="language">
                                 <thead>
                                 <tr>
                                     <th colspan="2">
-                                        <span data-i18n="character-language"></span>
+                                        <span data-i18n="language"></span>
                                     </th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <tr>
                                     <td width="100%">
-                                        <input type="text" class="modal-label" name="attr_character_language" title="" readonly="readonly"/>
+                                        <input type="text" class="modal-label" name="attr_language" title="" readonly="readonly"/>
                                     </td>
                                     <td>
-                                        <div class="modal character-language-modal">
+                                        <div class="modal language-modal">
                                             <input title="" class="modal-checkbox" type="checkbox" />
                                             <span class="modal-label button" data-i18n="equipment-proficiency-modify"></span>
                                             <div class="modal-background"></div>
                                             <div class="modal-dialog modal-medium">
                                                 <div class="modal-title">
-                                                    <span data-i18n="character-language"></span>
+                                                    <span data-i18n="language"></span>
                                                 </div>
-                                                <h2 data-i18n="character-language-common-h1"></h2>
-                                                <ul data-i18n-list="character-language-common-list">
+                                                <h2 data-i18n="language-common-h1"></h2>
+                                                <ul data-i18n-list="language-common-list">
                                                     <li data-i18n-list-item="common">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_common" title="" />
+                                                            <input type="checkbox" name="attr_language_common" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-common"></span>
+                                                            <span class="button-switch-label" data-i18n="language-common"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="draconic">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_draconic" title="" />
+                                                            <input type="checkbox" name="attr_language_draconic" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-draconic"></span>
+                                                            <span class="button-switch-label" data-i18n="language-draconic"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="dwarven">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_dwarven" title="" />
+                                                            <input type="checkbox" name="attr_language_dwarven" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-dwarven"></span>
+                                                            <span class="button-switch-label" data-i18n="language-dwarven"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="elven">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_elven" title="" />
+                                                            <input type="checkbox" name="attr_language_elven" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-elven"></span>
+                                                            <span class="button-switch-label" data-i18n="language-elven"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="gnomish">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_gnomish" title="" />
+                                                            <input type="checkbox" name="attr_language_gnomish" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-gnomish"></span>
+                                                            <span class="button-switch-label" data-i18n="language-gnomish"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="goblin">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_goblin" title="" />
+                                                            <input type="checkbox" name="attr_language_goblin" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-goblin"></span>
+                                                            <span class="button-switch-label" data-i18n="language-goblin"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="halfling">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_halfling" title="" />
+                                                            <input type="checkbox" name="attr_language_halfling" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-halfling"></span>
+                                                            <span class="button-switch-label" data-i18n="language-halfling"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="jotun">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_jotun" title="" />
+                                                            <input type="checkbox" name="attr_language_jotun" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-jotun"></span>
+                                                            <span class="button-switch-label" data-i18n="language-jotun"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="orcish">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_orcish" title="" />
+                                                            <input type="checkbox" name="attr_language_orcish" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-orcish"></span>
+                                                            <span class="button-switch-label" data-i18n="language-orcish"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="sylvan">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_sylvan" title="" />
+                                                            <input type="checkbox" name="attr_language_sylvan" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-sylvan"></span>
+                                                            <span class="button-switch-label" data-i18n="language-sylvan"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="undercommon">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_undercommon" title="" data-i18n-title="character-language-undercommon" />
+                                                            <input type="checkbox" name="attr_language_undercommon" title="" data-i18n-title="language-undercommon" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-undercommon"></span>
+                                                            <span class="button-switch-label" data-i18n="language-undercommon"></span>
                                                         </div>
                                                     </li>
                                                 </ul>
 
-                                                <h2 data-i18n="character-language-uncommon-h1"></h2>
-                                                <ul data-i18n-list="character-language-uncommon-list">
+                                                <h2 data-i18n="language-uncommon-h1"></h2>
+                                                <ul data-i18n-list="language-uncommon-list">
                                                     <li data-i18n-list-item="abyssal">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_abyssal" title="" />
+                                                            <input type="checkbox" name="attr_language_abyssal" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-abyssal"></span>
+                                                            <span class="button-switch-label" data-i18n="language-abyssal"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="aklo">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_aklo" title="" />
+                                                            <input type="checkbox" name="attr_language_aklo" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-aklo"></span>
+                                                            <span class="button-switch-label" data-i18n="language-aklo"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="aquan">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_aquan" title="" />
+                                                            <input type="checkbox" name="attr_language_aquan" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-aquan"></span>
+                                                            <span class="button-switch-label" data-i18n="language-aquan"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="auran">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_auran" title="" />
+                                                            <input type="checkbox" name="attr_language_auran" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-auran"></span>
+                                                            <span class="button-switch-label" data-i18n="language-auran"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="celestial">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_celestial" title="" />
+                                                            <input type="checkbox" name="attr_language_celestial" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-celestial"></span>
+                                                            <span class="button-switch-label" data-i18n="language-celestial"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="gnoll">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_gnoll" title="" />
+                                                            <input type="checkbox" name="attr_language_gnoll" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-gnoll"></span>
+                                                            <span class="button-switch-label" data-i18n="language-gnoll"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="ignan">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_ignan" title="" />
+                                                            <input type="checkbox" name="attr_language_ignan" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-ignan"></span>
+                                                            <span class="button-switch-label" data-i18n="language-ignan"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="infernal">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_infernal" title="" />
+                                                            <input type="checkbox" name="attr_language_infernal" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-infernal"></span>
+                                                            <span class="button-switch-label" data-i18n="language-infernal"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="necril">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_necril" title="" />
+                                                            <input type="checkbox" name="attr_language_necril" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-necril"></span>
+                                                            <span class="button-switch-label" data-i18n="language-necril"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="shadowtongue">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_shadowtongue" title="" />
+                                                            <input type="checkbox" name="attr_language_shadowtongue" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-shadowtongue"></span>
+                                                            <span class="button-switch-label" data-i18n="language-shadowtongue"></span>
                                                         </div>
                                                     </li>
                                                     <li data-i18n-list-item="terran">
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_terran" title="" />
+                                                            <input type="checkbox" name="attr_language_terran" title="" />
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-terran"></span>
+                                                            <span class="button-switch-label" data-i18n="language-terran"></span>
                                                         </div>
                                                     </li>
                                                 </ul>
 
-                                                <h2 data-i18n="character-language-secret-h1"></h2>
+                                                <h2 data-i18n="language-secret-h1"></h2>
                                                 <ul>
                                                     <li>
                                                         <div class="button-switch">
-                                                            <input type="checkbox" name="attr_character_language_druidic" title=""/>
+                                                            <input type="checkbox" name="attr_language_druidic" title=""/>
                                                             <span class="button-switch-face"></span>
-                                                            <span class="button-switch-label" data-i18n="character-language-druidic"></span>
+                                                            <span class="button-switch-label" data-i18n="language-druidic"></span>
                                                         </div>
                                                     </li>
                                                 </ul>
 
-                                                <h2 data-i18n="character-language-other-h1"></h2>
-                                                <input type="text" name="attr_character_language_other" title="" value="" />
+                                                <h2 data-i18n="language-other-h1"></h2>
+                                                <input type="text" name="attr_language_other" title="" value="" />
                                             </div>
                                         </div>
                                     </td>
@@ -5751,13 +5986,13 @@
                                 <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus-title"></span>
                             </th>
                             <th width="7.692308%">
-                                <span data-i18n="reflex-short" data-i18n-title="reflex-title"></span>
+                                <span data-i18n="save-reflex-short" data-i18n-title="save-reflex-title"></span>
                             </th>
                             <th width="7.692308%">
-                                <span data-i18n="fortitude-short" data-i18n-title="fortitude-title"></span>
+                                <span data-i18n="save-fortitude-short" data-i18n-title="save-fortitude-title"></span>
                             </th>
                             <th width="7.692308%">
-                                <span data-i18n="willpower-short" data-i18n-title="willpower-title"></span>
+                                <span data-i18n="save-willpower-short" data-i18n-title="save-willpower-title"></span>
                             </th>
                             <th width="7.692308%">
                                 <span data-i18n="level-short" data-i18n-title="level"></span>
@@ -16799,17 +17034,17 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_ac_melee}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_melee}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_ac_melee}" data-i18n-title="modifier-status-title" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_armor_class_melee}" data-i18n-title="modifier-status-title" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_ac_ranged}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_bonus}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_race}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}+@{foo_status_armor_class_ranged}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_ac_ranged}" data-i18n-title="modifier-status-title" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" data-i18n-title="modifier-status-title" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
@@ -16817,7 +17052,7 @@
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_armor_class_dexterity}+@{character_category_height_select}+@{foo_status_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -20014,19 +20249,19 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_miscellaneous" title="" min="0" step="1" value="0"/>
+                                        <input type="number" name="attr_health_hit_points_miscellaneous" title="" min="0" step="1" value="0"/>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_hit_points_ceiling" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_hit_points_ceiling" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td></td>
                                     <td>
@@ -20056,16 +20291,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_nonlethal_damage_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_nonlethal_damage_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{character_hit_points_base}+@{character_hit_points_miscellaneous}+@{character_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
+                                        <input type="number" name="attr_character_nonlethal_damage_ceiling" title="" min="0" step="1" value="@{health_hit_points_base}+@{health_hit_points_miscellaneous}+@{health_hit_points_temporary}+@{foo_status_hit_points}" disabled="disabled"/>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -20095,16 +20330,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_wound_points_ceiling" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_wound_points_ceiling" title="" min="0" step="1" value="0" />
                                     </td>
                                 </tr>
                                 </tbody>
@@ -20130,16 +20365,16 @@
                                 <tbody>
                                 <tr>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_base" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_vigor_base" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_temporary" title="" min="0" step="1" value="0" />
+                                        <input type="number" name="attr_health_vigor_temporary" title="" min="0" step="1" value="0" />
                                     </td>
                                     <td>
                                         <span data-i18n="sign-separator"></span>
                                     </td>
                                     <td>
-                                        <input type="number" name="attr_character_vigor_ceiling" title="" min="0" step="1" value="0"/>
+                                        <input type="number" name="attr_health_vigor_ceiling" title="" min="0" step="1" value="0"/>
                                     </td>
                                 </tr>
                                 </tbody>

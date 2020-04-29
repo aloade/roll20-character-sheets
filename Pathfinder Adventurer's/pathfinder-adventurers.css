@@ -72,23 +72,6 @@ html, body {
 }
 
 /* --------------------------------------------------- */
-/* preload */
-/* --------------------------------------------------- */
-/* force download for not visible images */
-.sheet-locale {
-    background-image: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/dice.png")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/wax_seal.png")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/title.png")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets-static.png")
-    , url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/modal.jpg");
-    width: 0;
-    height: 0;
-    display: inline;
-}
-
-/* --------------------------------------------------- */
 /* option - template */
 /* --------------------------------------------------- */
 .sheet-template-companion,
