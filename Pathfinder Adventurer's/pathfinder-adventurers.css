@@ -1729,8 +1729,14 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-combat-maneuver-defense table {
-    max-width: 1320px;
+.charsheet .sheet-combat-maneuver-defense {
+    max-width: 120px;
+    margin-bottom: 15px;
+}
+
+
+.charsheet .sheet-combat-maneuver-defense-detail {
+    max-width: 1080px;
     margin-bottom: 15px;
 }
 

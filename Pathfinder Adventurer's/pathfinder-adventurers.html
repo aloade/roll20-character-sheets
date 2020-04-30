@@ -1037,10 +1037,8 @@
                                 "status_willpower": 0,
                                 "status_ac_melee": 0,
                                 "status_ac_ranged": 0,
-                                "status_ac_dodge": 0,
                                 "status_ac_dexterity_ceiling": Infinity,
                                 "status_cmd": 0,
-                                "status_cmd_dexterity_ceiling": Infinity,
                                 "status_immune_physical_attack": false,
                                 "status_half_dammage_magic": false,
                                 "status_skill": 0,
@@ -1293,7 +1291,8 @@
                                 cache.status_resume.push(getTranslationByKey("status-cowering"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_action = true;
-                                    cache.status_ac_dodge -= 2;
+                                    cache.status_ac_melee -= 2;
+                                    cache.status_ac_ranged -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                 }
                             }
@@ -1320,7 +1319,8 @@
                                 cache.status_resume.push(getTranslationByKey("status-fighting-defensively"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_attack -= 4;
-                                    cache.status_ac_dodge += 2;
+                                    cache.status_ac_melee += 2;
+                                    cache.status_ac_ranged += 2;
                                     if ( user_number.skill_acrobatics_ranks > 2 ) cache.status_skill_acrobatics += 1;
                                 }
                             }
@@ -1329,7 +1329,6 @@
                                 cache.status_resume.push(getTranslationByKey("status-flat-footed"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_ac_dexterity_ceiling = 0;
-                                    cache.status_cmd_dexterity_ceiling = 0;
                                     cache.status_attack_opportunity = true;
                                 }
                             }
@@ -1343,7 +1342,8 @@
                                     cache.status_resume.push(getTranslationByKey("status-movement-charge"));
                                     if ( user_number.option_status === 1 ) {
                                         cache.status_attack += 2;
-                                        cache.status_ac_dodge -= 2;
+                                        cache.status_ac_melee -= 2;
+                                        cache.status_ac_ranged -= 2;
                                         cache.status_ac_dexterity_ceiling = 0;
                                         cache.status_rush = true;
                                     }
@@ -1371,7 +1371,8 @@
                                         cache.move_tactic = 0;
                                         cache.status_action_full_round = true;
                                         cache.status_dexterity_mod_ceiling = 0;
-                                        cache.status_ac_dodge -= 2;
+                                        cache.status_ac_melee -= 2;
+                                        cache.status_ac_ranged -= 2;
                                         cache.status_ac_dexterity_ceiling = 0;
                                         cache.status_spell_somatic_material = true;
                                     }
@@ -1396,7 +1397,8 @@
                                 if ( user_number.option_status === 1 ) {
                                     // crane ripost on total defense permit attack of opportunity
                                     if ( user_number.status_class_monk_crane !== 4 ) cache.status_attack_opportunity = true;
-                                    cache.status_ac_dodge += 4;
+                                    cache.status_ac_melee += 4;
+                                    cache.status_ac_ranged += 4;
                                     if ( user_number.skill_acrobatics_ranks > 2 ) cache.status_skill_acrobatics += 2;
                                 }
                             }
@@ -1409,7 +1411,8 @@
                                     cache.move_tactic = Math.min(0.5, cache.move_tactic);
                                     cache.status_strength -= 4;
                                     cache.status_dexterity -= 4;
-                                    cache.status_ac_dodge -= 2;
+                                    cache.status_ac_melee -= 2;
+                                    cache.status_ac_ranged -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                     cache.status_skill_sight = true;
                                     cache.status_skill_perception -= 4;
@@ -1451,7 +1454,8 @@
                                 cache.status_resume.push(getTranslationByKey("status-stunned"));
                                 if ( user_number.option_status === 1 ) {
                                     cache.status_action = true;
-                                    cache.status_ac_dodge -= 2;
+                                    cache.status_ac_melee -= 2;
+                                    cache.status_ac_ranged -= 2;
                                     cache.status_ac_dexterity_ceiling = 0;
                                     cache.status_cmd -= 4;
                                 }
@@ -1559,7 +1563,8 @@
                                                 cache.status_attack += 4; // cancel status_fighting_defensively status
                                                 cache.status_attack -= 2;
                                             }
-                                            cache.status_ac_dodge += 1;
+                                            cache.status_ac_melee += 1;
+                                            cache.status_ac_ranged += 1;
                                         }
                                         break;
 
@@ -1571,7 +1576,8 @@
                                                 cache.status_attack -= 2;
                                                 cache.status_ac_melee += 4;
                                             }
-                                            cache.status_ac_dodge += 1;
+                                            cache.status_ac_melee += 1;
+                                            cache.status_ac_ranged += 1;
                                         }
                                         break;
 
@@ -1583,7 +1589,8 @@
                                                 cache.status_attack -= 1;
                                                 cache.status_ac_melee += 4;
                                             }
-                                            cache.status_ac_dodge += 1;
+                                            cache.status_ac_melee += 1;
+                                            cache.status_ac_ranged += 1;
                                         }
                                         break;
                                 }
@@ -1855,14 +1862,9 @@
 
                             // ------------------------------------------
                             // amor class dodge bonus
-                            // need calculated "cache.status_ac_dexterity_ceiling", "cache.armor_class_mod_dodge" ,"cache.status_ac_dodge"
+                            // need calculated "cache.status_ac_dexterity_ceiling", "cache.armor_class_mod_dodge"
                             // ------------------------------------------
-                            if ( cache.status_ac_dexterity_ceiling === 0 ) {
-                                cache.armor_class_mod_dodge = Math.min(cache.status_ac_dodge, 0) + Math.min(cache.armor_class_mod_dodge, 0);
-                            }
-                            else {
-                                cache.armor_class_mod_dodge += cache.status_ac_dodge;
-                            }
+                            if ( cache.status_ac_dexterity_ceiling === 0 ) cache.armor_class_mod_dodge = 0;
 
                             // ------------------------------------------
                             // CMB height
@@ -1967,7 +1969,6 @@
                             }
 
                             cache.status_ac_dexterity_ceiling = Math.min(cache.status_ac_dexterity_ceiling, cache.encumbrance_dexterity_ceiling);
-                            cache.status_cmd_dexterity_ceiling = Math.min(cache.status_cmd_dexterity_ceiling, cache.encumbrance_dexterity_ceiling);
 
                             if ( user_number.option_status_armor_penalty === 1 && cache.encumbrance_armor_penalty_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
 
@@ -2069,12 +2070,10 @@
                                     if ( cache.status_ac_melee !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-melee"), cache.status_ac_melee));
                                     if ( cache.status_ac_ranged !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-ranged"), cache.status_ac_ranged));
                                 }
-                                if ( cache.status_ac_dodge !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-armor-class-dodge"), cache.status_ac_dodge));
                                 if ( cache.status_ac_dexterity_ceiling === 0 && cache.status_dexterity_mod_ceiling > 0 ) cache.status_effect.push(getTranslationByKey("status-effect-armor-class-dexterity-bonus-none"));
 
                                 // combat maneuver bonus
                                 if ( cache.status_cmd !== 0 ) cache.status_effect.push(attributeModifier(getTranslationByKey("status-effect-combat-maneuver-defense"), cache.status_cmd));
-                                if ( cache.status_cmd_dexterity_ceiling === 0 && user_number.status_flat_footed === 1 ) cache.status_effect.push(getTranslationByKey("status-effect-combat-maneuver-defense-dexterity-bonus-none"));
 
                                 // defense
                                 if ( cache.status_immune_physical_attack === true ) cache.status_effect.push(getTranslationByKey("status-effect-immune-physical-attack"));
@@ -2208,7 +2207,6 @@
 
                             payload["foo_status_armor_class_melee"] = cache.status_ac_melee;
                             payload["foo_status_armor_class_ranged"] = cache.status_ac_ranged;
-                            payload["foo_status_armor_class_dodge"] = cache.status_ac_dodge;
                             payload["foo_armor_class_mod_dodge"] = cache.armor_class_mod_dodge;
                             payload["foo_status_combat_maneuver_defense"] = cache.status_cmd;
                             payload["foo_status_skill"] = cache.status_skill;
@@ -2232,14 +2230,14 @@
                             payload["character_movement_lift"] = formatNumber(cache.encumbrance_charge_heavy, 0.1, cache.unit_decimal, cache.unit_thousand) + " " + cache.unit_weight;
                             payload["character_movement_pull"] = formatNumber(5 * cache.encumbrance_charge_heavy, 0.1, cache.unit_decimal, cache.unit_thousand) + " " + cache.unit_weight;
 
+                            payload["foo_combat_maneuver_bonus_height_category"] = cache.cmb_height_category;
+
                             payload["foo_caster_level_total_corrected"] = cache.caster_level;
 
                             payload["foo_armor_class_dexterity"] = Math.min(cache.dexterity_mod, cache.status_ac_dexterity_ceiling);
                             payload["foo_armor_class_dexterity_alert"] = ( cache.status_ac_dexterity_ceiling === 0 && cache.dexterity_mod >= 0 ? "show" : "hide" );
-                            payload["foo_combat_maneuver_bonus_height_category"] = cache.cmb_height_category;
+                            payload["foo_combat_maneuver_defense_alert"] = ( cache.status_ac_dexterity_ceiling === 0 && cache.dexterity_mod >= 0 ? "show" : "hide" );
 
-                            payload["foo_combat_maneuver_defense_dexterity"] = Math.min(cache.dexterity_mod, cache.status_cmd_dexterity_ceiling);
-                            payload["foo_combat_maneuver_defense_alert"] = ( cache.status_cmd_dexterity_ceiling === 0 && cache.dexterity_mod >= 0 ? "show" : "hide" );
                             payload["equipment_encumbrance_total"] = formatNumber(cache.encumbrance_total, 0.01, cache.unit_decimal, cache.unit_thousand) + " " + cache.unit_weight;
                             payload["equipment_encumbrance_charge_percent"] = ( cache.encumbrance_total_percent > 1 ? 1 : +formatNumber(cache.encumbrance_total_percent, 0.01) );
                             payload["equipment_encumbrance_charge_light"] = formatNumber(cache.encumbrance_charge_light, 0.01, cache.unit_decimal, cache.unit_thousand)  + " " + cache.unit_weight;
@@ -3656,7 +3654,6 @@
 
     <input type="hidden" name="attr_foo_status_armor_class_melee" value="0" />
     <input type="hidden" name="attr_foo_status_armor_class_ranged" value="0" />
-    <input type="hidden" name="attr_foo_status_armor_class_dodge" value="0" />
     <input type="hidden" name="attr_foo_status_combat_maneuver_defense" value="0" />
     <input type="hidden" name="attr_foo_status_skill" value="0" />
     <input type="hidden" name="attr_foo_status_skill_perception" value="0" />
@@ -3714,7 +3711,6 @@
     <input type="hidden" name="attr_foo_armor_class_bonus" value="0" />
     <input type="hidden" name="attr_foo_armor_class_dexterity" value="0" />
 
-    <input type="hidden" name="attr_foo_combat_maneuver_defense_dexterity" value="0" />
 
     <input type="hidden" name="attr_foo_skill_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_representation_ranks_total" value ="0" />
@@ -4185,24 +4181,23 @@
                                             </li>
                                         </ul>
 
+                                        <h2 data-i18n="status-custom-h1"></h2>
                                         <div class="status-custom">
                                             <fieldset class="repeating_statuscustom">
-                                                <div class="status-custom-item">
-                                                    <div class="flex-row">
-                                                        <div class="flex-col">
+                                                <div class="status-accordion">
+                                                    <input class="accordion-checkbox" type="checkbox" title="" data-i18n="show-hide">
+                                                    <div class="accordion-container">
+                                                        <div class="accordion-label">
                                                             <div class="button-switch">
-                                                                <input type="checkbox" name="attr_status_class_custom" title="" />
+                                                                <input type="checkbox" name="attr_status_custom" title=""  />
                                                                 <span class="button-switch-face"></span>
-                                                                <input type="text" class="button-switch-label" title="" value="@{status_custom_label}" readonly="readonly"/>
+                                                                <span class="button-switch-label" name="attr_status_custom_label"></span>
+                                                            </div>
+                                                            <div class="accordion-content">
+                                                                <input type="text" name="attr_status_custom_label" title="" data-i18n-placeholder="status-custom-label-placeholder" value="" />
+                                                                <input type="text" name="attr_status_custom_formula" title="" data-i18n-placeholder="status-custom-formula-placeholder" value="" />
                                                             </div>
                                                         </div>
-                                                        <div class="flex-col-auto">
-                                                            <span class="cog"></span>
-                                                        </div>
-                                                    </div>
-                                                    <div>
-                                                        <input type="text" name="attr_status_custom_label" title="" data-i18n-placeholder="counter-placeholder" value="" />
-                                                        <input type="text" name="attr_status_custom_formula" title="" value="" />
                                                     </div>
                                                 </div>
                                             </fieldset>
@@ -4430,195 +4425,42 @@
                         <div class="modal-title">
                             <span data-i18n="option"></span>
                         </div>
-                        <div class="flex-row">
-                            <div class="flex-col6">
-                                <h2 data-i18n="option-general-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-template-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-template-short"></span>
-                                                </div>
-                                                <select name="attr_option_template" title="" data-i18n-list="option-template-list">
-                                                    <option value="pet" data-i18n="option-template-companion" data-i18n-list-item="companion"></option>
-                                                    <option value="npc" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
-                                                    <option value="pc" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-template-life-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-template-life-short"></span>
-                                                </div>
-                                                <select name="attr_option_health" title="">
-                                                    <option value="standard" selected="selected" data-i18n="option-template-life-standard"></option>
-                                                    <option value="alternative" data-i18n="option-template-life-alternative"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-whisper-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-whisper-short"></span>
-                                                </div>
-                                                <select name="attr_option_whisper" title="" data-i18n-list="option-whisper-list">
-                                                    <option value="" data-i18n="option-whisper-everyone" selected="selected" data-i18n-list-item="all"></option>
-                                                    <option value="/w gm" data-i18n="option-whisper-game-master" data-i18n-list-item="gm"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-attack-roll-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-attack-roll-short"></span>
-                                                </div>
-                                                <select name="attr_option_attack_roll" title="" data-i18n-list="option-attack-roll-list">
-                                                    <option value="no-aiming" selected="selected" data-i18n="option-attack-roll-no-aiming" data-i18n-list-item="no-aiming"></option>
-                                                    <option value="aiming" selected="selected" data-i18n="option-attack-roll-aiming" data-i18n-list-item="aiming"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                <h2 data-i18n="option-status-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status" title="" data-i18n-title="option-status-all-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-all"></span>
-                                        </div>
-                                    </li>
-                                    <li class="template-health-standard">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_wound_threshold" title="" data-i18n-title="option-status-wound-threshold-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-wound-threshold"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_aging" title="" data-i18n-title="option-status-aging-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-aging"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_armor_penalty" title="" data-i18n-title="option-status-armor-penalty-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-armor-penalty"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_encumbrance" title="" data-i18n-title="option-status-encumbrance-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-encumbrance"></span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="flex-col6">
-                                <h2 data-i18n="option-compendium-h1"></h2>
-                                <ul data-i18n-list="option-compendium-list">
-                                    <li data-i18n-list-item="height">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_height_category_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-compendium-height"></span>
-                                        </div>
-                                    </li>
-                                    <li data-i18n-list-item="unit">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_unit_active" title="" data-i18n-title="option-compendium-unit-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-compendium-unit"></span>
-                                        </div>
-                                    </li>
-                                </ul>
-
-                                <h2 data-i18n="option-unit-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-movement-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-movement-short"></span>
-                                                </div>
-                                                <select name="attr_option_unit_movement" title="" data-i18n-list="option-unit-movement-list">
-                                                    <option value="3" data-i18n="option-unit-meter" data-i18n-list-item="meter" selected="selected"></option>
-                                                    <option value="1" data-i18n="option-unit-case" data-i18n-list-item="case"></option>
-                                                    <option value="2" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-height-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-height-short"></span>
-                                                </div>
-                                                <select name="attr_option_unit_height" title="" data-i18n-list="option-unit-height-list">
-                                                    <option value="1" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-unit-meter" data-i18n-list-item="meter"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-weight-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-weight-short"></span>
-                                                </div>
-                                                <select name="attr_option_unit_weight" title="" data-i18n-list="option-unit-weight-list">
-                                                    <option value="1" selected="selected" data-i18n="option-unit-kilogram" data-i18n-list-item="kilogram"></option>
-                                                    <option value="2" data-i18n="option-unit-pound" data-i18n-list-item="pound"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-decimal-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-decimal-short"></span>
-                                                </div>
-                                                <select name="attr_option_unit_decimal" title="" data-i18n-list="option-unit-decimal-list">
-                                                    <option value="1" selected="selected" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
-                                                    <option value="2" data-i18n="option-unit-dot" data-i18n-list-item="dot"></option>
-                                                    <option value="3" data-i18n="option-unit-momayyez" data-i18n-list-item="momayyez"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-thousand-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-thousand-short"></span>
-                                                </div>
-                                                <select name="attr_option_unit_thousand" title="" data-i18n-list="option-unit-thousand-list">
-                                                    <option value="1" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-unit-space" data-i18n-list-item="space"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
+                        <h2 data-i18n="option-general-h1"></h2>
+                        <p>
+                            points de vie<br />
+                            action complexe ?<br />
+                            facteur de déplacement<br />
+                        </p>
+                        <p>
+                            force<br />
+                            dextérité<br />
+                            constitution<br />
+                            intelligence<br />
+                            sagesse<br >
+                            charismme<br />
+                        </p>
+                        <p>
+                            peut attaquer ?<br />
+                            peut attaque d'opportunité ?<br />
+                            initiative<br />
+                            BMO<br />
+                            jet d'attaque<br />
+                            dégâts<br />
+                        </p>
+                        <p>
+                            peut lancer des sorts ?<br />
+                            NLS ( personnage )<br />
+                        </p>
+                        <p>
+                            reflexe<br />
+                            vigueur<br />
+                            volonté<br />
+                            CA<br />
+                            DMD<br />
+                        </p>
+                        <p>
+                            compétences
+                        </p>
                     </div>
                 </div>
             </div>
@@ -17084,7 +16926,7 @@
                             <th width="11.111111%">
                                 <span data-i18n="armor-class-natural-armor-short" data-i18n-title="armor-class-natural-armor-title"></span>
                             </th>
-                            <th width="11.111111%" colspan="2">
+                            <th width="11.111111%">
                                 <span data-i18n="defense-dodge"></span>
                             </th>
                             <th width="11.111111%">
@@ -17115,14 +16957,11 @@
                             <td>
                                 <input type="number" name="attr_armor_class_mod_race" title="" min="0" step="1" value="0"/>
                             </td>
-                            <td data-i18n-title="modifier-status-title">
-                                <input type="number" name="attr_armor_class_dodge_status" title="" value="@{foo_status_armor_class_dodge}" disabled="disabled"/>
+                            <td>
+                                <input type="number" name="attr_armor_class_mod_dodge" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_mod_dodge" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_armor_class_mod_deflection" title="" step="1" value="0"/>
+                                <input type="number" name="attr_armor_class_mod_deflection" title="" min="0" step="1" value="0"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_mod_miscellaneous" title="" step="1" value="0"/>
@@ -17138,50 +16977,61 @@
                 </div>
 
                 <h1 data-i18n="combat-maneuver-defense-h1"></h1>
-                <div class="combat-maneuver-defense section">
-                    <table>
+                <div class="section">
+                    <table class="combat-maneuver-defense">
                         <thead>
                         <tr>
-                            <th width="9.090909%">
+                            <th colspan="2">
                                 <span data-i18n="combat-maneuver-defense-short" data-i18n-title="combat-maneuver-defense-total-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="base"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="base-attack-bonus-short" data-i18n-title="combat-maneuver-defense-base-attack-bonus-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="modifier-special-height-short" data-i18n-title="modifier-special-height-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="attribute-strength-short" data-i18n-title="modifier-strength-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="attribute-dexterity-short" data-i18n-title="combat-maneuver-defense-modifier-dexterity-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="defense-dodge"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="defense-deflection"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
-                            </th>
-                            <th width="9.090909%">
-                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_height_category_select})+@{foo_character_strength_mod}+@{foo_combat_maneuver_defense_dexterity}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_dodge}+@{combat_maneuver_defense_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{combat_maneuver_defense_base}+@{foo_status_combat_maneuver_defense}+@{foo_class_base_attack_bonus1_total}-(@{character_height_category_select})+@{foo_character_strength_mod}+@{foo_armor_class_dexterity}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
                             </td>
+                            <td>
+                                <input type="number" name="attr_combat_maneuver_defense_status" title="" value="@{foo_status_combat_maneuver_defense}" disabled="disabled"/>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <table class="combat-maneuver-defense-detail">
+                        <thead>
+                        <tr>
+                            <th width="11.111111%">
+                                <span data-i18n="base"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="base-attack-bonus-short" data-i18n-title="combat-maneuver-defense-base-attack-bonus-title"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="modifier-special-height-short" data-i18n-title="modifier-special-height-title"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="attribute-strength-short" data-i18n-title="modifier-strength-title"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="attribute-dexterity-short" data-i18n-title="combat-maneuver-defense-modifier-dexterity-title"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="defense-dodge"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="defense-deflection"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
+                            </th>
+                            <th width="11.111111%">
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_base" title="" value="10" disabled="disabled"/>
                             </td>
@@ -17192,19 +17042,16 @@
                                 <input type="number" name="attr_combat_maneuver_defense_height_special" title="" value="-(@{character_height_category_select})" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_strength" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_strength" title="" value="@{foo_character_strength_mod}" disabled="disabled" />
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_dexteriy" title="" value="@{foo_combat_maneuver_defense_dexterity}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_dexteriy" title="" value="@{foo_armor_class_dexterity}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_status" title="" value="@{foo_status_combat_maneuver_defense}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_dodge" title="" value="@{armor_class_mod_dodge}"  disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_dodge" title="" min="0" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_combat_maneuver_defense_deflection" title="" step="1" value="0"/>
+                                <input type="number" name="attr_combat_maneuver_defense_deflection" title="" value="@{armor_class_mod_deflection}"  disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_miscellaneous" title="" step="1" value="0"/>
