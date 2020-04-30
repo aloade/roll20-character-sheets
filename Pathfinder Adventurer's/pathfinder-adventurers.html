@@ -4055,7 +4055,7 @@
                                         <h2 data-i18n="status-negative-level-h1"></h2>
                                         <ul>
                                             <li>
-                                                <div class="status-negative-level input-group">
+                                                <div class="input-group">
                                                     <div class="input-group-text">
                                                         <span data-i18n="permanent"></span>
                                                     </div>
@@ -4063,7 +4063,7 @@
                                                 </div>
                                             </li>
                                             <li>
-                                                <div class="status-negative-level input-group">
+                                                <div class="input-group">
                                                     <div class="input-group-text">
                                                         <span data-i18n="temporary"></span>
                                                     </div>
@@ -4172,7 +4172,7 @@
                                                 <div class="button" data-i18n-title="status-class-monk-crane-title">
                                                     <div class="input-group">
                                                         <div class="input-group-text">
-                                                            <span data-i18n="status-class-crane-short"></span>
+                                                            <span data-i18n="status-class-crane-style-short"></span>
                                                         </div>
                                                         <select name="attr_status_class_monk_crane" title="">
                                                             <option value="1" data-i18n="status-class-monk-crane-unknown" selected="selected"></option>
@@ -4430,46 +4430,252 @@
                             <input title="" class="modal-checkbox" type="checkbox" />
                             <span class="modal-label button" data-i18n="status-custom"></span>
                             <div class="modal-background"></div>
-                            <div class="modal-dialog modal-small">
+                            <div class="modal-dialog modal-medium">
                                 <div class="modal-title">
                                     <span data-i18n="option"></span>
                                 </div>
-                                <h2 data-i18n="option-general-h1"></h2>
-                                <p>
-                                    points de vie<br />
-                                    action complexe ?<br />
-                                    facteur de déplacement<br />
-                                </p>
-                                <p>
-                                    force<br />
-                                    dextérité<br />
-                                    constitution<br />
-                                    intelligence<br />
-                                    sagesse<br >
-                                    charismme<br />
-                                </p>
-                                <p>
-                                    peut attaquer ?<br />
-                                    peut attaque d'opportunité ?<br />
-                                    initiative<br />
-                                    BMO<br />
-                                    jet d'attaque<br />
-                                    dégâts<br />
-                                </p>
-                                <p>
-                                    peut lancer des sorts ?<br />
-                                    NLS ( personnage )<br />
-                                </p>
-                                <p>
-                                    reflexe<br />
-                                    vigueur<br />
-                                    volonté<br />
-                                    CA<br />
-                                    DMD<br />
-                                </p>
-                                <p>
-                                    compétences
-                                </p>
+                                <div class="input-group">
+                                    <div class="input-group-text">
+                                        <span data-i18n="status-custom"></span>
+                                    </div>
+                                    <input type="text" name="attr_status_custom_formula" title="" placeholder="status-custom-formula" step="1" value="" />
+                                </div>
+
+                                <div class="flex-row">
+                                    <div class="flex-col4">
+                                        <h2 data-i18n="character-nav"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="health-hit-points"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_hit_points" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="status-custom-action-complex"></span>
+                                                    </div>
+                                                    <select name="attr_status_custom_action_complex" title="">
+                                                        <option data-i18n="yes" value="1"></option>
+                                                        <option data-i18n="no" value="2"></option>
+                                                    </select>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="status-custom"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_movement_factor" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <h2 data-i18n="attribute-h1"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-strength"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_strength" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-dexterity"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_dexterity" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-constitution"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_constitution" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-intelligence"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_intelligence" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-wisdom"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_wisdom" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="attribute-charisma"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_charisma" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="flex-col4">
+                                        <h2 data-i18n="battle-nav"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="status-custom-action-attack"></span>
+                                                    </div>
+                                                    <select name="attr_status_custom_action_attack" title="">
+                                                        <option data-i18n="yes" value="1"></option>
+                                                        <option data-i18n="no" value="2"></option>
+                                                    </select>
+                                                </div>
+                                             </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="status-custom-action-attack-opportunity"></span>
+                                                    </div>
+                                                    <select name="attr_status_custom_action_attack_opportunity" title="">
+                                                        <option data-i18n="yes" value="1"></option>
+                                                        <option data-i18n="no" value="2"></option>
+                                                    </select>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="initiative"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_initiative" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="combat-maneuver-bonus-short"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_combat_maneuver_bonus" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="battle-attack-bonus-short"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_attack_roll" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="damage"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_attack_damage" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="health-hit-points"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_movement_factor" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <h2 data-i18n="spell-nav"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="status-custom-action-spell"></span>
+                                                    </div>
+                                                    <select name="attr_status_custom_action_spell" title="">
+                                                        <option data-i18n="yes" value="1"></option>
+                                                        <option data-i18n="no" value="2"></option>
+                                                    </select>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="caster-level-h1"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_caster_level" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="flex-col4">
+                                        <h2 data-i18n="defense-nav"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="save-reflex"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_save_reflex" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="save-fortitude"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_save_fortitude" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="save-willpower"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_save_willpower" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="armor-class-h1"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_save_armor_class" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="combat-maneuver-defense-short"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_save_combat_maneuver_defense" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+
+                                        <h2 data-i18n="skill-nav"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="input-group">
+                                                    <div class="input-group-text">
+                                                        <span data-i18n="save-reflex"></span>
+                                                    </div>
+                                                    <input type="number" name="attr_status_custom_skill" title="" step="1" value="0" />
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

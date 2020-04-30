@@ -71,164 +71,6 @@ html, body {
     text-shadow: none;
 }
 
-
-/* --------------------------------------------------- */
-/* option */
-/* --------------------------------------------------- */
-.charsheet .sheet-option-modal  {
-    margin: 0 5px 0;
-}
-
-.charsheet .sheet-option-modal:hover .sheet-button {
-    color: rgb(255, 255, 255);
-}
-
-/* --------------------------------------------------- */
-/* option - template */
-/* --------------------------------------------------- */
-.sheet-template-companion,
-.sheet-template-non-playable-character,
-.sheet-template-playable-character {
-    display: none;
-}
-
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div .sheet-template-companion,
-input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div .sheet-template-playable-character {
-    display: block;
-}
-
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div tr.sheet-template-companion,
-input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
-    display: table-row;
-}
-
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div th.sheet-template-companion,
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div td.sheet-template-companion,
-input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
-input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
-input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
-    display: table-cell;
-}
-
-/* --------------------------------------------------- */
-/* option - roll attack */
-/* --------------------------------------------------- */
-.sheet-template-no-aiming,
-.sheet-template-aiming {
-    display: none;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="no-aiming"] ~ div .sheet-template-no-aiming,
-input[name="attr_option_attack_roll"][value="aiming"] ~ div .sheet-template-aiming {
-    display: block;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-aiming {
-    display: table-row;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-aiming {
-    display: table-cell;
-}
-
-/* --------------------------------------------------- */
-/* option - health */
-/* --------------------------------------------------- */
-.sheet-template-health-standard,
-.sheet-template-health-alternative {
-    display: none;
-}
-
-input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div .sheet-template-health-standard,
-input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div .sheet-template-health-alternative {
-    display: block;
-}
-
-input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div tr.sheet-template-health-standard,
-input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div tr.sheet-template-health-alternative {
-    display: table-row;
-}
-
-input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div th.sheet-template-health-standard,
-input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div td.sheet-template-health-standard,
-input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div th.sheet-template-health-alternative,
-input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.sheet-template-health-alternative {
-    display: table-cell;
-}
-
-/* --------------------------------------------------- */
-/* status */
-/* --------------------------------------------------- */
-.charsheet .sheet-status-modal {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    margin: 0 5px 0;
-    transition: color 0.25s ease;
-}
-
-.charsheet .sheet-status-modal .sheet-modal-checkbox:hover ~ span.sheet-button {
-    color: rgb(255, 255, 255);
-}
-
-.charsheet .sheet-status-button {
-    flex: 0 1 0;
-}
-
-.charsheet .sheet-status-button .sheet-modal {
-    height: 26px;
-}
-
-.charsheet .sheet-status-resume {
-    width: auto;
-    flex: 1 1 auto;
-    height: 26px;
-}
-
-.charsheet .sheet-status-resume input {
-    height: 26px;
-    line-height: 26px;
-    color: rgb(200, 200, 200);
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 4px;
-}
-
-.charsheet .sheet-status-negative-level .sheet-input-group-text span, .charsheet .sheet-status-negative-level input,
-.charsheet .sheet-status-effect {
-    color: rgb(200, 200, 200);
-}
-
-.charsheet .sheet-status-effect {
-    width: 100%;
-    border: none;
-    background: transparent;
-    resize: none;
-    height: calc(100% - 36px);
-    overflow-y: auto;
-    padding: 0;
-    cursor: default;
-    line-height: 20px;
-}
-
-/* --------------------------------------------------- */
-/* status custom */
-/* --------------------------------------------------- */
-.charsheet .sheet-status-custom-modal {
-    margin: 0 5px 0;
-}
-
-.charsheet .sheet-status-custom-modal:hover .sheet-button {
-    color: rgb(255, 255, 255);
-}
-
 /* --------------------------------------------------- */
 /* compendium drop */
 /* --------------------------------------------------- */
@@ -333,9 +175,12 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
     appearance: textfield;
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png") no-repeat center right;
     padding-right: 9px !important;
     cursor: pointer;
+}
+
+.charsheet .sheet-paper select {
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
 }
 
 .charsheet select:-moz-focusring {
@@ -457,7 +302,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 
 .sheet-button .sheet-input-group-text {
     color: rgb(150, 150, 150);
-    line-height: 19px;
+    line-height: 20px;
 }
 
 .sheet-button select {
@@ -571,7 +416,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     border-image-slice: 49 fill;
     border-image-width: 15px;
     border-image-repeat: round;
-    box-shadow: 0 2px 5px rgb(100, 100, 100);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     transition: color 0.35s ease;
 }
 
@@ -718,15 +563,15 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     opacity: 0;
 }
 
-.charsheet .sheet-modal-dialog.sheet-modal-small {
+.charsheet .sheet-modal-small {
     max-width: 460px;
 }
 
-.charsheet .sheet-modal-dialog.sheet-modal-medium {
+.charsheet .sheet-modal-medium {
     max-width: 680px;
 }
 
-.charsheet .sheet-modal-dialog.sheet-modal-large {
+.charsheet .sheet-modal-large {
     max-width: 880px;
 }
 
@@ -780,12 +625,18 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-modal-dialog span:not(.sheet-button-switch-label),
-.charsheet .sheet-modal-dialog input {
+.charsheet .sheet-modal-dialog input,
+.charsheet .sheet-modal-dialog select {
     color: rgb(200, 200, 200);
 }
 
-.charsheet .sheet-modal-dialog input:not([readonly]) {
-    border-bottom: 1px solid rgb(100, 100, 100) !important;
+.charsheet .sheet-modal-dialog input:not([readonly]),
+.charsheet .sheet-modal-dialog select {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+.charsheet .sheet-modal select {
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
 }
 
 /* accordion */
@@ -1110,7 +961,164 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-header .sheet-input-group-text span {
-    line-height: 23px;
+    line-height: 20px;
+}
+
+/* --------------------------------------------------- */
+/* option */
+/* --------------------------------------------------- */
+.charsheet .sheet-option-modal  {
+    margin-right: 10px;
+}
+
+.charsheet .sheet-option-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
+}
+
+/* --------------------------------------------------- */
+/* option - template */
+/* --------------------------------------------------- */
+.sheet-template-companion,
+.sheet-template-non-playable-character,
+.sheet-template-playable-character {
+    display: none;
+}
+
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div .sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div .sheet-template-playable-character {
+    display: block;
+}
+
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div tr.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
+    display: table-row;
+}
+
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div th.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div td.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
+input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
+    display: table-cell;
+}
+
+/* --------------------------------------------------- */
+/* option - roll attack */
+/* --------------------------------------------------- */
+.sheet-template-no-aiming,
+.sheet-template-aiming {
+    display: none;
+}
+
+input.sheet-toggle[name="attr_option_attack_roll"][value="no-aiming"] ~ div .sheet-template-no-aiming,
+input[name="attr_option_attack_roll"][value="aiming"] ~ div .sheet-template-aiming {
+    display: block;
+}
+
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-aiming {
+    display: table-row;
+}
+
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-no-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-aiming,
+input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-aiming {
+    display: table-cell;
+}
+
+/* --------------------------------------------------- */
+/* option - health */
+/* --------------------------------------------------- */
+.sheet-template-health-standard,
+.sheet-template-health-alternative {
+    display: none;
+}
+
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div .sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div .sheet-template-health-alternative {
+    display: block;
+}
+
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div tr.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div tr.sheet-template-health-alternative {
+    display: table-row;
+}
+
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div th.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div td.sheet-template-health-standard,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div th.sheet-template-health-alternative,
+input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.sheet-template-health-alternative {
+    display: table-cell;
+}
+
+/* --------------------------------------------------- */
+/* status */
+/* --------------------------------------------------- */
+.charsheet .sheet-status-modal {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin-left: 10px;
+    transition: color 0.25s ease;
+}
+
+.charsheet .sheet-status-modal .sheet-modal-checkbox:hover ~ span.sheet-button {
+    color: rgb(255, 255, 255);
+}
+
+.charsheet .sheet-status-button {
+    flex: 0 1 0;
+}
+
+.charsheet .sheet-status-button .sheet-modal {
+    height: 26px;
+}
+
+.charsheet .sheet-status-resume {
+    width: auto;
+    flex: 1 1 auto;
+    height: 26px;
+}
+
+.charsheet .sheet-status-resume input {
+    height: 26px;
+    line-height: 26px;
+    color: rgb(200, 200, 200);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+}
+
+.charsheet .sheet-modal .sheet-input-group-text span, .charsheet .sheet-input-group,
+.charsheet .sheet-status-effect {
+    color: rgb(200, 200, 200);
+}
+
+.charsheet .sheet-status-effect {
+    width: 100%;
+    border: none;
+    background: transparent;
+    resize: none;
+    height: calc(100% - 36px);
+    overflow-y: auto;
+    padding: 0;
+    cursor: default;
+    line-height: 20px;
+}
+
+/* --------------------------------------------------- */
+/* status custom */
+/* --------------------------------------------------- */
+.charsheet .sheet-status-custom-modal {
+    margin-right: 10px;
+}
+
+.charsheet .sheet-status-custom-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
 }
 
 /* --------------------------------------------------- */
@@ -1452,10 +1460,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-character-language-modal {
-}
-
-.charsheet .sheet-character-language-modal .sheet-modal-label {
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown.png") no-repeat center right;
 }
 
 .charsheet .sheet-character-height {
