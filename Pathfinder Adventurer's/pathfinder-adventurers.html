@@ -166,42 +166,44 @@
             "label_willpower": getTranslationByKey("save-willpower-label"),
 
             "label_skill_acrobatics": getTranslationByKey("skill-acrobatics-label"),
-            "label_skill_animal_training": getTranslationByKey("skill-animal-training-label"),
             "label_skill_appraise": getTranslationByKey("skill-appraise-label"),
             "label_skill_artistry": getTranslationByKey("skill-artistry-label"),
             "label_skill_bluff": getTranslationByKey("skill-bluff-label"),
-            "label_skill_career": getTranslationByKey("skill-career-label"),
-            "label_skill_climbing": getTranslationByKey("skill-climbing-label"),
+            "label_skill_climb": getTranslationByKey("skill-climb-label"),
             "label_skill_craft": getTranslationByKey("skill-craft-label"),
             "label_skill_disguise": getTranslationByKey("skill-disguise-label"),
             "label_skill_diplomacy": getTranslationByKey("skill-diplomacy-label"),
-            "label_skill_escape": getTranslationByKey("skill-escape-label"),
-            "label_skill_first_aid": getTranslationByKey("skill-first-aid-label"),
+            "label_skill_disable_device": getTranslationByKey("skill-disable-device-label"),
+            "label_skill_escape_artist": getTranslationByKey("skill-escape-artist-label"),
             "label_skill_fly": getTranslationByKey("skill-fly-label"),
-            "label_skill_horseback_riding": getTranslationByKey("skill-horseback-riding-label"),
+            "label_skill_handle_animal": getTranslationByKey("skill-handle-animal-label"),
+            "label_skill_heal": getTranslationByKey("skill-heal-label"),
             "label_skill_intimidate": getTranslationByKey("skill-intimidate-label"),
             "label_skill_knowledge_arcana": getTranslationByKey("skill-knowledge-arcana-label"),
-            "label_skill_knowledge_dungeon": getTranslationByKey("skill-knowledge-dungeon-label"),
+            "label_skill_knowledge_dungeoneering": getTranslationByKey("skill-knowledge-dungeoneering-label"),
             "label_skill_knowledge_engineering": getTranslationByKey("skill-knowledge-engineering-label"),
             "label_skill_knowledge_geography": getTranslationByKey("skill-knowledge-geography-label"),
             "label_skill_knowledge_history": getTranslationByKey("skill-knowledge-history-label"),
             "label_skill_knowledge_local": getTranslationByKey("skill-knowledge-local-label"),
             "label_skill_knowledge_nature": getTranslationByKey("skill-knowledge-nature-label"),
             "label_skill_knowledge_nobility": getTranslationByKey("skill-knowledge-nobility-label"),
-            "label_skill_knowledge_plans": getTranslationByKey("skill-knowledge-plans-label"),
+            "label_skill_knowledge_planes": getTranslationByKey("skill-knowledge-planes-label"),
             "label_skill_knowledge_religion": getTranslationByKey("skill-knowledge-religion-label"),
             "label_skill_linguistics": getTranslationByKey("skill-linguistics-label"),
             "label_skill_perception": getTranslationByKey("skill-perception-label"),
-            "label_skill_pick_pocketing": getTranslationByKey("skill-pick-pocketing-label"),
-            "label_skill_psychology": getTranslationByKey("skill-psychology-label"),
-            "label_skill_sabotage": getTranslationByKey("skill-sabotage-label"),
-            "label_skill_spell_craft": getTranslationByKey("skill-spell-craft-label"),
+            "label_skill_profession": getTranslationByKey("skill-profession-label"),
+            "label_skill_ride": getTranslationByKey("skill-ride-label"),
+            "label_skill_sense_motive": getTranslationByKey("skill-sense-motive-label"),
+            "label_skill_sleight_of_hand": getTranslationByKey("skill-sleight-of-hand-label"),
+            "label_skill_spellcraft": getTranslationByKey("skill-spellcraft-label"),
             "label_skill_stealth": getTranslationByKey("skill-stealth-label"),
             "label_skill_survival": getTranslationByKey("skill-survival-label"),
-            "label_skill_swimming": getTranslationByKey("skill-swimming-label"),
-            "label_skill_use_of_magic_objects": getTranslationByKey("skill-use-of-magic-objects-label"),
+            "label_skill_swim": getTranslationByKey("skill-swim-label"),
+            "label_skill_use_magic_device": getTranslationByKey("skill-use-magic-device-label"),
 
-            "label_skill_representation": getTranslationByKey("skill-representation-label")
+            "label_skill_perform": getTranslationByKey("skill-perform-label"),
+
+            "label_skill_custom": getTranslationByKey("skill-custom-label")
         };
 
         // send payload + init all variables
@@ -226,7 +228,7 @@
             //spell_damage_repeating();
 
             skill();
-            skill_representation();
+            skill_perform();
             skill_custom();
 
             equipment_armor();
@@ -2913,16 +2915,16 @@
     // skill
     on(
         "change:option_template"
-        + " change:skill_acrobatics_ranks change:skill_animal_training_ranks change:skill_artistry_ranks change:skill_appraise_ranks change:skill_bluff_ranks change:skill_climbing_ranks change:skill_craft_ranks change:skill_career_ranks change:skill_disguise_ranks change:skill_diplomacy_ranks change:skill_first_aid_ranks change:skill_fly_ranks change:skill_knowledge_arcana_ranks change:skill_knowledge_dungeon_ranks change:skill_knowledge_engineering_ranks change:skill_knowledge_geography_ranks change:skill_knowledge_history_ranks change:skill_knowledge_local_ranks change:skill_knowledge_nature_ranks change:skill_knowledge_plans_ranks change:skill_knowledge_religion_ranks change:skill_knowledge_nobility_ranks change:skill_horseback_riding_ranks change:skill_escape_ranks change:skill_intimidate_ranks change:skill_linguistics_ranks change:skill_swimming_ranks change:skill_perception_ranks change:skill_pick_pocketing_ranks change:skill_psychology_ranks change:skill_sabotage_ranks change:skill_stealth_ranks change:skill_survival_ranks change:skill_spell_craft_ranks change:skill_use_of_magic_objects_ranks"
+        + " change:skill_acrobatics_ranks change:skill_handle_animal_ranks change:skill_artistry_ranks change:skill_appraise_ranks change:skill_bluff_ranks change:skill_climb_ranks change:skill_craft_ranks change:skill_profession_ranks change:skill_disguise_ranks change:skill_diplomacy_ranks change:skill_heal_ranks change:skill_fly_ranks change:skill_knowledge_arcana_ranks change:skill_knowledge_dungeon_ranks change:skill_knowledge_engineering_ranks change:skill_knowledge_geography_ranks change:skill_knowledge_history_ranks change:skill_knowledge_local_ranks change:skill_knowledge_nature_ranks change:skill_knowledge_planes_ranks change:skill_knowledge_religion_ranks change:skill_knowledge_nobility_ranks change:skill_ride_ranks change:skill_escape_artist_ranks change:skill_intimidate_ranks change:skill_linguistics_ranks change:skill_swim_ranks change:skill_perception_ranks change:skill_sleight_of_hand_ranks change:skill_sense_motive_ranks change:skill_disable_device_ranks change:skill_stealth_ranks change:skill_survival_ranks change:skill_spellcraft_ranks change:skill_use_magic_device_ranks"
         , skill);
     function skill() {
         getAttrs([
             "option_template",
-            "skill_acrobatics_ranks", "skill_animal_training_ranks", "skill_artistry_ranks", "skill_appraise_ranks", "skill_bluff_ranks", "skill_climbing_ranks", "skill_craft_ranks", "skill_career_ranks", "skill_disguise_ranks", "skill_diplomacy_ranks", "skill_first_aid_ranks", "skill_fly_ranks", "skill_knowledge_arcana_ranks", "skill_knowledge_dungeon_ranks", "skill_knowledge_engineering_ranks", "skill_knowledge_geography_ranks", "skill_knowledge_history_ranks", "skill_knowledge_local_ranks", "skill_knowledge_nature_ranks", "skill_knowledge_plans_ranks", "skill_knowledge_religion_ranks", "skill_knowledge_nobility_ranks", "skill_horseback_riding_ranks", "skill_escape_ranks", "skill_intimidate_ranks", "skill_linguistics_ranks", "skill_swimming_ranks", "skill_perception_ranks", "skill_pick_pocketing_ranks", "skill_psychology_ranks", "skill_sabotage_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_spell_craft_ranks", "skill_use_of_magic_objects_ranks"
+            "skill_acrobatics_ranks", "skill_handle_animal_ranks", "skill_artistry_ranks", "skill_appraise_ranks", "skill_bluff_ranks", "skill_climb_ranks", "skill_craft_ranks", "skill_profession_ranks", "skill_disguise_ranks", "skill_diplomacy_ranks", "skill_heal_ranks", "skill_fly_ranks", "skill_knowledge_arcana_ranks", "skill_knowledge_dungeon_ranks", "skill_knowledge_engineering_ranks", "skill_knowledge_geography_ranks", "skill_knowledge_history_ranks", "skill_knowledge_local_ranks", "skill_knowledge_nature_ranks", "skill_knowledge_planes_ranks", "skill_knowledge_religion_ranks", "skill_knowledge_nobility_ranks", "skill_ride_ranks", "skill_escape_artist_ranks", "skill_intimidate_ranks", "skill_linguistics_ranks", "skill_swim_ranks", "skill_perception_ranks", "skill_sleight_of_hand_ranks", "skill_sense_motive_ranks", "skill_disable_device_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_spellcraft_ranks", "skill_use_magic_device_ranks"
         ], (user) => {
-            getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
+            getAttrsRepeating("skillperform", ["skill_perform_ranks"], (repeating) => {
                 // white list
-                let npc_list = ["skill_climbing_ranks", "skill_escape_ranks", "skill_fly_ranks", "skill_intimidate_ranks", "skill_perception_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_swimming_ranks"];
+                let npc_list = ["skill_climb_ranks", "skill_escape_artist_ranks", "skill_fly_ranks", "skill_intimidate_ranks", "skill_perception_ranks", "skill_stealth_ranks", "skill_survival_ranks", "skill_swim_ranks"];
 
                 // prepare payload
                 let payload = {};
@@ -2957,22 +2959,22 @@
         });
     }
 
-    // skill representation
+    // skill perform
     on(
         "change option_template"
-        + " change:repeating_skillrepresentation:skill_representation_ranks remove:repeating_skillrepresentation"
-        , skill_representation);
-    function skill_representation() {
+        + " change:repeating_skillperform:skill_perform_ranks remove:repeating_skillperform"
+        , skill_perform);
+    function skill_perform() {
         getAttrs(["option_template"], (user) => {
             if ( user.option_template === "pc" || user.option_template === "npc") {
-                getAttrsRepeating("skillrepresentation", ["skill_representation_ranks"], (repeating) => {
+                getAttrsRepeating("skillperform", ["skill_perform_ranks"], (repeating) => {
                     // prepare payload
                     let payload = {};
-                    payload["foo_skill_representation_ranks_total"] = 0;
+                    payload["foo_skill_perform_ranks_total"] = 0;
 
                     // iterate payload
                     Object.keys(repeating).forEach( id => {
-                        payload["foo_skill_representation_ranks_total"] += repeating[id]["skill_representation_ranks"];
+                        payload["foo_skill_perform_ranks_total"] += repeating[id]["skill_perform_ranks"];
                     });
                     delete(repeating);
 
@@ -2984,7 +2986,7 @@
             else {
                 // prepare payload
                 let payload = {};
-                payload["foo_skill_representation_ranks_total"] = 0;
+                payload["foo_skill_perform_ranks_total"] = 0;
 
                 // send payload
                 setAttrs(payload);
@@ -3595,42 +3597,44 @@
 
     <span data-i18n="skill-status-reactive"></span>
     <span data-i18n="skill-status-sight"></span>
+
     <span data-i18n="skill-acrobatics-label"></span>
-    <span data-i18n="skill-animal-training-label"></span>
-    <span data-i18n="skill-bluff-label"></span>
-    <span data-i18n="skill-climbing-label"></span>
-    <span data-i18n="skill-disguise-label"></span>
-    <span data-i18n="skill-diplomacy-label"></span>
-    <span data-i18n="skill-escape-label"></span>
-    <span data-i18n="skill-first-aid-label"></span>
-    <span data-i18n="skill-fly-label"></span>
-    <span data-i18n="skill-horseback-riding-label"></span>
-    <span data-i18n="skill-intimidate-label"></span>
-    <span data-i18n="skill-perception-label"></span>
-    <span data-i18n="skill-pick-pocketing-label"></span>
-    <span data-i18n="skill-psychology-label"></span>
-    <span data-i18n="skill-sabotage-label"></span>
-    <span data-i18n="skill-spell-craft-label"></span>
-    <span data-i18n="skill-stealth-label"></span>
-    <span data-i18n="skill-survival-label"></span>
-    <span data-i18n="skill-swimming-label"></span>
-    <span data-i18n="skill-use-of-magic-objects-label"></span>
     <span data-i18n="skill-appraise-label"></span>
     <span data-i18n="skill-artistry-label"></span>
-    <span data-i18n="skill-career-label"></span>
+    <span data-i18n="skill-bluff-label"></span>
+    <span data-i18n="skill-climb-label"></span>
     <span data-i18n="skill-craft-label"></span>
+    <span data-i18n="skill-diplomacy-label"></span>
+    <span data-i18n="skill-disable-device-label"></span>
+    <span data-i18n="skill-disguise-label"></span>
+    <span data-i18n="skill-escape-artist-label"></span>
+    <span data-i18n="skill-fly-label"></span>
+    <span data-i18n="skill-handle-animal-label"></span>
+    <span data-i18n="skill-heal-label"></span>
+    <span data-i18n="skill-intimidate-label"></span>
     <span data-i18n="skill-knowledge-arcana-label"></span>
-    <span data-i18n="skill-knowledge-dungeon-label"></span>
+    <span data-i18n="skill-knowledge-dungeoneering-label"></span>
     <span data-i18n="skill-knowledge-engineering-label"></span>
     <span data-i18n="skill-knowledge-geography-label"></span>
     <span data-i18n="skill-knowledge-history-label"></span>
     <span data-i18n="skill-knowledge-local-label"></span>
     <span data-i18n="skill-knowledge-nature-label"></span>
     <span data-i18n="skill-knowledge-nobility-label"></span>
-    <span data-i18n="skill-knowledge-plans-label"></span>
+    <span data-i18n="skill-knowledge-planes-label"></span>
     <span data-i18n="skill-knowledge-religion-label"></span>
     <span data-i18n="skill-linguistics-label"></span>
-    <span data-i18n="skill-representation-label"></span>
+    <span data-i18n="skill-perception-label"></span>
+    <span data-i18n="skill-profession-label"></span>
+    <span data-i18n="skill-ride-label"></span>
+    <span data-i18n="skill-sense-motive-label"></span>
+    <span data-i18n="skill-spellcraft-label"></span>
+    <span data-i18n="skill-sleight-of-hand-label"></span>
+    <span data-i18n="skill-stealth-label"></span>
+    <span data-i18n="skill-survival-label"></span>
+    <span data-i18n="skill-swim-label"></span>
+    <span data-i18n="skill-use-magic-device-label"></span>
+
+    <span data-i18n="skill-perform-label"></span>
 
     <!-- variables -->
     <input type="hidden" name="attr_foo_status_hit_points" value="0" />
@@ -3713,7 +3717,7 @@
 
 
     <input type="hidden" name="attr_foo_skill_ranks_total" value ="0" />
-    <input type="hidden" name="attr_foo_skill_representation_ranks_total" value ="0" />
+    <input type="hidden" name="attr_foo_skill_perform_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
 </div>
 
@@ -3892,7 +3896,7 @@
         </div>
         <div class="flex-row">
             <div class="flex-col9">
-                <div class="status">
+                <div class="status-modal">
                     <div class="status-button">
                         <div class="modal">
                             <input title="" class="modal-checkbox" type="checkbox" />
@@ -4218,249 +4222,256 @@
                 </div>
             </div>
             <div class="flex-col3">
-                <div class="modal option">
-                    <input title="" class="modal-checkbox" type="checkbox" />
-                    <span class="modal-label button" data-i18n="option"></span>
-                    <div class="modal-background"></div>
-                    <div class="modal-dialog modal-small">
-                        <div class="modal-title">
-                            <span data-i18n="option"></span>
-                        </div>
-                        <div class="flex-row">
-                            <div class="flex-col6">
-                                <h2 data-i18n="option-general-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-template-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-template-short"></span>
+                <div class="flex-row">
+                    <div class="flex-col"></div>
+                    <div class="flex-col-auto">
+                        <div class="modal option-modal">
+                            <input title="" class="modal-checkbox" type="checkbox" />
+                            <span class="modal-label button" data-i18n="option"></span>
+                            <div class="modal-background"></div>
+                            <div class="modal-dialog modal-small">
+                                <div class="modal-title">
+                                    <span data-i18n="option"></span>
+                                </div>
+                                <div class="flex-row">
+                                    <div class="flex-col6">
+                                        <h2 data-i18n="option-general-h1"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-template-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-template-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_template" title="" data-i18n-list="option-template-list">
+                                                            <option value="pet" data-i18n="option-template-companion" data-i18n-list-item="companion"></option>
+                                                            <option value="npc" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
+                                                            <option value="pc" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_template" title="" data-i18n-list="option-template-list">
-                                                    <option value="pet" data-i18n="option-template-companion" data-i18n-list-item="companion"></option>
-                                                    <option value="npc" data-i18n="option-template-non-playable-character" data-i18n-list-item="npc"></option>
-                                                    <option value="pc" selected="selected" data-i18n="option-template-playable-character" data-i18n-list-item="pc"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-template-life-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-template-life-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-template-life-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-template-life-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_health" title="">
+                                                            <option value="standard" selected="selected" data-i18n="option-template-life-standard"></option>
+                                                            <option value="alternative" data-i18n="option-template-life-alternative"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_health" title="">
-                                                    <option value="standard" selected="selected" data-i18n="option-template-life-standard"></option>
-                                                    <option value="alternative" data-i18n="option-template-life-alternative"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-whisper-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-whisper-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-whisper-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-whisper-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_whisper" title="" data-i18n-list="option-whisper-list">
+                                                            <option value="" data-i18n="option-whisper-everyone" selected="selected" data-i18n-list-item="all"></option>
+                                                            <option value="/w gm" data-i18n="option-whisper-game-master" data-i18n-list-item="gm"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_whisper" title="" data-i18n-list="option-whisper-list">
-                                                    <option value="" data-i18n="option-whisper-everyone" selected="selected" data-i18n-list-item="all"></option>
-                                                    <option value="/w gm" data-i18n="option-whisper-game-master" data-i18n-list-item="gm"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-attack-roll-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-attack-roll-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-attack-roll-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-attack-roll-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_attack_roll" title="" data-i18n-list="option-attack-roll-list">
+                                                            <option value="no-aiming" selected="selected" data-i18n="option-attack-roll-no-aiming" data-i18n-list-item="no-aiming"></option>
+                                                            <option value="aiming" selected="selected" data-i18n="option-attack-roll-aiming" data-i18n-list-item="aiming"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_attack_roll" title="" data-i18n-list="option-attack-roll-list">
-                                                    <option value="no-aiming" selected="selected" data-i18n="option-attack-roll-no-aiming" data-i18n-list-item="no-aiming"></option>
-                                                    <option value="aiming" selected="selected" data-i18n="option-attack-roll-aiming" data-i18n-list-item="aiming"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                            </li>
+                                        </ul>
 
-                                <h2 data-i18n="option-status-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status" title="" data-i18n-title="option-status-all-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-all"></span>
-                                        </div>
-                                    </li>
-                                    <li class="template-health-standard">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_wound_threshold" title="" data-i18n-title="option-status-wound-threshold-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-wound-threshold"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_aging" title="" data-i18n-title="option-status-aging-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-aging"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_armor_penalty" title="" data-i18n-title="option-status-armor-penalty-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-armor-penalty"></span>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_option_status_encumbrance" title="" data-i18n-title="option-status-encumbrance-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-status-encumbrance"></span>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="flex-col6">
-                                <h2 data-i18n="option-compendium-h1"></h2>
-                                <ul data-i18n-list="option-compendium-list">
-                                    <li data-i18n-list-item="height">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_height_category_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-compendium-height"></span>
-                                        </div>
-                                    </li>
-                                    <li data-i18n-list-item="unit">
-                                        <div class="button-switch">
-                                            <input type="checkbox" name="attr_compendium_unit_active" title="" data-i18n-title="option-compendium-unit-title" checked="checked" />
-                                            <span class="button-switch-face"></span>
-                                            <span class="button-switch-label" data-i18n="option-compendium-unit"></span>
-                                        </div>
-                                    </li>
-                                </ul>
+                                        <h2 data-i18n="option-status-h1"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_option_status" title="" data-i18n-title="option-status-all-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-status-all"></span>
+                                                </div>
+                                            </li>
+                                            <li class="template-health-standard">
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_option_status_wound_threshold" title="" data-i18n-title="option-status-wound-threshold-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-status-wound-threshold"></span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_option_status_aging" title="" data-i18n-title="option-status-aging-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-status-aging"></span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_option_status_armor_penalty" title="" data-i18n-title="option-status-armor-penalty-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-status-armor-penalty"></span>
+                                                </div>
+                                            </li>
+                                            <li>
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_option_status_encumbrance" title="" data-i18n-title="option-status-encumbrance-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-status-encumbrance"></span>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="flex-col6">
+                                        <h2 data-i18n="option-compendium-h1"></h2>
+                                        <ul data-i18n-list="option-compendium-list">
+                                            <li data-i18n-list-item="height">
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_compendium_height_category_active" title="" data-i18n-title="option-compendium-height-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-compendium-height"></span>
+                                                </div>
+                                            </li>
+                                            <li data-i18n-list-item="unit">
+                                                <div class="button-switch">
+                                                    <input type="checkbox" name="attr_compendium_unit_active" title="" data-i18n-title="option-compendium-unit-title" checked="checked" />
+                                                    <span class="button-switch-face"></span>
+                                                    <span class="button-switch-label" data-i18n="option-compendium-unit"></span>
+                                                </div>
+                                            </li>
+                                        </ul>
 
-                                <h2 data-i18n="option-unit-h1"></h2>
-                                <ul>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-movement-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-movement-short"></span>
+                                        <h2 data-i18n="option-unit-h1"></h2>
+                                        <ul>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-unit-movement-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-unit-movement-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_unit_movement" title="" data-i18n-list="option-unit-movement-list">
+                                                            <option value="3" data-i18n="option-unit-meter" data-i18n-list-item="meter" selected="selected"></option>
+                                                            <option value="1" data-i18n="option-unit-case" data-i18n-list-item="case"></option>
+                                                            <option value="2" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_unit_movement" title="" data-i18n-list="option-unit-movement-list">
-                                                    <option value="3" data-i18n="option-unit-meter" data-i18n-list-item="meter" selected="selected"></option>
-                                                    <option value="1" data-i18n="option-unit-case" data-i18n-list-item="case"></option>
-                                                    <option value="2" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-height-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-height-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-unit-height-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-unit-height-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_unit_height" title="" data-i18n-list="option-unit-height-list">
+                                                            <option value="1" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
+                                                            <option value="2" selected="selected" data-i18n="option-unit-meter" data-i18n-list-item="meter"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_unit_height" title="" data-i18n-list="option-unit-height-list">
-                                                    <option value="1" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-unit-meter" data-i18n-list-item="meter"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-weight-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-weight-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-unit-weight-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-unit-weight-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_unit_weight" title="" data-i18n-list="option-unit-weight-list">
+                                                            <option value="1" selected="selected" data-i18n="option-unit-kilogram" data-i18n-list-item="kilogram"></option>
+                                                            <option value="2" data-i18n="option-unit-pound" data-i18n-list-item="pound"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_unit_weight" title="" data-i18n-list="option-unit-weight-list">
-                                                    <option value="1" selected="selected" data-i18n="option-unit-kilogram" data-i18n-list-item="kilogram"></option>
-                                                    <option value="2" data-i18n="option-unit-pound" data-i18n-list-item="pound"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-decimal-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-decimal-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-unit-decimal-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-unit-decimal-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_unit_decimal" title="" data-i18n-list="option-unit-decimal-list">
+                                                            <option value="1" selected="selected" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
+                                                            <option value="2" data-i18n="option-unit-dot" data-i18n-list-item="dot"></option>
+                                                            <option value="3" data-i18n="option-unit-momayyez" data-i18n-list-item="momayyez"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_unit_decimal" title="" data-i18n-list="option-unit-decimal-list">
-                                                    <option value="1" selected="selected" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
-                                                    <option value="2" data-i18n="option-unit-dot" data-i18n-list-item="dot"></option>
-                                                    <option value="3" data-i18n="option-unit-momayyez" data-i18n-list-item="momayyez"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div class="button" data-i18n-title="option-unit-thousand-title">
-                                            <div class="input-group">
-                                                <div class="input-group-text">
-                                                    <span data-i18n="option-unit-thousand-short"></span>
+                                            </li>
+                                            <li>
+                                                <div class="button" data-i18n-title="option-unit-thousand-title">
+                                                    <div class="input-group">
+                                                        <div class="input-group-text">
+                                                            <span data-i18n="option-unit-thousand-short"></span>
+                                                        </div>
+                                                        <select name="attr_option_unit_thousand" title="" data-i18n-list="option-unit-thousand-list">
+                                                            <option value="1" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
+                                                            <option value="2" selected="selected" data-i18n="option-unit-space" data-i18n-list-item="space"></option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <select name="attr_option_unit_thousand" title="" data-i18n-list="option-unit-thousand-list">
-                                                    <option value="1" data-i18n="option-unit-comma" data-i18n-list-item="comma"></option>
-                                                    <option value="2" selected="selected" data-i18n="option-unit-space" data-i18n-list-item="space"></option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal status_custom">
-                    <input title="" class="modal-checkbox" type="checkbox" />
-                    <span class="modal-label button" data-i18n="option"></span>
-                    <div class="modal-background"></div>
-                    <div class="modal-dialog modal-small">
-                        <div class="modal-title">
-                            <span data-i18n="option"></span>
+                    <div class="flex-col-auto">
+                        <div class="modal status-custom-modal">
+                            <input title="" class="modal-checkbox" type="checkbox" />
+                            <span class="modal-label button" data-i18n="status-custom"></span>
+                            <div class="modal-background"></div>
+                            <div class="modal-dialog modal-small">
+                                <div class="modal-title">
+                                    <span data-i18n="option"></span>
+                                </div>
+                                <h2 data-i18n="option-general-h1"></h2>
+                                <p>
+                                    points de vie<br />
+                                    action complexe ?<br />
+                                    facteur de déplacement<br />
+                                </p>
+                                <p>
+                                    force<br />
+                                    dextérité<br />
+                                    constitution<br />
+                                    intelligence<br />
+                                    sagesse<br >
+                                    charismme<br />
+                                </p>
+                                <p>
+                                    peut attaquer ?<br />
+                                    peut attaque d'opportunité ?<br />
+                                    initiative<br />
+                                    BMO<br />
+                                    jet d'attaque<br />
+                                    dégâts<br />
+                                </p>
+                                <p>
+                                    peut lancer des sorts ?<br />
+                                    NLS ( personnage )<br />
+                                </p>
+                                <p>
+                                    reflexe<br />
+                                    vigueur<br />
+                                    volonté<br />
+                                    CA<br />
+                                    DMD<br />
+                                </p>
+                                <p>
+                                    compétences
+                                </p>
+                            </div>
                         </div>
-                        <h2 data-i18n="option-general-h1"></h2>
-                        <p>
-                            points de vie<br />
-                            action complexe ?<br />
-                            facteur de déplacement<br />
-                        </p>
-                        <p>
-                            force<br />
-                            dextérité<br />
-                            constitution<br />
-                            intelligence<br />
-                            sagesse<br >
-                            charismme<br />
-                        </p>
-                        <p>
-                            peut attaquer ?<br />
-                            peut attaque d'opportunité ?<br />
-                            initiative<br />
-                            BMO<br />
-                            jet d'attaque<br />
-                            dégâts<br />
-                        </p>
-                        <p>
-                            peut lancer des sorts ?<br />
-                            NLS ( personnage )<br />
-                        </p>
-                        <p>
-                            reflexe<br />
-                            vigueur<br />
-                            volonté<br />
-                            CA<br />
-                            DMD<br />
-                        </p>
-                        <p>
-                            compétences
-                        </p>
                     </div>
                 </div>
             </div>
@@ -17151,7 +17162,7 @@
                         <tr>
                             <td>
                                 <div class="input-group">
-                                    <input class="text-strong" type="number" name="attr_skill_total" title="" data-i18n-title="skill-total-title" value="@{foo_skill_ranks_total}+@{foo_skill_representation_ranks_total}+@{foo_skill_custom_ranks_total}" disabled="disabled"/>
+                                    <input class="text-strong" type="number" name="attr_skill_total" title="" data-i18n-title="skill-total-title" value="@{foo_skill_ranks_total}+@{foo_skill_perform_ranks_total}+@{foo_skill_custom_ranks_total}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="sign-separator"></span>
                                     </div>
@@ -17255,56 +17266,6 @@
                                 <input type="number" name="attr_skill_acrobatics_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="animal-training">
-                            <td>
-                                <button
-                                        data-i18n-title="skill-animal-training-roll-title"
-                                        type="roll"
-                                        value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_animal_training}}} {{test=[[1d20+@{skill_animal_training_total}]]}}"
-                                        name="roll_skill_animal_training"
-                                ></button>
-                            </td>
-                            <td>
-                                <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_animal_training_cc" title="" value="( 3 * ( @{skill_animal_training_ranks} + 1 - abs( @{skill_animal_training_ranks} - 1 ) ) / 2 )"/>
-                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
-                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-animal-training"></span>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_total" title="" disabled="disabled" class="text-strong" value="@{skill_animal_training_ranks}+@{skill_animal_training_class}+@{skill_animal_training_stat}+@{foo_status_skill}+@{skill_animal_training_trait}+@{skill_animal_training_gift}+@{skill_animal_training_temporary}"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_class" title="" value="@{skill_animal_training_cc}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_animal_training_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
-                                    <div class="input-group-text">
-                                        <span data-i18n="attribute-charisma-short"></span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_trait" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_gift" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_animal_training_temporary" title="" step="1" value="0"/>
-                            </td>
-                        </tr>
                         <tr class="template-playable-character" data-i18n-list-item="appraise">
                             <td>
                                 <button
@@ -17358,7 +17319,7 @@
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_artistry} @{skill_artistry_label_user}}} {{test=[[1d20+@{skill_artistry_total}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_artistry} @{skill_artistry_label}}} {{test=[[1d20+@{skill_artistry_total}]]}}"
                                         data-i18n-title="skill-artistry-roll-title"
                                         name="roll_skill_artistry"
                                 ></button>
@@ -17457,114 +17418,60 @@
                                 <input type="number" name="attr_skill_bluff_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="career">
+                        <tr data-i18n-list-item="climb">
                             <td>
                                 <button
+                                        data-i18n-title="skill-climb-roll-title"
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_career} @{skill_career_label_user}}} {{test=[[1d20+@{skill_career_total}]]}}"
-                                        data-i18n-title="skill-career-roll-title"
-                                        name="roll_skill_career"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_climb}}} {{test=[[1d20+@{skill_climb_total}]]}}"
+                                        name="roll_skill_climb"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_career_cc" title="" value="((((3 * @{skill_career_ranks}) + 3) - abs((3 * @{skill_career_ranks}) - 3)) / 2)"/>
+                                    <input type="checkbox" name="attr_skill_climb_cc" title="" value="( 3 * ( @{skill_climb_ranks} + 1 - abs( @{skill_climb_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <div class="input-group">
-                                    <div class="input-group-text">
-                                        <span data-i18n="skill-career"></span> :
-                                    </div>
-                                    <input class="text-left" name="attr_skill_career_label_user" title="" type="text"/>
-                                </div>
+                                <span data-i18n="skill-climb"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_career_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_climb_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_career_total" title="" disabled="disabled" class="text-strong" value="@{skill_career_ranks}+@{skill_career_cc}+@{skill_career_stat}+@{foo_status_skill}+@{skill_career_trait}+@{skill_career_gift}+@{skill_career_temporary}"/>
+                                <input type="number" name="attr_skill_climb_total" title="" disabled="disabled" class="text-strong" value="@{skill_climb_ranks}+@{skill_climb_cc}+@{skill_climb_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_climb_trait}+@{skill_climb_gift}+@{skill_climb_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_career_class" title="" value="@{skill_career_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_climb_class" title="" value="@{skill_climb_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_career_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
-                                    <div class="input-group-text">
-                                        <span data-i18n="attribute-wisdom-short"></span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_career_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_career_trait" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_career_gift" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_career_temporary" title="" step="1" value="0"/>
-                            </td>
-                        </tr>
-                        <tr data-i18n-list-item="climbing">
-                            <td>
-                                <button
-                                        data-i18n-title="skill-climbing-roll-title"
-                                        type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_climbing}}} {{test=[[1d20+@{skill_climbing_total}]]}}"
-                                        name="roll_skill_climbing"
-                                ></button>
-                            </td>
-                            <td>
-                                <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_climbing_cc" title="" value="( 3 * ( @{skill_climbing_ranks} + 1 - abs( @{skill_climbing_ranks} - 1 ) ) / 2 )"/>
-                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
-                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <span data-i18n="skill-climbing"></span>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_climbing_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_climbing_total" title="" disabled="disabled" class="text-strong" value="@{skill_climbing_ranks}+@{skill_climbing_cc}+@{skill_climbing_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_climbing_trait}+@{skill_climbing_gift}+@{skill_climbing_temporary}"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_climbing_class" title="" value="@{skill_climbing_cc}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_climbing_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_climb_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-strength-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climbing_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_climb_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climbing_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_climb_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climbing_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_climb_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climbing_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_climb_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr class="template-playable-character" data-i18n-list-item="craft">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_craft} @{skill_craft_label_user}}} {{test=[[1d20+@{skill_craft_total}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_craft} @{skill_craft_label}}} {{test=[[1d20+@{skill_craft_total}]]}}"
                                         data-i18n-title="skill-craft-roll-title"
                                         name="roll_skill_craft"
                                 ></button>
@@ -17581,7 +17488,7 @@
                                     <div class="input-group-text">
                                         <span data-i18n="skill-craft"></span> :
                                     </div>
-                                    <input class="text-left" name="attr_skill_craft_label_user" title="" type="text"/>
+                                    <input class="text-left" name="attr_skill_craft_label" title="" type="text"/>
                                 </div>
                             </td>
                             <td>
@@ -17612,55 +17519,6 @@
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_craft_temporary" title="" step="1" value="0"/>
-                            </td>
-                        </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="disguise">
-                            <td>
-                                <button
-                                        type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_disguise}}} {{test=[[1d20+@{skill_disguise_total}]]}}"
-                                        data-i18n-title="skill-disguise-roll-title"
-                                        name="roll_skill_disguise"
-                                ></button>
-                            </td>
-                            <td>
-                                <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_disguise_cc" title="" value="( 3 * ( @{skill_disguise_ranks} + 1 - abs( @{skill_disguise_ranks} - 1 ) ) / 2 )"/>
-                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
-                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <span data-i18n="skill-disguise"></span>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_total" title="" disabled="disabled" class="text-strong" value="@{skill_disguise_ranks}+@{skill_disguise_cc}+@{skill_disguise_stat}+@{foo_status_skill}+@{skill_disguise_trait}+@{skill_disguise_gift}+@{skill_disguise_temporary}"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_class" title="" value="@{skill_disguise_cc}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_disguise_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
-                                    <div class="input-group-text">
-                                        <span data-i18n="attribute-charisma-short"></span>
-                                    </div>
-                                </div>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_trait" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_gift" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_disguise_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr class="template-playable-character" data-i18n-list-item="diplomacy">
@@ -17712,102 +17570,152 @@
                                 <input type="number" name="attr_skill_diplomacy_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr data-i18n-list-item="escape">
+                        <tr class="template-playable-character" data-i18n-list-item="disable-device">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_escape}}} {{test=[[1d20+@{skill_escape_total}]]}}"
-                                        data-i18n-title="skill-escape-roll-title"
-                                        name="roll_skill_escape"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_disable_device}}} {{test=[[1d20+@{skill_disable_device_total}]]}}"
+                                        data-i18n-title="skill-disable-device-roll-title"
+                                        name="roll_skill_disable_device"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_escape_cc" title="" value="( 3 * ( @{skill_escape_ranks} + 1 - abs( @{skill_escape_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_disable_device_cc" title="" value="( 3 * ( @{skill_disable_device_ranks} + 1 - abs( @{skill_disable_device_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n="skill-escape"></span>
+                                <span data-i18n-title="skill-required-training-title" class="alert"></span>
+                                <span data-i18n="skill-disable-device"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_disable_device_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_total" title="" disabled="disabled" class="text-strong" value="@{skill_escape_ranks}+@{skill_escape_cc}+@{skill_escape_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_escape_trait}+@{skill_escape_gift}+@{skill_escape_temporary}"/>
+                                <input type="number" name="attr_skill_disable_device_total" title="" disabled="disabled" class="text-strong" value="@{skill_disable_device_ranks}+@{skill_disable_device_cc}+@{skill_disable_device_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_disable_device_trait}+@{skill_disable_device_gift}+@{skill_disable_device_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_class" title="" value="@{skill_escape_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_disable_device_class" title="" value="@{skill_disable_device_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_escape_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_disable_device_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_disable_device_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disable_device_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disable_device_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disable_device_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="first-aid">
+                        <tr class="template-playable-character" data-i18n-list-item="disguise">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_first_aid}}} {{test=[[1d20+@{skill_first_aid_total}]]}}"
-                                        data-i18n-title="skill-first-aid-roll-title"
-                                        name="roll_skill_first_aid"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_disguise}}} {{test=[[1d20+@{skill_disguise_total}]]}}"
+                                        data-i18n-title="skill-disguise-roll-title"
+                                        name="roll_skill_disguise"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_first_aid_cc" title="" value="( 3 * ( @{skill_first_aid_ranks} + 1 - abs( @{skill_first_aid_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_disguise_cc" title="" value="( 3 * ( @{skill_disguise_ranks} + 1 - abs( @{skill_disguise_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n="skill-first-aid"></span>
+                                <span data-i18n="skill-disguise"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_disguise_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_total" title="" disabled="disabled" class="text-strong" value="@{skill_first_aid_ranks}+@{skill_first_aid_class}+@{skill_first_aid_stat}+@{foo_status_skill}+@{skill_first_aid_trait}+@{skill_first_aid_gift}+@{skill_first_aid_temporary}"/>
+                                <input type="number" name="attr_skill_disguise_total" title="" disabled="disabled" class="text-strong" value="@{skill_disguise_ranks}+@{skill_disguise_cc}+@{skill_disguise_stat}+@{foo_status_skill}+@{skill_disguise_trait}+@{skill_disguise_gift}+@{skill_disguise_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_class" title="" value="@{skill_first_aid_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_disguise_class" title="" value="@{skill_disguise_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_first_aid_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_disguise_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="attribute-wisdom-short"></span>
+                                        <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_disguise_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disguise_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disguise_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_first_aid_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_disguise_temporary" title="" step="1" value="0"/>
+                            </td>
+                        </tr>
+                        <tr data-i18n-list-item="escape-artist">
+                            <td>
+                                <button
+                                        type="roll"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_escape_artist}}} {{test=[[1d20+@{skill_escape_artist_total}]]}}"
+                                        data-i18n-title="skill-escape-artist-roll-title"
+                                        name="roll_skill_escape_artist"
+                                ></button>
+                            </td>
+                            <td>
+                                <div class="waxseal">
+                                    <input type="checkbox" name="attr_skill_escape_artist_cc" title="" value="( 3 * ( @{skill_escape_artist_ranks} + 1 - abs( @{skill_escape_artist_ranks} - 1 ) ) / 2 )"/>
+                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
+                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span data-i18n="skill-escape-artist"></span>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_total" title="" disabled="disabled" class="text-strong" value="@{skill_escape_artist_ranks}+@{skill_escape_artist_cc}+@{skill_escape_artist_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_escape_artist_trait}+@{skill_escape_artist_gift}+@{skill_escape_artist_temporary}"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_class" title="" value="@{skill_escape_artist_cc}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <div class="input-group disabled">
+                                    <input type="number" name="attr_skill_escape_artist_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                    <div class="input-group-text">
+                                        <span data-i18n="attribute-dexterity-short"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_trait" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_gift" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_escape_artist_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr data-i18n-list-item="fly">
@@ -17859,53 +17767,53 @@
                                 <input type="number" name="attr_skill_fly_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="horseback-riding">
+                        <tr class="template-playable-character" data-i18n-list-item="heal">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_horseback_riding}}} {{test=[[1d20+@{skill_horseback_riding_total}]]}}"
-                                        data-i18n-title="skill-horseback-riding-roll-title"
-                                        name="roll_skill_horseback_riding"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_heal}}} {{test=[[1d20+@{skill_heal_total}]]}}"
+                                        data-i18n-title="skill-heal-roll-title"
+                                        name="roll_skill_heal"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_horseback_riding_cc" title="" value="( 3 * ( @{skill_horseback_riding_ranks} + 1 - abs( @{skill_horseback_riding_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_heal_cc" title="" value="( 3 * ( @{skill_heal_ranks} + 1 - abs( @{skill_heal_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n="skill-horseback-riding"></span>
+                                <span data-i18n="skill-heal"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_heal_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_total" title="" disabled="disabled" class="text-strong" value="@{skill_horseback_riding_ranks}+@{skill_horseback_riding_class}+@{skill_horseback_riding_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_horseback_riding_trait}+@{skill_horseback_riding_gift}+@{skill_horseback_riding_temporary}"/>
+                                <input type="number" name="attr_skill_heal_total" title="" disabled="disabled" class="text-strong" value="@{skill_heal_ranks}+@{skill_heal_class}+@{skill_heal_stat}+@{foo_status_skill}+@{skill_heal_trait}+@{skill_heal_gift}+@{skill_heal_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_class" title="" value="@{skill_horseback_riding_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_heal_class" title="" value="@{skill_heal_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_horseback_riding_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_heal_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
-                                        <span data-i18n="attribute-dexterity-short"></span>
+                                        <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_heal_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_heal_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_heal_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_horseback_riding_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_heal_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr data-i18n-list-item="intimidate">
@@ -18007,54 +17915,54 @@
                                 <input type="number" name="attr_skill_knowledge_arcana_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="knowledge-dungeon">
+                        <tr class="template-playable-character" data-i18n-list-item="knowledge-dungeoneering">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_knowledge_dungeon}}} {{test=[[1d20+@{skill_knowledge_dungeon_total}]]}}"
-                                        data-i18n-title="skill-knowledge-dungeon-roll-title"
-                                        name="roll_skill_knowledge_dungeon"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_knowledge_dungeoneering}}} {{test=[[1d20+@{skill_knowledge_dungeoneering_total}]]}}"
+                                        data-i18n-title="skill-knowledge-dungeoneering-roll-title"
+                                        name="roll_skill_knowledge_dungeoneering"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_knowledge_dungeon_cc" title="" value="( 3 * ( @{skill_knowledge_dungeon_ranks} + 1 - abs( @{skill_knowledge_dungeon_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_knowledge_dungeoneering_cc" title="" value="( 3 * ( @{skill_knowledge_dungeoneering_ranks} + 1 - abs( @{skill_knowledge_dungeoneering_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
                                 <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-knowledge-dungeon"></span>
+                                <span data-i18n="skill-knowledge-dungeoneering"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_total" title="" disabled="disabled" class="text-strong" value="@{skill_knowledge_dungeon_ranks}+@{skill_knowledge_dungeon_class}+@{skill_knowledge_dungeon_stat}+@{foo_status_skill}+@{skill_knowledge_dungeon_trait}+@{skill_knowledge_dungeon_gift}+@{skill_knowledge_dungeon_temporary}"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_total" title="" disabled="disabled" class="text-strong" value="@{skill_knowledge_dungeoneering_ranks}+@{skill_knowledge_dungeoneering_class}+@{skill_knowledge_dungeoneering_stat}+@{foo_status_skill}+@{skill_knowledge_dungeoneering_trait}+@{skill_knowledge_dungeoneering_gift}+@{skill_knowledge_dungeoneering_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_class" title="" value="@{skill_knowledge_dungeon_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_class" title="" value="@{skill_knowledge_dungeoneering_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_knowledge_dungeon_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_knowledge_dungeoneering_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_dungeon_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_dungeoneering_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr class="template-playable-character" data-i18n-list-item="knowledge-engineering">
@@ -18357,54 +18265,54 @@
                                 <input type="number" name="attr_skill_knowledge_nobility_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="knowledge-plans">
+                        <tr class="template-playable-character" data-i18n-list-item="knowledge-planes">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_knowledge_plans}}} {{test=[[1d20+@{skill_knowledge_plans_total}]]}}"
-                                        data-i18n-title="skill-knowledge-plans-roll-title"
-                                        name="roll_skill_knowledge_plans"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_knowledge_planes}}} {{test=[[1d20+@{skill_knowledge_planes_total}]]}}"
+                                        data-i18n-title="skill-knowledge-planes-roll-title"
+                                        name="roll_skill_knowledge_planes"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_knowledge_plans_cc" title="" value="( 3 * ( @{skill_knowledge_plans_ranks} + 1 - abs( @{skill_knowledge_plans_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_knowledge_planes_cc" title="" value="( 3 * ( @{skill_knowledge_planes_ranks} + 1 - abs( @{skill_knowledge_planes_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
                                 <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-knowledge-plans"></span>
+                                <span data-i18n="skill-knowledge-planes"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_planes_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_total" title="" disabled="disabled" class="text-strong" value="@{skill_knowledge_plans_ranks}+@{skill_knowledge_plans_class}+@{skill_knowledge_plans_stat}+@{foo_status_skill}+@{skill_knowledge_plans_trait}+@{skill_knowledge_plans_gift}+@{skill_knowledge_plans_temporary}"/>
+                                <input type="number" name="attr_skill_knowledge_planes_total" title="" disabled="disabled" class="text-strong" value="@{skill_knowledge_planes_ranks}+@{skill_knowledge_planes_class}+@{skill_knowledge_planes_stat}+@{foo_status_skill}+@{skill_knowledge_planes_trait}+@{skill_knowledge_planes_gift}+@{skill_knowledge_planes_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_class" title="" value="@{skill_knowledge_plans_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_knowledge_planes_class" title="" value="@{skill_knowledge_planes_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_knowledge_plans_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_knowledge_planes_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_knowledge_planes_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_planes_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_planes_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_knowledge_plans_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_knowledge_planes_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr class="template-playable-character" data-i18n-list-item="knowledge-religion">
@@ -18556,204 +18464,257 @@
                                 <input type="number" name="attr_skill_perception_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="pick-pocketing">
+                        <tr class="template-playable-character" data-i18n-list-item="profession">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_pick_pocketing}}} {{test=[[1d20+@{skill_pick_pocketing_total}]]}}"
-                                        data-i18n-title="skill-pick-pocketing-roll-title"
-                                        name="roll_skill_pick_pocketing"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_profession} @{skill_profession_label}}} {{test=[[1d20+@{skill_profession_total}]]}}"
+                                        data-i18n-title="skill-profession-roll-title"
+                                        name="roll_skill_profession"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_pick_pocketing_cc" title="" value="( 3 * ( @{skill_pick_pocketing_ranks} + 1 - abs( @{skill_pick_pocketing_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_profession_cc" title="" value="((((3 * @{skill_profession_ranks}) + 3) - abs((3 * @{skill_profession_ranks}) - 3)) / 2)"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-pick-pocketing"></span>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_pick_pocketing_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_pick_pocketing_total" title="" disabled="disabled" class="text-strong" value="@{skill_pick_pocketing_ranks}+@{skill_pick_pocketing_cc}+@{skill_pick_pocketing_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_pick_pocketing_trait}+@{skill_pick_pocketing_gift}+@{skill_pick_pocketing_temporary}"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_pick_pocketing_class" title="" value="@{skill_pick_pocketing_cc}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_pick_pocketing_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                <div class="input-group">
                                     <div class="input-group-text">
-                                        <span data-i18n="attribute-dexterity-short"></span>
+                                        <span data-i18n="skill-profession"></span> :
                                     </div>
+                                    <input class="text-left" name="attr_skill_profession_label" title="" type="text"/>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_pick_pocketing_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_profession_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_pick_pocketing_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_profession_total" title="" disabled="disabled" class="text-strong" value="@{skill_profession_ranks}+@{skill_profession_cc}+@{skill_profession_stat}+@{foo_status_skill}+@{skill_profession_trait}+@{skill_profession_gift}+@{skill_profession_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_pick_pocketing_gift" title="" step="1" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_pick_pocketing_temporary" title="" step="1" value="0"/>
-                            </td>
-                        </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="psychology">
-                            <td>
-                                <button
-                                        type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_psychology}}} {{test=[[1d20+@{skill_psychology_total}]]}}"
-                                        data-i18n-title="skill-psychology-roll-title"
-                                        name="roll_skill_psychology"
-                                ></button>
-                            </td>
-                            <td>
-                                <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_psychology_cc" title="" value="( 3 * ( @{skill_psychology_ranks} + 1 - abs( @{skill_psychology_ranks} - 1 ) ) / 2 )"/>
-                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
-                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
-                                </div>
-                            </td>
-                            <td>
-                                <span data-i18n="skill-psychology"></span>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_psychology_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_psychology_total" title="" disabled="disabled" class="text-strong" value="@{skill_psychology_ranks}+@{skill_psychology_cc}+@{skill_psychology_stat}+@{foo_status_skill}+@{skill_psychology_trait}+@{skill_psychology_gift}+@{skill_psychology_temporary}"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_skill_psychology_class" title="" value="@{skill_psychology_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_profession_class" title="" value="@{skill_profession_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_psychology_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_profession_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-wisdom-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_psychology_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_profession_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_psychology_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_profession_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_psychology_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_profession_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_psychology_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_profession_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="sabotage">
+                        <tr class="template-playable-character" data-i18n-list-item="ride">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_sabotage}}} {{test=[[1d20+@{skill_sabotage_total}]]}}"
-                                        data-i18n-title="skill-sabotage-roll-title"
-                                        name="roll_skill_sabotage"
+                                        value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_ride}}} {{test=[[1d20+@{skill_ride_total}]]}}"
+                                        data-i18n-title="skill-ride-roll-title"
+                                        name="roll_skill_ride"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_sabotage_cc" title="" value="( 3 * ( @{skill_sabotage_ranks} + 1 - abs( @{skill_sabotage_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_ride_cc" title="" value="( 3 * ( @{skill_ride_ranks} + 1 - abs( @{skill_ride_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-sabotage"></span>
+                                <span data-i18n="skill-ride"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_ride_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_total" title="" disabled="disabled" class="text-strong" value="@{skill_sabotage_ranks}+@{skill_sabotage_cc}+@{skill_sabotage_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_sabotage_trait}+@{skill_sabotage_gift}+@{skill_sabotage_temporary}"/>
+                                <input type="number" name="attr_skill_ride_total" title="" disabled="disabled" class="text-strong" value="@{skill_ride_ranks}+@{skill_ride_class}+@{skill_ride_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_ride_trait}+@{skill_ride_gift}+@{skill_ride_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_class" title="" value="@{skill_sabotage_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_ride_class" title="" value="@{skill_ride_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_sabotage_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_ride_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-dexterity-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_ride_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_ride_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_ride_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sabotage_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_ride_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="spell-craft">
+                        <tr class="template-playable-character" data-i18n-list-item="sense-motive">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_spell_craft}}} {{test=[[1d20+@{skill_spell_craft_total}]]}}"
-                                        data-i18n-title="skill-spell-craft-roll-title"
-                                        name="roll_skill_spell_craft"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_sense_motive}}} {{test=[[1d20+@{skill_sense_motive_total}]]}}"
+                                        data-i18n-title="skill-sense-motive-roll-title"
+                                        name="roll_skill_sense_motive"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_spell_craft_cc" title="" value="( 3 * ( @{skill_spell_craft_ranks} + 1 - abs( @{skill_spell_craft_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_sense_motive_cc" title="" value="( 3 * ( @{skill_sense_motive_ranks} + 1 - abs( @{skill_sense_motive_ranks} - 1 ) ) / 2 )"/>
+                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
+                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span data-i18n="skill-sense-motive"></span>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_total" title="" disabled="disabled" class="text-strong" value="@{skill_sense_motive_ranks}+@{skill_sense_motive_cc}+@{skill_sense_motive_stat}+@{foo_status_skill}+@{skill_sense_motive_trait}+@{skill_sense_motive_gift}+@{skill_sense_motive_temporary}"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_class" title="" value="@{skill_sense_motive_cc}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <div class="input-group disabled">
+                                    <input type="number" name="attr_skill_sense_motive_stat" title="" value="@{character_wisdom_mod}" disabled="disabled"/>
+                                    <div class="input-group-text">
+                                        <span data-i18n="attribute-wisdom-short"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_trait" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_gift" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sense_motive_temporary" title="" step="1" value="0"/>
+                            </td>
+                        </tr>
+                        <tr class="template-playable-character" data-i18n-list-item="sleight-of-hand">
+                            <td>
+                                <button
+                                        type="roll"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_sleight_of_hand}}} {{test=[[1d20+@{skill_sleight_of_hand_total}]]}}"
+                                        data-i18n-title="skill-sleight-of-hand-roll-title"
+                                        name="roll_skill_sleight_of_hand"
+                                ></button>
+                            </td>
+                            <td>
+                                <div class="waxseal">
+                                    <input type="checkbox" name="attr_skill_sleight_of_hand_cc" title="" value="( 3 * ( @{skill_sleight_of_hand_ranks} + 1 - abs( @{skill_sleight_of_hand_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
                                 <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-spell-craft"></span>
+                                <span data-i18n="skill-sleight-of-hand"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_sleight_of_hand_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_total" title="" disabled="disabled" class="text-strong" value="@{skill_spell_craft_ranks}+@{skill_spell_craft_cc}+@{skill_spell_craft_stat}+@{foo_status_skill}+@{skill_spell_craft_trait}+@{skill_spell_craft_gift}+@{skill_spell_craft_temporary}"/>
+                                <input type="number" name="attr_skill_sleight_of_hand_total" title="" disabled="disabled" class="text-strong" value="@{skill_sleight_of_hand_ranks}+@{skill_sleight_of_hand_cc}+@{skill_sleight_of_hand_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_sleight_of_hand_trait}+@{skill_sleight_of_hand_gift}+@{skill_sleight_of_hand_temporary}"/>
                             </td>
                             <td>
-
-                                <input type="number" name="attr_skill_spell_craft_class" title="" value="@{skill_spell_craft_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_sleight_of_hand_class" title="" value="@{skill_sleight_of_hand_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_spell_craft_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_sleight_of_hand_stat" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
+                                    <div class="input-group-text">
+                                        <span data-i18n="attribute-dexterity-short"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sleight_of_hand_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sleight_of_hand_trait" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sleight_of_hand_gift" title="" step="1" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_sleight_of_hand_temporary" title="" step="1" value="0"/>
+                            </td>
+                        </tr>
+                        <tr class="template-playable-character" data-i18n-list-item="spellcraft">
+                            <td>
+                                <button
+                                        type="roll"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_spellcraft}}} {{test=[[1d20+@{skill_spellcraft_total}]]}}"
+                                        data-i18n-title="skill-spellcraft-roll-title"
+                                        name="roll_skill_spellcraft"
+                                ></button>
+                            </td>
+                            <td>
+                                <div class="waxseal">
+                                    <input type="checkbox" name="attr_skill_spellcraft_cc" title="" value="( 3 * ( @{skill_spellcraft_ranks} + 1 - abs( @{skill_spellcraft_ranks} - 1 ) ) / 2 )"/>
+                                    <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
+                                    <span data-i18n="no" class="waxseal-face waxseal-off"></span>
+                                </div>
+                            </td>
+                            <td>
+                                <span data-i18n-title="skill-required-training-title" class="alert"></span>
+                                <span data-i18n="skill-spellcraft"></span>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_spellcraft_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_skill_spellcraft_total" title="" disabled="disabled" class="text-strong" value="@{skill_spellcraft_ranks}+@{skill_spellcraft_cc}+@{skill_spellcraft_stat}+@{foo_status_skill}+@{skill_spellcraft_trait}+@{skill_spellcraft_gift}+@{skill_spellcraft_temporary}"/>
+                            </td>
+                            <td>
+
+                                <input type="number" name="attr_skill_spellcraft_class" title="" value="@{skill_spellcraft_cc}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <div class="input-group disabled">
+                                    <input type="number" name="attr_skill_spellcraft_stat" title="" value="@{character_intelligence_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-intelligence-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_spellcraft_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_spellcraft_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_spellcraft_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_spell_craft_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_spellcraft_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         <tr data-i18n-list-item="stealth">
@@ -18854,103 +18815,103 @@
                                 <input type="number" name="attr_skill_survival_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr data-i18n-list-item="swimming">
+                        <tr data-i18n-list-item="swim">
                             <td>
                                 <button
                                         type="roll"
-                                        data-i18n-title="skill-swimming-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_swimming}}} {{test=[[1d20+@{skill_swimming_total}]]}}"
-                                        name="roll_skill_swimming"
+                                        data-i18n-title="skill-swim-roll-title"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_swim}}} {{test=[[1d20+@{skill_swim_total}]]}}"
+                                        name="roll_skill_swim"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_swimming_cc" title="" value="( 3 * ( @{skill_swimming_ranks} + 1 - abs( @{skill_swimming_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_swim_cc" title="" value="( 3 * ( @{skill_swim_ranks} + 1 - abs( @{skill_swim_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
-                                <span data-i18n="skill-swimming"></span>
+                                <span data-i18n="skill-swim"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_swim_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_total" title="" disabled="disabled" class="text-strong" value="@{skill_swimming_ranks}+@{skill_swimming_cc}+@{skill_swimming_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_swimming_trait}+@{skill_swimming_gift}+@{skill_swimming_temporary}"/>
+                                <input type="number" name="attr_skill_swim_total" title="" disabled="disabled" class="text-strong" value="@{skill_swim_ranks}+@{skill_swim_cc}+@{skill_swim_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_swim_trait}+@{skill_swim_gift}+@{skill_swim_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_class" title="" value="@{skill_swimming_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_swim_class" title="" value="@{skill_swim_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_swimming_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_swim_stat" title="" value="@{foo_character_strength_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-strength-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_swim_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_swim_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_swim_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swimming_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_swim_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
-                        <tr class="template-playable-character" data-i18n-list-item="use-of-magic-objects">
+                        <tr class="template-playable-character" data-i18n-list-item="use-magic-device">
                             <td>
                                 <button
                                         type="roll"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_use_of_magic_objects}}} {{test=[[1d20+@{skill_use_of_magic_objects_total}]]}}"
-                                        data-i18n-title="skill-use-of-magic-objects-roll-title"
-                                        name="roll_skill_use_of_magic_objects"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_use_magic_device}}} {{test=[[1d20+@{skill_use_magic_device_total}]]}}"
+                                        data-i18n-title="skill-use-magic-device-roll-title"
+                                        name="roll_skill_use_magic_device"
                                 ></button>
                             </td>
                             <td>
                                 <div class="waxseal">
-                                    <input type="checkbox" name="attr_skill_use_of_magic_objects_cc" title="" value="( 3 * ( @{skill_use_of_magic_objects_ranks} + 1 - abs( @{skill_use_of_magic_objects_ranks} - 1 ) ) / 2 )"/>
+                                    <input type="checkbox" name="attr_skill_use_magic_device_cc" title="" value="( 3 * ( @{skill_use_magic_device_ranks} + 1 - abs( @{skill_use_magic_device_ranks} - 1 ) ) / 2 )"/>
                                     <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                     <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                 </div>
                             </td>
                             <td>
                                 <span data-i18n-title="skill-required-training-title" class="alert"></span>
-                                <span data-i18n="skill-use-of-magic-objects"></span>
+                                <span data-i18n="skill-use-magic-device"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                <input type="number" name="attr_skill_use_magic_device_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_total" title="" disabled="disabled" class="text-strong" value="@{skill_use_of_magic_objects_ranks}+@{skill_use_of_magic_objects_class}+@{skill_use_of_magic_objects_stat}+@{foo_status_skill}+@{skill_use_of_magic_objects_trait}+@{skill_use_of_magic_objects_gift}+@{skill_use_of_magic_objects_temporary}"/>
+                                <input type="number" name="attr_skill_use_magic_device_total" title="" disabled="disabled" class="text-strong" value="@{skill_use_magic_device_ranks}+@{skill_use_magic_device_class}+@{skill_use_magic_device_stat}+@{foo_status_skill}+@{skill_use_magic_device_trait}+@{skill_use_magic_device_gift}+@{skill_use_magic_device_temporary}"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_class" title="" value="@{skill_use_of_magic_objects_cc}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_use_magic_device_class" title="" value="@{skill_use_magic_device_cc}" disabled="disabled"/>
                             </td>
                             <td>
                                 <div class="input-group disabled">
-                                    <input type="number" name="attr_skill_use_of_magic_objects_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
+                                    <input type="number" name="attr_skill_use_magic_device_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                     <div class="input-group-text">
                                         <span data-i18n="attribute-charisma-short"></span>
                                     </div>
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_use_magic_device_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_trait" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_use_magic_device_trait" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_gift" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_use_magic_device_gift" title="" step="1" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_use_of_magic_objects_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_skill_use_magic_device_temporary" title="" step="1" value="0"/>
                             </td>
                         </tr>
                         </tbody>
@@ -18958,7 +18919,7 @@
                 </div>
 
                 <div class="template-playable-character">
-                    <h1 data-i18n="skill-representation-h1"></h1>
+                    <h1 data-i18n="skill-perform-h1"></h1>
                     <div class="skill section">
                         <table>
                             <thead>
@@ -18982,7 +18943,7 @@
                                     <span data-i18n="skill-class-competence-short" data-i18n-title="skill-class-competence-title"></span>
                                 </th>
                                 <th width="8%">
-                                    <span data-i18n="modifier-short" data-i18n-title="skill-representation-modifier-title"></span>
+                                    <span data-i18n="modifier-short" data-i18n-title="skill-perform-modifier-title"></span>
                                 </th>
                                 <th width="8%">
                                     <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
@@ -19002,21 +18963,21 @@
                             </tbody>
                         </table>
 
-                        <fieldset class="repeating_skillrepresentation">
+                        <fieldset class="repeating_skillperform">
                             <table>
                                 <tbody>
                                 <tr>
                                     <td width="1%">
                                         <button
                                                 type="roll"
-                                                value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_representation} @{skill_representation_label_user}}} {{test=[[1d20+@{skill_representation_total}]]}}"
-                                                data-i18n-title="skill-representation-roll-title"
-                                                name="roll_skill_representation"
+                                                value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_perform} @{skill_perform_label_user}}} {{test=[[1d20+@{skill_perform_total}]]}}"
+                                                data-i18n-title="skill-perform-roll-title"
+                                                name="roll_skill_perform"
                                         ></button>
                                     </td>
                                     <td width="1%">
                                         <div class="waxseal">
-                                            <input type="checkbox" name="attr_skill_representation_cc" title="" value="( 3 * ( @{skill_representation_ranks} + 1 - abs( @{skill_representation_ranks} - 1 ) ) / 2 )"/>
+                                            <input type="checkbox" name="attr_skill_perform_cc" title="" value="( 3 * ( @{skill_perform_ranks} + 1 - abs( @{skill_perform_ranks} - 1 ) ) / 2 )"/>
                                             <span data-i18n="yes" class="waxseal-face waxseal-on"></span>
                                             <span data-i18n="no" class="waxseal-face waxseal-off"></span>
                                         </div>
@@ -19026,37 +18987,37 @@
                                             <div class="input-group-text">
                                                 <span data-i18n-title="skill-required-training-title" class="alert"></span>
                                             </div>
-                                            <input class="text-left" name="attr_skill_representation_label_user" title="" type="text">
+                                            <input class="text-left" name="attr_skill_perform_label_user" title="" type="text">
                                         </div>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
+                                        <input type="number" name="attr_skill_perform_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_total" title="" disabled="disabled" class="text-strong" value="@{skill_representation_ranks}+@{skill_representation_cc}+@{skill_representation_stat}+@{foo_status_skill}+@{skill_representation_trait}+@{skill_representation_gift}+@{skill_representation_temporary}"/>
+                                        <input type="number" name="attr_skill_perform_total" title="" disabled="disabled" class="text-strong" value="@{skill_perform_ranks}+@{skill_perform_cc}+@{skill_perform_stat}+@{foo_status_skill}+@{skill_perform_trait}+@{skill_perform_gift}+@{skill_perform_temporary}"/>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_class" title="" value="@{skill_representation_cc}" disabled="disabled"/>
+                                        <input type="number" name="attr_skill_perform_class" title="" value="@{skill_perform_cc}" disabled="disabled"/>
                                     </td>
                                     <td width="8%">
                                         <div class="input-group disabled">
-                                            <input type="number" name="attr_skill_representation_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
+                                            <input type="number" name="attr_skill_perform_stat" title="" value="@{character_charisma_mod}" disabled="disabled"/>
                                             <div class="input-group-text">
                                                 <span data-i18n="attribute-charisma-short"></span>
                                             </div>
                                         </div>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
+                                        <input type="number" name="attr_skill_perform_penalty" title="" value="@{foo_status_skill}" disabled="disabled"/>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_trait" title="" step="1" value="0"/>
+                                        <input type="number" name="attr_skill_perform_trait" title="" step="1" value="0"/>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_gift" title="" step="1" value="0"/>
+                                        <input type="number" name="attr_skill_perform_gift" title="" step="1" value="0"/>
                                     </td>
                                     <td width="8%">
-                                        <input type="number" name="attr_skill_representation_temporary" title="" step="1" value="0"/>
+                                        <input type="number" name="attr_skill_perform_temporary" title="" step="1" value="0"/>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -19116,7 +19077,7 @@
                                 <td width="1%">
                                     <button
                                             type="roll"
-                                            value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_custom} @{skill_custom_label}} {{test=[[1d20+@{skill_custom_total}]]}}"
+                                            value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_skill_custom}@{skill_custom_label}}} {{test=[[1d20+@{skill_custom_total}]]}}"
                                             data-i18n-title="skill-custom-roll-title"
                                             name="roll_skill_custom"
                                     ></button>

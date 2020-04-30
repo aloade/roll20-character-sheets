@@ -71,6 +71,18 @@ html, body {
     text-shadow: none;
 }
 
+
+/* --------------------------------------------------- */
+/* option */
+/* --------------------------------------------------- */
+.charsheet .sheet-option-modal  {
+    margin: 0 5px 0;
+}
+
+.charsheet .sheet-option-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
+}
+
 /* --------------------------------------------------- */
 /* option - template */
 /* --------------------------------------------------- */
@@ -149,6 +161,72 @@ input.sheet-toggle[name="attr_option_health"][value="standard"] ~ div td.sheet-t
 input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div th.sheet-template-health-alternative,
 input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.sheet-template-health-alternative {
     display: table-cell;
+}
+
+/* --------------------------------------------------- */
+/* status */
+/* --------------------------------------------------- */
+.charsheet .sheet-status-modal {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    margin: 0 5px 0;
+    transition: color 0.25s ease;
+}
+
+.charsheet .sheet-status-modal .sheet-modal-checkbox:hover ~ span.sheet-button {
+    color: rgb(255, 255, 255);
+}
+
+.charsheet .sheet-status-button {
+    flex: 0 1 0;
+}
+
+.charsheet .sheet-status-button .sheet-modal {
+    height: 26px;
+}
+
+.charsheet .sheet-status-resume {
+    width: auto;
+    flex: 1 1 auto;
+    height: 26px;
+}
+
+.charsheet .sheet-status-resume input {
+    height: 26px;
+    line-height: 26px;
+    color: rgb(200, 200, 200);
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 4px;
+}
+
+.charsheet .sheet-status-negative-level .sheet-input-group-text span, .charsheet .sheet-status-negative-level input,
+.charsheet .sheet-status-effect {
+    color: rgb(200, 200, 200);
+}
+
+.charsheet .sheet-status-effect {
+    width: 100%;
+    border: none;
+    background: transparent;
+    resize: none;
+    height: calc(100% - 36px);
+    overflow-y: auto;
+    padding: 0;
+    cursor: default;
+    line-height: 20px;
+}
+
+/* --------------------------------------------------- */
+/* status custom */
+/* --------------------------------------------------- */
+.charsheet .sheet-status-custom-modal {
+    margin: 0 5px 0;
+}
+
+.charsheet .sheet-status-custom-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
 }
 
 /* --------------------------------------------------- */
@@ -2081,75 +2159,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 480px;
 }
 
-/* --------------------------------------------------- */
-/* option */
-/* --------------------------------------------------- */
-.charsheet .sheet-option {
-    max-width: 90px;
-    margin: 0 auto;
-    transition: color 0.25s ease;
-}
-
-.charsheet .sheet-option:hover .sheet-modal-label {
-    color: rgb(255, 255, 255);
-}
-
-.charsheet .sheet-option .sheet-modal-label {
-    display: inline-block;
-    width: 100%;
-}
-
-/* --------------------------------------------------- */
-/* status */
-/* --------------------------------------------------- */
-.charsheet .sheet-status {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: stretch;
-    max-width: 630px;
-    margin: 0 auto;
-}
-
-.charsheet .sheet-status-button {
-    flex: 0 1 0;
-}
-
-.charsheet .sheet-status-button .sheet-modal {
-    width: 90px;
-    height: 26px;
-}
-
-.charsheet .sheet-status-resume {
-    width: auto;
-    flex: 1 1 auto;
-    height: 26px;
-}
-
-.charsheet .sheet-status-resume input {
-    height: 26px;
-    line-height: 26px;
-    color: rgb(200, 200, 200);
-    background: rgba(0, 0, 0, 0.4);
-    border-radius: 4px;
-}
-
-.charsheet .sheet-status-negative-level .sheet-input-group-text span, .charsheet .sheet-status-negative-level input,
-.charsheet .sheet-status-effect {
-    color: rgb(200, 200, 200);
-}
-
-.charsheet .sheet-status-effect {
-    width: 100%;
-    border: none;
-    background: transparent;
-    resize: none;
-    height: calc(100% - 36px);
-    overflow-y: auto;
-    padding: 0;
-    cursor: default;
-    line-height: 20px;
-}
 /* --------------------------------------------------- */
 /* rolltemplate */
 /* --------------------------------------------------- */
