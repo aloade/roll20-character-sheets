@@ -101,8 +101,10 @@ html, body {
     line-height: 15px;
 }
 
+/* "text-align-last:center; " chrome hack for 'text-align: center' */
 .charsheet .sheet-text-center {
-    text-align: center;
+    text-align: center !important;
+    text-align-last: center !important;
 }
 
 .charsheet .sheet-text-strong {
@@ -175,12 +177,7 @@ html, body {
     -moz-appearance: textfield;
     -webkit-appearance: textfield;
     appearance: textfield;
-    padding-right: 9px !important;
     cursor: pointer;
-}
-
-.charsheet .sheet-paper select {
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
 }
 
 .charsheet select:-moz-focusring {
@@ -280,7 +277,8 @@ html, body {
     transition: color 0.35s ease;
 }
 
-.sheet-button:hover, .sheet-button:hover select,
+.sheet-button:hover,
+.sheet-button:hover select,
 .sheet-button-switch:hover {
     color: rgb(255, 255, 255);
 }
@@ -305,12 +303,13 @@ html, body {
     line-height: 20px;
 }
 
-.sheet-button select {
+.sheet-button .sheet-input-group select {
     width: 100%;
     color: rgb(246, 226, 195);
-    background: none;
     transition: color 0.35s ease;
-    margin-top: -1px;
+    text-align-last: center;
+    padding-right: 8px;
+    border-bottom: none;
 }
 
 .sheet-button-switch {
@@ -536,7 +535,6 @@ html, body {
     border-image-width: 30px;
     border-image-repeat: stretch;
     width: calc(100% - 20px);
-    padding: 30px;
     border-bottom-left-radius: 8px;
     border-bottom-right-radius: 8px;
     box-shadow: 0 0 9px rgb(20, 20, 20);
@@ -575,7 +573,11 @@ html, body {
     max-width: 880px;
 }
 
-.charsheet .sheet-modal-title span {
+.charsheet .sheet-modal-header {
+    padding: 30px 30px 10px;
+}
+
+.charsheet .sheet-modal-header span {
     display: block;
     text-align: center;
     color: rgb(200, 200, 200);
@@ -584,7 +586,7 @@ html, body {
     font-weight: bold;
 }
 
-.charsheet .sheet-modal-title:after {
+.charsheet .sheet-modal-header:after {
     content: "";
     display: block;
     width: 60%;
@@ -592,6 +594,14 @@ html, body {
     height: 2px;
     background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.5), rgba(0, 0, 0, 0));
     margin: 5px 20% 0;
+}
+
+.charsheet .sheet-modal-body {
+    padding: 0 30px 30px;
+}
+
+.charsheet .sheet-modal-footer {
+    padding: 0 30px 30px;
 }
 
 .charsheet .sheet-modal-dialog h2 {
@@ -630,13 +640,22 @@ html, body {
     color: rgb(200, 200, 200);
 }
 
+/* "text-align-last:center; " chrome hack for 'text-align: center' */
 .charsheet .sheet-modal-dialog input:not([readonly]),
 .charsheet .sheet-modal-dialog select {
     border-bottom: 1px solid rgba(255, 255, 255, 0.15) !important;
 }
 
+.charsheet .sheet-modal-dialog .sheet-input-group input:not([readonly]),
+.charsheet .sheet-modal-dialog .sheet-input-group select {
+    text-align: right;
+    text-align-last: right;
+    padding-right: 20px;
+    height: 26px;
+}
+
 .charsheet .sheet-modal select {
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_light.png") no-repeat center right;
 }
 
 /* accordion */
@@ -1072,7 +1091,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-status-button {
-    flex: 0 1 0;
+    flex: 0 1 auto;
 }
 
 .charsheet .sheet-status-button .sheet-modal {
@@ -1080,7 +1099,6 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-status-resume {
-    width: auto;
     flex: 1 1 auto;
     height: 26px;
 }
@@ -1333,6 +1351,10 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     border-radius: 0;
 }
 
+.charsheet .sheet-paper select {
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
+}
+
 .charsheet .sheet-paper input:disabled, .charsheet input.sheet-disabled {
     cursor: default;
     pointer-events:none;
@@ -1477,7 +1499,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-character-movement table {
+.charsheet .sheet-character-speed table {
     max-width: 840px;
     margin-bottom: 15px;
 }
@@ -1614,12 +1636,12 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 /* magic */
-.charsheet .sheet-caster-level table {
+.charsheet .sheet-caster-level-check table {
     max-width: 600px;
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-spell-risk-failure-arcane-spell table {
+.charsheet .sheet-spell-arcane-spell-failure table {
     max-width: 360px;
     margin-bottom: 15px;
 }
