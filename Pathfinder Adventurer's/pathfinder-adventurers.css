@@ -161,7 +161,7 @@ html, body {
     width: auto;
     text-align: center;
     border: none;
-    height: 23px;
+    height: 23px !important;
     margin: 0;
     line-height: 23px;
 }
@@ -303,7 +303,7 @@ html, body {
     line-height: 20px;
 }
 
-.sheet-button .sheet-input-group select {
+.charsheet .sheet-button .sheet-input-group select {
     width: 100%;
     color: rgb(246, 226, 195);
     transition: color 0.35s ease;
@@ -651,7 +651,6 @@ html, body {
     text-align: right;
     text-align-last: right;
     padding-right: 20px;
-    height: 26px;
 }
 
 .charsheet .sheet-modal select {
@@ -933,10 +932,6 @@ html, body {
     border-image-repeat: stretch;
 }
 
-.charsheet .sheet-header .sheet-section + .sheet-section {
-    margin-top: 15px;
-}
-
 .charsheet .sheet-header-character,
 .charsheet .sheet-header-player,
 .charsheet .sheet-header-health span, .charsheet .sheet-header-health input {
@@ -964,8 +959,13 @@ html, body {
     line-height: 30px;
 }
 
+.charsheet .sheet-header-name {
+    margin-bottom: 15px;
+}
+
 .charsheet .sheet-header-health table {
     max-width: 360px;
+    margin-bottom: 15px;
 }
 
 .charsheet .sheet-header-health table th {
@@ -1642,7 +1642,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-spell-arcane-spell-failure table {
-    max-width: 360px;
+    max-width: 480px;
     margin-bottom: 15px;
 }
 
@@ -1867,42 +1867,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-skill {
     max-width: 1200px;
-}
-
-/* feat */
-.charsheet .sheet-feat-racial {}
-
-.charsheet .sheet-feat-racial-content {
-    margin-bottom: 15px;
-}
-
-.charsheet .sheet-feat-racial-label {
-    border-bottom: none !important;
-}
-
-.charsheet .sheet-feat-racial-description {
-    min-height: 240px;
-    height: 240px;
-}
-
-.charsheet .sheet-feat {}
-
-.charsheet .sheet-feat-content {
-    margin-bottom: 15px;
-}
-
-.charsheet .sheet-feat span {
-    display: inline-block;
-}
-
-.charsheet .sheet-feat-description-short {
-    border-bottom: none !important;
-    margin-top: 8px !important;
-}
-
-.charsheet .sheet-feat-description {
-    min-height: 240px;
-    height: 240px;
 }
 
 /* inventory */
@@ -2130,25 +2094,29 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 .charsheet .sheet-paper .sheet-progress input[type="hidden"][value="0.99"] ~ .sheet-progress-bar .sheet-progress-bar-current { width: 99%; background-color: rgb(255, 193, 7); }
 .charsheet .sheet-paper .sheet-progress input[type="hidden"][value="1"] ~ .sheet-progress-bar .sheet-progress-bar-current { width: 100%; background-color: rgb(200, 35, 51); }
 
-.charsheet .sheet-equipment-weapon {
+.charsheet .sheet-weapon {
     max-width: 1080px;
 }
 
-.charsheet .sheet-equipment-weapon .repcontrol {
+.charsheet .sheet-weapon .repcontrol {
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-equipment-armor {
+.charsheet .sheet-armor {
     max-width: 1080px;
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-equipment-armor .repcontrol {
+.charsheet .sheet-armor .repcontrol {
     margin-bottom: 15px;
 }
 
 .charsheet .sheet-equipement {
     max-width: 480px;
+}
+
+.charsheet .sheet-equipement .repcontrol {
+    margin-bottom: 15px;
 }
 
 .charsheet .sheet-equipment-magic table {
@@ -2165,6 +2133,43 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-equipment-magic tbody tr td:first-child {
     text-align: center;
+}
+
+
+/* feat */
+.charsheet .sheet-feat-racial {}
+
+.charsheet .sheet-feat-racial-content {
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-feat-racial-label {
+    border-bottom: none !important;
+}
+
+.charsheet .sheet-feat-racial-description {
+    min-height: 240px;
+    height: 240px;
+}
+
+.charsheet .sheet-feat {}
+
+.charsheet .sheet-feat-content {
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-feat span {
+    display: inline-block;
+}
+
+.charsheet .sheet-feat-description-short {
+    border-bottom: none !important;
+    margin-top: 8px !important;
+}
+
+.charsheet .sheet-feat-description {
+    min-height: 240px;
+    height: 240px;
 }
 
 /* notes */

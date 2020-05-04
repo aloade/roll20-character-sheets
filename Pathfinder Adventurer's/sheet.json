@@ -97,22 +97,13 @@
       "descriptiontranslationkey": "useroptions-experience-rate-description"
     },
     {
-      "attribute": "option_status",
+      "attribute": "option_status_condition",
       "displayname": "",
-      "displaytranslationkey": "useroptions-status",
+      "displaytranslationkey": "useroptions-status-condition",
       "type": "checkbox",
       "value": "1",
       "description": "foo",
-      "descriptiontranslationkey": "useroptions-status-description"
-    },
-    {
-      "attribute": "option_status_wound_threshold",
-      "displayname": "",
-      "displaytranslationkey": "useroptions-status-wound-threshold",
-      "type": "checkbox",
-      "value": "1",
-      "description": "foo",
-      "descriptiontranslationkey": "useroptions-status-wound-threshold-description"
+      "descriptiontranslationkey": "useroptions-status-condition-description"
     },
     {
       "attribute": "option_status_aging",
@@ -133,6 +124,15 @@
       "descriptiontranslationkey": "useroptions-status-armor-penalty-description"
     },
     {
+      "attribute": "option_status_class",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-status-class",
+      "type": "checkbox",
+      "value": "1",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-status-class-description"
+    },
+    {
       "attribute": "option_status_encumbrance",
       "displayname": "",
       "displaytranslationkey": "useroptions-status-encumbrance",
@@ -140,6 +140,24 @@
       "value": "1",
       "description": "foo",
       "descriptiontranslationkey": "useroptions-status-encumbrance-description"
+    },
+    {
+      "attribute": "option_status_nonlethal_damage",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-status-nonlethal-damage",
+      "type": "checkbox",
+      "value": "1",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-status-nonlethal-damage-description"
+    },
+    {
+      "attribute": "option_status_wound_threshold",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-status-wound-threshold",
+      "type": "checkbox",
+      "value": "1",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-status-wound-threshold-description"
     },
     {
       "attribute": "option_unit_movement",
