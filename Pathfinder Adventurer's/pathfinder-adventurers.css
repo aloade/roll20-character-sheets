@@ -634,7 +634,6 @@ html, body {
     height: 26px;
 }
 
-.charsheet .sheet-modal-dialog span:not(.sheet-button-switch-label),
 .charsheet .sheet-modal-dialog input,
 .charsheet .sheet-modal-dialog select {
     color: rgb(200, 200, 200);
@@ -1126,17 +1125,6 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     padding: 0;
     cursor: default;
     line-height: 20px;
-}
-
-/* --------------------------------------------------- */
-/* status custom */
-/* --------------------------------------------------- */
-.charsheet .sheet-status-custom-modal {
-    margin-right: 10px;
-}
-
-.charsheet .sheet-status-custom-modal:hover .sheet-button {
-    color: rgb(255, 255, 255);
 }
 
 /* --------------------------------------------------- */
