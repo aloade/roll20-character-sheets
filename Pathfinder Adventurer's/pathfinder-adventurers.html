@@ -4201,10 +4201,13 @@
     <input type="hidden" name="attr_foo_armor_bonus" value="0" />
     <input type="hidden" name="attr_foo_armor_class_dexterity" value="0" />
 
-
     <input type="hidden" name="attr_foo_skill_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_perform_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
+
+    <input type="hidden" name="attr_foo_npc_strength_mod" value="0" />
+    <input type="hidden" name="attr_foo_npc_dexterity_mod" value="0" />
+
 </div>
 
 <!-- DOM interactions -->
@@ -22297,7 +22300,7 @@
 
             {{#rollGreater() save_used 0}}
             <p>
-                <b><span data-i18n="rt-save" data-i18n-title="rt-save-title"></span></b> :&nbsp;
+                <b><span data-i18n="rt-save"></span></b> :&nbsp;
                 {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
                 {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
                 {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
@@ -22351,7 +22354,7 @@
 
             {{#rollGreater() save_used 0}}
             <p>
-                <b><span data-i18n="rt-save" data-i18n-title="rt-save-title"></span></b> :&nbsp;
+                <b><span data-i18n="rt-save"></span></b> :&nbsp;
                 {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
                 {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
                 {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
