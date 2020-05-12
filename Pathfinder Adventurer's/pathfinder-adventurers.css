@@ -118,8 +118,8 @@ html, body {
 .charsheet .sheet-alert,
 .charsheet .sheet-cogwheel,
 .charsheet .sheet-house,
-.charsheet .sheet-link,
-.charsheet .sheet-newwindow {
+.charsheet .sheet-info-sign,
+.charsheet .sheet-link{
     font-family: "Pictos", sans-serif;
 }
 
@@ -136,16 +136,16 @@ html, body {
     content : "y";
 }
 
+.charsheet .sheet-info-sign::after {
+    content : "i";
+}
+
 .charsheet .sheet-house::after {
     content : "H";
 }
 
 .charsheet .sheet-link::after {
     content : "j";
-}
-
-.charsheet .sheet-newwindow::after {
-    content : "R";
 }
 
 .charsheet small {
@@ -1364,14 +1364,6 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     line-height: 23px;
 }
 
-.charsheet .sheet-paper input,
-.charsheet .sheet-paper select {
-    width: 100%;
-    height: auto;
-    padding: 0;
-    border-radius: 0;
-}
-
 .charsheet .sheet-paper select {
     background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
 }
@@ -1426,7 +1418,9 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_character_dexterity_mod_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_armor_class_dexterity_alert"][value="show"] ~ div input[name="attr_armor_class_dexterity"],
-input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"] {
+input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"],
+input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_npc_strength_total"],
+input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_npc_dexterity_total"] {
     color: rgb(200, 82, 58);
 }
 
@@ -2278,6 +2272,16 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 /* --------------------------------------------------- */
 /* rolltemplate */
 /* --------------------------------------------------- */
+.sheet-rolltemplate-roll .sheet-info-sign {
+    font-family: "Pictos", sans-serif;
+    margin-left: 5px;
+    color: rgb(120, 120, 120);
+}
+
+.sheet-rolltemplate-roll .sheet-info-sign::after {
+    content: "i";
+}
+
 /* generic */
 .sheet-rolltemplate-roll * {
     font-family: "Gloria Hallelujah", "Patrick Hand", sans-serif;
@@ -2299,7 +2303,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-top: 15px;
 }
 
-.sheet-rolltemplate-roll span[title]:not(.inlinerollresult ) {
+.sheet-rolltemplate-roll span[title]:not(.inlinerollresult):not(.sheet-info-sign) {
     text-decoration: underline dashed rgb(50, 50, 50);
     cursor: help;
 }
@@ -2341,7 +2345,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    margin: 0 -8px;
 }
 
 .sheet-rolltemplate-roll .sheet-flex-col {
@@ -2349,7 +2352,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     width: 100%;
     flex-basis: 0;
     flex-grow: 1;
-    padding: 0 8px;
 }
 
 .sheet-rolltemplate-roll .sheet-header {

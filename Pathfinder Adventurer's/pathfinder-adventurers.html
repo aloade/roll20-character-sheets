@@ -319,7 +319,7 @@
                 }
 
                 if ( cache.type === null) {
-                    console.log("["+datalocale()+"] drop ignored for '" + user_string.compendium_name + "'");
+                    console.log("["+datelocale()+"] drop ignored for '" + user_string.compendium_name + "'");
                     delete(cache);
                     delete(user_number);
                     delete(user_string);
@@ -379,14 +379,14 @@
                         payload["npc_treasure"] = user_string.compendium_treasure;
 
                         // attributes
+                        payload["npc_strength_base"] = parseInt(user_string.compendium_strength);
+                        payload["npc_dexterity_base"] = parseInt(user_string.compendium_dexterity);
+                        payload["npc_constitution_base"] = parseInt(user_string.compendium_constitution);
+                        payload["npc_intelligence_base"] = parseInt(user_string.compendium_intelligence);
+                        payload["npc_wisdom_base"] = parseInt(user_string.compendium_wisdom);
+                        payload["npc_charisma_base"] = parseInt(user_string.compendium_charisma);
                         payload["npc_aura"] = user_string.compendium_aura;
-                        payload["npc_charisma"] = parseInt(user_string.compendium_charisma);
-                        payload["npc_constitution"] = parseInt(user_string.compendium_constitution);
-                        payload["npc_dexterity"] = parseInt(user_string.compendium_dexterity);
-                        payload["npc_intelligence"] = parseInt(user_string.compendium_intelligence);
                         payload["npc_reach"] = user_string.compendium_reach;
-                        payload["npc_strength"] = parseInt(user_string.compendium_strength);
-                        payload["npc_wisdom"] = parseInt(user_string.compendium_wisdom);
                         payload["npc_sense"] = user_string.compendium_sense;
                         payload["npc_space"] = user_string.compendium_space;
                         payload["npc_speed"] = user_string.compendium_speed;
@@ -1141,8 +1141,8 @@
         + " change:repeating_statuscustom remove:repeating_statuscustom"
         + " change:health_hit_points_base change:health_hit_points_miscellaneous change:health_hit_points_temporary change:health_hit_points_ceiling change:health_nonlethal_damage_base change:health_nonlethal_damage_temporary"
         + " change:health_wound_points_base change:health_wound_points_temporary change:health_wound_points_ceiling change:health_vigor_base change:health_vigor_temporary change:health_vigor_ceiling"
-        + " change:character_strength_base change:character_strength_race change:character_strength_bonus change:character_strength_penalty change:character_strength_temp"
-        + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_penalty change:character_dexterity_temp"
+        + " change:character_strength_base change:character_strength_race change:character_strength_bonus change:character_strength_penalty change:character_strength_temporary"
+        + " change:character_dexterity_base change:character_dexterity_race change:character_dexterity_bonus change:character_dexterity_penalty change:character_dexterity_temporary"
         + " change:character_stance change:character_creature_size_select change:character_speed_base"
         + " change:character_age change:character_race change:character_age_select"
         + " change:caster_level_rank change:caster_level_miscellaneous change:caster_level_temporary"
@@ -1154,6 +1154,8 @@
         + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_type change:repeating_armor:equipment_armor_dexterity_ceiling change:repeating_armor:equipment_armor_penalty change:repeating_armor:equipment_armor_weight remove:repeating_armor"
         + " change:repeating_equipment:equipment_quantity change:repeating_equipment:equipment_weight remove:repeating_equipment"
         + " change:equipment_magic_head_weight change:equipment_magic_neck_weight change:equipment_magic_body_weight change:equipment_magic_belt_weight change:equipment_magic_wrist_weight change:equipment_magic_hand_weight change:equipment_magic_finger1_weight change:equipment_magic_finger2_weight change:equipment_magic_foot_weight"
+        + " change:npc_strength_base change:npc_strength_bonus change:npc_strength_penalty change:npc_strength_temporary"
+        + " change:npc_dexterity_base change:npc_dexterity_bonus change:npc_dexterity_penalty change:npc_dexterity_temporary"
         , core );
     function core() {
         getAttrsNumber([
@@ -1178,7 +1180,10 @@
             "armor_class_mod_dodge",
             "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "armor_proficiency_shield", "armor_proficiency_shield_tower",
             "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
-            "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight"
+            "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight",
+            "npc_strength_base", "npc_strength_bonus", "npc_strength_penalty", "npc_strength_temporary",
+            "npc_dexterity_base", "npc_dexterity_bonus", "npc_dexterity_penalty", "npc_dexterity_temporary",
+            "npc_constitution_base", "npc_constitution_bonus", "npc_constitution_penalty", "npc_constitution_temporary"
         ], (user_number) => {
             getAttrs([
                 "option_template", "option_health"
@@ -1341,13 +1346,12 @@
 
                                     "speed_base": status.speed_base,
                                     "speed_run_multiplier": 1,
-
-                                    "strength": user_number.character_strength_base + user_number.character_strength_race + user_number.character_strength_bonus - Math.abs(user_number.character_strength_penalty) + user_number.character_strength_temporary,
-                                    "dexterity": user_number.character_dexterity_base + user_number.character_dexterity_race + user_number.character_dexterity_bonus - Math.abs(user_number.character_dexterity_penalty) + user_number.character_dexterity_temporary,
-                                    "constitution": user_number.character_constitution_base + user_number.character_constitution_race + user_number.character_constitution_bonus - Math.abs(user_number.character_constitution_penalty) + user_number.character_constitution_temporary,
-
+                                    "strength": 10,
+                                    "strength_mod": 0,
+                                    "dexterity": 10,
+                                    "dexterity_mod": 0,
+                                    "constitution": 10,
                                     "caster_level_corrected": 0,
-
                                     "armor_class_mod_dodge": user_number.armor_class_mod_dodge,
 
                                     "status_resume": [],
@@ -1357,6 +1361,17 @@
                                     "status_effect_spell": [],
                                     "status_effect_skill": []
                                 };
+                                if ( user_string.option_template !== "npc") { // companion / pc
+                                    cache.strength = user_number.character_strength_base + user_number.character_strength_race + user_number.character_strength_bonus - Math.abs(user_number.character_strength_penalty) + user_number.character_strength_temporary;
+                                    cache.dexterity = user_number.character_dexterity_base + user_number.character_dexterity_race + user_number.character_dexterity_bonus - Math.abs(user_number.character_dexterity_penalty) + user_number.character_dexterity_temporary;
+                                    cache.constitution = user_number.character_constitution_base + user_number.character_constitution_race + user_number.character_constitution_bonus - Math.abs(user_number.character_constitution_penalty) + user_number.character_constitution_temporary;
+                                }
+                                else { // npc
+                                    cache.strength = user_number.npc_strength_base + user_number.npc_strength_bonus - Math.abs(user_number.npc_strength_penalty) + user_number.npc_strength_temporary;
+                                    cache.dexterity = user_number.npc_dexterity_base + user_number.npc_dexterity_bonus - Math.abs(user_number.npc_dexterity_penalty) + user_number.npc_dexterity_temporary;
+                                    cache.constitution = user_number.npc_constitution_base + user_number.npc_constitution_bonus - Math.abs(user_number.npc_constitution_penalty) + user_number.npc_constitution_temporary;
+
+                                }
 
                                 // ------------------------------------------
                                 // unit
@@ -2102,68 +2117,70 @@
                                 // encumbrance + armor malus + dextery ceiling
                                 // need "repeating_[...]", "currency_[...]"
                                 // ------------------------------------------
-                                // purse
-                                encumbrance.total += ( user_number.currency_platinum + user_number.currency_gold + user_number.currency_silver + user_number.currency_copper ) * 0.01;
+                                if ( user_string.option_template !== "npc") {
+                                    // purse
+                                    encumbrance.total += (user_number.currency_platinum + user_number.currency_gold + user_number.currency_silver + user_number.currency_copper) * 0.01;
 
-                                // weapons
-                                Object.keys(repeating_weapon).forEach(id => {
-                                    encumbrance.total += repeating_weapon[id][field.weapon.weight];
-                                });
-                                delete(repeating_weapon);
+                                    // weapons
+                                    Object.keys(repeating_weapon).forEach(id => {
+                                        encumbrance.total += repeating_weapon[id][field.weapon.weight];
+                                    });
 
-                                // armor
-                                Object.keys(repeating_armor).forEach(id => {
-                                    if ( repeating_armor[id][field.armor.worn] === 1 ) {
-                                        if ( user_number.option_status_armor_penalty === 1 ) {
-                                            switch (repeating_armor[id][field.armor.type]) {
-                                                case 1: // light
-                                                    if ( user_number.armor_proficiency_light === 0 ) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                    // armor
+                                    Object.keys(repeating_armor).forEach(id => {
+                                        if (repeating_armor[id][field.armor.worn] === 1) {
+                                            if (user_number.option_status_armor_penalty === 1) {
+                                                switch (repeating_armor[id][field.armor.type]) {
+                                                    case 1: // light
+                                                        if (user_number.armor_proficiency_light === 0) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
 
-                                                case 2: // medium
-                                                    if ( user_number.armor_proficiency_medium === 0 ) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                                    case 2: // medium
+                                                        if (user_number.armor_proficiency_medium === 0) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
 
-                                                case 3: // heavy
-                                                    if ( user_number.armor_proficiency_heavy === 0 ) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                                    case 3: // heavy
+                                                        if (user_number.armor_proficiency_heavy === 0) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
 
-                                                case 4: // shield
-                                                    if ( user_number.armor_proficiency_shield === 0 ) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                                    case 4: // shield
+                                                        if (user_number.armor_proficiency_shield === 0) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
 
-                                                case 5: // tower shield
-                                                    if ( user_number.armor_proficiency_shield_tower === 0 ) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                                    case 5: // tower shield
+                                                        if (user_number.armor_proficiency_shield_tower === 0) encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
 
-                                                case 6: // other
-                                                    encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                                    break;
+                                                    case 6: // other
+                                                        encumbrance.armor_penalty_proficiency -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                        break;
+                                                }
+                                                encumbrance.armor_penalty -= Math.abs(repeating_armor[id][field.armor.malus]);
+                                                if (repeating_armor[id][field.armor.dexterity] !== null) encumbrance.dexterity_ceiling = Math.min(encumbrance.dexterity_ceiling, repeating_armor[id][field.armor.dexterity]);
                                             }
-                                            encumbrance.armor_penalty -= Math.abs(repeating_armor[id][field.armor.malus]);
-                                            if ( repeating_armor[id][field.armor.dexterity] !== null ) encumbrance.dexterity_ceiling = Math.min(encumbrance.dexterity_ceiling, repeating_armor[id][field.armor.dexterity] );
                                         }
-                                    }
-                                    encumbrance.total += repeating_armor[id][field.armor.weight];
-                                });
+                                        encumbrance.total += repeating_armor[id][field.armor.weight];
+                                    });
+
+                                    // equipment
+                                    Object.keys(repeating_equipment).forEach(id => {
+                                        encumbrance.total += repeating_equipment[id][field.equipment.weight] * repeating_equipment[id][field.equipment.quantity];
+                                    });
+
+                                    // equipment magic
+                                    encumbrance.total += user_number.equipment_magic_head_weight;
+                                    encumbrance.total += user_number.equipment_magic_neck_weight;
+                                    encumbrance.total += user_number.equipment_magic_body_weight;
+                                    encumbrance.total += user_number.equipment_magic_belt_weight;
+                                    encumbrance.total += user_number.equipment_magic_wrist_weight;
+                                    encumbrance.total += user_number.equipment_magic_hand_weight;
+                                    encumbrance.total += user_number.equipment_magic_finger1_weight;
+                                    encumbrance.total += user_number.equipment_magic_finger2_weight;
+                                    encumbrance.total += user_number.equipment_magic_foot_weight;
+                                }
+                                delete(repeating_weapon);
                                 delete(repeating_armor);
-
-                                // equipment
-                                Object.keys(repeating_equipment).forEach(id => {
-                                    encumbrance.total += repeating_equipment[id][field.equipment.weight] * repeating_equipment[id][field.equipment.quantity];
-                                });
                                 delete(repeating_equipment);
-
-                                // equipment magic
-                                encumbrance.total += user_number.equipment_magic_head_weight;
-                                encumbrance.total += user_number.equipment_magic_neck_weight;
-                                encumbrance.total += user_number.equipment_magic_body_weight;
-                                encumbrance.total += user_number.equipment_magic_belt_weight;
-                                encumbrance.total += user_number.equipment_magic_wrist_weight;
-                                encumbrance.total += user_number.equipment_magic_hand_weight;
-                                encumbrance.total += user_number.equipment_magic_finger1_weight;
-                                encumbrance.total += user_number.equipment_magic_finger2_weight;
-                                encumbrance.total += user_number.equipment_magic_foot_weight;
 
                                 // ------------------------------------------
                                 // status custom
@@ -2272,7 +2289,7 @@
                                 }
 
                                 // wound threshold
-                                if ( (user_string.option_template === "pc" || user_string.option_template === "npc" ) && user_string.option_health === "standard" && user_number.option_status_wound_threshold === 1 ) {
+                                if ( user_string.option_health === "standard" && user_number.option_status_wound_threshold === 1 ) {
                                     let current = {
                                         "base" : health.hit_points,
                                         "ceiling": health.hit_points_ceiling,
@@ -2384,120 +2401,122 @@
                                 // necessary for CMB height, encumbrance
                                 // ------------------------------------------
                                 cache.strength = Math.min(cache.strength, status.strength_ceiling);
-                                cache.strength_mod = Math.floor(cache.strength / 2 - 5);
                                 cache.dexterity = Math.min(cache.dexterity, status.dexterity_ceiling);
-                                cache.dexterity_mod = Math.min(Math.floor(cache.dexterity / 2 - 5), status.dexterity_mod_ceiling);
 
-                                // ------------------------------------------
-                                // caster level corrected
-                                // need calculated "caster_level"
-                                // ------------------------------------------
-                                cache.caster_level_corrected = Math.max(user_number.caster_level_rank + user_number.caster_level_miscellaneous + user_number.caster_level_temporary + status.caster_level, 0);
+                                if ( user_string.option_template !== "npc") {
+                                    cache.strength_mod = Math.floor(cache.strength / 2 - 5);
+                                    cache.dexterity_mod = Math.min(Math.floor(cache.dexterity / 2 - 5), status.dexterity_mod_ceiling);
+                                    // ------------------------------------------
+                                    // caster level corrected
+                                    // need calculated "caster_level"
+                                    // ------------------------------------------
+                                    cache.caster_level_corrected = Math.max(user_number.caster_level_rank + user_number.caster_level_miscellaneous + user_number.caster_level_temporary + status.caster_level, 0);
 
-                                // ------------------------------------------
-                                // CMB height
-                                // need calculated "dexterity_mod"
-                                // ------------------------------------------
-                                switch (user_number.character_creature_size_select) {
-                                    case 8: // very tiny
-                                    case 4: // tiny
-                                    case 2: // very small
-                                        cache.combat_maneuver_bonus_creature_size = cache.dexterity_mod;
-                                        break;
+                                    // ------------------------------------------
+                                    // CMB height
+                                    // need calculated "dexterity_mod"
+                                    // ------------------------------------------
+                                    switch (user_number.character_creature_size_select) {
+                                        case 8: // very tiny
+                                        case 4: // tiny
+                                        case 2: // very small
+                                            cache.combat_maneuver_bonus_creature_size = cache.dexterity_mod;
+                                            break;
 
-                                    default: // small, standard, big, very big, gigantic, huge
-                                        cache.combat_maneuver_bonus_creature_size = cache.strength_mod;
-                                        break;
-                                }
-
-                                // ------------------------------------------
-                                // encumbrance + armor class dodge bonus
-                                // need calculated "strength",
-                                // need "speed_tactic", "armor_penalty", "dexterity_ceiling", "status.ac_dexterity_ceiling", "cache.armor_class_mod_dodge"
-
-                                // ------------------------------------------
-                                // pathfinder data are badly rounded, in remplacement  :
-                                // light = max / 3
-                                // medium = max * 2 / 3
-                                // Strength in [0;10] : encumbrance = 5 x Strength
-                                // Strength in ]10; Infinity[ : encumbrance = 24.9087 e^( 0.1386 x Strength )
-
-                                // encumbrance max
-                                if ( cache.strength < 11 ) {
-                                    encumbrance.charge_heavy = 10 * cache.strength;
-                                }
-                                else {
-                                    encumbrance.charge_heavy = Math.round(24.9087 * Math.exp(0.1386 * cache.strength));
-                                }
-                                if ( user_number.option_unit_weight === 1 ) encumbrance.charge_heavy = convertUnit(encumbrance.charge_heavy, "lb2kg");
-
-                                // encumbrance max + height & stance
-                                encumbrance.charge_heavy *= local.encumbrance_mode[user_number.character_creature_size_select][user_number.character_stance];
-
-                                //  overcharge
-                                if ( encumbrance.charge_heavy === 0 ) {
-                                    encumbrance.total = 0;
-                                    encumbrance.total_percent = 0;
-                                    encumbrance.charge_light = 0;
-                                    encumbrance.charge_medium = 0;
-                                    encumbrance.charge_heavy = 0;
-                                    encumbrance.type = 1;
-                                }
-                                else {
-                                    encumbrance.total_percent = encumbrance.total / encumbrance.charge_heavy;
-
-                                    // values need to be rounded now for value consistency
-                                    encumbrance.total = +formatNumber(encumbrance.total, 0.01);
-                                    encumbrance.charge_light = +formatNumber(encumbrance.charge_heavy / 3, 0.01);
-                                    encumbrance.charge_medium = +formatNumber(encumbrance.charge_heavy * 2 / 3, 0.01);
-                                    encumbrance.charge_heavy = +formatNumber(encumbrance.charge_heavy, 0.01);
-
-                                    if ( encumbrance.total <= encumbrance.charge_light ) { // light charge
-                                        // void
+                                        default: // small, standard, big, very big, gigantic, huge
+                                            cache.combat_maneuver_bonus_creature_size = cache.strength_mod;
+                                            break;
                                     }
-                                    else if ( encumbrance.total <= encumbrance.charge_medium ) { // medium charge
-                                        cache.status_resume.push(getTranslationByKey("status-charge-medium"));
-                                        if ( encumbrance.total_percent < 0.34 ) encumbrance.total_percent = 0.34; // for progress bar consistency
-                                        if ( user_number.option_status_encumbrance === 1 ) {
-                                            encumbrance.armor_penalty = Math.min(-3, encumbrance.armor_penalty);
-                                            encumbrance.armor_penalty_proficiency = Math.min(-3, encumbrance.armor_penalty_proficiency);
-                                            encumbrance.dexterity_ceiling = Math.min(3, encumbrance.dexterity_ceiling);
-                                            status.speed_tactic = Math.min(2 / 3, status.speed_tactic);
+
+                                    // ------------------------------------------
+                                    // encumbrance + armor class dodge bonus
+                                    // need calculated "strength",
+                                    // need "speed_tactic", "armor_penalty", "dexterity_ceiling", "status.ac_dexterity_ceiling", "cache.armor_class_mod_dodge"
+
+                                    // ------------------------------------------
+                                    // pathfinder data are badly rounded, in remplacement  :
+                                    // light = max / 3
+                                    // medium = max * 2 / 3
+                                    // Strength in [0;10] : encumbrance = 5 x Strength
+                                    // Strength in ]10; Infinity[ : encumbrance = 24.9087 e^( 0.1386 x Strength )
+
+                                    // encumbrance max
+                                    if (cache.strength < 11) {
+                                        encumbrance.charge_heavy = 10 * cache.strength;
+                                    }
+                                    else {
+                                        encumbrance.charge_heavy = Math.round(24.9087 * Math.exp(0.1386 * cache.strength));
+                                    }
+                                    if (user_number.option_unit_weight === 1) encumbrance.charge_heavy = convertUnit(encumbrance.charge_heavy, "lb2kg");
+
+                                    // encumbrance max + height & stance
+                                    encumbrance.charge_heavy *= local.encumbrance_mode[user_number.character_creature_size_select][user_number.character_stance];
+
+                                    //  overcharge
+                                    if (encumbrance.charge_heavy === 0) {
+                                        encumbrance.total = 0;
+                                        encumbrance.total_percent = 0;
+                                        encumbrance.charge_light = 0;
+                                        encumbrance.charge_medium = 0;
+                                        encumbrance.charge_heavy = 0;
+                                        encumbrance.type = 1;
+                                    }
+                                    else {
+                                        encumbrance.total_percent = encumbrance.total / encumbrance.charge_heavy;
+
+                                        // values need to be rounded now for value consistency
+                                        encumbrance.total = +formatNumber(encumbrance.total, 0.01);
+                                        encumbrance.charge_light = +formatNumber(encumbrance.charge_heavy / 3, 0.01);
+                                        encumbrance.charge_medium = +formatNumber(encumbrance.charge_heavy * 2 / 3, 0.01);
+                                        encumbrance.charge_heavy = +formatNumber(encumbrance.charge_heavy, 0.01);
+
+                                        if (encumbrance.total <= encumbrance.charge_light) { // light charge
+                                            // void
                                         }
+                                        else if (encumbrance.total <= encumbrance.charge_medium) { // medium charge
+                                            cache.status_resume.push(getTranslationByKey("status-charge-medium"));
+                                            if (encumbrance.total_percent < 0.34) encumbrance.total_percent = 0.34; // for progress bar consistency
+                                            if (user_number.option_status_encumbrance === 1) {
+                                                encumbrance.armor_penalty = Math.min(-3, encumbrance.armor_penalty);
+                                                encumbrance.armor_penalty_proficiency = Math.min(-3, encumbrance.armor_penalty_proficiency);
+                                                encumbrance.dexterity_ceiling = Math.min(3, encumbrance.dexterity_ceiling);
+                                                status.speed_tactic = Math.min(2 / 3, status.speed_tactic);
+                                            }
 
-                                    }
-                                    else if ( encumbrance.total <= encumbrance.charge_heavy ) {  // heavy charge
-                                        cache.status_resume.push(getTranslationByKey("status-charge-heavy"));
-                                        if ( encumbrance.total_percent < 0.68 ) encumbrance.total_percent = 0.68; // for progress bar consistency
-                                        if ( user_number.option_status_encumbrance === 1 ) {
-                                            encumbrance.armor_penalty = Math.min(-6, encumbrance.armor_penalty);
-                                            encumbrance.armor_penalty_proficiency = Math.min(-6, encumbrance.armor_penalty_proficiency);
-                                            encumbrance.dexterity_ceiling = Math.min(1, encumbrance.dexterity_ceiling);
-                                            status.speed_run_mode = Math.min(3, status.speed_run_mode);
-                                            status.speed_tactic = Math.min(2 / 3, status.speed_tactic);
+                                        }
+                                        else if (encumbrance.total <= encumbrance.charge_heavy) {  // heavy charge
+                                            cache.status_resume.push(getTranslationByKey("status-charge-heavy"));
+                                            if (encumbrance.total_percent < 0.68) encumbrance.total_percent = 0.68; // for progress bar consistency
+                                            if (user_number.option_status_encumbrance === 1) {
+                                                encumbrance.armor_penalty = Math.min(-6, encumbrance.armor_penalty);
+                                                encumbrance.armor_penalty_proficiency = Math.min(-6, encumbrance.armor_penalty_proficiency);
+                                                encumbrance.dexterity_ceiling = Math.min(1, encumbrance.dexterity_ceiling);
+                                                status.speed_run_mode = Math.min(3, status.speed_run_mode);
+                                                status.speed_tactic = Math.min(2 / 3, status.speed_tactic);
+                                            }
+                                        }
+                                        else { // overcharge
+                                            cache.status_resume.push(getTranslationByKey("status-overcharge"));
+                                            encumbrance.total_percent = 1; // for progress bar consistency
+                                            if (user_number.option_status_encumbrance === 1) {
+                                                encumbrance.armor_penalty = Math.min(-6, encumbrance.armor_penalty);
+                                                encumbrance.armor_penalty_proficiency = Math.min(-6, encumbrance.armor_penalty_proficiency);
+                                                encumbrance.dexterity_ceiling = Math.min(1, encumbrance.dexterity_ceiling);
+                                                status.speed_run_mode = 0;
+                                                status.speed_tactic = 0;
+                                            }
                                         }
                                     }
-                                    else { // overcharge
-                                        cache.status_resume.push(getTranslationByKey("status-overcharge"));
-                                        encumbrance.total_percent = 1; // for progress bar consistency
-                                        if ( user_number.option_status_encumbrance === 1 ) {
-                                            encumbrance.armor_penalty = Math.min(-6, encumbrance.armor_penalty);
-                                            encumbrance.armor_penalty_proficiency = Math.min(-6, encumbrance.armor_penalty_proficiency);
-                                            encumbrance.dexterity_ceiling = Math.min(1, encumbrance.dexterity_ceiling);
-                                            status.speed_run_mode = 0;
-                                            status.speed_tactic = 0;
-                                        }
+                                    status.speed_run_mode *= cache.speed_run_multiplier;
+
+                                    status.ac_dexterity_ceiling = Math.min(status.ac_dexterity_ceiling, encumbrance.dexterity_ceiling);
+                                    if (status.ac_dexterity_ceiling === 0) {
+                                        cache.armor_class_mod_dodge = 0;
+                                        status.armor_class_dodge = Math.min(status.armor_class_dodge, 0);
                                     }
-                                }
-                                status.speed_run_mode *= cache.speed_run_multiplier;
 
-                                status.ac_dexterity_ceiling = Math.min(status.ac_dexterity_ceiling, encumbrance.dexterity_ceiling);
-                                if ( status.ac_dexterity_ceiling === 0 ) {
-                                    cache.armor_class_mod_dodge = 0;
-                                    status.armor_class_dodge = Math.min(status.armor_class_dodge, 0);
+                                    if (user_number.option_condition_armor_penalty === 1 && encumbrance.armor_penalty_proficiency !== 0) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
                                 }
-
-                                if ( user_number.option_condition_armor_penalty === 1 && encumbrance.armor_penalty_proficiency !== 0 ) cache.status_resume.push(getTranslationByKey("status-armor-proficiency"));
 
                                 // ------------------------------------------
                                 // status effects
@@ -2515,8 +2534,8 @@
                                         cache.status_effect.push(getTranslationByKey("status-effect-action-no-speed"));
                                     }
                                     else {
-                                        if ( status.speed_base !== cache.speed_base ) cache.status_effect.push(getTranslationByKey("status-effect-action-speed-base").replace("%s", status.speed_base).replace("%u", cache.unit_speed));
-                                        if ( status.speed_tactic !== 1 ) cache.status_effect.push(getTranslationByKey("status-effect-action-speed").replace("%s", status.speed_tactic*100));
+                                        if ( status.speed_base !== cache.speed_base ) cache.status_effect.push(getTranslationByKey("status-effect-action-speed-base").replace("%s", status.speed_base ).replace("%u", cache.unit_speed));
+                                        if ( status.speed_tactic !== 1 ) cache.status_effect.push(getTranslationByKey("status-effect-action-speed").replace("%s", formatNumber(status.speed_tactic*100, 0.01, cache.unit_decimal, cache.unit_thousand) ) );
                                         if ( status.speed_run_mode === 0 ) {
                                             cache.status_effect.push(getTranslationByKey("status-effect-action-no-run"));
                                         }
@@ -2745,10 +2764,17 @@
                                 payload["foo_status_skill"] = status.skill;
                                 payload["foo_status_skill_perception"] = status.skill_perception;
 
-                                payload["foo_character_strength_total"] = cache.strength;
-                                payload["foo_character_strength_mod"] = cache.strength_mod;
-                                payload["foo_character_dexterity_total"] = cache.dexterity;
-                                payload["foo_character_dexterity_mod"] = cache.dexterity_mod;
+                                if ( user_string.option_template !== "npc") { // companion / pc
+                                    payload["foo_character_strength_total"] = cache.strength;
+                                    payload["foo_character_strength_mod"] = cache.strength_mod;
+                                    payload["foo_character_dexterity_total"] = cache.dexterity;
+                                    payload["foo_character_dexterity_mod"] = cache.dexterity_mod;
+                                }
+                                else { // npc
+                                    payload["foo_npc_strength_total"] = cache.strength;
+                                    payload["foo_npc_dexterity_total"] = cache.dexterity;
+                                    payload["foo_npc_constitution_total"] = cache.constitution;
+                                }
                                 payload["character_aging_label"] = aging.label;
                                 payload["foo_character_aging_strength"] = aging.strength;
                                 payload["foo_character_aging_dexterity"] = aging.dexterity;
@@ -4075,13 +4101,6 @@
     }
 </script>
 
-<div>
-    <button type="action" name="act_character" >Character</button>
-    <button type="action" name="act_journal" >Journal</button>
-    <button type="action" name="act_configuration" >Configuration</button>
-</div>
-<input type='hidden' class='sheet-tabstoggle' name='attr_sheetTab'  value='character'  />
-
 <div class="locale">
     <!-- translation -->
     <span data-i18n="language"></span>
@@ -4261,8 +4280,9 @@
     <input type="hidden" name="attr_foo_skill_perform_ranks_total" value ="0" />
     <input type="hidden" name="attr_foo_skill_custom_ranks_total" value ="0" />
 
-    <input type="hidden" name="attr_foo_npc_strength_mod" value="0" />
-    <input type="hidden" name="attr_foo_npc_dexterity_mod" value="0" />
+    <input type="hidden" name="attr_foo_npc_strength_total" value="0" />
+    <input type="hidden" name="attr_foo_npc_dexterity_total" value="0" />
+    <input type="hidden" name="attr_foo_npc_constitution_total" value="0" />
 
 </div>
 
@@ -6846,7 +6866,7 @@
                                 <span data-i18n="class-skills-per-level-short" data-i18n-title="class-skills-per-level-title"></span>
                             </th>
                             <th colspan="4" width="30.769231%">
-                                <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus-title"></span>
+                                <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus"></span>
                             </th>
                             <th width="7.692308%">
                                 <span data-i18n="save-reflex-short" data-i18n-title="save-reflex-title"></span>
@@ -7409,7 +7429,7 @@
                                                                 <span data-i18n="battle-attack-short" data-i18n-title="battle-attack-title"></span>
                                                             </th>
                                                             <th width="11.111111%">
-                                                                <span data-i18n="base-attack-bonus-short" data-i18n-title="battle-base-attack-bonus-title"></span>
+                                                                <span data-i18n="base-attack-bonus-short" data-i18n-title="battle-base-attack-bonus"></span>
                                                             </th>
                                                             <th width="11.111111%">
                                                                 <span data-i18n="modifier-short" data-i18n-title="battle-modifier-range-title"></span>
@@ -13198,10 +13218,6 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <p>
-                    points de vie <input type="text" name="attr_npc_hit_points" title="" /><br />
-                </p>
-
                 <div class="section template-health-standard">
                     <div class="flex-row">
                         <div class="flex-col7">
@@ -13252,6 +13268,13 @@
                                 </tr>
                                 </tbody>
                             </table>
+                            <div class="input-group">
+                                <div class="input-group-text">
+                                    <span data-i18n="hit-points"></span>
+                                </div>
+                                <input type="text" name="attr_npc_hit_points" title="" /><br />
+                            </div>
+
                         </div>
                         <div class="flex-col5">
                             <h1 data-i18n="health-nonlethal-damage-h1"></h1>
@@ -13365,7 +13388,7 @@
                     </div>
                 </div>
 
-                <h1>Caractéristiques</h1>
+                <h1 data-i18n="attribute-h1"></h1>
                 <div class="section npc-attribute">
                     <table>
                         <thead>
@@ -13377,7 +13400,7 @@
                                 <span data-i18n="attribute-short" data-i18n-title="attribute-title"></span>
                             </th>
                             <th width="14.285714%">
-                                <span data-i18n="modifier-short" data-i18n-title="attribute-modifier-title"></span>
+                                <span data-i18n="total" data-i18n-title="npc-attribute-total-title"></span>
                             </th>
                             <th width="14.285714%">
                                 <span data-i18n="modifier-status" data-i18n-title="modifier-status-title"></span>
@@ -13402,20 +13425,20 @@
                                         name="roll_npc_attribute_strength"
                                         type="roll"
                                         data-i18n-title="attribute-strength-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_strength}}} {{test=[[1d20+@{npc_strength_mod}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_strength}}} {{test=[[1d20+@{foo_npc_dexterity_total}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-strength"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_strength_mod" title="" class="text-strong" value="@{foo_npc_strength_mod}" disabled="disabled" />
+                                <input type="number" name="attr_npc_strength_total" title="" class="text-strong" value="@{foo_npc_strength_total}" disabled="disabled" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_strength_modifier_status" title="" value="@{foo_status_strength}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_strength" title="" min="0" step="1" value="10"/>
+                                <input type="number" name="attr_npc_strength_base" title="" min="0" step="1" value="10"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_strength_bonus" title="" min="0" step="1" value="0"/>
@@ -13433,20 +13456,20 @@
                                         name="roll_npc_attribute_dexterity"
                                         type="roll"
                                         data-i18n-title="attribute-dexterity-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_npc_dexterity_mod}+@{foo_status_encumbrance_proficiency}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_npc_dexterity_total}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-dexterity"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_dexterity_mod" title="" class="text-strong" value="@{foo_npc_dexterity_mod}" disabled="disabled" />
+                                <input type="number" name="attr_npc_dexterity_total" title="" class="text-strong" value="@{foo_npc_dexterity_total}" disabled="disabled" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_dexterity_modifier_status" title="" value="@{foo_status_dexterity}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_dexterity" title="" min="0" step="1" value="10"/>
+                                <input type="number" name="attr_npc_dexterity_base" title="" min="0" step="1" value="10"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_dexterity_bonus" title="" min="0" step="1" value="0"/>
@@ -13464,20 +13487,20 @@
                                         name="roll_npc_attribute_constitution"
                                         type="roll"
                                         data-i18n-title="attribute-constitution-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_constitution}}} {{test=[[1d20+@{npc_constitution_mod}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_constitution}}} {{test=[[1d20+@{foo_npc_constitution_total}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-constitution"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_constitution_mod" title="" class="text-strong" value="@{npc_constitution_status}+@{npc_constitution}+@{npc_constitution_bonus}+@{npc_constitution_penalty}+@{npc_constitution_temporary}" disabled="disabled" />
+                                <input type="number" name="attr_npc_constitution_total" title="" class="text-strong" value="@{foo_npc_constitution_total}" disabled="disabled" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_constitution_status" title="" value="@{foo_status_constitution}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_constitution" title="" min="0" step="1" value="10"/>
+                                <input type="number" name="attr_npc_constitution_base" title="" min="0" step="1" value="10"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_constitution_bonus" title="" min="0" step="1" value="0"/>
@@ -13495,20 +13518,20 @@
                                         name="roll_npc_attribute_intelligence"
                                         type="roll"
                                         data-i18n-title="attribute-intelligence-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_intelligence}}} {{test=[[1d20+@{npc_intelligence_mod}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_intelligence}}} {{test=[[1d20+@{npc_intelligence_total]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-intelligence"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_intelligence_mod" title="" class="text-strong" value="@{npc_intelligence_status}+@{npc_intelligence}+@{npc_intelligence_bonus}+@{npc_intelligence_penalty}+@{npc_intelligence_temporary}" disabled="disabled" />
+                                <input type="number" name="attr_npc_intelligence_total" title="" class="text-strong" value="@{npc_intelligence_status}+@{npc_intelligence_base}+@{npc_intelligence_bonus}+@{npc_intelligence_penalty}+@{npc_intelligence_temporary}" disabled="disabled" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_intelligence_status" title="" value="@{foo_status_intelligence}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_intelligence" title="" min="0" step="1" value="10"/>
+                                <input type="number" name="attr_npc_intelligence_base" title="" min="0" step="1" value="10"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_intelligence_bonus" title="" min="0" step="1" value="0"/>
@@ -13526,20 +13549,20 @@
                                         name="roll_npc_attribute_wisdom"
                                         type="roll"
                                         data-i18n-title="attribute-wisdom-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_wisdom}}} {{test=[[1d20+@{npc_wisdom_mod}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_wisdom}}} {{test=[[1d20+@{npc_wisdom_total}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-wisdom"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_wisdom_mod" title="" class="text-strong" value="@{npc_wisdom_status}+@{npc_wisdom}+@{npc_wisdom_bonus}+@{npc_wisdom_penalty}+@{npc_wisdom_temporary}" disabled="disabled" />
+                                <input type="number" name="attr_npc_wisdom_total" title="" class="text-strong" value="@{npc_wisdom_status}+@{npc_wisdom_base}+@{npc_wisdom_bonus}+@{npc_wisdom_penalty}+@{npc_wisdom_temporary}" disabled="disabled" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_wisdom_status" title="" value="@{foo_status_wisdom}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_wisdom" title="" min="0" step="1" value="10" />
+                                <input type="number" name="attr_npc_wisdom_base" title="" min="0" step="1" value="10" />
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_wisdom_bonus" title="" min="0" step="1" value="0"/>
@@ -13557,20 +13580,20 @@
                                         name="roll_npc_attribute_charisma"
                                         type="roll"
                                         data-i18n-title="attribute-charisma-roll-title"
-                                        value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_charisma}}} {{test=[[1d20+@{npc_charisma_mod}]]}}"
+                                        value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_charisma}}} {{test=[[1d20+@{npc_charisma_total}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
                                 <span data-i18n="attribute-charisma"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_charisma_mod" title="" class="text-strong" value="@{npc_charisma_status}+@{npc_charisma}+@{npc_charisma_bonus}+@{npc_charisma_penalty}+@{npc_charisma_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_charisma_total" title="" class="text-strong" value="@{npc_charisma_status}+@{npc_charisma_base}+@{npc_charisma_bonus}+@{npc_charisma_penalty}+@{npc_charisma_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_charisma_status" title="" value="@{foo_status_charisma}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_charisma" title="" min="0" step="1" value="10"/>
+                                <input type="number" name="attr_npc_charisma_base" title="" min="0" step="1" value="10"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_charisma_bonus" title="" min="0" step="1" value="0"/>
@@ -13585,13 +13608,13 @@
                     </table>
                 </div>
 
-                <h1>Physionomie</h1>
+                <h1 data-i18n="character-appearance-h1"></h1>
                 <div class="section">
                     <table>
                         <tbody>
                         <tr>
                             <td width="20%">
-                                Taille
+                                <span data-i18n="character-height"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_size" title="" />
@@ -13599,7 +13622,7 @@
                         </tr>
                         <tr>
                             <td>
-                                aura
+                                aura*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_aura" title="" />
@@ -13607,7 +13630,7 @@
                         </tr>
                         <tr>
                             <td>
-                                langues parlées
+                                <span data-i18n="language"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_languages" title="" />
@@ -13615,7 +13638,7 @@
                         </tr>
                         <tr>
                             <td>
-                                alignement
+                                <span data-i18n="character-alignment"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_alignment" title="" />
@@ -13623,7 +13646,7 @@
                         </tr>
                         <tr>
                             <td>
-                                sense
+                                sense*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_sense" title="" />
@@ -13631,7 +13654,7 @@
                         </tr>
                         <tr>
                             <td>
-                                type
+                                type*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_creature_type" title="" />
@@ -13639,7 +13662,7 @@
                         </tr>
                         <tr>
                             <td>
-                                class
+                                class*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_npc_class" title="" />
@@ -13649,18 +13672,18 @@
                     </table>
                 </div>
 
-                <h1>Mouvements</h1>
+                <h1 data-i18n="speed-h1"></h1>
                 <table>
                     <thead>
                     <tr>
                         <th>
-                            <span>Espace occupé</span>
+                            <span>Espace occupé*</span>
                         </th>
                         <th>
-                            <span>Allonge</span>
+                            <span>Allonge*</span>
                         </th>
                         <th>
-                            <span>vitesse</span>
+                            <span>vitesse*</span>
                         </th>
                     </tr>
                     </thead>
@@ -13687,13 +13710,13 @@
         <div class="tab-content">
             <div class="paper">
                 <div class="section">
-                    <h1>Attack</h1>
+                    <h1 data-i18n="battle-attacks-h1"></h1>
                     <div class="section">
                         <table>
                             <tbody>
                             <tr>
                                 <td width="20%">
-                                    initiative
+                                    <span data-i18n="initiative"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_initiative" title="" />
@@ -13701,7 +13724,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Base Attack Bonus
+                                    <span data-i18n="base-attack-bonus"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_base_attack_bonus" title="" />
@@ -13709,7 +13732,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    melee attacks
+                                    melee attacks*
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_melee_attack" title="" />
@@ -13717,7 +13740,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    ranged attacks
+                                    ranged attacks*
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_ranged_attack" title="" />
@@ -13737,32 +13760,32 @@
                 </div>
 
                 <div class="section">
-                    <h1>Magic</h1>
+                    <h1 data-i18n="status-spell-h1"></h1>
                     <div class="section">
                         <table>
                             <tbody>
                             <tr>
                                 <td width="20%">
-                                    spell like ability
+                                    spell like ability*
                                 </td>
                                 <td>
-                                    <input type="text" name="attr_npc_spell_like_ability" title="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    Spells prepared
-                                </td>
-                                <td>
-                                    <input type="text" name="attr_npc_cleric_spell_prepared" title="" />
+                                    <textarea type="text" name="attr_npc_spell_like_ability" title=""></textarea>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    spell known
+                                    Spells prepared*
                                 </td>
                                 <td>
-                                    <input type="text" name="attr_npc_spell_known" title="" />
+                                    <textarea type="text" name="attr_npc_cleric_spell_prepared" title=""></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    spell known*
+                                </td>
+                                <td>
+                                    <textarea type="text" name="attr_npc_spell_known" title=""></textarea>
                                 </td>
                             </tr>
                             </tbody>
@@ -13771,13 +13794,13 @@
                 </div>
 
                 <div class="section">
-                    <h1>Feat</h1>
+                    <h1 data-i18n="skill-feat"></h1>
                     <div class="section">
                         <table>
                             <tbody>
                             <tr>
                                 <td width="20%">
-                                    feat
+                                    <span data-i18n="skill-feat"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_feat" title="" />
@@ -13785,7 +13808,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    feat modifier
+                                    feat modifier*
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_racial_modifier" title="" />
@@ -13793,7 +13816,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    special quality
+                                    special quality*
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_special_quality" title="" />
@@ -13804,13 +13827,13 @@
                     </div>
                 </div>
 
-                <h1>Skill</h1>
+                <h1 data-i18n="skill-h1"></h1>
                 <div class="section">
                     <table>
                         <tbody>
                         <tr>
                             <td width="20%">
-                                skill
+                                <span data-i18n="skill-h1"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_skill" title="" />
@@ -13962,7 +13985,7 @@
                         <tbody>
                         <tr>
                             <td width="20%">
-                                armor class
+                                <span data-i18n="armor-class-h1"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_armor_class" title="" />
@@ -14016,7 +14039,6 @@
                                 <input type="text" name="attr_npc_immune" title="" />
                             </td>
                         </tr>
-                        </tr>
                         <tr>
                             <td>
                                 weakness
@@ -14024,7 +14046,6 @@
                             <td>
                                 <input type="text" name="attr_npc_weakness" title="" />
                             </td>
-                        </tr>
                         </tr>
                         <tr>
                             <td>
@@ -14134,13 +14155,13 @@
 
 <rolltemplate class="sheet-rolltemplate-roll">
     {{#roll_basic}}
-    <div class="sheet-basic">
-        <div class="sheet-header">
+    <div class="basic">
+        <div class="header">
             <p>
-                <b title="{{status}}">{{name}}</b>
+                <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
             </p>
         </div>
-        <div class="sheet-body">
+        <div class="body">
             <p>
                 <b>{{label}}</b> : {{test}}
             </p>
@@ -14149,58 +14170,58 @@
     {{/roll_basic}}
 
     {{#roll_battle_aiming}}
-    <div class="sheet-battle">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="battle">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}<br />
                     <b><span data-i18n="rt-attack-short" data-i18n-title="rt-attack"></span></b> : {{test}}<br />
                     {{#rollWasCrit() test}}<b><span data-i18n="rt-critical-confirmation-short" data-i18n-title="rt-critical-confirmation-title"></span></b> : {{test_critic}}<br />{{/rollWasCrit() test}}
                 </p>
             </div>
-            <div class="sheet-flex-col sheet-right">
+            <div class="flex-col right">
                 <p>
-                    <b title="{{target_status}}">{{target_name}}</b>
+                    <b title="{{target_status}}">{{target_name}}</b>{{#target_status}}<span class="info-sign" title="{{target_status}}"></span>{{/target_status}}
                 </p>
             </div>
         </div>
 
-        {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
-        <div class="sheet-body">
+        {{#rollWasCrit() test}}<div class="critic">{{/rollWasCrit() test}}
+        <div class="body">
             <p>
                 <b>{{attack_name}}</b><br />
                 <!-- FUMBLE -->
                 {{#rollWasFumble() test}}
-                <span class="sheet-text-danger" data-i18n="rt-fumble"></span>
+                <span class="text-danger" data-i18n="rt-fumble"></span>
                 {{/rollWasFumble() test}}
                 <!-- FUMBLE -->
-
                 <!-- NOT FUMBLE -->
                 {{#^rollWasFumble() test}}
-
-                <!-- SUCCESS -->
+                <!-- NOT CRITIC -->
                 {{#^rollWasCrit() test}}
+                <!-- NOT CRITIC, FAILED -->
                 {{#rollLess() test target_ac}}<span data-i18n="rt-missed"></span>{{/rollLess() test target_ac}}
+                <!-- NOT CRITIC, FAILED -->
+                <!-- NOT CRITIC, SUCCESS -->
                 {{#^rollLess() test target_ac}}
                 <span data-i18n="rt-hit"></span><br />
                 <span data-i18n="rt-damage"></span> : {{damage}}<br />
                 {{/^rollLess() test target_ac}}
+                <!-- NOT CRITIC, SUCCESS -->
                 {{/^rollWasCrit() test}}
-                <!-- SUCCESS -->
-
+                <!-- NOT CRITIC -->
                 <!-- CRITIC -->
                 {{#rollWasCrit() test}}
                 {{#rollLess() test_critic target_ac}}
-                <span class="sheet-text-warning" data-i18n="rt-critical-hit-missed"></span><br />
+                <span class="text-warning" data-i18n="rt-critical-hit-missed"></span><br />
                 <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
                 {{/rollLess() test_critic target_ac}}
                 {{#^rollLess() test_critic target_ac}}
-                <span class="sheet-text-success" data-i18n="rt-critical-hit"></span><br />
+                <span class="text-success" data-i18n="rt-critical-hit"></span><br />
                 <b><span data-i18n="rt-damage"></span></b> : {{damage_critic}}<br />
                 {{/^rollLess() test_critic target_ac}}
                 {{/rollWasCrit() test}}
                 <!-- CRITIC -->
-
                 {{/^rollWasFumble() test}}
                 <!-- NOT FUMBLE -->
             </p>
@@ -14210,16 +14231,16 @@
     {{/roll_battle_aiming}}
 
     {{#roll_battle_no_aiming}}
-    <div class="sheet-battle">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="battle">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
                 </p>
             </div>
         </div>
-        {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
-        <div class="sheet-body">
+        {{#rollWasCrit() test}}<div class="critic">{{/rollWasCrit() test}}
+        <div class="body">
             <p>
                 <b>{{attack_name}}</b><br />
                 <b><span data-i18n="rt-attack"></span></b> : {{test}}<br />
@@ -14233,24 +14254,24 @@
     {{/roll_battle_no_aiming}}
 
     {{#roll_battle_damage}}
-    <div class="sheet-battle">
-        {{#is_critic}}<div class="sheet-critic">{{/is_critic}}
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="battle">
+        {{#is_critic}}<div class="critic">{{/is_critic}}
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
                 </p>
             </div>
             {{#target_name}}
-            <div class="sheet-flex-col sheet-right">
+            <div class="flex-col right">
                 <p>
-                    <b title="{{target_status}}">{{target_name}}</b>
+                    <b>{{target_name}}</b>{{#target_status}}<span class="info-sign" title="{{target_status}}"></span>{{/target_status}}
                 </p>
             </div>
             {{/target_name}}
         </div>
 
-        <div class="sheet-body">
+        <div class="body">
             <p>
                 <b>{{attack_name}}</b><br />
                 {{#label}}<b>{{label}}</b><br />{{/label}}
@@ -14262,23 +14283,23 @@
     {{/roll_battle_damage}}
 
     {{#roll_battle_deathblow}}
-    <div class="sheet-battle">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="battle">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
                 </p>
             </div>
             {{#target_name}}
-            <div class="sheet-flex-col sheet-right">
+            <div class="flex-col right">
                 <p>
-                    <b title="{{target_status}}">{{target_name}}</b>
+                    <b>{{target_name}}</b>{{#target_status}}<span class="info-sign" title="{{target_status}}"></span>{{/target_status}}
                 </p>
             </div>
             {{/target_name}}
 
-            <div class="sheet-critic">
-                <div class="sheet-body">
+            <div class="critic">
+                <div class="body">
                     <p>
                         <b>{{attack_name}}</b><br />
                         <b><span data-i18n="rt-deathblow"></span></b><br />
@@ -14295,13 +14316,13 @@
     {{/roll_battle_deathblow}}
 
     {{#roll_caster_level_check}}
-    <div class="sheet-magic">
-        <div class="sheet-header">
+    <div class="magic">
+        <div class="header">
             <p>
-                <b title="{{status}}">{{name}}</b>
+                <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
             </p>
         </div>
-        <div class="sheet-body">
+        <div class="body">
             <p>
                 <b><span data-i18n="rt-caster-level-check-test"></span></b> : {{caster_level}}
             </p>
@@ -14309,208 +14330,55 @@
     </div>
     {{/roll_caster_level_check}}
 
-    {{#roll_incantation_aiming_old}}
-    <div class="sheet-magic">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
-                <p>
-                    <b title="{{status}}">{{name}}</b><br />
-                </p>
-            </div>
-            <div class="sheet-flex-col sheet-right">
-                <p>
-                    <b title="{{target_status}}">{{target_name}}</b><br />
-                </p>
-            </div>
-        </div>
-        <div class="sheet-body">
-            <!-- FUMBLE -->
-            {{#rollWasFumble() failure_spell}}
-            <p>
-                <b>{{label}}</b><br />
-                <b><span data-i18n="rt-arcane-spell-failure-short" data-i18n-title="rt-arcane-spell-failure-title"></span></b> : {{failure_spell}}<br />
-                <span data-i18n="rt-incantation-fumble"></span>
-            </p>
-            {{/rollWasFumble() failure_spell}}
-            <!-- FUMBLE -->
-
-            <!-- NOT FUMBLE -->
-            {{#^rollWasFumble() failure_spell}}
-
-            <!-- FAILED -->
-            {{#^rollGreater() failure_spell failure_spell_total}}
-            <p>
-                <b>{{label}}</b><br />
-                <b><span data-i18n="rt-arcane-spell-failure-short" data-i18n-title="rt-arcane-spell-failure-title"></span></b> : {{failure_spell}} ≤ {{failure_spell_total}}<br />
-                <span data-i18n="rt-incantation-failed"></span>
-            </p>
-            {{/^rollGreater() failure_spell failure_spell_total}}
-            <!-- FAILED -->
-
-            <!-- SUCCESS -->
-            {{#rollGreater() failure_spell failure_spell_total}}
-            {{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}
-            <p>
-                <b>{{label}}</b><br />
-                {{#rollTotal() spell_failure_used 1}}
-                <b><span data-i18n="rt-arcane-spell-failure-short" data-i18n-title="rt-arcane-spell-failure-title"></span></b> : {{failure_spell}} > {{failure_spell_total}}<br />
-                <span data-i18n="rt-incantation-success"></span><br />
-                {{/rollTotal() spell_failure_used 1}}
-            </p>
-            <p>
-                {{#rollTotal() incantation_type 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 1}}
-                {{#rollTotal() incantation_type 2}}{{/rollTotal() incantation_type 2}}
-                {{#rollTotal() incantation_type 3}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 3}}
-                {{#rollTotal() incantation_type 4}}<b><span data-i18n="spell-incantation-standard"></span></b> : {{incantation}}<br />{{/rollTotal() incantation_type 4}}
-
-                <!-- NOT CRITIC -->
-                {{#^rollWasCrit() incantation}}
-                {{#rollLess() incantation target_spell_resistance}}<span data-i18n="rt-incantation-hit-no-effect"></span>{{/rollLess() incantation target_spell_resistance}}
-                {{#^rollLess() incantation target_spell_resistance}}<span data-i18n="rt-incantation-hit"></span>{{/^rollLess() incantation target_spell_resistance}}
-                {{/^rollWasCrit() incantation}}
-                <!-- NOT CRITIC -->
-                <!-- CRITIC -->
-                {{#rollWasCrit() incantation}}
-                <b class="sheet-text-danger"><span data-i18n="rt-incantation-critical-hit"></span></b>
-                {{/rollWasCrit() incantation}}
-                <!-- CRITIC -->
-            </p>
-
-            {{#rollGreater() damage_used 0}}
-            <p>
-                <!-- NOT CRITIC -->
-                {{#^rollWasCrit() incantation}}
-                <b><span data-i18n="rt-damage"></span></b> : {{damage}}
-                {{/^rollWasCrit() incantation}}
-                <!-- NOT CRITIC -->
-                <!-- CRITIC -->
-                {{#rollWasCrit() incantation}}
-                <b><span data-i18n="rt-damage"></span></b> : {{damage_critic}}
-                {{/rollWasCrit() incantation}}
-                <!-- CRITIC -->
-            </p>
-            {{/rollGreater() damage_used 0}}
-
-            {{#rollGreater() effect_used 0}}
-            <p>
-                <!-- NOT CRITIC -->
-                {{#^rollWasCrit() incantation}}
-                <b><span data-i18n="rt-effect"></span></b> : {{effect}}
-                {{/^rollWasCrit() incantation}}
-                <!-- NOT CRITIC -->
-                <!-- CRITIC -->
-                {{#rollWasCrit() incantation}}
-                <b><span data-i18n="rt-effect"></span></b> : {{effect_critic}}
-                {{/rollWasCrit() incantation}}
-                <!-- CRITIC -->
-            </p>
-            {{/rollGreater() effect_used 0}}
-
-            {{#rollGreater() save_used 0}}
-            <p>
-                <b><span data-i18n="rt-save"></span></b> :&nbsp;
-                {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
-                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
-                {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
-                {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
-                {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
-                {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
-                {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
-                {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
-                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
-                <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}
-            </p>
-            {{/rollGreater() save_used 0}}
-
-            {{#rollWasCrit() incantation}}</div>{{/rollWasCrit() incantation}}
-            {{/rollGreater() failure_spell failure_spell_total}}
-            <!-- SUCCESS -->
-
-            {{/^rollWasFumble() failure_spell}}
-            <!-- NOT FUMBLE -->
-        </div>
-
-        <div class="sheet-footer">
-            <p>
-                {{#rollTotal() spell_failure_used 0}}<span data-i18n="rt-arcane-spell-failure-ignore"></span><br />{{/rollTotal() spell_failure_used 0}}
-                {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
-            </p>
-        </div>
-    </div>
-    {{/roll_incantation_aiming_old}}
-
     {{#roll_incantation_aiming}}
-    <div class="sheet-magic">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="magic">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
+                </p>
+            </div>
+            <div class="flex-col right">
+                <p>
+                    <b>{{target_name}}</b>{{#target_status}}<span class="info-sign" title="{{target_status}}"></span>{{/target_status}}
                 </p>
             </div>
         </div>
         <!-- SPELL FAILURE NOT USED -->
         {{#rollTotal() spell_failure_used 0}}
-        {{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}
-        <div class="sheet-body">
+        {{#rollWasCrit() incantation}}<div class="critic">{{/rollWasCrit() incantation}}
+        <div class="body">
             <p>
                 <b>{{label}}</b><br />
-                <span class="sheet-text-disabled" data-i18n="rt-arcane-spell-failure-ignore"></span>
+                <span class="text-disabled" data-i18n="rt-arcane-spell-failure-ignore"></span>
                 <b><span data-i18n="spell-incantation"></span></b> : {{incantation}}<br />
                 <!-- INCANTATION FUMBLE -->
                 {{#rollWasFumble() incantation}}
-                <span class="sheet-text-danger" data-i18n="rt-incantation-fumble"></span>
+                <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
                 {{/rollWasFumble() incantation}}
                 <!-- INCANTATION FUMBLE -->
-                <!-- INCANTATION SUCCESS-->
+                <!-- INCANTATION SUCCESS-FAILED -->
                 {{#^rollWasFumble() incantation}}
-
-                <!-- INCANTATION NOT CRITIC -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC -->
                 {{#^rollWasCrit() incantation}}
-                {{/^rollWasCrit() incantation}}
-                <!-- INCANTATION NOT CRITIC -->
-                <!-- INCANTATION CRITIC -->
-                {{#rollWasCrit() incantation}}
-                {{/rollWasCrit() incantation}}
-                <!-- INCANTATION CRITIC -->
-
-                {{/^rollWasFumble() incantation}}
-                <!-- INCANTATION SUCCESS-->
-
-
-
-
-
-
-                {{#^rollWasCrit() incantation}}
-                <!-- SPELL MISSED -->
-                {{#rollLess() incantation target_spell_resistance}}<span data-i18n="rt-incantation-hit-no-effect"></span><br />{{/rollLess() incantation target_spell_resistance}}
-                <!-- SPELL MISSED -->
-                <!-- SPELL HIT -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, FAILED -->
+                {{#rollLess() incantation target_spell_resistance}}
+                <span data-i18n="rt-incantation-failed"></span><br />
+                {{/rollLess() incantation target_spell_resistance}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, FAILED -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS -->
                 {{#^rollLess() incantation target_spell_resistance}}
-                <span data-i18n="rt-incantation-hit"></span><br />
-                {{/^rollWasCrit() incantation}}
-                {{#rollWasCrit() incantation}}<span class="sheet-text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
-
-                {{#rollGreater() touch_used 0}}
+                <span data-i18n="rt-incantation-success"></span><br />
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NO -->
+                {{#^rollGreater() touch_used 0}}
                 <br />
-                {{#rollTotal() touch_used 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 1}}
-                {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
-                {{/rollGreater() touch_used 0}}
-
                 {{#rollGreater() damage_used 0}}
-                <br />
-                {{#^rollWasCrit() incantation}}<b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />{{/^rollWasCrit() incantation}}
-                {{#rollWasCrit() incantation}}<b><span data-i18n="rt-damage"></span></b> : {{damage_critic}}<br />{{/rollWasCrit() incantation}}
+                <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
                 {{/rollGreater() damage_used 0}}
-
                 {{#rollGreater() effect_used 0}}
-                <br />
-                {{#^rollWasCrit() incantation}}<b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />{{/^rollWasCrit() incantation}}
-                {{#rollWasCrit() incantation}}<b><span data-i18n="rt-effect"></span></b> : {{effect_critic}}<br />{{/rollWasCrit() incantation}}
+                <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
                 {{/rollGreater() effect_used 0}}
-
                 {{#rollGreater() save_used 0}}
-                <br />
                 <b><span data-i18n="rt-save"></span></b> :&nbsp;
                 {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
                 {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
@@ -14523,20 +14391,142 @@
                 {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
                 <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
                 {{/rollGreater() save_used 0}}
-
+                {{/^rollGreater() touch_used 0}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NO -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED-->
+                {{#rollGreater() touch_used 0}}
+                <br />
+                {{#rollTotal() touch_used 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 1}}
+                {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, FUMBLE -->
+                {{#rollWasFumble() touch}}
+                <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
+                {{/rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, FUMBLE -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE-->
+                {{#^rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC-->
+                {{#^rollWasCrit() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NOT FUMBLE, NOT CRITIC, FAILED -->
+                {{#rollLess() touch target_armor_class_touch}}<span data-i18n="rt-incantation-failed"></span><br />{{/rollLess() touch target_armor_class_touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, FAILED -->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, SUCCESS -->
+                {{#^rollLess() touch target_armor_class_touch}}
+                <span data-i18n="rt-incantation-success"></span><br />
+                <br />
+                {{#rollGreater() damage_used 0}}
+                <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
+                {{/rollGreater() damage_used 0}}
+                {{#rollGreater() effect_used 0}}
+                <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                {{/rollGreater() effect_used 0}}
+                {{#rollGreater() save_used 0}}
+                <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                {{/rollGreater() save_used 0}}
+                {{/^rollLess() touch target_armor_class_touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, SUCCESS -->
+                {{/^rollWasCrit() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC-->
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, CRITIC-->
+                {{#rollWasCrit() touch}}
+                <span data-i18n="rt-incantation-critic"></span><br />
+                <br />
+                {{#rollGreater() damage_used 0}}
+                <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
+                {{/rollGreater() damage_used 0}}
+                {{#rollGreater() effect_used 0}}
+                <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                {{/rollGreater() effect_used 0}}
+                {{#rollGreater() save_used 0}}
+                <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                {{/rollGreater() save_used 0}}
+                {{/rollWasCrit() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, CRITIC-->
+                {{/^rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE -->
+                {{/rollGreater() touch_used 0}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED -->
                 {{/^rollLess() incantation target_spell_resistance}}
-                <!-- SPELL HIT -->
-
-
-
-
-
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS -->
+                {{/^rollWasCrit() incantation}}
+                <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC -->
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC -->
+                {{#rollWasCrit() incantation}}
+                <span class="text-success" data-i18n="rt-incantation-critic"></span><br />
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED -->
+                {{#rollGreater() touch_used 0}}
+                <br />
+                {{#rollTotal() touch_used 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 1}}
+                {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, FUMBLED -->
+                {{#rollWasFumble() touch}}
+                <span data-i18n="rt-incantation-fumbled"></span><br />
+                {{/rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, FUMBLED -->
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED -->
+                {{#^rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, FAILED -->
+                {{#rollLess() touch target_armor_class_touch}}
+                <span data-i18n="rt-incantation-failed"></span><br />
+                {{/rollLess() touch target_armor_class_touch}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, FAILED -->
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, SUCCESS -->
+                {{#^rollLess() touch target_armor_class_touch}}
+                <span data-i18n="rt-incantation-success"></span><br />
+                {{/^rollLess() touch target_armor_class_touch}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, SUCCESS -->
+                {{/^rollWasFumble() touch}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED -->
+                {{/rollGreater() touch_used 0}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED -->
+                <br />
+                {{#rollGreater() damage_used 0}}
+                <b><span data-i18n="rt-damage-critic"></span></b> : {{damage_critic}}<br />}}
+                {{/rollGreater() damage_used 0}}
+                {{#rollGreater() effect_used 0}}
+                <b><span data-i18n="rt-effect"></span></b> : {{effec}}<br />
+                {{/rollGreater() effect_used 0}}
+                {{#rollGreater() save_used 0}}
+                <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                {{/rollGreater() save_used 0}}
+                {{/rollWasCrit() incantation}}
+                <!-- INCANTATION SUCCESS-FAILED, CRITIC -->
                 {{/^rollWasFumble() incantation}}
-                <!-- INCANTATION SUCCESS-->
+                <!-- INCANTATION SUCCESS-FAILED -->
             </p>
         </div>
 
-        <div class="sheet-footer">
+        <div class="footer">
             <p>
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
@@ -14547,20 +14537,19 @@
 
         <!-- SPELL FAILURE USED -->
         {{#rollTotal() spell_failure_used 1}}
-        {{#^rollWasFumble() spell_failure}}{{#rollGreater() spell_failure spell_failure_total}}{{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}{{/rollGreater() spell_failure spell_failure_total}}{{/^rollWasFumble() spell_failure}}
-        <div class="sheet-body">
+        {{#^rollWasFumble() spell_failure}}{{#rollGreater() spell_failure spell_failure_total}}{{#rollWasCrit() incantation}}<div class="critic">{{/rollWasCrit() incantation}}{{/rollGreater() spell_failure spell_failure_total}}{{/^rollWasFumble() spell_failure}}
+        <div class="body">
             <!-- SPELL FUMBLE -->
             {{#rollWasFumble() spell_failure}}
             <div>
                 <p>
                     <b>{{label}}</b><br />
                     <b><span data-i18n="rt-arcane-spell-failure-short" data-i18n-title="rt-arcane-spell-failure-title"></span></b> : {{spell_failure}}<br />
-                    <span data-i18n="rt-incantation-failed"></span>
+                    <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
                 </p>
             </div>
             {{/rollWasFumble() spell_failure}}
             <!-- SPELL FUMBLE -->
-
             <!-- SPELL SUCCESS-FAILED -->
             {{#^rollWasFumble() spell_failure}}
             <div>
@@ -14573,7 +14562,6 @@
                 </p>
                 {{/^rollGreater() spell_failure spell_failure_total}}
                 <!-- SPELL FAILED -->
-
                 <!-- SPELL SUCCESS -->
                 {{#rollGreater() spell_failure spell_failure_total}}
                 <p>
@@ -14583,22 +14571,177 @@
 
                     <!-- INCANTATION FUMBLE -->
                     {{#rollWasFumble() incantation}}
-                    <span class="sheet-text-danger" data-i18n="rt-incantation-fumble"></span><br />
+                    <span class="text-danger" data-i18n="rt-incantation-fumble"></span><br />
                     {{/rollWasFumble() incantation}}
                     <!-- INCANTATION FUMBLE -->
 
-                    <!-- INCANTATION NO FUMBLE -->
+                    <!-- INCANTATION SUCCESS-FAILED -->
                     {{#^rollWasFumble() incantation}}
-                    {{#^rollWasCrit() incantation}}<span data-i18n="rt-incantation-success"></span><br />{{/^rollWasCrit() incantation}}
-                    {{#rollWasCrit() incantation}}<span class="sheet-text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
-                    <!-- CRITIC -->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC -->
+                    {{#^rollWasCrit() incantation}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, FAILED -->
+                    {{#rollLess() incantation target_spell_resistance}}
+                    <span data-i18n="rt-incantation-failed"></span><br />
+                    {{/rollLess() incantation target_spell_resistance}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, FAILED -->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS -->
+                    {{#^rollLess() incantation target_spell_resistance}}
+                    <span data-i18n="rt-incantation-success"></span><br />
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NO -->
+                    {{#^rollGreater() touch_used 0}}
+                    <br />
+                    {{#rollGreater() damage_used 0}}
+                    <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
+                    {{/rollGreater() damage_used 0}}
+                    {{#rollGreater() effect_used 0}}
+                    <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                    {{/rollGreater() effect_used 0}}
+                    {{#rollGreater() save_used 0}}
+                    <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                    {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                    {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                    {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                    {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                    {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                    {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                    {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                    {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                    {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                    <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                    {{/rollGreater() save_used 0}}
+                    {{/^rollGreater() touch_used 0}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NO -->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED-->
                     {{#rollGreater() touch_used 0}}
                     <br />
                     {{#rollTotal() touch_used 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 1}}
-                    {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 2}}
+                    {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, FUMBLE -->
+                    {{#rollWasFumble() touch}}
+                    <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
+                    {{/rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, FUMBLE -->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE-->
+                    {{#^rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC-->
+                    {{#^rollWasCrit() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH NOT FUMBLE, NOT CRITIC, FAILED -->
+                    {{#rollLess() touch target_armor_class_touch}}<span data-i18n="rt-incantation-failed"></span><br />{{/rollLess() touch target_armor_class_touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, FAILED -->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, SUCCESS -->
+                    {{#^rollLess() touch target_armor_class_touch}}
+                    <span data-i18n="rt-incantation-success"></span><br />
+                    <br />
+                    {{#rollGreater() damage_used 0}}
+                    <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
+                    {{/rollGreater() damage_used 0}}
+                    {{#rollGreater() effect_used 0}}
+                    <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                    {{/rollGreater() effect_used 0}}
+                    {{#rollGreater() save_used 0}}
+                    <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                    {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                    {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                    {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                    {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                    {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                    {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                    {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                    {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                    {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                    <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                    {{/rollGreater() save_used 0}}
+                    {{/^rollLess() touch target_armor_class_touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC, SUCCESS -->
+                    {{/^rollWasCrit() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, NOT CRITIC-->
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, CRITIC-->
+                    {{#rollWasCrit() touch}}
+                    <span data-i18n="rt-incantation-critic"></span><br />
+                    <br />
+                    {{#rollGreater() damage_used 0}}
+                    <b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />
+                    {{/rollGreater() damage_used 0}}
+                    {{#rollGreater() effect_used 0}}
+                    <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                    {{/rollGreater() effect_used 0}}
+                    {{#rollGreater() save_used 0}}
+                    <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                    {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                    {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                    {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                    {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                    {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                    {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                    {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                    {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                    {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                    <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                    {{/rollGreater() save_used 0}}
+                    {{/rollWasCrit() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE, CRITIC-->
+                    {{/^rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED, NOT FUMBLE -->
                     {{/rollGreater() touch_used 0}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS, TOUCH USED -->
+                    {{/^rollLess() incantation target_spell_resistance}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC, SUCCESS -->
+                    {{/^rollWasCrit() incantation}}
+                    <!-- INCANTATION SUCCESS-FAILED, NOT CRITIC -->
+
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC -->
+                    {{#rollWasCrit() incantation}}
+                    <span class="text-success" data-i18n="rt-incantation-critic"></span><br />
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED -->
+                    {{#rollGreater() touch_used 0}}
+                    <br />
+                    {{#rollTotal() touch_used 1}}<b><span data-i18n="spell-incantation-melee-touch"></span></b> : {{touch}}<br />{{/rollTotal() touch_used 1}}
+                    {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, FUMBLED -->
+                    {{#rollWasFumble() touch}}
+                    <span data-i18n="rt-incantation-fumbled"></span><br />
+                    {{/rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, FUMBLED -->
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED -->
+                    {{#^rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, FAILED -->
+                    {{#rollLess() touch target_armor_class_touch}}
+                    <span data-i18n="rt-incantation-failed"></span><br />
+                    {{/rollLess() touch target_armor_class_touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, FAILED -->
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, SUCCESS -->
+                    {{#^rollLess() touch target_armor_class_touch}}
+                    <span data-i18n="rt-incantation-success"></span><br />
+                    {{/^rollLess() touch target_armor_class_touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED, SUCCESS -->
+                    {{/^rollWasFumble() touch}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED, NOT FUMBLED -->
+                    {{/rollGreater() touch_used 0}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC, TOUCH USED -->
+                    <br />
+                    {{#rollGreater() damage_used 0}}
+                    <b><span data-i18n="rt-damage-critic"></span></b> : {{damage_critic}}<br />
+                    {{/rollGreater() damage_used 0}}
+                    {{#rollGreater() effect_used 0}}
+                    <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
+                    {{/rollGreater() effect_used 0}}
+                    {{#rollGreater() save_used 0}}
+                    <b><span data-i18n="rt-save"></span></b> :&nbsp;
+                    {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>{{/rollTotal() save_used 1}}
+                    {{#rollTotal() save_used 2}}<span data-i18n="save-reflex"></span>{{/rollTotal() save_used 2}}
+                    {{#rollTotal() save_used 3}}<span data-i18n="save-willpower"></span>{{/rollTotal() save_used 3}},&nbsp;
+                    {{#rollTotal() save 1}}<span data-i18n="spell-save-effect-negates"></span>{{/rollTotal() save 1}}
+                    {{#rollTotal() save 2}}<span data-i18n="spell-save-effect-negates-harmless"></span>{{/rollTotal() save 2}}
+                    {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
+                    {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
+                    {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
+                    {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                    <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
+                    {{/rollGreater() save_used 0}}
+                    {{/rollWasCrit() incantation}}
+                    <!-- INCANTATION SUCCESS-FAILED, CRITIC -->
                     {{/^rollWasFumble() incantation}}
-                    <!-- INCANTATION NO FUMBLE -->
+                    <!-- INCANTATION SUCCESS-FAILED -->
                 </p>
                 {{/rollGreater() spell_failure spell_failure_total}}
                 <!-- SPELL SUCCESS -->
@@ -14607,7 +14750,7 @@
             <!-- SPELL SUCCESS-FAILED -->
         </div>
 
-        <div class="sheet-footer">
+        <div class="footer">
             <p>
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
@@ -14619,36 +14762,36 @@
     {{/roll_incantation_aiming}}
 
     {{#roll_incantation_no_aiming}}
-    <div class="sheet-magic">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="magic">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
                 </p>
             </div>
-            <div class="sheet-flex-col sheet-right">
+            <div class="flex-col right">
                 <p>
-                    <b title="{{target_status}}">{{target_name}}</b><br />
+                    <b>{{target_name}}</b>{{#target_status}}<span class="info-sign" title="{{target_status}}"></span>{{/target_status}}
                 </p>
             </div>
         </div>
         <!-- SPELL FAILURE NOT USED -->
         {{#rollTotal() spell_failure_used 0}}
-        {{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}
-        <div class="sheet-body">
+        {{#rollWasCrit() incantation}}<div class="critic">{{/rollWasCrit() incantation}}
+        <div class="body">
             <p>
                 <b>{{label}}</b><br />
-                <span class="sheet-text-disabled" data-i18n="rt-arcane-spell-failure-ignore"></span>
+                <span class="text-disabled" data-i18n="rt-arcane-spell-failure-ignore"></span>
                 <b><span data-i18n="spell-incantation"></span></b> : {{incantation}}<br />
                 <!-- INCANTATION FUMBLE -->
                 {{#rollWasFumble() incantation}}
-                <span class="sheet-text-danger" data-i18n="rt-incantation-fumble"></span>
+                <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
                 {{/rollWasFumble() incantation}}
                 <!-- INCANTATION FUMBLE -->
                 <!-- INCANTATION SUCCESS-->
                 {{#^rollWasFumble() incantation}}
                 {{#^rollWasCrit() incantation}}<span data-i18n="rt-incantation-success"></span><br />{{/^rollWasCrit() incantation}}
-                {{#rollWasCrit() incantation}}<span class="sheet-text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
+                {{#rollWasCrit() incantation}}<span class="text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
 
                 {{#rollGreater() touch_used 0}}
                 <br />
@@ -14660,7 +14803,7 @@
             </p>
         </div>
 
-        <div class="sheet-footer">
+        <div class="footer">
             <p>
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
@@ -14671,8 +14814,8 @@
 
         <!-- SPELL FAILURE USED -->
         {{#rollTotal() spell_failure_used 1}}
-        {{#^rollWasFumble() spell_failure}}{{#rollGreater() spell_failure spell_failure_total}}{{#rollWasCrit() incantation}}<div class="sheet-critic">{{/rollWasCrit() incantation}}{{/rollGreater() spell_failure spell_failure_total}}{{/^rollWasFumble() spell_failure}}
-        <div class="sheet-body">
+        {{#^rollWasFumble() spell_failure}}{{#rollGreater() spell_failure spell_failure_total}}{{#rollWasCrit() incantation}}<div class="critic">{{/rollWasCrit() incantation}}{{/rollGreater() spell_failure spell_failure_total}}{{/^rollWasFumble() spell_failure}}
+        <div class="body">
             <!-- SPELL FUMBLE -->
             {{#rollWasFumble() spell_failure}}
             <div>
@@ -14707,14 +14850,14 @@
 
                     <!-- INCANTATION FUMBLE -->
                     {{#rollWasFumble() incantation}}
-                    <span class="sheet-text-danger" data-i18n="rt-incantation-fumble"></span><br />
+                    <span class="text-danger" data-i18n="rt-incantation-fumble"></span><br />
                     {{/rollWasFumble() incantation}}
                     <!-- INCANTATION FUMBLE -->
 
                     <!-- INCANTATION NO FUMBLE -->
                     {{#^rollWasFumble() incantation}}
                     {{#^rollWasCrit() incantation}}<span data-i18n="rt-incantation-success"></span><br />{{/^rollWasCrit() incantation}}
-                    {{#rollWasCrit() incantation}}<span class="sheet-text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
+                    {{#rollWasCrit() incantation}}<span class="text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
                     <!-- CRITIC -->
                     {{#rollGreater() touch_used 0}}
                     <br />
@@ -14731,7 +14874,7 @@
             <!-- SPELL SUCCESS-FAILED -->
         </div>
 
-        <div class="sheet-footer">
+        <div class="footer">
             <p>
                 {{#rollTotal() spell_resistance_used 0}}<span data-i18n="rt-spell-resistance-ignore"></span><br />{{/rollTotal() spell_resistance_used 0}}
             </p>
@@ -14743,17 +14886,17 @@
     {{/roll_incantation_no_aiming}}
 
     {{#roll_incantation_effect}}
-    <div class="sheet-magic">
-        {{#is_critic}}<div class="sheet-critic">{{/is_critic}}
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="magic">
+        {{#is_critic}}<div class="critic">{{/is_critic}}
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}
                 </p>
             </div>
         </div>
         <!-- SUCCESS -->
-        <div class="sheet-body">
+        <div class="body">
             <p>
                 <b>{{label}}</b>
                 {{#rollGreater() damage_used 0}}
@@ -14790,26 +14933,26 @@
     {{/roll_incantation_effect}}
 
     {{#roll_concentration}}
-    <div class="sheet-magic">
-        <div class="sheet-header sheet-flex-row">
-            <div class="sheet-flex-col sheet-left">
+    <div class="magic">
+        <div class="header flex-row">
+            <div class="flex-col left">
                 <p>
-                    <b title="{{status}}">{{name}}</b><br />
+                    <b>{{name}}</b>{{#status}}<span class="info-sign" title="{{status}}"></span>{{/status}}<br />
                     {{#difficulty_class}}<b><span data-i18n="rt-difficulty-class"></span></b> : {{difficulty_class}}<br />{{/difficulty_class}}
                 </p>
             </div>
-            <div class="sheet-flex-col sheet-right">
+            <div class="flex-col right">
                 <p>
                     {{#target_name}}<b title="{{target_status}}">{{target_name}}</b><br />{{/target_name}}
                 </p>
             </div>
         </div>
-        {{#rollWasCrit() test}}<div class="sheet-critic">{{/rollWasCrit() test}}
-        <div class="sheet-body">
+        {{#rollWasCrit() test}}<div class="critic">{{/rollWasCrit() test}}
+        <div class="body">
             <p>
                 <b>{{label}}</b>
                 <b>{{label_concentration}}</b> : {{test}}<br />
-                {{#rollLess() test difficulty_class}}<b class="sheet-text-danger"><span data-i18n="rt-concentration-failed"></span></b>{{/rollLess() test difficulty_class}}
+                {{#rollLess() test difficulty_class}}<b class="text-danger"><span data-i18n="rt-concentration-failed"></span></b>{{/rollLess() test difficulty_class}}
                 {{#^rollLess() test difficulty_class}}<span data-i18n="rt-concentration-success"></span>{{/^rollLess() test difficulty_class}}
             </p>
         </div>
