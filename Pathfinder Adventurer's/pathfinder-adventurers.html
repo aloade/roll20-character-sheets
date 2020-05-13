@@ -3779,6 +3779,69 @@
         })
     }
 
+    // transfert armor to "repeating_armorracks"
+    on( "clicked:repeating_armor:armor-to-racks", armor_to_racks_repeating );
+    function armor_to_racks_repeating(event) {
+        // format "repeating_armorracks_-LrcL2qT7lhjZ6BZrble_armor-to-racks"
+        let source = event.sourceAttribute.replace(/armor-to-racks$/, '');
+
+        let field = {
+            "getNumber" : {
+                "type" : "equipment_armor_type",
+                "bonus" : "equipment_armor_armor_bonus",
+                "dexterity_ceiling" : "equipment_armor_dexterity_ceiling",
+                "penalty": "equipment_armor_armor_penalty",
+                "arcane_spell_failure" : "equipment_armor_arcane_spell_failure",
+                "weight" : "equipment_armor_weight"
+            },
+            "getString" : {
+                "name" : "equipment_armor_name",
+                "special" : "equipment_armor_special"
+            },
+            "set" : {
+                "name" : "armor_rack_name",
+                "type" : "armor_rack_type",
+                "bonus" : "armor_rack_armor_bonus",
+                "dexterity_ceiling" : "armor_rack_dexterity_ceiling",
+                "penalty": "armor_rack_armor_penalty",
+                "arcane_spell_failure" : "armor_rack_arcane_spell_failure",
+                "weight" : "armor_rack_weight",
+                "special" : "armor_rack_special"
+            }
+        };
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_armorrack_"+generateRowID()+"_" );
+
+                // prepare payload
+                let payload = {};
+                payload[field.set.name] = user_string[ field.getString.name ];
+                payload[field.set.type] = user_number[ field.getNumber.type ];
+                payload[field.set.bonus] = user_number[ field.getNumber.bonus ];
+                payload[field.set.dexterity_ceiling] = user_number[ field.getNumber.dexterity_ceiling ];
+                payload[field.set.penalty] = user_number[ field.getNumber.penalty ];
+                payload[field.set.arcane_spell_failure] = user_number[ field.getNumber.arcane_spell_failure ];
+                payload[field.set.weight] = user_number[ field.getNumber.weight ];
+                payload[field.set.special] = user_string[ field.getString.special ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // remove object in equipment
+                removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                // note  removeRepeatingRow() don't trigger on("remove:repeating_equipment")
+                setAttrs(payload, {silent:true}, core );
+            });
+        })
+    }
+
     // transfert equipment to "repeating_deposit"
     on( "clicked:repeating_equipment:inventory-to-deposit", inventory_to_deposit_repeating );
     function inventory_to_deposit_repeating(event) {
@@ -3883,6 +3946,70 @@
                 payload[field.set.range] = user_number[ field.getNumber.range ];
                 payload[field.set.range_description] = user_string[ field.getString.range_description ];
                 payload[field.set.damage_type] = user_number[ field.getNumber.damage_type ];
+                payload[field.set.weight] = user_number[ field.getNumber.weight ];
+                payload[field.set.special] = user_string[ field.getString.special ];
+
+                delete(user_number);
+                delete(user_string);
+
+                // remove object in equipment
+                removeRepeatingRow(source.slice(0, -1));
+
+                // send payload
+                // note  removeRepeatingRow() don't trigger on("remove:repeating_equipment")
+                setAttrs(payload);
+            });
+        })
+    }
+
+    // transfert armor to "repeating_armor"
+    on( "clicked:repeating_armorrack:racks-to-armor", racks_to_armor_repeating );
+    function racks_to_armor_repeating(event) {
+        // format "repeating_armorrack_-LrcL2qT7lhjZ6BZrble_racks-to-armor"
+        let source = event.sourceAttribute.replace(/racks-to-armor$/, '');
+
+        let field = {
+            "getNumber" : {
+                "type" : "armor_rack_type",
+                "bonus" : "armor_rack_armor_bonus",
+                "dexterity_ceiling" : "armor_rack_dexterity_ceiling",
+                "penalty": "armor_rack_armor_penalty",
+                "arcane_spell_failure" : "armor_rack_arcane_spell_failure",
+                "weight" : "armor_rack_weight"
+            },
+            "getString" : {
+                "name" : "armor_rack_name",
+                "special" : "armor_rack_special"
+            },
+            "set" : {
+                "name" : "equipment_armor_name",
+                "type" : "equipment_armor_type",
+                "bonus" : "equipment_armor_armor_bonus",
+                "dexterity_ceiling" : "equipment_armor_dexterity_ceiling",
+                "penalty": "equipment_armor_armor_penalty",
+                "arcane_spell_failure" : "equipment_armor_arcane_spell_failure",
+                "weight" : "equipment_armor_weight",
+                "special" : "equipment_armor_special"
+            }
+        };
+
+        field.getNumber = stringAddBegin(field.getNumber, source );
+        field.getString = stringAddBegin(field.getString, source );
+
+        getAttrsNumber(Object.values(field.getNumber), (user_number) => {
+            getAttrs(Object.values(field.getString), (user_string) => {
+                // generate new ID
+                // note : setAttrs() generate new row if doesn't exist
+                field.set = stringAddBegin(field.set, "repeating_armor_"+generateRowID()+"_" );
+
+                // prepare payload
+                let payload = {};
+                payload[field.set.name] = user_string[ field.getString.name ];
+                payload[field.set.type] = user_number[ field.getNumber.type ];
+                payload[field.set.bonus] = user_number[ field.getNumber.bonus ];
+                payload[field.set.dexterity_ceiling] = user_number[ field.getNumber.dexterity_ceiling ];
+                payload[field.set.penalty] = user_number[ field.getNumber.penalty ];
+                payload[field.set.arcane_spell_failure] = user_number[ field.getNumber.arcane_spell_failure ];
                 payload[field.set.weight] = user_number[ field.getNumber.weight ];
                 payload[field.set.special] = user_string[ field.getString.special ];
 
@@ -12468,115 +12595,113 @@
                     </table>
 
                     <fieldset class="repeating_weapon">
-                        <div class="weapon-content">
-                            <table>
-                                <tbody>
-                                <tr>
-                                    <td width="21.428571%">
-                                        <input type="text" name="attr_equipment_weapon_name" title=""/>
-                                    </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <input type="number" name="attr_equipment_weapon_dices_count" title="" min="1" step="1" value="1"/>
-                                            <div class="input-group-text">
-                                                <span data-i18n="dice-short"></span>
-                                            </div>
-                                            <select class="fixed-small" name="attr_equipment_weapon_dices" title="">
-                                                <option value="2" selected="selected">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="6">6</option>
-                                                <option value="8">8</option>
-                                                <option value="10">10</option>
-                                                <option value="12">12</option>
-                                                <option value="20">20</option>
-                                                <option value="100">100</option>
-                                            </select>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td width="21.428571%">
+                                    <input type="text" name="attr_equipment_weapon_name" title=""/>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <input type="number" name="attr_equipment_weapon_dices_count" title="" min="1" step="1" value="1"/>
+                                        <div class="input-group-text">
+                                            <span data-i18n="dice-short"></span>
                                         </div>
-                                    </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <select name="attr_equipment_weapon_critic" title="">
-                                                <option data-i18n="1-20" value="1"></option>
-                                                <option data-i18n="2-20" value="2"></option>
-                                                <option data-i18n="3-20" value="3"></option>
-                                                <option data-i18n="4-20" value="4"></option>
-                                                <option data-i18n="5-20" value="5"></option>
-                                                <option data-i18n="6-20" value="6"></option>
-                                                <option data-i18n="7-20" value="7"></option>
-                                                <option data-i18n="8-20" value="8"></option>
-                                                <option data-i18n="9-20" value="9"></option>
-                                                <option data-i18n="10-20" value="10"></option>
-                                                <option data-i18n="11-20" value="11"></option>
-                                                <option data-i18n="12-20" value="12"></option>
-                                                <option data-i18n="13-20" value="13"></option>
-                                                <option data-i18n="14-20" value="14"></option>
-                                                <option data-i18n="15-20" value="15"></option>
-                                                <option data-i18n="16-20" value="16"></option>
-                                                <option data-i18n="17-20" value="17"></option>
-                                                <option data-i18n="18-20" value="18"></option>
-                                                <option data-i18n="19-20" value="19"></option>
-                                                <option value="20" selected="selected">20</option>
-                                            </select>
-                                            <div class="input-group-text">
-                                                <span data-i18n="sign-mutiplication"></span>
-                                            </div>
-                                            <input type="number" name="attr_equipment_weapon_critic_multiplier" title="" min="0" step="1" value="2"/>
-                                        </div>
-                                    </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <select class="fixed-small" name="attr_equipment_weapon_range" title="" data-i18n-list="weapon-range-list">
-                                                <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
-                                                <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
-                                            </select>
-                                            <input type="text" name="attr_equipment_weapon_range_description" title="" value=""/>
-                                        </div>
-                                    </td>
-                                    <td width="7.142857%">
-                                        <input type="number" name="attr_equipment_weapon_weight" title="" min="0" step="0.01" value="0"/>
-                                    </td>
-                                    <td width="7.142857%">
-                                        <select name="attr_equipment_weapon_damage_type" title="">
-                                            <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
-                                            <option data-i18n="weapon-blunt" value="2"></option>
-                                            <option data-i18n="weapon-piercing" value="3"></option>
-                                            <option data-i18n="weapon-sharp" value="4"></option>
-                                            <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
-                                            <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
-                                            <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
-                                            <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
-                                            <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
-                                            <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
+                                        <select class="fixed-small" name="attr_equipment_weapon_dices" title="">
+                                            <option value="2" selected="selected">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="6">6</option>
+                                            <option value="8">8</option>
+                                            <option value="10">10</option>
+                                            <option value="12">12</option>
+                                            <option value="20">20</option>
+                                            <option value="100">100</option>
                                         </select>
-                                    </td>
-                                    <td width="21.428571%">
-                                        <input type="text" name="attr_equipment_weapon_special" title=""/>
-                                    </td>
-                                    <td>
-                                        <button
-                                                type="action"
-                                                name="act_create-attack"
-                                                class="button button-small"
-                                                data-i18n-title="equipment-create-attack-with-this-weapon-title"
-                                        >
-                                            <span class="link"></span>
-                                        </button>
-                                    </td>
-                                    <td>
-                                        <button
-                                                type="action"
-                                                name="act_weapon-to-racks"
-                                                class="button button-small"
-                                                data-i18n-title="equipment-inventory-to-deposit-title"
-                                        >
-                                            <span class="house"></span>
-                                        </button>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </div>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <select name="attr_equipment_weapon_critic" title="">
+                                            <option data-i18n="1-20" value="1"></option>
+                                            <option data-i18n="2-20" value="2"></option>
+                                            <option data-i18n="3-20" value="3"></option>
+                                            <option data-i18n="4-20" value="4"></option>
+                                            <option data-i18n="5-20" value="5"></option>
+                                            <option data-i18n="6-20" value="6"></option>
+                                            <option data-i18n="7-20" value="7"></option>
+                                            <option data-i18n="8-20" value="8"></option>
+                                            <option data-i18n="9-20" value="9"></option>
+                                            <option data-i18n="10-20" value="10"></option>
+                                            <option data-i18n="11-20" value="11"></option>
+                                            <option data-i18n="12-20" value="12"></option>
+                                            <option data-i18n="13-20" value="13"></option>
+                                            <option data-i18n="14-20" value="14"></option>
+                                            <option data-i18n="15-20" value="15"></option>
+                                            <option data-i18n="16-20" value="16"></option>
+                                            <option data-i18n="17-20" value="17"></option>
+                                            <option data-i18n="18-20" value="18"></option>
+                                            <option data-i18n="19-20" value="19"></option>
+                                            <option value="20" selected="selected">20</option>
+                                        </select>
+                                        <div class="input-group-text">
+                                            <span data-i18n="sign-mutiplication"></span>
+                                        </div>
+                                        <input type="number" name="attr_equipment_weapon_critic_multiplier" title="" min="0" step="1" value="2"/>
+                                    </div>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <select class="fixed-small" name="attr_equipment_weapon_range" title="" data-i18n-list="weapon-range-list">
+                                            <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
+                                            <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
+                                        </select>
+                                        <input type="text" name="attr_equipment_weapon_range_description" title="" value=""/>
+                                    </div>
+                                </td>
+                                <td width="7.142857%">
+                                    <input type="number" name="attr_equipment_weapon_weight" title="" min="0" step="0.01" value="0"/>
+                                </td>
+                                <td width="7.142857%">
+                                    <select name="attr_equipment_weapon_damage_type" title="">
+                                        <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
+                                        <option data-i18n="weapon-blunt" value="2"></option>
+                                        <option data-i18n="weapon-piercing" value="3"></option>
+                                        <option data-i18n="weapon-sharp" value="4"></option>
+                                        <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
+                                        <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
+                                        <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
+                                        <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
+                                        <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
+                                        <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
+                                    </select>
+                                </td>
+                                <td width="21.428571%">
+                                    <input type="text" name="attr_equipment_weapon_special" title=""/>
+                                </td>
+                                <td>
+                                    <button
+                                            type="action"
+                                            name="act_create-attack"
+                                            class="button button-small"
+                                            data-i18n-title="equipment-create-attack-with-this-weapon-title"
+                                    >
+                                        <span class="link"></span>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button
+                                            type="action"
+                                            name="act_weapon-to-racks"
+                                            class="button button-small"
+                                            data-i18n-title="equipment-inventory-to-deposit-title"
+                                    >
+                                        <span class="house"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </fieldset>
 
                     <textarea name="attr_weapon_note" title=""></textarea>
@@ -12614,6 +12739,9 @@
                             <th width="23%">
                                 <span data-i18n="special"></span>
                             </th>
+                            <th>
+                                <div class="button-fake"></div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -12649,13 +12777,13 @@
                                     </select>
                                 </td>
                                 <td width="9%">
-                                    <input type="number" name="attr_equipment_armor_bonus" title="" min="0" step="1" value="1"/>
+                                    <input type="number" name="attr_equipment_armor_armor_bonus" title="" min="0" step="1" value="1"/>
                                 </td>
                                 <td width="9%">
                                     <input type="number" name="attr_equipment_armor_dexterity_ceiling" title="" min="0" step="1"/>
                                 </td>
                                 <td width="9%">
-                                    <input type="number" name="attr_equipment_armor_penalty" title="" step="1" value="0"/>
+                                    <input type="number" name="attr_equipment_armor_armor_penalty" title="" step="1" value="0"/>
                                 </td>
                                 <td width="9%">
                                     <input type="number" name="attr_equipment_armor_arcane_spell_failure" title="" min="0" max="100" step="1" value="0"/>
@@ -12665,6 +12793,16 @@
                                 </td>
                                 <td width="23%">
                                     <input type="text" name="attr_equipment_armor_special" title=""/>
+                                </td>
+                                <td>
+                                    <button
+                                            type="action"
+                                            name="act_armor-to-racks"
+                                            class="button button-small"
+                                            data-i18n-title="equipment-inventory-to-deposit-title"
+                                    >
+                                        <span class="house"></span>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
@@ -12993,95 +13131,188 @@
                     </table>
 
                     <fieldset class="repeating_weaponrack">
-                        <div class="weapon-content">
+                        <table>
+                            <tbody>
+                            <tr>
+                                <td width="21.428571%">
+                                    <input type="text" name="attr_weapon_rack_name" title=""/>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <input type="number" name="attr_weapon_rack_dices_count" title="" min="1" step="1" value="1"/>
+                                        <div class="input-group-text">
+                                            <span data-i18n="dice-short"></span>
+                                        </div>
+                                        <select class="fixed-small" name="attr_weapon_rack_dices" title="">
+                                            <option value="2" selected="selected">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="6">6</option>
+                                            <option value="8">8</option>
+                                            <option value="10">10</option>
+                                            <option value="12">12</option>
+                                            <option value="20">20</option>
+                                            <option value="100">100</option>
+                                        </select>
+                                    </div>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <select name="attr_weapon_rack_critic" title="">
+                                            <option data-i18n="1-20" value="1"></option>
+                                            <option data-i18n="2-20" value="2"></option>
+                                            <option data-i18n="3-20" value="3"></option>
+                                            <option data-i18n="4-20" value="4"></option>
+                                            <option data-i18n="5-20" value="5"></option>
+                                            <option data-i18n="6-20" value="6"></option>
+                                            <option data-i18n="7-20" value="7"></option>
+                                            <option data-i18n="8-20" value="8"></option>
+                                            <option data-i18n="9-20" value="9"></option>
+                                            <option data-i18n="10-20" value="10"></option>
+                                            <option data-i18n="11-20" value="11"></option>
+                                            <option data-i18n="12-20" value="12"></option>
+                                            <option data-i18n="13-20" value="13"></option>
+                                            <option data-i18n="14-20" value="14"></option>
+                                            <option data-i18n="15-20" value="15"></option>
+                                            <option data-i18n="16-20" value="16"></option>
+                                            <option data-i18n="17-20" value="17"></option>
+                                            <option data-i18n="18-20" value="18"></option>
+                                            <option data-i18n="19-20" value="19"></option>
+                                            <option value="20" selected="selected">20</option>
+                                        </select>
+                                        <div class="input-group-text">
+                                            <span data-i18n="sign-mutiplication"></span>
+                                        </div>
+                                        <input type="number" name="attr_weapon_rack_critic_multiplier" title="" min="0" step="1" value="2"/>
+                                    </div>
+                                </td>
+                                <td width="14.285714%">
+                                    <div class="input-group">
+                                        <select class="fixed-small" name="attr_weapon_rack_range" title="" data-i18n-list="weapon-range-list">
+                                            <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
+                                            <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
+                                        </select>
+                                        <input type="text" name="attr_weapon_rack_range_description" title="" value=""/>
+                                    </div>
+                                </td>
+                                <td width="7.142857%">
+                                    <input type="number" name="attr_weapon_rack_weight" title="" min="0" step="0.01" value="0"/>
+                                </td>
+                                <td width="7.142857%">
+                                    <select name="attr_weapon_rack_damage_type" title="">
+                                        <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
+                                        <option data-i18n="weapon-blunt" value="2"></option>
+                                        <option data-i18n="weapon-piercing" value="3"></option>
+                                        <option data-i18n="weapon-sharp" value="4"></option>
+                                        <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
+                                        <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
+                                        <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
+                                        <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
+                                        <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
+                                        <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
+                                    </select>
+                                </td>
+                                <td width="21.428571%">
+                                    <input type="text" name="attr_weapon_rack_special" title=""/>
+                                </td>
+                                <td>
+                                    <button
+                                            type="action"
+                                            name="act_racks-to-weapon"
+                                            class="button button-small"
+                                            data-i18n-title="deposit-deposit-to-inventory-title"
+                                    >
+                                        <span class="link"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </fieldset>
+                </div>
+
+                <h1 data-i18n="armor-racks-h1"></h1>
+                <div class="armor_rack section">
+                    <div class="armor_rack section">
+                        <table>
+                            <thead>
+                            <tr>
+                                <th width="19%">
+                                    <span data-i18n="name"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="type" data-i18n-title="armor-type-title"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="armor-bonus-short" data-i18n-title="armor-bonus-title"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="dexterity-ceiling-short" data-i18n-title="armor-dexterity-max-title"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="penalty" data-i18n-title="armor-penalty-title"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="spell-arcane-spell-failure-short" data-i18n-title="armor-arcane-spell-failure-title"></span>
+                                </th>
+                                <th width="9%">
+                                    <span data-i18n="weight"></span>
+                                </th>
+                                <th width="23%">
+                                    <span data-i18n="special"></span>
+                                </th>
+                                <th>
+                                    <div class="button-fake"></div>
+                                </th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                        <fieldset class="repeating_armorrack">
                             <table>
                                 <tbody>
                                 <tr>
-                                    <td width="21.428571%">
-                                        <input type="text" name="attr_weapon_rack_name" title=""/>
+                                    <td width="19%">
+                                        <input type="text" name="attr_armor_rack_name" title=""/>
                                     </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <input type="number" name="attr_weapon_rack_dices_count" title="" min="1" step="1" value="1"/>
-                                            <div class="input-group-text">
-                                                <span data-i18n="dice-short"></span>
-                                            </div>
-                                            <select class="fixed-small" name="attr_weapon_rack_dices" title="">
-                                                <option value="2" selected="selected">2</option>
-                                                <option value="3">3</option>
-                                                <option value="4">4</option>
-                                                <option value="6">6</option>
-                                                <option value="8">8</option>
-                                                <option value="10">10</option>
-                                                <option value="12">12</option>
-                                                <option value="20">20</option>
-                                                <option value="100">100</option>
-                                            </select>
-                                        </div>
-                                    </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <select name="attr_weapon_rack_critic" title="">
-                                                <option data-i18n="1-20" value="1"></option>
-                                                <option data-i18n="2-20" value="2"></option>
-                                                <option data-i18n="3-20" value="3"></option>
-                                                <option data-i18n="4-20" value="4"></option>
-                                                <option data-i18n="5-20" value="5"></option>
-                                                <option data-i18n="6-20" value="6"></option>
-                                                <option data-i18n="7-20" value="7"></option>
-                                                <option data-i18n="8-20" value="8"></option>
-                                                <option data-i18n="9-20" value="9"></option>
-                                                <option data-i18n="10-20" value="10"></option>
-                                                <option data-i18n="11-20" value="11"></option>
-                                                <option data-i18n="12-20" value="12"></option>
-                                                <option data-i18n="13-20" value="13"></option>
-                                                <option data-i18n="14-20" value="14"></option>
-                                                <option data-i18n="15-20" value="15"></option>
-                                                <option data-i18n="16-20" value="16"></option>
-                                                <option data-i18n="17-20" value="17"></option>
-                                                <option data-i18n="18-20" value="18"></option>
-                                                <option data-i18n="19-20" value="19"></option>
-                                                <option value="20" selected="selected">20</option>
-                                            </select>
-                                            <div class="input-group-text">
-                                                <span data-i18n="sign-mutiplication"></span>
-                                            </div>
-                                            <input type="number" name="attr_weapon_rack_critic_multiplier" title="" min="0" step="1" value="2"/>
-                                        </div>
-                                    </td>
-                                    <td width="14.285714%">
-                                        <div class="input-group">
-                                            <select class="fixed-small" name="attr_weapon_rack_range" title="" data-i18n-list="weapon-range-list">
-                                                <option data-i18n="range-melee" value="1" selected="selected" data-i18n-list-item="melee"></option>
-                                                <option data-i18n="range-ranged" value="2" data-i18n-list-item="ranged"></option>
-                                            </select>
-                                            <input type="text" name="attr_weapon_rack_range_description" title="" value=""/>
-                                        </div>
-                                    </td>
-                                    <td width="7.142857%">
-                                        <input type="number" name="attr_weapon_rack_weight" title="" min="0" step="0.01" value="0"/>
-                                    </td>
-                                    <td width="7.142857%">
-                                        <select name="attr_weapon_rack_damage_type" title="">
-                                            <option data-i18n="weapon-inapplicable" value="1" selected="selected"></option>
-                                            <option data-i18n="weapon-blunt" value="2"></option>
-                                            <option data-i18n="weapon-piercing" value="3"></option>
-                                            <option data-i18n="weapon-sharp" value="4"></option>
-                                            <option data-i18n="weapon-blunt-or-piercing" value="5"></option>
-                                            <option data-i18n="weapon-blunt-or-sharp" value="6"></option>
-                                            <option data-i18n="weapon-piercing-or-sharp" value="7"></option>
-                                            <option data-i18n="weapon-blunt-and-piercing" value="8"></option>
-                                            <option data-i18n="weapon-blunt-and-sharp" value="9"></option>
-                                            <option data-i18n="weapon-piercing-and-sharp" value="10"></option>
+                                    <td width="9%">
+                                        <select name="attr_armor_rack_type" title="">
+                                            <optgroup label="" data-i18n-label="armor">
+                                                <option data-i18n="armor-light" value="1"></option>
+                                                <option data-i18n="armor-medium" value="2"></option>
+                                                <option data-i18n="armor-heavy" value="3"></option>
+                                            </optgroup>
+                                            <optgroup label="" data-i18n-label="other">
+                                                <option data-i18n="equipment-shield" value="4"></option>
+                                                <option data-i18n="equipment-shield-tower" value="5"></option>
+                                                <option data-i18n="other" value="6" selected="selected"></option>
+                                            </optgroup>
                                         </select>
                                     </td>
-                                    <td width="21.428571%">
-                                        <input type="text" name="attr_weapon_rack_special" title=""/>
+                                    <td width="9%">
+                                        <input type="number" name="attr_armor_rack_armor_bonus" title="" min="0" step="1" value="1"/>
+                                    </td>
+                                    <td width="9%">
+                                        <input type="number" name="attr_armor_rack_dexterity_ceiling" title="" min="0" step="1"/>
+                                    </td>
+                                    <td width="9%">
+                                        <input type="number" name="attr_armor_rack_armor_penalty" title="" step="1" value="0"/>
+                                    </td>
+                                    <td width="9%">
+                                        <input type="number" name="attr_armor_rack_arcane_spell_failure" title="" min="0" max="100" step="1" value="0"/>
+                                    </td>
+                                    <td width="9%">
+                                        <input type="number" name="attr_armor_rack_weight" title="" min="0" step="0.01" value="0"/>
+                                    </td>
+                                    <td width="23%">
+                                        <input type="text" name="attr_armor_rack_special" title=""/>
                                     </td>
                                     <td>
                                         <button
                                                 type="action"
-                                                name="act_racks-to-weapon"
+                                                name="act_racks-to-armor"
                                                 class="button button-small"
                                                 data-i18n-title="deposit-deposit-to-inventory-title"
                                         >
@@ -13090,9 +13321,11 @@
                                     </td>
                                 </tr>
                                 </tbody>
+                                <tbody>
+                                </tbody>
                             </table>
-                        </div>
-                    </fieldset>
+                        </fieldset>
+                    </div>
                 </div>
 
                 <div class="flex-row">
@@ -13611,17 +13844,37 @@
                 <h1 data-i18n="character-appearance-h1"></h1>
                 <div class="section">
                     <table>
+                        <thead>
+                        <tr>
+                            <th>
+                                <span data-i18n="character-height"></span>
+                            </th>
+                            <th>
+                                <span data-i18n="character-alignment"></span>
+                            </th>
+                            <th>
+                                type*
+                            </th>
+                        </tr>
+                        </thead>
                         <tbody>
                         <tr>
-                            <td width="20%">
-                                <span data-i18n="character-height"></span>
-                            </td>
                             <td>
                                 <input type="text" name="attr_npc_size" title="" />
                             </td>
-                        </tr>
-                        <tr>
                             <td>
+                                <input type="text" name="attr_npc_alignment" title="" />
+                            </td>
+                            <td>
+                                <input type="text" name="attr_npc_creature_type" title="" />
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td width="20%">
                                 aura*
                             </td>
                             <td>
@@ -13638,26 +13891,10 @@
                         </tr>
                         <tr>
                             <td>
-                                <span data-i18n="character-alignment"></span>
-                            </td>
-                            <td>
-                                <input type="text" name="attr_npc_alignment" title="" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
                                 sense*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_sense" title="" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                type*
-                            </td>
-                            <td>
-                                <input type="text" name="attr_npc_creature_type" title="" />
                             </td>
                         </tr>
                         <tr>
@@ -13713,25 +13950,37 @@
                     <h1 data-i18n="battle-attacks-h1"></h1>
                     <div class="section">
                         <table>
+                            <thead>
+                            <tr>
+                                <th width="33.333333%">
+                                    <span data-i18n="combat-maneuver-bonus-short"></span>
+                                </th>
+                                <th width="33.333333%">
+                                    <span data-i18n="initiative"></span>
+                                </th>
+                                <th width="33.333333%">
+                                    <span data-i18n="base-attack-bonus"></span>
+                                </th>
+                            </tr>
+                            </thead>
                             <tbody>
                             <tr>
-                                <td width="20%">
-                                    <span data-i18n="initiative"></span>
+                                <td>
+                                    <input type="text" name="attr_npc_combat_maneuver_bonus" title="" />
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_initiative" title="" />
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    <span data-i18n="base-attack-bonus"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_base_attack_bonus" title="" />
                                 </td>
                             </tr>
+                            </tbody>
+                        </table>
+                        <table>
+                            <tbody>
                             <tr>
-                                <td>
+                                <td width="20%">
                                     melee attacks*
                                 </td>
                                 <td>
@@ -13748,7 +13997,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    special attacks
+                                    special attacks*
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_special_attack" title="" />
@@ -13769,7 +14018,7 @@
                                     spell like ability*
                                 </td>
                                 <td>
-                                    <textarea type="text" name="attr_npc_spell_like_ability" title=""></textarea>
+                                    <textarea name="attr_npc_spell_like_ability" title=""></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -13777,7 +14026,7 @@
                                     Spells prepared*
                                 </td>
                                 <td>
-                                    <textarea type="text" name="attr_npc_cleric_spell_prepared" title=""></textarea>
+                                    <textarea name="attr_npc_cleric_spell_prepared" title=""></textarea>
                                 </td>
                             </tr>
                             <tr>
@@ -13785,7 +14034,7 @@
                                     spell known*
                                 </td>
                                 <td>
-                                    <textarea type="text" name="attr_npc_spell_known" title=""></textarea>
+                                    <textarea name="attr_npc_spell_known" title=""></textarea>
                                 </td>
                             </tr>
                             </tbody>
@@ -13836,7 +14085,7 @@
                                 <span data-i18n="skill-h1"></span>
                             </td>
                             <td>
-                                <input type="text" name="attr_npc_skill" title="" />
+                                <textarea name="attr_npc_skill" title=""></textarea>
                             </td>
                         </tr>
                         </tbody>
@@ -13993,15 +14242,7 @@
                         </tr>
                         <tr>
                             <td>
-                                CMB
-                            </td>
-                            <td>
-                                <input type="text" name="attr_npc_combat_maneuver_bonus" title="" />
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                CMD
+                                <span data-i18n="combat-maneuver-defense-short"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_combat_maneuver_defense" title="" />
@@ -14017,7 +14258,7 @@
                         <tbody>
                         <tr>
                             <td width="20%">
-                                resistance
+                                resistance*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_resistance" title="" />
@@ -14025,7 +14266,7 @@
                         </tr>
                         <tr>
                             <td>
-                                damage resistance
+                                damage resistance*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_damage_resistance" title="" />
@@ -14033,7 +14274,7 @@
                         </tr>
                         <tr>
                             <td>
-                                immune
+                                immune*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_immune" title="" />
@@ -14041,7 +14282,7 @@
                         </tr>
                         <tr>
                             <td>
-                                weakness
+                                weakness*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_weakness" title="" />
@@ -14049,7 +14290,7 @@
                         </tr>
                         <tr>
                             <td>
-                                defense ability
+                                defense ability*
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_defensive_ability" title="" />
@@ -14067,7 +14308,7 @@
         <div class="tab-content">
             <div class="paper">
                 <div class="npc-challenge-rating section">
-                    <table >
+                    <table>
                         <thead>
                         <tr>
                             <th>
@@ -14102,10 +14343,10 @@
                         <thead>
                         <tr>
                             <th width="50%">
-                                <span>Environment</span>
+                                <span>Environment*</span>
                             </th>
                             <th width="50%">
-                                <span>Organisation</span>
+                                <span>Organisation*</span>
                             </th>
                         </tr>
                         </thead>
@@ -14120,12 +14361,14 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
 
+                <div class="section">
                     <table>
                         <thead>
                         <tr>
                             <th>
-                                <span>Description</span>
+                                <span>Description*</span>
                             </th>
                         </tr>
                         </thead>

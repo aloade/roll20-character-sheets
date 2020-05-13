@@ -1353,6 +1353,8 @@
   "weapon-rack-h1" : "Râtelier d'armes",
   "deposit-h1": "Consigne",
   "deposit-deposit-to-inventory-title": "Envoyer dans l'inventaire",
+  "weapon-racks-h1": "Rack d'armes",
+  "armor-racks-h1": "Rack d'armures",
   "rt-attack": "jet d'Attaque",
   "rt-critical-confirmation-short": "Conf. Critique",
   "rt-critical-confirmation-title": "jet de confirmation du coup Critique",
