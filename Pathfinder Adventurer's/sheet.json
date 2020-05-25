@@ -189,7 +189,7 @@
       ],
       "optiontranslationkeys": [
         "option-unit-feet",
-        "option-unit-feet-meter"
+        "option-unit-meter"
       ],
       "default": "1",
       "description": "foo",

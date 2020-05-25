@@ -119,7 +119,8 @@ html, body {
 .charsheet .sheet-cogwheel,
 .charsheet .sheet-house,
 .charsheet .sheet-info-sign,
-.charsheet .sheet-link{
+.charsheet .sheet-link,
+.charsheet .sheet-tools {
     font-family: "Pictos", sans-serif;
 }
 
@@ -148,6 +149,11 @@ html, body {
     content : "j";
 }
 
+.charsheet .sheet-tools::after {
+    content : "x";
+}
+
+
 .charsheet small {
     color: rgb(108, 117, 125);
     font-size: 80%;
@@ -171,9 +177,12 @@ html, body {
     width: auto;
     text-align: center;
     border: none;
-    height: 23px !important;
     margin: 0;
-    line-height: 23px;
+    line-height: 26px;
+}
+
+.charsheet select {
+    height: 27px;
 }
 
 .charsheet input[type="number"]:-moz-read-only, .charsheet input[type="text"]:-moz-read-only,
@@ -254,7 +263,7 @@ html, body {
     display: block;
 }
 
-.sheet-button::before {
+.charsheet .sheet-button::before {
     content: "" !important;
     display: block;
     border-radius: 3px;
@@ -266,12 +275,12 @@ html, body {
     left: 0;
 }
 
-.sheet-button,
-.sheet-button-switch {
+.charsheet .sheet-button,
+.charsheet .sheet-button-switch {
     position: relative;
     height: 26px;
     font-size: 15px !important;
-    line-height: 19px;
+    line-height: 18px;
     margin: 0 !important;
     padding: 0 12px !important;
     text-align: center;
@@ -316,6 +325,8 @@ html, body {
 .charsheet .sheet-button .sheet-input-group select {
     width: 100%;
     color: rgb(246, 226, 195);
+    line-height: 20px;
+    height: 21px;
     transition: color 0.35s ease;
     text-align-last: center;
     padding-right: 8px;
@@ -1395,6 +1406,10 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     line-height: 20px;
 }
 
+.charsheet .sheet-paper textarea.sheet-huge {
+    height: calc(16px + 2px + 8 * 20px);
+}
+
 .charsheet .sheet-paper span[title]:not(.sheet-alert) {
     text-decoration: underline dashed;
     text-decoration-color: inherit;
@@ -1410,6 +1425,9 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     background: none !important;
 }
 
+/* --------------------------------------------------- */
+/* PC */
+/* --------------------------------------------------- */
 /* took 120px as colomn width for reference */
 /* character */
 input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_character_strength_total"],
@@ -1418,9 +1436,7 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_character_dexterity_mod_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_armor_class_dexterity_alert"][value="show"] ~ div input[name="attr_armor_class_dexterity"],
-input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"],
-input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_npc_strength_total"],
-input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_npc_dexterity_total"] {
+input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"] {
     color: rgb(200, 82, 58);
 }
 
@@ -2267,6 +2283,37 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-deposit {
     max-width: 480px;
+}
+
+/* --------------------------------------------------- */
+/* NPC */
+/* --------------------------------------------------- */
+input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_npc_strength_total"],
+input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_npc_dexterity_total"] {
+    color: rgb(200, 82, 58);
+}
+
+.charsheet .sheet-character-npc-attribute {
+    max-width: 840px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-initiative {
+    max-width: 480px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-battle table {
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-battle table:first-child {
+    max-width: 240px;
+}
+
+.charsheet .sheet-npc-saves {
+    max-width: 840px;
+    margin-bottom: 15px;
 }
 
 /* --------------------------------------------------- */
