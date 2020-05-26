@@ -5652,7 +5652,19 @@
                         </div>
                     </div>
                     <div class="flex-col-auto">
-
+                        <div class="note-modal modal">
+                            <input title="" class="modal-checkbox" data-i18n-title="note-title" type="checkbox" />
+                            <span class="modal-label button" data-i18n="note"></span>
+                            <div class="modal-background"></div>
+                            <div class="modal-dialog modal-large">
+                                <div class="modal-header">
+                                    <span data-i18n="note"></span>
+                                </div>
+                                <div class="modal-body">
+                                    <textarea name="attr_note" data-i18n-placeholder="note-placeholder" title=""></textarea>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -21217,7 +21229,7 @@
         </div>
 
         <label class="tab-label">
-            <span data-i18n="note-nav"></span>
+            <span data-i18n="stock-nav"></span>
         </label>
         <div class="tab-content">
             <div class="paper">
@@ -21456,57 +21468,9 @@
                     </div>
                 </div>
 
+                <h1 data-i18n="deposit-h1"></h1>
                 <div class="flex-row">
                     <div class="flex-col6">
-                        <h1 data-i18n="note-h1"></h1>
-                        <div class="note section">
-                            <fieldset class="repeating_note">
-                                <div class="note-content">
-                                    <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
-                                    <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
-                                </div>
-                            </fieldset>
-                        </div>
-                    </div>
-
-                    <div class="flex-col6">
-                        <div class="bank section">
-                            <table>
-                                <thead>
-                                <tr>
-                                    <th>
-                                        <span data-i18n="currency-bank"></span>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td>
-                                        <div class="input-group currency">
-                                            <input type="number" name="attr_currency_platinum_bank" title="" min="0" step="1" value="0"/>
-                                            <div class="input-text">
-                                                <span data-i18n="currency-platinum" data-i18n-title="currency-platinum-title" class="currency-coin currency-platinum"></span>
-                                            </div>
-                                            <input type="number" name="attr_currency_gold_bank" title="" min="0" step="1" value="0"/>
-                                            <div class="input-text">
-                                                <span data-i18n="currency-gold" data-i18n-title="currency-gold-title" class="currency-coin currency-gold"></span>
-                                            </div>
-                                            <input type="number" name="attr_currency_silver_bank" title="" min="0" step="1" value="0"/>
-                                            <div class="input-group-text">
-                                                <span data-i18n="currency-silver" data-i18n-title="currency-silver-title" class="currency-coin currency-silver"></span>
-                                            </div>
-                                            <input type="number" name="attr_currency_copper_bank" title="" min="0" step="1" value="0"/>
-                                            <div class="input-group-text">
-                                                <span data-i18n="currency-copper" data-i18n-title="currency-copper-title" class="currency-coin currency-copper"></span>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <h1 data-i18n="deposit-h1"></h1>
                         <div class="deposit section">
                             <table>
                                 <thead>
@@ -21557,6 +21521,44 @@
                                     </tbody>
                                 </table>
                             </fieldset>
+                        </div>
+                    </div>
+
+                    <div class="flex-col6">
+                        <div class="bank section">
+                            <table>
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span data-i18n="currency-bank"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="input-group currency">
+                                            <input type="number" name="attr_currency_platinum_bank" title="" min="0" step="1" value="0"/>
+                                            <div class="input-text">
+                                                <span data-i18n="currency-platinum" data-i18n-title="currency-platinum-title" class="currency-coin currency-platinum"></span>
+                                            </div>
+                                            <input type="number" name="attr_currency_gold_bank" title="" min="0" step="1" value="0"/>
+                                            <div class="input-text">
+                                                <span data-i18n="currency-gold" data-i18n-title="currency-gold-title" class="currency-coin currency-gold"></span>
+                                            </div>
+                                            <input type="number" name="attr_currency_silver_bank" title="" min="0" step="1" value="0"/>
+                                            <div class="input-group-text">
+                                                <span data-i18n="currency-silver" data-i18n-title="currency-silver-title" class="currency-coin currency-silver"></span>
+                                            </div>
+                                            <input type="number" name="attr_currency_copper_bank" title="" min="0" step="1" value="0"/>
+                                            <div class="input-group-text">
+                                                <span data-i18n="currency-copper" data-i18n-title="currency-copper-title" class="currency-coin currency-copper"></span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

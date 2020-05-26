@@ -1172,6 +1172,29 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 /* --------------------------------------------------- */
+/* note */
+/* --------------------------------------------------- */
+.charsheet .sheet-note-modal .sheet-modal-dialog {
+    height: 80%;
+}
+
+.charsheet .sheet-note-modal .sheet-modal-body {
+    height: calc(100% - 61px - 10px);
+}
+
+.charsheet .sheet-note-modal textarea {
+    margin-top: 10px;
+    width: 100%;
+    height: 100%;
+    border: none;
+    background-color: transparent;
+    resize: none;
+    overflow-y: auto;
+    color: rgb(200, 200, 200);
+    line-height: 20px;
+}
+
+/* --------------------------------------------------- */
 /* content */
 /* --------------------------------------------------- */
 .charsheet .sheet-main.section {
