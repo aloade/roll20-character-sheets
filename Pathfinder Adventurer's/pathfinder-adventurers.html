@@ -1172,7 +1172,7 @@
         + " change:caster_level_rank change:caster_level_miscellaneous change:caster_level_temporary"
         + " change:skill_acrobatics_ranks"
         + " change:armor_class_mod_dodge"
-        + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:armor_proficiency_shield change:armor_proficiency_shield_tower"
+        + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:arcane_armor_training change:arcane_armor_mastery change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_weapon:equipment_weapon_weight remove:repeating_weapon"
         + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_type change:repeating_armor:equipment_armor_dexterity_ceiling change:repeating_armor:equipment_armor_penalty change:repeating_armor:equipment_armor_weight remove:repeating_armor"
@@ -1202,7 +1202,7 @@
             "caster_level_rank", "caster_level_miscellaneous", "caster_level_temporary",
             "skill_acrobatics_ranks",
             "armor_class_mod_dodge",
-            "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "armor_proficiency_shield", "armor_proficiency_shield_tower",
+            "armor_proficiency_light", "armor_proficiency_medium", "armor_proficiency_heavy", "arcane_armor_training", "arcane_armor_mastery", "armor_proficiency_shield", "armor_proficiency_shield_tower",
             "currency_platinum", "currency_gold", "currency_silver", "currency_copper",
             "equipment_magic_head_weight", "equipment_magic_neck_weight", "equipment_magic_body_weight", "equipment_magic_belt_weight", "equipment_magic_wrist_weight", "equipment_magic_hand_weight", "equipment_magic_finger1_weight", "equipment_magic_finger2_weight", "equipment_magic_foot_weight",
             "npc_strength_base", "npc_strength_bonus", "npc_strength_penalty", "npc_strength_temporary",
@@ -2185,6 +2185,10 @@
                                         }
                                         encumbrance.total += repeating_armor[id][field.armor.weight];
                                     });
+
+                                    if ( user_number.arcane_armor_training === 1 && user_number.arcane_armor_mastery === 0 ) status.arcane_spell_failure -= 10;
+                                    if ( user_number.arcane_armor_mastery === 1 ) status.arcane_spell_failure -= 20;
+
                                     // equipment
                                     Object.keys(repeating_equipment).forEach(id => {
                                         encumbrance.total += repeating_equipment[id][field.equipment.weight] * repeating_equipment[id][field.equipment.quantity];
@@ -2834,6 +2838,8 @@
                                 if ( user_number.armor_proficiency_light === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-light"));
                                 if ( user_number.armor_proficiency_medium === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-medium"));
                                 if ( user_number.armor_proficiency_heavy === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-heavy"));
+                                if ( user_number.arcane_armor_training === 1 ) cache.armor_proficiency.push(getTranslationByKey("arcane-armor-training"));
+                                if ( user_number.arcane_armor_mastery === 1 ) cache.armor_proficiency.push(getTranslationByKey("arcane-armor-mastery"));
                                 if ( user_number.armor_proficiency_shield === 1 ) cache.armor_proficiency.push(getTranslationByKey("armor-proficiency-shield"));
                                 if ( user_number.armor_proficiency_shield_tower === 1 ) cache.armor_proficiency.push(getTranslationByKey("equipment-shield-tower"));
                                 if ( cache.armor_proficiency.length === 0 ) cache.armor_proficiency.push(getTranslationByKey("equipment-proficiency-none"));
@@ -3574,23 +3580,24 @@
     // ------------------------------------------
     // armor bonus + arcane spell failure
     on( "change:user_decimal"
-        + " change:arcane_spell_failure_miscellaneous change:arcane_spell_failure_temporary"
+        + " change:foo_status_arcane_spell_failure change:arcane_spell_failure_miscellaneous change:arcane_spell_failure_temporary"
         + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_armor_bonus change:equipment_armor_arcane_spell_failure remove:repeating_armor"
         , equipment_armor);
     function equipment_armor() {
         getAttrsNumber([
-            "option_unit_decimal", "option_unit_thousand", "arcane_spell_failure_miscellaneous", "arcane_spell_failure_temporary"
+            "option_unit_decimal", "option_unit_thousand", "foo_status_arcane_spell_failure", "arcane_spell_failure_miscellaneous", "arcane_spell_failure_temporary"
         ], (user) => {
             let field = {
                 "get": {
                     "armor": "equipment_armor_armor_bonus",
+                    "status": "foo_status_arcane_spell_failure",
                     "spellfailure": "equipment_armor_arcane_spell_failure",
                     "worn": "equipment_armor_worn"
                 },
                 "set": {
                     "armor": "foo_armor_bonus",
                     "spellfailure_total": "foo_arcane_spell_failure_total",
-                    "spellfailure_malus_percent": "arcane_spell_failure_malus_percent",
+                    "spellfailure_penalty": "arcane_spell_failure_penalty",
                     "spellfailure_total_percent": "arcane_spell_failure_total_percent"
                 }
             };
@@ -3638,15 +3645,15 @@
                 });
                 delete(repeating);
 
-                cache.spellfailure = cache.spellfailure_armor + user.arcane_spell_failure_miscellaneous + user.arcane_spell_failure_temporary;
+                cache.spellfailure = cache.spellfailure_armor + user.foo_status_arcane_spell_failure + user.arcane_spell_failure_miscellaneous + user.arcane_spell_failure_temporary;
                 if ( cache.spellfailure < 0 ) cache.spellfailure = 0;
                 if ( cache.spellfailure > 100 ) cache.spellfailure = 100;
 
                 // prepare payload
                 let payload = {};
-                payload[field.set.spellfailure_total_percent] = formatNumber(cache.spellfailure, 0.01, cache.unit_decimal, cache.unit_thousand) + " %";
-                payload[field.set.spellfailure_malus_percent] = formatNumber(cache.spellfailure_armor, 0.01, cache.unit_decimal, cache.unit_thousand) + " %";
                 payload[field.set.spellfailure_total] = cache.spellfailure;
+                payload[field.set.spellfailure_total_percent] = formatNumber(cache.spellfailure, 0.01, cache.unit_decimal, cache.unit_thousand) + " %";
+                payload[field.set.spellfailure_penalty] = formatNumber(cache.spellfailure_armor, 0.01);
                 payload[field.set.armor] = cache.armor;
 
                 delete(cache);
@@ -4151,15 +4158,20 @@
     // note :           - to use this function with a number as output, dont change "decimal" or "thousand"
     //                  - ECMAscript need numbers formated as "1000.1" to convert string to numbers
     function formatNumber(value, step = 1, decimal = ".", thousand = "") {
+        value = parseFloat(value);
+
         // round value
         if ( step !== 0 ) {
             let inverse = 1.0 / step;
             value = Math.round(value * inverse) / inverse;
         }
+
         // format to local
-        value = value.toString();
-        value = value.replace(".", decimal);
-        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+        if ( decimal !== "." || thousand !== "") {
+            value = value.toString();
+            value = value.replace(".", decimal);
+            value = value.replace(/\B(?=(\d{3})+(?!\d))/g, thousand);
+        }
 
         return value
     }
@@ -4656,9 +4668,9 @@
                                                                     </div>
                                                                     <select name="attr_status_condition_drowsy" title="">
                                                                         <option value="0" selected="selected" data-i18n="status-drowsy-awake"></option>
-                                                                        <option value="1" data-i18n="status-drowsy-mild"></option>
-                                                                        <option value="2" data-i18n="status-drowsy-moderate"></option>
-                                                                        <option value="3" data-i18n="status-drowsy-extreme"></option>
+                                                                        <option value="1" data-i18n="status-drowsy-mild-short"></option>
+                                                                        <option value="2" data-i18n="status-drowsy-moderate-short"></option>
+                                                                        <option value="3" data-i18n="status-drowsy-extreme-short"></option>
                                                                         <option value="4" data-i18n="status-drowsy-asleep"></option>
                                                                     </select>
                                                                 </div>
@@ -7372,6 +7384,20 @@
                                                         </li>
                                                         <li>
                                                             <div class="button-switch">
+                                                                <input type="checkbox" name="attr_arcane_armor_training" title="" data-i18n-title="armor-proficiency-title" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="arcane-armor-training"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_arcane_armor_mastery" title="" data-i18n-title="armor-proficiency-title" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="arcane-armor-mastery"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li>
+                                                            <div class="button-switch">
                                                                 <input type="checkbox" name="attr_armor_proficiency_shield" title="" data-i18n-title="armor-proficiency-title" />
                                                                 <span class="button-switch-face"></span>
                                                                 <span class="button-switch-label" data-i18n="armor-proficiency-shield"></span>
@@ -7978,10 +8004,10 @@
                                         <input type="text" class="disabled text-strong" name="attr_arcane_spell_failure_total_percent" title="" value="0%" readonly="readonly"/>
                                     </td>
                                     <td>
-                                        <input type="text" class="disabled" name="attr_arcane_spell_failure_malus_percent" title="" value="0%" readonly="readonly" />
+                                        <input type="number" class="disabled" name="attr_arcane_spell_failure_penalty" title="" value="0" readonly="readonly" />
                                     </td>
                                     <td>
-                                        <input type="text" class="disabled" name="attr_foo_status_arcane_spell_failure" title="" value="0%" readonly="readonly" />
+                                        <input type="number" class="disabled" name="attr_foo_status_arcane_spell_failure" title="" value="0" readonly="readonly" />
                                     </td>
                                     <td>
                                         <input type="number" name="attr_arcane_spell_failure_miscellaneous" title="" value="0" />
@@ -22126,7 +22152,7 @@
                                 <input type="number" name="attr_npc_initiative_total" title="" class="text-strong" value="@{foo_status_initiative}+@{npc_initiative}+@{npc_initiative_miscellaneous}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_npc_initiative_status" title="" value="@{foo_status_encumbrance}+@{foo_status_initiative}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_initiative_status" title="" value="@{foo_status_initiative}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_npc_initiative" title="" step="1" value="0"/>

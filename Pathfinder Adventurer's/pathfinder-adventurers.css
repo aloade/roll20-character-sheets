@@ -511,6 +511,7 @@ html, body {
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
+    padding: 0 8px;
 }
 
 /* accordion */
@@ -1030,7 +1031,6 @@ html, body {
 /* option */
 /* --------------------------------------------------- */
 .charsheet .sheet-option-modal  {
-    margin-right: 10px;
 }
 
 .charsheet .sheet-option-modal:hover .sheet-button {
@@ -1172,8 +1172,19 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 /* --------------------------------------------------- */
+/* status custom */
+/* --------------------------------------------------- */
+.charsheet .sheet-status-custom-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
+}
+
+/* --------------------------------------------------- */
 /* note */
 /* --------------------------------------------------- */
+.charsheet .sheet-note-modal:hover .sheet-button {
+    color: rgb(255, 255, 255);
+}
+
 .charsheet .sheet-note-modal .sheet-modal-dialog {
     height: 80%;
 }
