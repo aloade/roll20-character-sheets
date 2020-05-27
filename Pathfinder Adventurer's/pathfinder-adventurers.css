@@ -183,6 +183,7 @@ html, body {
 
 .charsheet select {
     height: 27px;
+    padding-right: 10px;
 }
 
 .charsheet input[type="number"]:-moz-read-only, .charsheet input[type="text"]:-moz-read-only,
@@ -1063,31 +1064,6 @@ input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div th.sheet-temp
 input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div th.sheet-template-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div td.sheet-template-playable-character {
-    display: table-cell;
-}
-
-/* --------------------------------------------------- */
-/* option - roll attack */
-/* --------------------------------------------------- */
-.sheet-template-no-aiming,
-.sheet-template-aiming {
-    display: none;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="no-aiming"] ~ div .sheet-template-no-aiming,
-input[name="attr_option_attack_roll"][value="aiming"] ~ div .sheet-template-aiming {
-    display: block;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div tr.sheet-template-aiming {
-    display: table-row;
-}
-
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-no-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div th.sheet-template-aiming,
-input.sheet-toggle[name="attr_option_attack_roll"][value="aiming"] ~ div td.sheet-template-aiming {
     display: table-cell;
 }
 
