@@ -1175,7 +1175,7 @@
         + " change:armor_proficiency_light change:armor_proficiency_medium change:armor_proficiency_heavy change:arcane_armor_training change:arcane_armor_mastery change:armor_proficiency_shield change:armor_proficiency_shield_tower"
         + " change:currency_platinum change:currency_gold change:currency_silver change:currency_copper"
         + " change:repeating_weapon:equipment_weapon_weight remove:repeating_weapon"
-        + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_type change:repeating_armor:equipment_armor_dexterity_ceiling change:repeating_armor:equipment_armor_penalty change:repeating_armor:equipment_armor_weight remove:repeating_armor"
+        + " change:repeating_armor:equipment_armor_worn change:repeating_armor:equipment_armor_type change:repeating_armor:equipment_armor_dexterity_ceiling change:repeating_armor:equipment_armor_armor_penalty change:repeating_armor:equipment_armor_weight remove:repeating_armor"
         + " change:repeating_equipment:equipment_quantity change:repeating_equipment:equipment_weight remove:repeating_equipment"
         + " change:equipment_magic_head_weight change:equipment_magic_neck_weight change:equipment_magic_body_weight change:equipment_magic_belt_weight change:equipment_magic_wrist_weight change:equipment_magic_hand_weight change:equipment_magic_finger1_weight change:equipment_magic_finger2_weight change:equipment_magic_foot_weight"
         + " change:npc_strength_base change:npc_strength_bonus change:npc_strength_penalty change:npc_strength_temporary"
@@ -2542,8 +2542,6 @@
                                         cache.armor_class_mod_dodge = 0;
                                         status.armor_class_dodge = Math.min(status.armor_class_dodge, 0);
                                     }
-
-                                    if (user_number.option_condition_armor_penalty === 1 && encumbrance.armor_penalty_proficiency !== 0) cache.resume.push(getTranslationByKey("status-armor-proficiency"));
                                 }
 
                                 // ------------------------------------------
@@ -6016,7 +6014,7 @@
                                         name="roll_attribute_strength"
                                         type="roll"
                                         data-i18n-title="attribute-strength-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_strength}}} {{test=[[1d20+@{foo_character_strength_mod}+@{foo_status_encumbrance}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_strength}}} {{test=[[1d20+@{foo_character_strength_mod}+@{foo_status_encumbrance_proficiency}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
@@ -6035,7 +6033,7 @@
                                 <input type="number" name="attr_character_strength_modifier_status" title="" value="@{foo_status_strength}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="character-modifier-encumbrance-title">
-                                <input type="number" name="attr_character_strength_modifier_encumbrance" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
+                                <input type="number" name="attr_character_strength_modifier_encumbrance" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_strength_base" title="" min="0" step="1" value="10"/>
@@ -6059,7 +6057,7 @@
                                         name="roll_attribute_dexterity"
                                         type="roll"
                                         data-i18n-title="attribute-dexterity-roll-title"
-                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_character_dexterity_mod}+@{foo_status_encumbrance}]]}}"
+                                        value="@{option_whisper} &{template:roll} {{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_dexterity}}} {{test=[[1d20+@{foo_character_dexterity_mod}+@{foo_status_encumbrance_proficiency}]]}}"
                                 ></button>
                             </td>
                             <td class="text-center">
@@ -6078,7 +6076,7 @@
                                 <input type="number" name="attr_character_dexterity_modifier_status" title="" value="@{foo_status_dexterity}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="character-modifier-encumbrance-title">
-                                <input type="number" name="attr_character_dexterity_modifier_encumbrance" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
+                                <input type="number" name="attr_character_dexterity_modifier_encumbrance" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_character_dexterity_base" title="" min="0" step="1" value="10"/>
@@ -7467,13 +7465,13 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_initiative_total" title="" class="text-strong" value="@{foo_character_dexterity_mod}+@{foo_status_initiative}+@{initiative_miscellaneous}" disabled="disabled"/>
+                                <input type="number" name="attr_initiative_total" title="" class="text-strong" value="@{foo_character_dexterity_mod}+@{foo_status_encumbrance_proficiency}+@{foo_status_initiative}+@{initiative_miscellaneous}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_initiative_dexterity" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_initiative_status" title="" value="@{foo_status_encumbrance}+@{foo_status_initiative}" disabled="disabled"/>
+                                <input type="number" name="attr_initiative_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_initiative}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_initiative_miscellaneous" title="" step="1" value="0"/>
@@ -7538,7 +7536,7 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_combat_maneuver_bonus_creature_size}+@{foo_status_combat_maneuver_bonus}+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_combat_maneuver_bonus_creature_size}+@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_bonus}+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_base_attack_bonus" title="" value="@{foo_class_base_attack_bonus1_total}" disabled="disabled"/>
@@ -7550,7 +7548,7 @@
                                 <input type="number" name="attr_combat_maneuver_bonus_mod_height" title="" value="@{foo_combat_maneuver_bonus_creature_size}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_mod_status" title="" value="@{foo_status_encumbrance}+@{foo_status_combat_maneuver_bonus}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_mod_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_bonus}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_bonus" title="" min="0" step="1" value="0"/>
@@ -7659,7 +7657,7 @@
                                                         <tbody>
                                                         <tr>
                                                             <td>
-                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_creature_size_select}+(@{foo_status_encumbrance}+@{foo_base_attack})+@{battle_mod_miscellaneous}+@{battle_mod_temporary}" disabled="disabled" />
+                                                                <input type="number" name="attr_battle_total" title="" class="text-strong" value="@{battle_base_attack_bonus_select}+@{battle_mod_attribute}+@{character_creature_size_select}+(@{foo_status_encumbrance_proficiency}+@{foo_base_attack})+@{battle_mod_miscellaneous}+@{battle_mod_temporary}" disabled="disabled" />
                                                             </td>
                                                             <td>
                                                                 <div class="input-group">
@@ -7685,7 +7683,7 @@
                                                                 <input type="number" name="attr_battle_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                             </td>
                                                             <td>
-                                                                <input type="number" name="attr_battle_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled" />
+                                                                <input type="number" name="attr_battle_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled" />
                                                             </td>
                                                             <td>
                                                                 <input type="number" name="attr_battle_mod_miscellaneous" title="" step="1" value="0"/>
@@ -7710,7 +7708,7 @@
 
                                                     <hr>
 
-                                                    <table class="battle-table-damage">
+                                                    <table class="battle-damage-table">
                                                         <thead>
                                                         <tr>
                                                             <th width="22.222222%">
@@ -7719,11 +7717,11 @@
                                                             <th width="11.111111%">
                                                                 <span data-i18n="modifier-short" data-i18n-title="battle-modifier-damage-title"></span>
                                                             </th>
-                                                            <th width="16.666666%">
-                                                                <span data-i18n="battle-weapon-handling"></span>
-                                                            </th>
                                                             <th width="11.111111%">
                                                                 <span data-i18n="modifier-status"></span>
+                                                            </th>
+                                                            <th width="16.666666%">
+                                                                <span data-i18n="battle-weapon-handling"></span>
                                                             </th>
                                                             <th width="16.666666%">
                                                                 <span data-i18n="battle-critic"></span>
@@ -7770,6 +7768,9 @@
                                                                 </div>
                                                             </td>
                                                             <td>
+                                                                <input type="number" name="attr_battle_damage_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_attack_damage}" disabled="disabled" />
+                                                            </td>
+                                                            <td>
                                                                 <div class="input-group">
                                                                     <input type="number" name="attr_battle_handler" title="" value="@{battle_handler_select}" disabled="disabled"/>
                                                                     <select class="fixed-medium" name="attr_battle_handler_select" title="">
@@ -7778,9 +7779,6 @@
                                                                         <option data-i18n="battle-handler-two-handed" value="1.5"></option>
                                                                     </select>
                                                                 </div>
-                                                            </td>
-                                                            <td>
-                                                                <input type="number" name="attr_battle_damage_status" title="" value="@{foo_status_encumbrance}+@{foo_status_attack_damage}" disabled="disabled" />
                                                             </td>
                                                             <td>
                                                                 <div class="input-group">
@@ -7828,7 +7826,7 @@
                                                                         type="roll"
                                                                         class="button"
                                                                         data-i18n-title="battle-damage-roll-no-aiming-title"
-                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_damage=show}} {{name=@{character_name}}} {{status=@{status}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor(@{battle_dices_count}d@{battle_dices}+@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select}+@{battle_damage_add}+@{foo_status_encumbrance}+@{foo_status_encumbrance}+@{foo_status_attack_damage})} }dl1]]}}"
+                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_damage=show}} {{name=@{character_name}}} {{status=@{status}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor(@{battle_dices_count}d@{battle_dices}+@{battle_bonus}+(@{battle_damage_mod_attribute}+@{foo_status_encumbrance_proficiency}+@{foo_status_attack_damage})*@{battle_handler_select}+@{battle_damage_add})} }dl1]]}}"
                                                                 >
                                                                     <span data-i18n="damage"></span>
                                                                 </button>
@@ -7839,7 +7837,7 @@
                                                                         type="roll"
                                                                         class="button"
                                                                         data-i18n-title="battle-damage-critic-roll-no-aiming-title"
-                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_damage=show}} {{name=@{character_name}}} {{status=@{status}}} {{is_critic=show}} {{label=@{label_battle_damage_critic}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_encumbrance}+@{foo_status_attack_damage}} }dl1]]}}"
+                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_damage=show}} {{name=@{character_name}}} {{status=@{status}}} {{is_critic=show}} {{label=@{label_battle_damage_critic}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+(@{battle_damage_mod_attribute}+@{foo_status_encumbrance_proficiency}+@{foo_status_attack_damage})*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add} } }dl1]]}}"
                                                                 >
                                                                     <span data-i18n="battle-damage-critic"></span>
                                                                 </button>
@@ -7850,7 +7848,7 @@
                                                                         type="roll"
                                                                         class="button"
                                                                         data-i18n-title="battle-deathblow-roll-no-aiming-title"
-                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_deathblow=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_battle_deathblow}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_encumbrance}+@{foo_status_attack_damage}} }dl1]]}}"
+                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_deathblow=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_battle_deathblow}}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+(@{battle_damage_mod_attribute}+@{foo_status_encumbrance_proficiency}+@{foo_status_attack_damage})*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add} } }dl1]]}}"
                                                                 >
                                                                     <span data-i18n="battle-deathblow"></span>
                                                                 </button>
@@ -7866,7 +7864,7 @@
                                                                         type="roll"
                                                                         class="button"
                                                                         data-i18n-title="battle-deathblow-roll-aiming-title"
-                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_deathblow=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_battle_deathblow}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_encumbrance}+@{foo_status_attack_damage}} }dl1]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|status}}}"
+                                                                        value="@{option_whisper} &{template:roll} {{roll_battle_deathblow=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_battle_deathblow}} {{attack_name=@{battle_name}}} {{damage=[[{ 1d1, {floor((@{battle_dices_count}*@{battle_damage_critic_multiplier})d@{battle_dices}+(@{battle_bonus}+@{battle_damage_mod_attribute}*@{battle_handler_select})*@{battle_damage_critic_multiplier})+@{battle_damage_add}+@{foo_status_encumbrance_proficiency}+@{foo_status_attack_damage}} }dl1]]}} {{target_name=@{target|character_name}}} {{target_status=@{target|status}}}"
                                                                 >
                                                                     <span data-i18n="battle-deathblow"></span>
                                                                 </button>
@@ -8371,7 +8369,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_melee_touch_total" title="" class="text-strong" value="@{spellcustom_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spellcustom_melee_touch_mod_miscellaneous}+@{spellcustom_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_melee_touch_total" title="" class="text-strong" value="@{spellcustom_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spellcustom_melee_touch_mod_miscellaneous}+@{spellcustom_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -8391,7 +8389,7 @@
                                                                                 <input type="number" name="attr_spellcustom_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spellcustom_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spellcustom_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -8433,7 +8431,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spellcustom_ranged_touch_total" title="" class="text-strong" value="@{spellcustom_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spellcustom_ranged_touch_mod_miscellaneous}+@{spellcustom_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_ranged_touch_total" title="" class="text-strong" value="@{spellcustom_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spellcustom_ranged_touch_mod_miscellaneous}+@{spellcustom_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -8453,7 +8451,7 @@
                                                                                 <input type="number" name="attr_spellcustom_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spellcustom_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spellcustom_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spellcustom_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -9274,7 +9272,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_melee_touch_total" title="" class="text-strong" value="@{spell0_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell0_melee_touch_mod_miscellaneous}+@{spell0_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_melee_touch_total" title="" class="text-strong" value="@{spell0_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell0_melee_touch_mod_miscellaneous}+@{spell0_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -9294,7 +9292,7 @@
                                                                                 <input type="number" name="attr_spell0_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell0_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell0_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -9336,7 +9334,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell0_ranged_touch_total" title="" class="text-strong" value="@{spell0_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell0_ranged_touch_mod_miscellaneous}+@{spell0_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_ranged_touch_total" title="" class="text-strong" value="@{spell0_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell0_ranged_touch_mod_miscellaneous}+@{spell0_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -9356,7 +9354,7 @@
                                                                                 <input type="number" name="attr_spell0_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell0_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell0_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell0_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -10177,7 +10175,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_melee_touch_total" title="" class="text-strong" value="@{spell1_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell1_melee_touch_mod_miscellaneous}+@{spell1_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_melee_touch_total" title="" class="text-strong" value="@{spell1_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell1_melee_touch_mod_miscellaneous}+@{spell1_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -10197,7 +10195,7 @@
                                                                                 <input type="number" name="attr_spell1_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell1_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell1_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -10239,7 +10237,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell1_ranged_touch_total" title="" class="text-strong" value="@{spell1_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell1_ranged_touch_mod_miscellaneous}+@{spell1_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_ranged_touch_total" title="" class="text-strong" value="@{spell1_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell1_ranged_touch_mod_miscellaneous}+@{spell1_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -10259,7 +10257,7 @@
                                                                                 <input type="number" name="attr_spell1_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell1_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell1_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell1_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -11080,7 +11078,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_melee_touch_total" title="" class="text-strong" value="@{spell2_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell2_melee_touch_mod_miscellaneous}+@{spell2_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_melee_touch_total" title="" class="text-strong" value="@{spell2_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell2_melee_touch_mod_miscellaneous}+@{spell2_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -11100,7 +11098,7 @@
                                                                                 <input type="number" name="attr_spell2_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell2_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell2_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -11142,7 +11140,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell2_ranged_touch_total" title="" class="text-strong" value="@{spell2_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell2_ranged_touch_mod_miscellaneous}+@{spell2_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_ranged_touch_total" title="" class="text-strong" value="@{spell2_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell2_ranged_touch_mod_miscellaneous}+@{spell2_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -11162,7 +11160,7 @@
                                                                                 <input type="number" name="attr_spell2_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell2_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell2_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell2_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -11983,7 +11981,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_melee_touch_total" title="" class="text-strong" value="@{spell3_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell3_melee_touch_mod_miscellaneous}+@{spell3_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_melee_touch_total" title="" class="text-strong" value="@{spell3_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell3_melee_touch_mod_miscellaneous}+@{spell3_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12003,7 +12001,7 @@
                                                                                 <input type="number" name="attr_spell3_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell3_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell3_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -12045,7 +12043,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell3_ranged_touch_total" title="" class="text-strong" value="@{spell3_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell3_ranged_touch_mod_miscellaneous}+@{spell3_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_ranged_touch_total" title="" class="text-strong" value="@{spell3_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell3_ranged_touch_mod_miscellaneous}+@{spell3_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12065,7 +12063,7 @@
                                                                                 <input type="number" name="attr_spell3_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell3_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell3_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell3_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -12886,7 +12884,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_melee_touch_total" title="" class="text-strong" value="@{spell4_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell4_melee_touch_mod_miscellaneous}+@{spell4_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_melee_touch_total" title="" class="text-strong" value="@{spell4_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell4_melee_touch_mod_miscellaneous}+@{spell4_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12906,7 +12904,7 @@
                                                                                 <input type="number" name="attr_spell4_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell4_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell4_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -12948,7 +12946,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell4_ranged_touch_total" title="" class="text-strong" value="@{spell4_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell4_ranged_touch_mod_miscellaneous}+@{spell4_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_ranged_touch_total" title="" class="text-strong" value="@{spell4_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell4_ranged_touch_mod_miscellaneous}+@{spell4_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -12968,7 +12966,7 @@
                                                                                 <input type="number" name="attr_spell4_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell4_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell4_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell4_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -13789,7 +13787,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_melee_touch_total" title="" class="text-strong" value="@{spell5_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell5_melee_touch_mod_miscellaneous}+@{spell5_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_melee_touch_total" title="" class="text-strong" value="@{spell5_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell5_melee_touch_mod_miscellaneous}+@{spell5_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -13809,7 +13807,7 @@
                                                                                 <input type="number" name="attr_spell5_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell5_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell5_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -13851,7 +13849,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell5_ranged_touch_total" title="" class="text-strong" value="@{spell5_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell5_ranged_touch_mod_miscellaneous}+@{spell5_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_ranged_touch_total" title="" class="text-strong" value="@{spell5_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell5_ranged_touch_mod_miscellaneous}+@{spell5_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -13871,7 +13869,7 @@
                                                                                 <input type="number" name="attr_spell5_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell5_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell5_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell5_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -14692,7 +14690,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_melee_touch_total" title="" class="text-strong" value="@{spell6_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell6_melee_touch_mod_miscellaneous}+@{spell6_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_melee_touch_total" title="" class="text-strong" value="@{spell6_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell6_melee_touch_mod_miscellaneous}+@{spell6_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -14712,7 +14710,7 @@
                                                                                 <input type="number" name="attr_spell6_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell6_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell6_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -14754,7 +14752,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell6_ranged_touch_total" title="" class="text-strong" value="@{spell6_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell6_ranged_touch_mod_miscellaneous}+@{spell6_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_ranged_touch_total" title="" class="text-strong" value="@{spell6_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell6_ranged_touch_mod_miscellaneous}+@{spell6_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -14774,7 +14772,7 @@
                                                                                 <input type="number" name="attr_spell6_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell6_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell6_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell6_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -15595,7 +15593,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_melee_touch_total" title="" class="text-strong" value="@{spell7_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell7_melee_touch_mod_miscellaneous}+@{spell7_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_melee_touch_total" title="" class="text-strong" value="@{spell7_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell7_melee_touch_mod_miscellaneous}+@{spell7_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -15615,7 +15613,7 @@
                                                                                 <input type="number" name="attr_spell7_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell7_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell7_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -15657,7 +15655,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell7_ranged_touch_total" title="" class="text-strong" value="@{spell7_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell7_ranged_touch_mod_miscellaneous}+@{spell7_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_ranged_touch_total" title="" class="text-strong" value="@{spell7_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell7_ranged_touch_mod_miscellaneous}+@{spell7_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -15677,7 +15675,7 @@
                                                                                 <input type="number" name="attr_spell7_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell7_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell7_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell7_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -16498,7 +16496,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_melee_touch_total" title="" class="text-strong" value="@{spell8_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell8_melee_touch_mod_miscellaneous}+@{spell8_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_melee_touch_total" title="" class="text-strong" value="@{spell8_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell8_melee_touch_mod_miscellaneous}+@{spell8_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -16518,7 +16516,7 @@
                                                                                 <input type="number" name="attr_spell8_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell8_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell8_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -16560,7 +16558,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell8_ranged_touch_total" title="" class="text-strong" value="@{spell8_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell8_ranged_touch_mod_miscellaneous}+@{spell8_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_ranged_touch_total" title="" class="text-strong" value="@{spell8_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell8_ranged_touch_mod_miscellaneous}+@{spell8_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -16580,7 +16578,7 @@
                                                                                 <input type="number" name="attr_spell8_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell8_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell8_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell8_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -17401,7 +17399,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_melee_touch_total" title="" class="text-strong" value="@{spell9_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell9_melee_touch_mod_miscellaneous}+@{spell9_melee_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_melee_touch_total" title="" class="text-strong" value="@{spell9_melee_touch_mod_base_attack_bonus_select}+@{foo_character_strength_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell9_melee_touch_mod_miscellaneous}+@{spell9_melee_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -17421,7 +17419,7 @@
                                                                                 <input type="number" name="attr_spell9_melee_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell9_melee_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_melee_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell9_melee_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -17463,7 +17461,7 @@
                                                                         <tbody>
                                                                         <tr>
                                                                             <td>
-                                                                                <input type="number" name="attr_spell9_ranged_touch_total" title="" class="text-strong" value="@{spell9_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance}+@{foo_base_attack}+@{spell9_ranged_touch_mod_miscellaneous}+@{spell9_ranged_touch_mod_temporary}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_ranged_touch_total" title="" class="text-strong" value="@{spell9_ranged_touch_mod_base_attack_bonus_select}+@{foo_character_dexterity_mod}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}+@{foo_base_attack}+@{spell9_ranged_touch_mod_miscellaneous}+@{spell9_ranged_touch_mod_temporary}" disabled="disabled"/>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="input-group">
@@ -17483,7 +17481,7 @@
                                                                                 <input type="number" name="attr_spell9_ranged_touch_height" title="" value="@{character_creature_size_select}" disabled="disabled"/>
                                                                             </td>
                                                                             <th>
-                                                                                <input type="number" name="attr_spell9_ranged_touch_status" title="" value="@{foo_status_encumbrance}+@{foo_base_attack}" disabled="disabled"/>
+                                                                                <input type="number" name="attr_spell9_ranged_touch_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_base_attack}" disabled="disabled"/>
                                                                             </th>
                                                                             <td>
                                                                                 <input type="number" name="attr_spell9_ranged_touch_mod_miscellaneous" title="" step="1" value="0"/>
@@ -18180,7 +18178,7 @@
                                 <span data-i18n="save-reflex"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_encumbrance}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_encumbrance_proficiency}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_base" title="" value="@{class_reflex_total}" disabled="disabled" />
@@ -18194,7 +18192,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_status" title="" step="1" value="@{foo_status_encumbrance}+@{foo_status_reflex}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_status" title="" step="1" value="@{foo_status_encumbrance_proficiency}+@{foo_status_reflex}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_feat" title="" step="1" value="0"/>
@@ -18324,31 +18322,31 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_encumbrance}+@{foo_status_armor_class_melee}" disabled="disabled"/>
-                            </td>
-                            <td></td>
-                            <td>
-                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_encumbrance}+@{foo_status_armor_class_ranged}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_melee}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance}+@{foo_status_dexterity_flatfooted}+@{foo_armor_bonus}+@{character_creature_size_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_flat_footed_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_ranged}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance}+@{foo_status_armor_class_dodge}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_dexterity_flatfooted}+@{foo_armor_bonus}+@{character_creature_size_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_flat_footed_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
+                            </td>
+                            <td></td>
+                            <td>
+                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_dodge}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                            </td>
+                            <td>
+                                <input type="number" name="attr_armor_class_touch_status" title="" value="@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -18438,10 +18436,10 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{foo_status_encumbrance}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_character_strength_mod}+@{foo_armor_class_dexterity}+@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_character_strength_mod}+@{foo_armor_class_dexterity}+@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_status" title="" value="@{foo_status_encumbrance}+@{foo_status_combat_maneuver_defense}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_defense}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -18681,7 +18679,7 @@
                                 <input type="number" name="attr_skill_acrobatics_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_acrobatics_total" title="" disabled="disabled" class="text-strong" value="@{skill_acrobatics_ranks}+@{skill_acrobatics_cc}+@{skill_acrobatics_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_acrobatics_trait}+@{skill_acrobatics_gift}+@{skill_acrobatics_temporary}"/>
+                                <input type="number" name="attr_skill_acrobatics_total" title="" disabled="disabled" class="text-strong" value="@{skill_acrobatics_ranks}+@{skill_acrobatics_cc}+@{skill_acrobatics_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_acrobatics_trait}+@{skill_acrobatics_gift}+@{skill_acrobatics_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_acrobatics_class" title="" value="@{skill_acrobatics_cc}" disabled="disabled"/>
@@ -18695,7 +18693,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_acrobatics_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_acrobatics_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_acrobatics_trait" title="" step="1" value="0"/>
@@ -18882,7 +18880,7 @@
                                 <input type="number" name="attr_skill_climb_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climb_total" title="" disabled="disabled" class="text-strong" value="@{skill_climb_ranks}+@{skill_climb_cc}+@{skill_climb_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_climb_trait}+@{skill_climb_gift}+@{skill_climb_temporary}"/>
+                                <input type="number" name="attr_skill_climb_total" title="" disabled="disabled" class="text-strong" value="@{skill_climb_ranks}+@{skill_climb_cc}+@{skill_climb_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_climb_trait}+@{skill_climb_gift}+@{skill_climb_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_climb_class" title="" value="@{skill_climb_cc}" disabled="disabled"/>
@@ -18896,7 +18894,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_climb_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_climb_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_climb_trait" title="" step="1" value="0"/>
@@ -19035,7 +19033,7 @@
                                 <input type="number" name="attr_skill_disable_device_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_disable_device_total" title="" disabled="disabled" class="text-strong" value="@{skill_disable_device_ranks}+@{skill_disable_device_cc}+@{skill_disable_device_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_disable_device_trait}+@{skill_disable_device_gift}+@{skill_disable_device_temporary}"/>
+                                <input type="number" name="attr_skill_disable_device_total" title="" disabled="disabled" class="text-strong" value="@{skill_disable_device_ranks}+@{skill_disable_device_cc}+@{skill_disable_device_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_disable_device_trait}+@{skill_disable_device_gift}+@{skill_disable_device_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_disable_device_class" title="" value="@{skill_disable_device_cc}" disabled="disabled"/>
@@ -19049,7 +19047,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_disable_device_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_disable_device_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_disable_device_trait" title="" step="1" value="0"/>
@@ -19133,7 +19131,7 @@
                                 <input type="number" name="attr_skill_escape_artist_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_artist_total" title="" disabled="disabled" class="text-strong" value="@{skill_escape_artist_ranks}+@{skill_escape_artist_cc}+@{skill_escape_artist_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_escape_artist_trait}+@{skill_escape_artist_gift}+@{skill_escape_artist_temporary}"/>
+                                <input type="number" name="attr_skill_escape_artist_total" title="" disabled="disabled" class="text-strong" value="@{skill_escape_artist_ranks}+@{skill_escape_artist_cc}+@{skill_escape_artist_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_escape_artist_trait}+@{skill_escape_artist_gift}+@{skill_escape_artist_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_escape_artist_class" title="" value="@{skill_escape_artist_cc}" disabled="disabled"/>
@@ -19147,7 +19145,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_escape_artist_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_escape_artist_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_escape_artist_trait" title="" step="1" value="0"/>
@@ -19182,7 +19180,7 @@
                                 <input type="number" name="attr_skill_fly_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_fly_total" title="" disabled="disabled" class="text-strong" value="@{skill_fly_ranks}+@{skill_fly_cc}+@{skill_fly_stat}+(@{foo_status_skill}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency})+@{skill_fly_trait}+@{skill_fly_gift}+@{skill_fly_temporary}"/>
+                                <input type="number" name="attr_skill_fly_total" title="" disabled="disabled" class="text-strong" value="@{skill_fly_ranks}+@{skill_fly_cc}+@{skill_fly_stat}+(@{foo_status_skill}+@{character_creature_size_select}+@{foo_status_encumbrance})+@{skill_fly_trait}+@{skill_fly_gift}+@{skill_fly_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_fly_class" title="" value="@{skill_fly_cc}" disabled="disabled"/>
@@ -19196,7 +19194,7 @@
                                 </div>
                             </td>
                             <td data-i18n-title="skill-fly-title">
-                                <input type="number" name="attr_skill_fly_penalty" title="" value="@{foo_status_skill}+@{character_creature_size_select}+@{foo_status_encumbrance_proficiency}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_fly_penalty" title="" value="@{foo_status_skill}+@{character_creature_size_select}+@{foo_status_encumbrance}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_fly_trait" title="" step="1" value="0"/>
@@ -20032,7 +20030,7 @@
                                 <input type="number" name="attr_skill_ride_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_ride_total" title="" disabled="disabled" class="text-strong" value="@{skill_ride_ranks}+@{skill_ride_class}+@{skill_ride_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_ride_trait}+@{skill_ride_gift}+@{skill_ride_temporary}"/>
+                                <input type="number" name="attr_skill_ride_total" title="" disabled="disabled" class="text-strong" value="@{skill_ride_ranks}+@{skill_ride_class}+@{skill_ride_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_ride_trait}+@{skill_ride_gift}+@{skill_ride_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_ride_class" title="" value="@{skill_ride_cc}" disabled="disabled"/>
@@ -20046,7 +20044,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_ride_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_ride_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_ride_trait" title="" step="1" value="0"/>
@@ -20131,7 +20129,7 @@
                                 <input type="number" name="attr_skill_sleight_of_hand_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sleight_of_hand_total" title="" disabled="disabled" class="text-strong" value="@{skill_sleight_of_hand_ranks}+@{skill_sleight_of_hand_cc}+@{skill_sleight_of_hand_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_sleight_of_hand_trait}+@{skill_sleight_of_hand_gift}+@{skill_sleight_of_hand_temporary}"/>
+                                <input type="number" name="attr_skill_sleight_of_hand_total" title="" disabled="disabled" class="text-strong" value="@{skill_sleight_of_hand_ranks}+@{skill_sleight_of_hand_cc}+@{skill_sleight_of_hand_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_sleight_of_hand_trait}+@{skill_sleight_of_hand_gift}+@{skill_sleight_of_hand_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_sleight_of_hand_class" title="" value="@{skill_sleight_of_hand_cc}" disabled="disabled"/>
@@ -20145,7 +20143,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_sleight_of_hand_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_sleight_of_hand_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_sleight_of_hand_trait" title="" step="1" value="0"/>
@@ -20231,7 +20229,7 @@
                                 <input type="number" name="attr_skill_stealth_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_stealth_total" title="" disabled="disabled" class="text-strong" value="@{skill_stealth_ranks}+@{skill_stealth_cc}+@{skill_stealth_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_stealth_trait}+@{skill_stealth_gift}+@{skill_stealth_temporary}"/>
+                                <input type="number" name="attr_skill_stealth_total" title="" disabled="disabled" class="text-strong" value="@{skill_stealth_ranks}+@{skill_stealth_cc}+@{skill_stealth_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_stealth_trait}+@{skill_stealth_gift}+@{skill_stealth_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_stealth_class" title="" value="@{skill_stealth_cc}" disabled="disabled"/>
@@ -20245,7 +20243,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_stealth_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_stealth_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_stealth_trait" title="" step="1" value="0"/>
@@ -20329,7 +20327,7 @@
                                 <input type="number" name="attr_skill_swim_ranks" title="" min="0" step="1" max="@{foo_class_level_total}" value="0"/>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swim_total" title="" disabled="disabled" class="text-strong" value="@{skill_swim_ranks}+@{skill_swim_cc}+@{skill_swim_stat}+(@{foo_status_encumbrance_proficiency}+@{foo_status_skill})+@{skill_swim_trait}+@{skill_swim_gift}+@{skill_swim_temporary}"/>
+                                <input type="number" name="attr_skill_swim_total" title="" disabled="disabled" class="text-strong" value="@{skill_swim_ranks}+@{skill_swim_cc}+@{skill_swim_stat}+(@{foo_status_encumbrance}+@{foo_status_skill})+@{skill_swim_trait}+@{skill_swim_gift}+@{skill_swim_temporary}"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_swim_class" title="" value="@{skill_swim_cc}" disabled="disabled"/>
@@ -20343,7 +20341,7 @@
                                 </div>
                             </td>
                             <td>
-                                <input type="number" name="attr_skill_swim_penalty" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_skill}" disabled="disabled"/>
+                                <input type="number" name="attr_skill_swim_penalty" title="" value="@{foo_status_encumbrance}+@{foo_status_skill}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_skill_swim_trait" title="" step="1" value="0"/>
@@ -22471,27 +22469,27 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_melee" title="" class="text-strong" value="@{foo_status_encumbrance}+@{npc_armor_class_melee_base}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_melee" title="" class="text-strong" value="@{npc_armor_class_melee_base}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="modifier-status">
-                                <input type="number" name="attr_npc_armor_class_melee_status" title="" value="@{foo_status_encumbrance}+@{foo_status_armor_class_melee}" disabled="disabled" />
+                                <input type="number" name="attr_npc_armor_class_melee_status" title="" value="+@{foo_status_armor_class_melee}" disabled="disabled" />
                             </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_melee_base" title="" value="0" />
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_ranged" title="" class="text-strong" value="@{foo_status_encumbrance}+@{npc_armor_class_melee_base}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_ranged" title="" class="text-strong" value="@{npc_armor_class_melee_base}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="modifier-status">
-                                <input type="number" name="attr_npc_armor_class_ranged_status" title="" value="@{foo_status_encumbrance}+@{foo_status_armor_class_ranged}" disabled="disabled" />
+                                <input type="number" name="attr_npc_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" disabled="disabled" />
                             </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_ranged_base" title="" value="@{npc_armor_class_melee_base}" disabled="disabled" />
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_flat_footed" title="" class="text-strong" value="@{foo_status_encumbrance}+@{foo_status_dexterity_flatfooted}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_flat_footed" title="" class="text-strong" value="+@{foo_status_dexterity_flatfooted}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="modifier-status">
                                 <input type="number" name="attr_npc_armor_class_flat_footed_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
@@ -22501,7 +22499,7 @@
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_touch" title="" class="text-strong" value="@{foo_status_encumbrance}+@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_touch" title="" class="text-strong" value="@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td data-i18n-title="modifier-status">
                                 <input type="number" name="attr_npc_armor_class_touch_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>

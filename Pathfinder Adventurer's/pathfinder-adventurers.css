@@ -1717,7 +1717,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 960px;
 }
 
-.charsheet .sheet-battle-table-damage {
+.charsheet .sheet-battle-damage-table {
     max-width: 960px;
 }
 
@@ -2464,6 +2464,7 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 .sheet-rolltemplate-roll .sheet-critic {
     background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/critical_hit.png") no-repeat center;
     background-size: contain;
+    width: 100%;
 }
 
 .sheet-rolltemplate-roll .sheet-text-disabled {
