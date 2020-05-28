@@ -461,7 +461,7 @@
                             payload["npc_armor_class_touch_base"] = parseInt(regex[3]);
                         }
                         payload["npc_armor_class"] = user_string.compendium_armor_class;
-                        payload["npc_combat_maneuver_defense"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
+                        payload["npc_combat_maneuver_defense_base"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
                         payload["npc_damage_resistance"] = user_string.compendium_damage_resistance;
                         payload["npc_defensive_ability"] = user_string.compendium_defensive_ability;
                         payload["npc_fortitude"] = parseInt(user_string.compendium_fortitude);
@@ -4564,7 +4564,7 @@
                             </tr>
                             <tr>
                                 <th>
-                                    <span data-i18n="health-nonlethal-damage-h1"></span>
+                                    <span data-i18n="health-nonlethal-damage"></span>
                                 </th>
                                 <td>
                                     <div class="input-group">
@@ -4624,20 +4624,20 @@
                         <div class="status-modal">
                             <div class="status-button">
                                 <div class="modal">
-                                    <input title="" class="modal-checkbox" data-i18n-title="status-h1" type="checkbox" />
-                                    <span class="modal-status-fake-button button" data-i18n="status"></span>
+                                    <input title="" class="modal-checkbox" data-i18n-title="status" type="checkbox" />
+                                    <span class="modal-status-fake-button button" data-i18n="modifier-status"></span>
                                     <div class="modal-background"></div>
                                     <div class="modal-dialog modal-large">
                                         <div class="modal-header">
-                                            <span data-i18n="status-h1"></span>
+                                            <span data-i18n="status"></span>
                                         </div>
                                         <input type="text" class="status-modal-resume" name="attr_status" title="" readonly="readonly" />
 
                                         <div class="modal-body">
                                             <div class="flex-row">
                                                 <div class="flex-col">
-                                                    <h2 data-i18n="status-health-h1"></h2>
-                                                    <ul data-i18n-list="status-health-list">
+                                                    <h2 data-i18n="status-health-and-mental"></h2>
+                                                    <ul data-i18n-list="status-health-and-mental-list">
                                                         <li data-i18n-list-item="antagonized">
                                                             <div class="button-switch">
                                                                 <input type="checkbox" name="attr_status_condition_antagonized" title="" data-i18n-title="status-antagonized-title"/>
@@ -4718,7 +4718,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="status-environment-h1"></h2>
+                                                    <h2 data-i18n="status-environment"></h2>
                                                     <ul data-i18n-list="status-environment-list">
                                                         <li data-i18n-list-item="cowering">
                                                             <div class="button-switch">
@@ -4783,7 +4783,7 @@
                                                 </div>
 
                                                 <div class="flex-col">
-                                                    <h2 data-i18n="status-deseases-h1"></h2>
+                                                    <h2 data-i18n="status-deseases"></h2>
                                                     <ul data-i18n-list="status-deseases-list">
                                                         <li data-i18n-list-item="sickened">
                                                             <div class="button-switch">
@@ -4801,7 +4801,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="status-sens-h1"></h2>
+                                                    <h2 data-i18n="status-sens"></h2>
                                                     <ul data-i18n-list="status-sens-list">
                                                         <li data-i18n-list-item="blinded">
                                                             <div class="button-switch">
@@ -4847,7 +4847,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="status-spell-h1"></h2>
+                                                    <h2 data-i18n="status-spell"></h2>
                                                     <ul data-i18n-list="status-spell-list">
                                                         <li data-i18n-list-item="incorporeal">
                                                             <div class="button-switch">
@@ -4888,7 +4888,7 @@
                                                 </div>
 
                                                 <div class="flex-col">
-                                                    <h2 data-i18n="status-negative-level-h1"></h2>
+                                                    <h2 data-i18n="status-negative-level"></h2>
                                                     <ul>
                                                         <li>
                                                             <div class="input-group">
@@ -4908,7 +4908,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="status-class-h1"></h2>
+                                                    <h2 data-i18n="status-class"></h2>
                                                     <ul>
                                                         <li>
                                                             <div class="button-switch">
@@ -4958,7 +4958,7 @@
                                                 </div>
 
                                                 <div class="flex-col">
-                                                    <h2 data-i18n="status-effect-h1"></h2>
+                                                    <h2 data-i18n="status-effect"></h2>
                                                     <textarea class="status-effect" name="attr_status_effect" title="" readonly="readonly"></textarea>
                                                 </div>
                                             </div>
@@ -5132,7 +5132,7 @@
                                             </div>
 
                                             <div class="flex-col3">
-                                                <h2 data-i18n="attribute-h1"></h2>
+                                                <h2 data-i18n="attribute"></h2>
                                                 <ul>
                                                     <li>
                                                         <div class="input-group">
@@ -5263,7 +5263,7 @@
                                                     <li>
                                                         <div class="input-group">
                                                             <div class="input-group-text">
-                                                                <span data-i18n="spell-arcane-spell-failure"></span>
+                                                                <span data-i18n="status-custom-spell-arcane-spell-failure"></span>
                                                             </div>
                                                             <input type="number" name="attr_status_arcane_spell_failure" title="" step="1" value="0" />
                                                             <div class="input-group-text">
@@ -5450,7 +5450,7 @@
                                 <div class="modal-body">
                                     <div class="flex-row">
                                         <div class="flex-col6">
-                                            <h2 data-i18n="option-general-h1"></h2>
+                                            <h2 data-i18n="option-general"></h2>
                                             <ul>
                                                 <li>
                                                     <div class="button" data-i18n-title="option-template-title">
@@ -5494,7 +5494,7 @@
                                                 </li>
                                             </ul>
 
-                                            <h2 data-i18n="option-unit-h1"></h2>
+                                            <h2 data-i18n="option-unit"></h2>
                                             <ul>
                                                 <li>
                                                     <div class="button" data-i18n-title="option-unit-speed-title">
@@ -5566,7 +5566,7 @@
                                             </ul>
                                         </div>
                                         <div class="flex-col6">
-                                            <h2 data-i18n="option-status-h1"></h2>
+                                            <h2 data-i18n="option-status"></h2>
                                             <ul data-i18n-list="option-status-list">
                                                 <li data-i18n-list-item="aging">
                                                     <div class="button-switch">
@@ -5619,7 +5619,7 @@
                                                 </li>
                                             </ul>
 
-                                            <h2 data-i18n="option-compendium-h1"></h2>
+                                            <h2 data-i18n="option-compendium"></h2>
                                             <ul data-i18n-list="option-compendium-list">
                                                 <li data-i18n-list-item="height">
                                                     <div class="button-switch">
@@ -5736,7 +5736,7 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="health-nonlethal-damage-h1"></h1>
+                            <h1 data-i18n="health-nonlethal-damage"></h1>
                             <table class="health-nonlethal-damage">
                                 <thead>
                                 <tr>
@@ -5775,7 +5775,7 @@
                 <div class="section template-health-alternative">
                     <div class="flex-row">
                         <div class="flex-col7">
-                            <h1 data-i18n="health-wound-points-h1"></h1>
+                            <h1 data-i18n="health-wound-points"></h1>
                             <table class="health-wound-points">
                                 <thead>
                                 <tr>
@@ -5810,7 +5810,7 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="health-vigor-h1"></h1>
+                            <h1 data-i18n="health-vigor"></h1>
                             <table class="health-vigor">
                                 <thead>
                                 <tr>
@@ -5849,13 +5849,13 @@
 
                 <div class="flex-row">
                     <div class="flex-col7">
-                        <h1 data-i18n="character-level-h1"></h1>
+                        <h1 data-i18n="character-level"></h1>
                         <div class="template-playable-character">
                             <table class="character-level">
                                 <thead>
                                 <tr>
                                     <th width="25%">
-                                        <span data-i18n="character-level"></span>
+                                        <span data-i18n="level"></span>
                                     </th>
                                     <th width="50%">
                                         <span data-i18n="character-experience"></span>
@@ -5911,13 +5911,13 @@
                     </div>
 
                     <div class="flex-col5">
-                        <h1 data-i18n="counter-h1"></h1>
+                        <h1 data-i18n="counter"></h1>
                         <div class="counter section">
                             <table>
                                 <thead>
                                 <tr>
                                     <th width="75%">
-                                        <span data-i18n="counter"></span>
+                                        <span data-i18n="counter-feature"></span>
                                     </th>
                                     <th width="25%">
                                         <span data-i18n="counter-value"></span>
@@ -5949,7 +5949,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="attribute-h1"></h1>
+                <h1 data-i18n="attribute"></h1>
                 <div class="character-attribute section">
                     <table>
                         <thead>
@@ -6240,7 +6240,7 @@
                     <textarea name="attr_character_attribute_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="character-appearance-h1"></h1>
+                <h1 data-i18n="character-appearance"></h1>
                 <div class="section">
                     <input type="hidden" name="attr_character_race_toggle" title="" value="hide" />
 
@@ -6759,8 +6759,8 @@
                                                     <span data-i18n="language"></span>
                                                 </div>
                                                 <div class="modal-body">
-                                                    <h2 data-i18n="language-common-h1"></h2>
-                                                    <ul data-i18n-list="language-common-list">
+                                                    <h2 data-i18n="language-everyday"></h2>
+                                                    <ul data-i18n-list="language-everyday-list">
                                                         <li data-i18n-list-item="common">
                                                             <div class="button-switch">
                                                                 <input type="checkbox" name="attr_language_common" title="" />
@@ -6840,7 +6840,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="language-uncommon-h1"></h2>
+                                                    <h2 data-i18n="language-uncommon"></h2>
                                                     <ul data-i18n-list="language-uncommon-list">
                                                         <li data-i18n-list-item="abyssal">
                                                             <div class="button-switch">
@@ -6921,7 +6921,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="language-secret-h1"></h2>
+                                                    <h2 data-i18n="language-secret"></h2>
                                                     <ul>
                                                         <li>
                                                             <div class="button-switch">
@@ -6932,7 +6932,7 @@
                                                         </li>
                                                     </ul>
 
-                                                    <h2 data-i18n="language-other-h1"></h2>
+                                                    <h2 data-i18n="language-other"></h2>
                                                     <input type="text" name="attr_language_other" title="" value="" />
                                                 </div>
                                             </div>
@@ -6947,7 +6947,7 @@
                     <textarea name="attr_character_appearance_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="speed-h1"></h1>
+                <h1 data-i18n="speed"></h1>
                 <div class="character-speed section">
                     <table>
                         <thead>
@@ -7016,7 +7016,7 @@
             <div class="paper">
                 <span class="sheet-status-alert"></span>
 
-                <h1 data-i18n="classes-h1"></h1>
+                <h1 data-i18n="classes"></h1>
                 <div class="class section">
                     <table>
                         <thead>
@@ -7278,7 +7278,7 @@
                     </fieldset>
                 </div>
 
-                <h1 data-i18n="equipment-proficiency-h1"></h1>
+                <h1 data-i18n="equipment-proficiency"></h1>
                 <div class="equipment-proficiency section">
                     <table>
                         <thead>
@@ -7307,7 +7307,7 @@
                                     <div class="modal-background"></div>
                                     <div class="modal-dialog modal-small">
                                         <div class="modal-header">
-                                            <span data-i18n="equipment-proficiency-h1"></span>
+                                            <span data-i18n="equipment-proficiency"></span>
                                         </div>
                                         <div class="modal-body">
                                             <div class="flex-row">
@@ -7399,7 +7399,7 @@
             <div class="paper">
                 <span name="attr_attack_status_alert" class="sheet-status-alert"></span>
 
-                <h1 data-i18n="battle-combat-round-h1"></h1>
+                <h1 data-i18n="battle-combat-round"></h1>
                 <div class="initiative section">
                     <table>
                         <thead>
@@ -7458,7 +7458,7 @@
                     <textarea name="attr_initiative_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="combat-maneuver-bonus-h1"></h1>
+                <h1 data-i18n="combat-maneuver"></h1>
                 <div class="combat-maneuver-bonus section">
                     <table>
                         <thead>
@@ -7533,7 +7533,7 @@
                     <textarea name="attr_combat_maneuver_bonus_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="battle-attacks-h1"></h1>
+                <h1 data-i18n="battle-attacks"></h1>
                 <div class="battle section">
                     <textarea class="battle-note" name="attr_battle_note" title=""></textarea>
 
@@ -7833,7 +7833,7 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
-                        <h1 data-i18n="caster-level-check-h1"></h1>
+                        <h1 data-i18n="caster-level-check"></h1>
                         <div class="caster-level-check section">
                             <table>
                                 <thead>
@@ -7913,7 +7913,7 @@
                         </div>
                     </div>
                     <div class="flex-col6">
-                        <h1 data-i18n="spell-arcane-spell-failure-h1"></h1>
+                        <h1 data-i18n="spell-arcane-spell-failure"></h1>
                         <div class="spell-arcane-spell-failure section">
                             <table>
                                 <thead>
@@ -7960,7 +7960,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="spell-h1"></h1>
+                <h1 data-i18n="spell"></h1>
                 <div class="spell-summary section">
                     <table>
                         <thead>
@@ -17727,7 +17727,7 @@
             <div class="paper">
                 <span name="attr_defense_status_alert" class="sheet-status-alert"></span>
 
-                <h1 data-i18n="saves-h1"></h1>
+                <h1 data-i18n="saves"></h1>
                 <div class="saves section">
                     <table>
                         <thead>
@@ -17736,16 +17736,16 @@
                                 <div class="fake-button-roll"></div>
                             </td>
                             <th width="11.111111%">
-                                <span data-i18n="type"></span>
+                                <span data-i18n="saves-type"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="total" data-i18n-title="save-pc-total-title"></span>
+                                <span data-i18n="total" data-i18n-title="saves-total-title"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="base"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="modifier-short" data-i18n-title="save-modifier-title"></span>
+                                <span data-i18n="modifier-short" data-i18n-title="saves-modifier-title"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="modifier-status"></span>
@@ -17897,7 +17897,7 @@
                     <textarea name="attr_saves_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="armor-class-h1"></h1>
+                <h1 data-i18n="armor-class"></h1>
                 <div class="section">
                     <table class="armor-class">
                         <thead>
@@ -18017,7 +18017,7 @@
                     <textarea name="attr_armor_class_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="combat-maneuver-defense-h1"></h1>
+                <h1 data-i18n="combat-maneuver-defense"></h1>
                 <div class="section">
                     <table class="combat-maneuver-defense">
                         <thead>
@@ -18110,12 +18110,12 @@
                     <textarea name="attr_combat_maneuver_defense_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="resistance-h1"></h1>
+                <h1 data-i18n="resistance"></h1>
                 <div class="resistance section">
                     <textarea name="attr_resistance" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="spell-resistance-h1"></h1>
+                <h1 data-i18n="spell-resistance"></h1>
                 <div class="spell-resistance section">
                     <table>
                         <thead>
@@ -18209,7 +18209,7 @@
                     <textarea name="attr_skill_summary_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="skill-h1"></h1>
+                <h1 data-i18n="skill"></h1>
                 <div class="skill section">
                     <table>
                         <thead>
@@ -20002,7 +20002,7 @@
                 </div>
 
                 <div class="template-playable-character">
-                    <h1 data-i18n="skill-perform-h1"></h1>
+                    <h1 data-i18n="skill-perform"></h1>
                     <div class="skill section">
                         <table>
                             <thead>
@@ -20109,7 +20109,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="skill-custom-h1"></h1>
+                <h1 data-i18n="skill-custom"></h1>
                 <div class="skill section">
                     <table>
                         <thead>
@@ -20314,7 +20314,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="weapon-h1"></h1>
+                <h1 data-i18n="weapon"></h1>
                 <div class="weapon section">
                     <table>
                         <thead>
@@ -20465,7 +20465,7 @@
                     <textarea name="attr_weapon_note" title=""></textarea>
                 </div>
 
-                <h1 data-i18n="armor-h1"></h1>
+                <h1 data-i18n="armor"></h1>
                 <div class="armor section">
                     <table>
                         <thead>
@@ -20477,7 +20477,7 @@
                                 <span data-i18n="name"></span>
                             </th>
                             <th width="9%">
-                                <span data-i18n="type" data-i18n-title="armor-type-title"></span>
+                                <span data-i18n="armor-type" data-i18n-title="armor-type-title"></span>
                             </th>
                             <th width="9%">
                                 <span data-i18n="armor-bonus-short" data-i18n-title="armor-bonus-title"></span>
@@ -20574,7 +20574,7 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
-                        <h1 data-i18n="equipment-h1"></h1>
+                        <h1 data-i18n="equipment"></h1>
                         <div class="equipment section">
                             <table>
                                 <thead>
@@ -20628,7 +20628,7 @@
                     </div>
 
                     <div class="flex-col6">
-                        <h1 data-i18n="equipment-magic-h1"></h1>
+                        <h1 data-i18n="equipment-magic"></h1>
                         <div class="equipment-magic section">
                             <table>
                                 <thead>
@@ -20819,7 +20819,7 @@
 
                 <div class="flex-row">
                     <div class="flex-col6">
-                        <h1 data-i18n="feat-racial-h1"></h1>
+                        <h1 data-i18n="feat-racial"></h1>
                         <div class="feat-racial section">
                             <fieldset class="repeating_featracial">
                                 <div class="feat-racial-content">
@@ -20831,7 +20831,7 @@
                     </div>
 
                     <div class="flex-col6">
-                        <h1 data-i18n="feat-h1"></h1>
+                        <h1 data-i18n="feat"></h1>
                         <div class="feat section">
                             <fieldset class="repeating_feat">
                                 <div class="feat-content">
@@ -20853,7 +20853,7 @@
             <div class="paper">
                 <span class="sheet-status-alert"></span>
 
-                <h1 data-i18n="weapon-racks-h1"></h1>
+                <h1 data-i18n="weapon-racks"></h1>
                 <div class="weapon_rack section">
                     <table>
                         <thead>
@@ -20989,7 +20989,7 @@
                     </fieldset>
                 </div>
 
-                <h1 data-i18n="armor-racks-h1"></h1>
+                <h1 data-i18n="armor-racks"></h1>
                 <div class="armor_rack section">
                     <div class="armor_rack section">
                         <table>
@@ -20999,7 +20999,7 @@
                                     <span data-i18n="name"></span>
                                 </th>
                                 <th width="9%">
-                                    <span data-i18n="type" data-i18n-title="armor-type-title"></span>
+                                    <span data-i18n="armor-type" data-i18n-title="armor-type-title"></span>
                                 </th>
                                 <th width="9%">
                                     <span data-i18n="armor-bonus-short" data-i18n-title="armor-bonus-title"></span>
@@ -21086,7 +21086,7 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="deposit-h1"></h1>
+                <h1 data-i18n="deposit"></h1>
                 <div class="flex-row">
                     <div class="flex-col6">
                         <div class="deposit section">
@@ -21258,7 +21258,7 @@
 
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="health-nonlethal-damage-h1"></h1>
+                            <h1 data-i18n="health-nonlethal-damage"></h1>
                             <table class="health-nonlethal-damage">
                                 <thead>
                                 <tr>
@@ -21297,7 +21297,7 @@
                 <div class="section template-health-alternative">
                     <div class="flex-row">
                         <div class="flex-col7">
-                            <h1 data-i18n="health-wound-points-h1"></h1>
+                            <h1 data-i18n="health-wound-points"></h1>
                             <table class="health-wound-points">
                                 <thead>
                                 <tr>
@@ -21332,7 +21332,7 @@
                             </table>
                         </div>
                         <div class="flex-col5">
-                            <h1 data-i18n="health-vigor-h1"></h1>
+                            <h1 data-i18n="health-vigor"></h1>
                             <table class="health-vigor">
                                 <thead>
                                 <tr>
@@ -21369,8 +21369,8 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="attribute-h1"></h1>
-                <table class="character-npc-attribute">
+                <h1 data-i18n="attribute"></h1>
+                <table class="npc-character-attribute section">
                     <thead>
                     <tr>
                         <td width="1%">
@@ -21587,19 +21587,19 @@
                     </tr>
                 </table>
 
-                <h1 data-i18n="character-appearance-h1"></h1>
-                <div class="section">
-                    <table>
+                <h1 data-i18n="character-appearance"></h1>
+                <div class="npc-character-appearance section">
+                    <table class="">
                         <thead>
                         <tr>
-                            <th>
+                            <th width="20%">
                                 <span data-i18n="character-height"></span>
                             </th>
-                            <th>
+                            <th width="20%">
                                 <span data-i18n="character-alignment"></span>
                             </th>
-                            <th>
-                                type*
+                            <th width="60%">
+                                <span data-i18n="npc-character-type"></span>
                             </th>
                         </tr>
                         </thead>
@@ -21633,11 +21633,12 @@
                         </tr>
                         </tbody>
                     </table>
+
                     <table>
                         <tbody>
                         <tr>
                             <td width="20%">
-                                aura*
+                                <span data-i18n="npc-character-aura"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_aura" title="" />
@@ -21653,7 +21654,7 @@
                         </tr>
                         <tr>
                             <td>
-                                sense*
+                                <span data-i18n="npc-character-sense"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_sense" title="" />
@@ -21661,7 +21662,7 @@
                         </tr>
                         <tr>
                             <td>
-                                class*
+                                <span data-i18n="npc-character-class"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_npc_class" title="" />
@@ -21671,18 +21672,18 @@
                     </table>
                 </div>
 
-                <h1 data-i18n="speed-h1"></h1>
+                <h1 data-i18n="speed"></h1>
                 <table>
                     <thead>
                     <tr>
                         <th>
-                            <span>Espace occupé*</span>
+                            <span data-i18n="npc-space"></span>
                         </th>
                         <th>
-                            <span>Allonge*</span>
+                            <span data-i18n="npc-reach"></span>
                         </th>
                         <th>
-                            <span>vitesse*</span>
+                            <span data-i18n="speed"></span>
                         </th>
                     </tr>
                     </thead>
@@ -21709,7 +21710,7 @@
         <div class="tab-content">
             <div class="paper">
                 <div class="section">
-                    <h1 data-i18n="battle-combat-round-h1"></h1>
+                    <h1 data-i18n="battle-combat-round"></h1>
                     <table class="npc-initiative">
                         <thead>
                         <tr>
@@ -21764,7 +21765,7 @@
                         </tbody>
                     </table>
 
-                    <h1 data-i18n="battle-attacks-h1"></h1>
+                    <h1 data-i18n="battle-attacks"></h1>
                     <div class="npc-battle">
                         <table>
                             <thead>
@@ -21821,7 +21822,7 @@
                 </div>
 
                 <div class="section">
-                    <h1 data-i18n="status-spell-h1"></h1>
+                    <h1 data-i18n="status-spell"></h1>
                     <div class="section">
                         <table>
                             <tbody>
@@ -21888,13 +21889,13 @@
                     </div>
                 </div>
 
-                <h1 data-i18n="skill-h1"></h1>
+                <h1 data-i18n="skill"></h1>
                 <div class="section">
                     <table>
                         <tbody>
                         <tr>
                             <td width="20%">
-                                <span data-i18n="skill-h1"></span>
+                                <span data-i18n="skill"></span>
                             </td>
                             <td>
                                 <textarea name="attr_npc_skill" title=""></textarea>
@@ -21911,18 +21912,18 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <h1 data-i18n="saves-h1"></h1>
-                <table class="npc-saves">
+                <h1 data-i18n="saves"></h1>
+                <table class="npc-saves section">
                     <thead>
                     <tr>
                         <td width="1%">
                             <div class="fake-button-roll"></div>
                         </td>
                         <th width="14.285714%">
-                            <span data-i18n="type"></span>
+                            <span data-i18n="saves-type"></span>
                         </th>
                         <th width="14.285714%">
-                            <span data-i18n="total" data-i18n-title="save-npc-total-title"></span>
+                            <span data-i18n="total" data-i18n-title="npc-saves-total-title"></span>
                         </th>
                         <th width="14.285714%">
                             <span data-i18n="modifier-status"></span>
@@ -22038,25 +22039,29 @@
                     </tbody>
                 </table>
 
-                <h1 data-i18n="armor-class-h1"></h1>
+                <h1 data-i18n="armor-class"></h1>
                 <div class="section">
-                    <table class="armor-class">
+                    <table class="npc-armor-class">
                         <thead>
                         <tr>
-                            <th width="25%" colspan="3">
-                                <span data-i18n="armor-class-melee-short" data-i18n-title="armor-class-melee-title"></span>
+                            <th width="20%" colspan="3">
+                                <span data-i18n="armor-class-melee-short" data-i18n-title="npc-armor-class-melee-title"></span>
                             </th>
                             <td></td>
-                            <th width="25" colspan="3">
-                                <span data-i18n="armor-class-ranged-short" data-i18n-title="armor-class-ranged-title"></span>
+                            <th width="20" colspan="3">
+                                <span data-i18n="armor-class-ranged-short" data-i18n-title="npc-armor-class-ranged-title"></span>
                             </th>
                             <td></td>
-                            <th width="25%" colspan="3">
-                                <span data-i18n="armor-class-flat-footed" data-i18n-title="armor-class-flat-footed-title"></span>
+                            <th width="20%" colspan="2">
+                                <span data-i18n="armor-class-flat-footed" data-i18n-title="npc-armor-class-flat-footed-title"></span>
                             </th>
                             <td></td>
-                            <th width="25%" colspan="3">
-                                <span data-i18n="armor-class-touch" data-i18n-title="armor-class-touch-title"></span>
+                            <th width="20%" colspan="2">
+                                <span data-i18n="armor-class-touch" data-i18n-title="npc-armor-class-touch-title"></span>
+                            </th>
+                            <td></td>
+                            <th width="20%">
+                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                             </th>
                         </tr>
                         </thead>
@@ -22085,9 +22090,6 @@
                             <td>
                                 <input type="number" name="attr_npc_armor_class_flat_footed" title="" class="text-strong" value="+@{foo_status_dexterity_flatfooted}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
-                            <td data-i18n-title="modifier-status">
-                                <input type="number" name="attr_npc_armor_class_flat_footed_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
-                            </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_flat_footed_base" title="" value="0" />
                             </td>
@@ -22095,41 +22097,10 @@
                             <td>
                                 <input type="number" name="attr_npc_armor_class_touch" title="" class="text-strong" value="@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
-                            <td data-i18n-title="modifier-status">
-                                <input type="number" name="attr_npc_armor_class_touch_status" title="" value="@{foo_status_encumbrance}" disabled="disabled"/>
-                            </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_touch_base" title="" value="0" />
                             </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
-                    <table class="npc-armor-classdetail">
-                        <thead>
-                        <tr>
-                            <th width="33.333333%">
-                                <span data-i18n="defense-dodge"></span>
-                            </th>
-                            <th width="33.333333%">
-                                <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
-                            </th>
-                            <th width="33.333333%">
-                                <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
-                            </th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <input type="number" name="attr_armor_bonus" title="" value="@{foo_armor_bonus}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_npc_armor_class_dodge_status" title="" value="@{foo_status_armor_class_dodge}" disabled="disabled"/>
-                            </td>
-                            <td>
-                                <input type="number" name="attr_npc_armor_class_mod_miscellaneous" title="" step="1" value="0"/>
-                            </td>
+                            <td></td>
                             <td>
                                 <input type="number" name="attr_npc_armor_class_mod_temporary" title="" step="1" value="0"/>
                             </td>
@@ -22139,29 +22110,49 @@
 
                     <div class="input-group">
                         <div class="input-group-text">
-                            <span data-i18n="armor-class-h1"></span>
+                            <span data-i18n="armor-class"></span>
                         </div>
                         <input type="text" name="attr_npc_armor_class" title="" />
                     </div>
                 </div>
 
-                <h1 data-i18n="combat-maneuver-defense-h1"></h1>
-                <div class="section">
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td width="20%">
-                                <span data-i18n="combat-maneuver-defense-short"></span>
-                            </td>
-                            <td>
-                                <input type="text" name="attr_npc_combat_maneuver_defense" title="" />
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <h1 data-i18n="combat-maneuver-defense"></h1>
+                <table class="npc-combat-maneuver-defense section">
+                    <thead>
+                    <tr>
+                        <th width="25%">
+                            <span data-i18n="total" data-i18n-title="npc-combat-maneuver-defense-title"></span>
+                        </th>
+                        <th width="25%">
+                            <span data-i18n="modifier-status"></span>
+                        </th>
+                        <th width="25%">
+                            <span data-i18n="base"></span>
+                        </th>
+                        <th width="25%">
+                            <span data-i18n="temporary-short"></span>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <input type="number" class="text-strong" name="attr_npc_combat_maneuver_defense" title="" value="@{foo_status_combat_maneuver_defense}+@{npc_combat_maneuver_defense_base}+@{npc_combat_maneuver_defense_temporary}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_combat_maneuver_defense_status" title="" value="@{foo_status_combat_maneuver_defense}" disabled="disabled" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_combat_maneuver_defense_base" title="" value="0" />
+                        </td>
+                        <td>
+                            <input type="number" name="attr_npc_combat_maneuver_defense_temporary" title="" step="1" value="0"/>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-                <h1 data-i18n="resistance-h1"></h1>
+                <h1 data-i18n="resistance"></h1>
                 <div class="section">
                     <table>
                         <tbody>
@@ -22291,7 +22282,7 @@
                     </table>
                 </div>
 
-                <h1 data-i18n="note-h1"></h1>
+                <h1 data-i18n="note"></h1>
                 <div class="note section">
                     <fieldset class="repeating_note">
                         <div class="note-content">

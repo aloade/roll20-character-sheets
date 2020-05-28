@@ -1183,7 +1183,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 /* --------------------------------------------------- */
 /* content */
 /* --------------------------------------------------- */
-.charsheet .sheet-main.section {
+.charsheet section {
     margin-bottom: 30px;
 }
 
@@ -1931,7 +1931,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 480px;
     margin-bottom: 15px;
 }
-
 .charsheet .sheet-armor-class-detail {
     max-width: 1080px;
     margin-bottom: 15px;
@@ -2302,8 +2301,13 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
     color: rgb(200, 82, 58);
 }
 
-.charsheet .sheet-character-npc-attribute {
+.charsheet .sheet-npc-character-attribute {
     max-width: 840px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-character-appearance table:first-child {
+    max-width: 720px;
     margin-bottom: 15px;
 }
 
@@ -2325,6 +2329,14 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
     margin-bottom: 15px;
 }
 
+.charsheet .sheet-npc-armor-class {
+    max-width: 600px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-combat-maneuver-defense {
+    max-width: 480px;
+}
 /* --------------------------------------------------- */
 /* rolltemplate */
 /* --------------------------------------------------- */

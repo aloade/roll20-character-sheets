@@ -44,23 +44,6 @@
       "descriptiontranslationkey": "useroptions-health-description"
     },
     {
-      "attribute": "option_attack_roll",
-      "displayname": "",
-      "displaytranslationkey": "useroptions-attack-roll",
-      "type": "select",
-      "options": [
-        "No targeting|no-target",
-        "Targeting|target"
-      ],
-      "optiontranslationkeys": [
-        "option-attack-roll-no-target",
-        "option-attack-roll-target"
-      ],
-      "default": "no-target",
-      "description": "foo",
-      "descriptiontranslationkey": "useroptions-attack-roll-description"
-    },
-    {
       "attribute": "option_whisper",
       "displayname": "",
       "displaytranslationkey": "useroptions-whisper",
