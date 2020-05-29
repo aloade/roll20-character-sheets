@@ -1960,11 +1960,15 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-paper .sheet-status-alert {
     display: block;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+.charsheet .sheet-paper .sheet-status-alert span {
     color: rgb(200, 82, 58);
     font-weight: bold;
     margin-bottom: 30px;
     font-size: 18px;
-    text-align: center;
     line-height: 20px;
 }
 
@@ -2320,8 +2324,14 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-npc-battle table:first-child {
-    max-width: 240px;
+.charsheet .sheet-npc-combat-maneuver-bonus {
+    max-width: 480px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-base-attack-bonus {
+    max-width: 120px;
+    margin-bottom: 15px;
 }
 
 .charsheet .sheet-npc-saves {
@@ -2331,7 +2341,6 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 
 .charsheet .sheet-npc-armor-class {
     max-width: 600px;
-    margin-bottom: 15px;
 }
 
 .charsheet .sheet-npc-combat-maneuver-defense {

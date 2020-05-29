@@ -350,7 +350,10 @@
                         // arcane_spell_failure_chance
                         if ( user_string.compendium_arcane_spell_failure_chance !== "" ) {
                             let regex = user_string.compendium_arcane_spell_failure_chance.match(/^([0-9]+)/);
-                            if ( regex !== null ) payload[cache.header + "spell_failure"] = +regex[1];
+                            if ( regex !== null) {
+                                let [, value] = regex;
+                                payload[cache.header + "spell_failure"] = parseInt(value);
+                            }
                         }
                         // name
                         payload[cache.header+"name"] = user_string.compendium_name;
@@ -372,7 +375,16 @@
                     case "monster":
                         // head
                         payload["character_name"] = user_string.compendium_name;
-                        payload["npc_challenge_rating"] = user_string.compendium_challenge_rating; // CR <number>
+                        if ( user_string.compendium_challenge_rating !== "") {
+                            let regex = user_string.compendium_challenge_rating.match(/([0-9]+)/i); // CR <number>
+                            if ( regex !== null ) {
+                                let [, value] = regex;
+                                payload["npc_challenge_rating"] = parseInt(value);
+                            }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_challenge_rating+"'");
+                            }
+                        }
                         payload["npc_experience"] = parseInt(user_string.compendium_experience.replace(/,/g, "") );
                         payload["npc_hit_points"] = user_string.compendium_hit_points; // <number> (<string>)
                         let hitpoints = parseInt(user_string.compendium_hit_points);
@@ -398,23 +410,29 @@
                         // background
                         if ( user_string.compendium_alignment !== "") {
                             let regex = user_string.compendium_alignment.match(/([cln])([gne]?)/i); // [CLN][gne]
-                            let alignment = 5;
-                            switch( regex[1].toLowerCase() ) {
-                                case "c" : alignment = 1; break; // chaotic
-                                case "l" : alignment = 7; break; // lawful
-                                case "n" : alignment = 4; break; // neutral
-                            }
-                            if ( regex[2] !== null) {
-                                switch (regex[2].toLowerCase()) {
-                                    case "e": alignment += 2; break; // evil
-                                    case "g": alignment += 0; break; // good
-                                    case "n": alignment += 1; break; // neutral
+                            if ( regex !== null ) {
+                                let [, major, minor] = regex;
+                                let alignment = 5;
+                                switch( major.toLowerCase() ) {
+                                    case "c" : alignment = 7; break; // chaotic
+                                    case "l" : alignment = 1; break; // lawful
+                                    case "n" : alignment = 4; break; // neutral
                                 }
+                                if ( minor !== null) {
+                                    switch (minor.toLowerCase()) {
+                                        case "e": alignment += 2; break; // evil
+                                        case "g": alignment += 0; break; // good
+                                        case "n": alignment += 1; break; // neutral
+                                    }
+                                }
+                                else {
+                                    alignment += 1; // neutral
+                                }
+                                payload["npc_alignment"] = alignment;
                             }
                             else {
-                                alignment += 1; // neutral
+                                console.log("parse error for '"+user_string.compendium_alignment+"'");
                             }
-                            payload["npc_alignment"] = alignment;
                         }
                         payload["npc_content"] = user_string.compendium_content;
                         payload["npc_creature_type"] = user_string.compendium_creature_type;
@@ -426,16 +444,28 @@
                         payload["npc_base_attack_bonus"] = parseInt(user_string.compendium_base_attack_bonus);
                         if ( user_string.compendium_combat_maneuver_bonus !== "") {
                             // initiative got a bunch of data
-                            let regex = user_string.compendium_combat_maneuver_bonus.match(/[+-]([0-9]?)/i); // <number> (<string>)
-                            payload["npc_combat_maneuver_bonus"] = parseInt(regex[1]);
+                            let regex = user_string.compendium_combat_maneuver_bonus.match(/[+-]([0-9]+)/i); // <number> (<string>)
+                            if ( regex !== null ) {
+                                let [, value] = regex;
+                                payload["npc_combat_maneuver_bonus"] = parseInt(value);
+                            }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_combat_maneuver_bonus+"'");
+                            }
                         }
                         else {
                             payload["npc_combat_maneuver_bonus"] = 0;
                         }
                         if ( user_string.compendium_initiative !== "") {
                             // initiative got a bunch of data
-                            let regex = user_string.compendium_initiative.match(/[+-]([0-9]?)/i); // <string> +/-<number>
-                            payload["npc_initiative"] = parseInt(regex[1]);
+                            let regex = user_string.compendium_initiative.match(/[+-]([0-9]*)/i); // <string> +/-<number>
+                            if ( regex !== null ) {
+                                let [, value] = regex;
+                                payload["npc_initiative"] = parseInt(value);
+                            }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_initiative+"'");
+                            }
                         }
                         else {
                             payload["npc_initiative"] = 0;
@@ -452,16 +482,20 @@
                         // defenses
                         payload["npc_base_attack_bonus"] = parseInt(user_string.compendium_base_attack_bonus);
                         if ( user_string.compendium_armor_class !== "") {
-                            let regex = user_string.compendium_armor_class.replace(/\s/g, '');
-                            console.log(regex);
-                            regex = regex.match(/([0-9]+),touch[+]?([0-9]+),flat-footed[+]?([0-9]+)/i);
-                            console.log(regex);
-                            payload["npc_armor_class_melee_base"] = parseInt(regex[1]);
-                            payload["npc_armor_class_flat_footed_base"] = parseInt(regex[2]);
-                            payload["npc_armor_class_touch_base"] = parseInt(regex[3]);
+                            let regex =  user_string.compendium_armor_class.replace(/\s/g, '').match(/([0-9]+),touch[+]?([0-9]+),flat-footed[+]?([0-9]+)/i)
+                            if ( regex !== null ) {
+                                let [, melee, flat_footed, touch] = regex;
+                                payload["npc_armor_class_melee_base"] = parseInt(melee);
+                                payload["npc_armor_class_flat_footed_base"] = parseInt(flat_footed);
+                                payload["npc_armor_class_touch_base"] = parseInt(touch);
+                            }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_armor_class+"'");
+                            }
                         }
                         payload["npc_armor_class"] = user_string.compendium_armor_class;
                         payload["npc_combat_maneuver_defense_base"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
+                        console.log("cmd : "+ user_string.compendium_combat_maneuver_defense);
                         payload["npc_damage_resistance"] = user_string.compendium_damage_resistance;
                         payload["npc_defensive_ability"] = user_string.compendium_defensive_ability;
                         payload["npc_fortitude"] = parseInt(user_string.compendium_fortitude);
@@ -513,10 +547,10 @@
                         // casting time
                         if ( user_string.compendium_casting_time !== "" ) {
                             // format : <string>
-                            // regex : 1 - string
                             let regex = user_string.compendium_casting_time.match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
-                            if ( regex !== null ) {
-                                switch(regex[1]) {
+                            if ( regex !== null) {
+                                let [, casting_time] = regex;
+                                switch(casting_time) {
                                     case "swift": payload[cache.header + "casting_time"] = 1; break;
                                     case "immediate": payload[cache.header + "casting_time"] = 2; break;
                                     case "free": payload[cache.header + "casting_time"] = 3; break;
@@ -526,40 +560,48 @@
                                     case "1 round": payload[cache.header + "casting_time"] = 7; break;
                                 }
                             }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_casting_time+"'");
+                            }
                         }
                         // components
                         if ( user_string.compendium_components !== "" ) {
                             let regex = user_string.compendium_components.match(/(DF|F|M|S|V)/g);
                             if ( regex !== null ) {
-                                payload[cache.header + "component_verbal"] = (regex.indexOf("V") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_somatic"] = (regex.indexOf("S") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_material"] = (regex.indexOf("M") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_focalizing"] = (regex.indexOf("F") !== -1 ? 1 : 0);
-                                payload[cache.header + "component_divine_focalizing"] = (regex.indexOf("DF") !== -1 ? 1 : 0);
+                                let [, component] = regex;
+                                payload[cache.header + "component_verbal"] = (component.indexOf("V") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_somatic"] = (component.indexOf("S") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_material"] = (component.indexOf("M") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_focalizing"] = (component.indexOf("F") !== -1 ? 1 : 0);
+                                payload[cache.header + "component_divine_focalizing"] = (component.indexOf("DF") !== -1 ? 1 : 0);
 
                                 regex = user_string.compendium_components.match(/\(([^\(^)]+)\)/g);
                                 // format <*> (<string>)
                                 // regex : 2 - materiel details
                                 if ( regex !== null ) {
-                                    regex_description = [];
+                                    let regex_description = [];
                                     for ( let i = 0, size = regex.length; i < size; i++) {
                                         regex_description.push(regex[i].slice(1,-1));
                                     }
                                     cache.content.push(getTranslationByKey("spell-content-component") + regex_description.join(", "));
                                 }
                             }
+                            else {
+                                console.log("parse error for '"+user_string.compendium_components+"'");
+                            }
                         }
                         // damage
                         if ( user_string.compendium_spell_damage !== "" ) {
                             // format : <number>d<number> + <number>
-                            // regex : 1 - dice count / 2 - dices / 4 - damage fixed
                             let regex = user_string.compendium_spell_damage.match(/([0-9]+)d([0-9]+)(\s+\+\s+([0-9]+))?/i);
                             if ( regex !== null ) {
-                                payload[cache.header + "damage_dices_count"] = +regex[1];
-                                payload[cache.header + "damage_dices"] = +regex[2];
-                                if ( regex[4] !== undefined ) payload[cache.header + "damage_miscellaneous"] = +regex[4];
+                                let [, dices_count, dices, , damage_fixed] = regex;
+                                payload[cache.header + "damage_dices_count"] = parseInt(dices_count);
+                                payload[cache.header + "damage_dices"] = parseInt(dices);
+                                if ( damage_fixed !== undefined ) payload[cache.header + "damage_miscellaneous"] = parseInt(damage_fixed);
                             }
                             else {
+                                console.log("parse error for '"+user_string.compendium_spell_damage+"'");
                                 payload[cache.header + "damage"] = 1;
                             }
                             if ( user_string.compendium_spell_damage_type !== "" ) cache.content.push(getTranslationByKey("spell-content-damage-type") + user_string.compendium_spell_damage_type);
@@ -570,10 +612,9 @@
                         // duration
                         if ( user_string.compendium_duration !== "" ) {
                             // format : <string>
-                            // regex : 1 - string
-                            let regex = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
-                            if ( regex !== null ) {
-                                switch(regex[1]) {
+                            let [, duration] = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
+                            if ( duration !== null ) {
+                                switch(duration) {
                                     case "concentration": payload[cache.header + "duration"] = 1; break;
                                     case "instantaneous": payload[cache.header + "duration"] = 2; break;
                                     case "permanent": payload[cache.header + "duration"] = 4; break;
@@ -602,10 +643,9 @@
                         // range
                         if ( user_string.compendium_range !== "" ) {
                             // format : <string> <*>
-                            // regex : 1 - range / 3 - range details
-                            let regex = user_string.compendium_range.match(/([a-z]+)(\s+\(?(.*)\))?/i);
-                            if ( regex !== null ) {
-                                switch (regex[1].toLowerCase()) {
+                            let [, range, , description] = user_string.compendium_range.match(/([a-z]+)(\s+\(?(.*)\))?/i);
+                            if ( range !== null ) {
+                                switch (range.toLowerCase()) {
                                     case "personal": payload[cache.header + "range"] = 1;break;
                                     case "touch": payload[cache.header + "range"] = 2; break;
                                     case "close": payload[cache.header + "range"] = 3; break;
@@ -613,24 +653,23 @@
                                     case "long": payload[cache.header + "range"] = 5; break;
                                     case "unlimited": payload[cache.header + "range"] = 6; break;
                                 }
-                                if ( regex[3] !== undefined ) payload[cache.header + "range_description"] = regex[3];
+                                if ( description !== undefined ) payload[cache.header + "range_description"] = description;
                             }
                         }
                         // saving throw
                         if ( user_string.compendium_saving_throw !== "" ) {
                             // format : <string> <string> (<string>)
-                            // regex : 1 - save / 3 - save type / 4 - harmless
-                            let regex = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s+(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
-                            if ( regex !== null ) {
-                                switch (regex[1].toLowerCase()) {
+                            let [, type, , saving_throw, harmless] = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s+(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
+                            if ( type !== null ) {
+                                switch (type.toLowerCase()) {
                                     case "none": payload[cache.header + "save"] = 0; break;
                                     case "fortitude": payload[cache.header + "save"] = 1; break;
                                     case "reflex": payload[cache.header + "save"] = 2; break;
                                     case "will": payload[cache.header + "save"] = 3; break;
                                 }
-                                if ( regex[3] !== undefined ) {
-                                    if ( regex[4] !== undefined ) regex[3] = regex[3] + " harmless";
-                                    switch (regex[3].toLowerCase()) {
+                                if ( harmless !== undefined ) {
+                                    if ( harmless !== undefined ) saving_throw = saving_throw + " harmless";
+                                    switch (saving_throw.toLowerCase()) {
                                         case "half": payload[cache.header + "save_type"] = 3; break;
                                         case "harmless": payload[cache.header + "save_type"] = 4; break;
                                         case "negates": payload[cache.header + "save_type"] = 1; break;
@@ -645,11 +684,10 @@
                         // school
                         if ( user_string.compendium_school !== "" ) {
                             // format : <string> (<string>) [<array>]
-                            // regex : 1 - school / 3 - school (sub) / 5 - register
-                            let regex = user_string.compendium_school.match(/([a-z]+)(\s+\(([a-z]+)\))?(\s+\[([ a-z,-]+)\])?/i);
-                            if( cache.scholl !== null ) {
-                                if ( regex[3] === undefined ) regex[3] = regex[1];
-                                switch (regex[3].toLowerCase()) {
+                            let [, school, , sub_school, , register] = user_string.compendium_school.match(/([a-z]+)(\s+\(([a-z]+)\))?(\s+\[([ a-z,-]+)\])?/i);
+                            if( school !== null ) {
+                                if ( sub_school === undefined ) sub_school = school;
+                                switch (sub_school.toLowerCase()) {
                                     // abjuration
                                     case "abjuration": payload[cache.header + "school"] = 1.1; break;
                                     // conjuration
@@ -684,9 +722,9 @@
                                     default: case "universal": payload[cache.header + "school"] = 9.1;
                                     break;
                                 }
-                                if ( regex[5] !== undefined ) {
-                                    regex[5] = regex[5].split(", ");
-                                    switch (regex[5][0].toLowerCase()) { // select only first possibility
+                                if ( register !== undefined ) {
+                                    register = register.split(", ");
+                                    switch (register[0].toLowerCase()) { // select only first possibility
                                         case "acid": payload[cache.header + "register"] = 1; break;
                                         case "air": payload[cache.header + "register"] = 2; break;
                                         case "chaos": payload[cache.header + "register"] = 3; break;
@@ -736,21 +774,21 @@
 
                         // critic
                         if ( user_string.compendium_critical_range !== "" ) {
-                            let regex = user_string.compendium_critical_range.match(/^([0-9]+)/);
-                            if ( regex !== null ) payload[cache.header+"critic"] = +regex[1];
+                            let [, value] = user_string.compendium_critical_range.match(/^([0-9]+)/);
+                            if ( value !== null ) payload[cache.header+"critic"] = parseInt(value);
                         }
                         if ( user_string.compendium_critical_damage !== "" ) {
-                            let regex = user_string.compendium_critical_damage.match(/([0-9]+)$/);
-                            if ( regex !== null ) payload[cache.header + "critic_multiplier"] = +regex[1];
+                            let [, value] = user_string.compendium_critical_damage.match(/([0-9]+)$/);
+                            if ( value !== null ) payload[cache.header + "critic_multiplier"] = parseInt(value);
                         }
                         // damage
                         if ( user_string.compendium_damage_small !== "" || user_string.compendium_damage_medium !== "" ) {
                             let damage = (user_number.compendium_creature_size_active === 1 && user_number.character_creature_size_select > 0 ? user_string.compendium_damage_small : user_string.compendium_damage_medium);
                             if (damage !== "") {
-                                let regex = damage.match(/([0-9]+)d([0-9]+)/);
-                                if (regex !== null) {
-                                    payload[cache.header + "dices_count"] = +regex[1];
-                                    payload[cache.header + "dices"] = +regex[2];
+                                let [, dices_count, dices] = damage.match(/([0-9]+)d([0-9]+)/);
+                                if ( dices_count !== null) {
+                                    payload[cache.header + "dices_count"] = parseInt(dices_count);
+                                    payload[cache.header + "dices"] = parseInt(dices);
                                 }
                             }
                         }
@@ -1324,6 +1362,7 @@
                                     "armor_class_ranged": 0,
                                     "armor_class_dodge": 0,
                                     "ac_dexterity_ceiling": Infinity,
+                                    "invisible": false,
                                     "combat_maneuver_defense": 0,
                                     "immune_physical_attack": false,
                                     "half_damage_magic": false,
@@ -2040,6 +2079,7 @@
                                 }
 
                                 if ( user_number.status_condition_invisible === 1 ) {
+                                    status.invisible = true;
                                     cache.resume.push(getTranslationByKey("status-invisible"));
                                     if ( user_number.option_status_condition === 1 ) {
                                         status.target_flat_footed = true;
@@ -2123,7 +2163,7 @@
 
                                             case 4 : // crane riposte
                                                 cache.resume.push(getTranslationByKey("status-class-monk-crane-riposte"));
-                                                if (user_number.status_class === 1) {
+                                                if (user_number.option_status_condition === 1) {
                                                     if (user_number.status_condition_fighting_defensively === 1) {
                                                         status.base_attack += 4; // cancel fighting defensively condition
                                                         status.base_attack -= 1;
@@ -2719,6 +2759,7 @@
                                 // status defense
                                 // ------------------------------------------
                                 if ( status.immune_physical_attack === true ) cache.effect_defense.push(getTranslationByKey("defense-status-immune-physical-attack"));
+                                if ( status.invisible === true ) cache.effect_defense.push(getTranslationByKey("defense-status-invisible"));
                                 if ( status.half_damage_magic === true ) cache.effect_defense.push(getTranslationByKey("defense-status-half-dammage-magic"));
                                 if ( status.target_sneak_attack === true ) cache.effect_defense.push(getTranslationByKey("defense-status-target-sneak-attack"));
 
@@ -3381,9 +3422,8 @@
     // spell functions
     function spell_touch_repeating( event ) {
         // get spell level
-        let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
-        if (level === null) return;
-        level  = level[1];
+        let [, level] =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
+        if ( level === null ) return;
 
         // iterate data
         // format "repeating_spellX_-LrcL2qT7lhjZ6BZrble_spellX_incantation_type_select"
@@ -3411,9 +3451,8 @@
 
     function spell_effect_repeating( event ) {
         // get spell level
-        let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
-        if (level === null) return;
-        level  = level[1];
+        let [, level] =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
+        if ( level === null ) return;
 
         // iterate data
         // format "repeating_spellX_-LrcL2qT7lhjZ6BZrble_spellX_effect_select"
@@ -3429,9 +3468,8 @@
 
     function spell_save_repeating( event ) {
         // get spell level
-        let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
-        if (level === null) return;
-        level  = level[1];
+        let [, level] =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
+        if ( level === null ) return;
 
         // iterate data
         // format "repeating_spellX-LrcL2qT7lhjZ6BZrble_spellX_save_select"
@@ -3447,9 +3485,8 @@
 
     function spell_damage_repeating( event ) {
         // get spell level
-        let level =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
-        if (level === null) return;
-        level  = level[1];
+        let [, level] =  event.sourceAttribute.match(/repeating_spell(custom|[0-9]+).*/i);
+        if ( level === null ) return;
 
         // iterate data
 
@@ -4203,11 +4240,11 @@
             let attributeNames = id.reduce( (m,id) => [...m, ...(fields.map(field => "repeating_"+section+'_'+id+'_'+field))],[]);
 
             getAttrs(attributeNames, raw => {
-                let payload = {}, regex = new RegExp( "repeating_" + section + "_([^_]*)_(.*)"), match;
+                let payload = {}, regex = new RegExp( "repeating_" + section + "_([^_]*)_(.*)"), field, sub_field;
                 Object.keys(raw).forEach( key => {
-                    match = key.match(regex);
-                    if ( !payload.hasOwnProperty( match[1]) ) payload[ match[1] ] = {};
-                    payload[ match[1] ][ match[2] ] = ( isNumber ? parseNumber( raw[key] ) : raw[key] );
+                    [, field, sub_field] = key.match(regex);
+                    if ( !payload.hasOwnProperty( field ) ) payload[ field ] = {};
+                    payload[ field ][ sub_field ] = ( isNumber ? parseNumber( raw[key] ) : raw[key] );
                 });
                 callback(payload);
             });
@@ -4408,26 +4445,26 @@
 
     <input type="hidden" name="attr_foo_caster_level_total_corrected" value="0" />
     <input type="hidden" name="attr_foo_arcane_spell_failure_total" value="0" />
-    <input type="hidden" name="attr_foo_spell0_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell0_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell1_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell1_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell2_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell2_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell3_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell3_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell4_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell4_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell5_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell5_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell6_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell6_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell7_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell7_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell8_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell8_prepared_custom" value="0" >
-    <input type="hidden" name="attr_foo_spell9_prepared" value="0" >
-    <input type="hidden" name="attr_foo_spell9_prepared_custom" value="0" >
+    <input type="hidden" name="attr_foo_spell0_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell0_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell1_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell1_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell2_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell2_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell3_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell3_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell4_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell4_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell5_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell5_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell6_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell6_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell7_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell7_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell8_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell8_prepared_custom" value="0">
+    <input type="hidden" name="attr_foo_spell9_prepared" value="0">
+    <input type="hidden" name="attr_foo_spell9_prepared_custom" value="0">
 
     <input type="hidden" name="attr_foo_armor_bonus" value="0" />
     <input type="hidden" name="attr_foo_armor_class_dexterity" value="0" />
@@ -4558,7 +4595,7 @@
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_hit_points_max" data-i18n-title="health-hit-points-ceiling-title" value="0" title="" readonly="readonly" />
+                                        <input type="number" name="attr_health_hit_points_max" data-i18n-title="health-hit-points-max-title" value="0" title="" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4572,7 +4609,7 @@
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_nonlethal_damage_max" title="" data-i18n-title="health-nonlethal-damage-ceiling-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_nonlethal_damage_max" title="" data-i18n-title="health-nonlethal-damage-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4592,7 +4629,7 @@
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_wound_points_max" title="" data-i18n-title="health-wound-points-ceiling-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_wound_points_max" title="" data-i18n-title="health-wound-points-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4606,7 +4643,7 @@
                                         <div class="input-group-text">
                                             <span data-i18n="sign-separator"></span>
                                         </div>
-                                        <input type="number" name="attr_health_vigor_max" title="" data-i18n-title="health-vigor-ceiling-title" value="0" readonly="readonly" />
+                                        <input type="number" name="attr_health_vigor_max" title="" data-i18n-title="health-vigor-max-title" value="0" readonly="readonly" />
                                     </div>
                                 </td>
                             </tr>
@@ -4625,7 +4662,7 @@
                             <div class="status-button">
                                 <div class="modal">
                                     <input title="" class="modal-checkbox" data-i18n-title="status" type="checkbox" />
-                                    <span class="modal-status-fake-button button" data-i18n="modifier-status"></span>
+                                    <span class="modal-status-fake-button button" data-i18n="status-short"></span>
                                     <div class="modal-background"></div>
                                     <div class="modal-dialog modal-large">
                                         <div class="modal-header">
@@ -5682,7 +5719,7 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span class="sheet-status-alert"></span>
+                <p class="sheet-status-alert"></p>
 
                 <div class="section template-health-standard">
                     <div class="flex-row">
@@ -5706,7 +5743,7 @@
                                     </th>
                                     <td></td>
                                     <th width="20%">
-                                        <span data-i18n="modifier-status"></span>
+                                        <span data-i18n="status-short"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -5970,7 +6007,7 @@
                                 <span data-i18n="modifier-age-short" data-i18n-title="modifier-age-title"></span>
                             </th>
                             <th width="10%" colspan="2">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="10%">
                                 <span data-i18n="base"></span>
@@ -7014,7 +7051,7 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span class="sheet-status-alert"></span>
+                <p class="sheet-status-alert"></p>
 
                 <h1 data-i18n="classes"></h1>
                 <div class="class section">
@@ -7397,7 +7434,9 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span name="attr_attack_status_alert" class="sheet-status-alert"></span>
+                <p class="sheet-status-alert">
+                    <span name="attr_attack_status_alert"></span>
+                </p>
 
                 <h1 data-i18n="battle-combat-round"></h1>
                 <div class="initiative section">
@@ -7408,13 +7447,13 @@
                                 <div class="fake-button-roll"></div>
                             </td>
                             <th width="25%">
-                                <span data-i18n="initiative" data-i18n-title="initiative-pc-title"></span>
+                                <span data-i18n="initiative" data-i18n-title="initiative-title"></span>
                             </th>
                             <th width="25%">
                                 <span data-i18n="attribute-dexterity-short" data-i18n-title="initiative-modifier-dexterity-title"></span>
                             </th>
                             <th width="25%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="25%">
                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -7432,7 +7471,7 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_initiative_total" title="" class="text-strong" value="@{foo_character_dexterity_mod}+@{foo_status_encumbrance_proficiency}+@{foo_status_initiative}+@{initiative_miscellaneous}" disabled="disabled"/>
+                                <input type="number" name="attr_initiative_total" title="" class="text-strong" value="@{foo_character_dexterity_mod}+(@{foo_status_encumbrance_proficiency}+@{foo_status_initiative})+@{initiative_miscellaneous}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_initiative_dexterity" title="" value="@{foo_character_dexterity_mod}" disabled="disabled"/>
@@ -7479,7 +7518,7 @@
                                 <span data-i18n="modifier-size-short" data-i18n-title="combat-maneuver-bonus-modifier-size-title"></span>
                             </th>
                             <th width="12.5%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="12.5%">
                                 <span data-i18n="bonus"></span>
@@ -7503,7 +7542,7 @@
                                 ></button>
                             </td>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_combat_maneuver_bonus_creature_size}+@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_bonus}+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_combat_maneuver_bonus_creature_size}+(@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_bonus})+@{combat_maneuver_bonus_bonus}-abs(@{combat_maneuver_bonus_penalty})+@{combat_maneuver_bonus_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_bonus_base_attack_bonus" title="" value="@{foo_class_base_attack_bonus1_total}" disabled="disabled"/>
@@ -7593,7 +7632,7 @@
                                                                 <span data-i18n="modifier-size-short"></span>
                                                             </th>
                                                             <th width="11.111111%">
-                                                                <span data-i18n="modifier-status"></span>
+                                                                <span data-i18n="status-short"></span>
                                                             </th>
                                                             <th width="11.111111%">
                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -7675,7 +7714,7 @@
                                                                 <span data-i18n="modifier-short" data-i18n-title="battle-modifier-damage-title"></span>
                                                             </th>
                                                             <th width="11.111111%">
-                                                                <span data-i18n="modifier-status"></span>
+                                                                <span data-i18n="status-short"></span>
                                                             </th>
                                                             <th width="16.666666%">
                                                                 <span data-i18n="battle-weapon-handling"></span>
@@ -7829,7 +7868,9 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span name="attr_spell_status_alert" class="sheet-status-alert"></span>
+                <p class="sheet-status-alert">
+                    <span name="attr_spell_status_alert"></span>
+                </p>
 
                 <div class="flex-row">
                     <div class="flex-col6">
@@ -7852,7 +7893,7 @@
                                         <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
                                     </th>
                                     <th width="20%">
-                                        <span data-i18n="modifier-status"></span>
+                                        <span data-i18n="status-short"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -7925,7 +7966,7 @@
                                         <span data-i18n="spell-arcane-spell-failure-armor-short" data-i18n-title="spell-arcane-spell-failure-armor-title"></span>
                                     </th>
                                     <th width="20%">
-                                        <span data-i18n="modifier-status"></span>
+                                        <span data-i18n="status-short"></span>
                                     </th>
                                     <th width="20%">
                                         <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -8268,7 +8309,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -8330,7 +8371,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -8418,7 +8459,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -9140,7 +9181,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -9202,7 +9243,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -9290,7 +9331,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -10012,7 +10053,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -10074,7 +10115,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -10162,7 +10203,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -10884,7 +10925,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -10946,7 +10987,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -11034,7 +11075,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -11756,7 +11797,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -11818,7 +11859,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -11906,7 +11947,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -12628,7 +12669,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -12690,7 +12731,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -12778,7 +12819,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -13500,7 +13541,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -13562,7 +13603,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -13650,7 +13691,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -14372,7 +14413,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -14434,7 +14475,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -14522,7 +14563,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -15244,7 +15285,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -15306,7 +15347,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -15394,7 +15435,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -16116,7 +16157,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -16178,7 +16219,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -16266,7 +16307,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -16988,7 +17029,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -17050,7 +17091,7 @@
                                                                                 <span data-i18n="modifier-size-short" data-i18n-title="modifier-size-title"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="14.285714%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -17138,7 +17179,7 @@
                                                                                 <span data-i18n="modifier-short" data-i18n-title="spell-concentration-modifier-title"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
-                                                                                <span data-i18n="modifier-status"></span>
+                                                                                <span data-i18n="status-short"></span>
                                                                             </th>
                                                                             <th width="16.666666%">
                                                                                 <span data-i18n="miscellaneous-short" data-i18n-title="miscellaneous-title"></span>
@@ -17725,7 +17766,9 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span name="attr_defense_status_alert" class="sheet-status-alert"></span>
+                <p class="sheet-status-alert">
+                    <span name="attr_defense_status_alert"></span>
+                </p>
 
                 <h1 data-i18n="saves"></h1>
                 <div class="saves section">
@@ -17748,7 +17791,7 @@
                                 <span data-i18n="modifier-short" data-i18n-title="saves-modifier-title"></span>
                             </th>
                             <th width="11.111111%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="11.111111%">
                                 <span data-i18n="feature"></span>
@@ -17778,7 +17821,7 @@
                                 <span data-i18n="save-reflex"></span>
                             </td>
                             <td>
-                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_encumbrance_proficiency}+@{foo_status_reflex}+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_reflex_total" title="" class="text-strong" value="@{reflex_base}+@{reflex_attribute}+@{foo_status_encumbrance_proficiency}+(@{foo_status_encumbrance_proficiency}+@{foo_status_reflex})+@{reflex_feat}+@{reflex_bonus}-abs(@{reflex_penalty})+@{reflex_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_reflex_base" title="" value="@{class_reflex_total}" disabled="disabled" />
@@ -17922,25 +17965,25 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_melee" title="" class="text-strong" value="@{armor_class_base}+(@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge})+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_melee_status" title="" value="@{foo_status_armor_class_melee}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_ranged" title="" class="text-strong" value="@{armor_class_base}+(@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge})+@{foo_armor_bonus}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{armor_class_mod_race}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_dexterity_flatfooted}+@{foo_armor_bonus}+@{character_creature_size_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_flat_footed" title="" class="text-strong" value="@{armor_class_base}+(@{foo_status_encumbrance_proficiency}+@{foo_status_dexterity_flatfooted})+@{foo_armor_bonus}+@{character_creature_size_select}+@{armor_class_mod_race}+@{armor_class_mod_deflection}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_dodge}+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_armor_class_touch" title="" class="text-strong" value="@{armor_class_base}+(@{foo_status_encumbrance_proficiency}+@{foo_status_armor_class_dodge})+@{foo_armor_class_dexterity}+@{character_creature_size_select}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_miscellaneous}+@{armor_class_mod_temporary}" disabled="disabled"/>
                             </td>
                         </tr>
                         </tbody>
@@ -18030,7 +18073,7 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_defense}+@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_character_strength_mod}+@{foo_armor_class_dexterity}+@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_combat_maneuver_defense_total" title="" class="text-strong" value="(@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_defense})+@{combat_maneuver_defense_base}+@{foo_class_base_attack_bonus1_total}-(@{character_creature_size_select})+@{foo_character_strength_mod}+@{foo_armor_class_dexterity}+@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{armor_class_mod_deflection}+@{combat_maneuver_defense_miscellaneous}+@{combat_maneuver_defense_temporary}" disabled="disabled"/>
                             </td>
                             <td>
                                 <input type="number" name="attr_combat_maneuver_defense_status" title="" value="@{foo_status_encumbrance_proficiency}+@{foo_status_combat_maneuver_defense}" disabled="disabled"/>
@@ -18180,7 +18223,9 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span name="attr_skill_status_alert" class="sheet-status-alert"></span>
+                <p class="sheet-status-alert">
+                    <span name="attr_skill_status_alert"></span>
+                </p>
 
                 <div class="skill-summary section">
                     <table>
@@ -18236,7 +18281,7 @@
                                 <span data-i18n="modifier-short" data-i18n-title="skill-modifier-title"></span>
                             </th>
                             <th width="8%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="8%">
                                 <span data-i18n="feature"></span>
@@ -20029,7 +20074,7 @@
                                     <span data-i18n="modifier-short" data-i18n-title="skill-perform-modifier-title"></span>
                                 </th>
                                 <th width="8%">
-                                    <span data-i18n="modifier-status"></span>
+                                    <span data-i18n="status-short"></span>
                                 </th>
                                 <th width="8%">
                                     <span data-i18n="feature"></span>
@@ -20136,7 +20181,7 @@
                                 <span data-i18n="modifier-short" data-i18n-title="skill-custom-modifier-title"></span>
                             </th>
                             <th width="8%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="8%">
                                 <span data-i18n="feature"></span>
@@ -20224,7 +20269,7 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span class="sheet-status-alert"></span>
+                <p class="sheet-status-alert"></p>
 
                 <div class="flex-row">
                     <div class="flex-col6">
@@ -20815,7 +20860,7 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span class="sheet-status-alert"></span>
+                <p class="sheet-status-alert"></p>
 
                 <div class="flex-row">
                     <div class="flex-col6">
@@ -20851,7 +20896,7 @@
         </label>
         <div class="tab-content">
             <div class="paper">
-                <span class="sheet-status-alert"></span>
+                <p class="sheet-status-alert"></p>
 
                 <h1 data-i18n="weapon-racks"></h1>
                 <div class="weapon_rack section">
@@ -21199,6 +21244,8 @@
         </label>
         <div class="tab-content">
             <div class="paper">
+                <span class="sheet-status-alert"></span>
+
                 <div class="section template-health-standard">
                     <div class="flex-row">
                         <div class="flex-col7">
@@ -21221,7 +21268,7 @@
                                     </th>
                                     <td></td>
                                     <th width="20%">
-                                        <span data-i18n="modifier-status"></span>
+                                        <span data-i18n="status-short"></span>
                                     </th>
                                 </tr>
                                 </thead>
@@ -21383,7 +21430,7 @@
                             <span data-i18n="total" data-i18n-title="npc-attribute-total-title"></span>
                         </th>
                         <th width="14.285714%">
-                            <span data-i18n="modifier-status"></span>
+                            <span data-i18n="status-short"></span>
                         </th>
                         <th width="14.285714%">
                             <span data-i18n="base"></span>
@@ -21589,16 +21636,18 @@
 
                 <h1 data-i18n="character-appearance"></h1>
                 <div class="npc-character-appearance section">
-                    <table class="">
+                    <table>
                         <thead>
                         <tr>
-                            <th width="20%">
+                            <th width="120px">
                                 <span data-i18n="character-height"></span>
                             </th>
-                            <th width="20%">
+                            <td width="1%"></td>
+                            <th width="120px">
                                 <span data-i18n="character-alignment"></span>
                             </th>
-                            <th width="60%">
+                            <td width="1%"></td>
+                            <th>
                                 <span data-i18n="npc-character-type"></span>
                             </th>
                         </tr>
@@ -21608,6 +21657,7 @@
                             <td>
                                 <input type="text" name="attr_npc_size" title="" />
                             </td>
+                            <td></td>
                             <td>
                                 <select name="attr_npc_alignment" title="">
                                     <optgroup label="" data-i18n-label="character-alignment-lawful">
@@ -21627,6 +21677,7 @@
                                     </optgroup>
                                 </select>
                             </td>
+                            <td></td>
                             <td>
                                 <input type="text" name="attr_npc_creature_type" title="" />
                             </td>
@@ -21676,12 +21727,14 @@
                 <table>
                     <thead>
                     <tr>
-                        <th>
+                        <th width="120px">
                             <span data-i18n="npc-space"></span>
                         </th>
-                        <th>
+                        <td width="1%"></td>
+                        <th width="120px">
                             <span data-i18n="npc-reach"></span>
                         </th>
+                        <td width="1%"></td>
                         <th>
                             <span data-i18n="speed"></span>
                         </th>
@@ -21692,9 +21745,11 @@
                         <td>
                             <input type="text" name="attr_npc_space" title="" />
                         </td>
+                        <td></td>
                         <td>
                             <input type="number" name="attr_npc_reach" title="" />
                         </td>
+                        <td></td>
                         <td>
                             <input type="text" name="attr_npc_speed" title="" />
                         </td>
@@ -21709,8 +21764,12 @@
         </label>
         <div class="tab-content">
             <div class="paper">
+                <p class="sheet-status-alert">
+                    <span name="attr_attack_status_alert"></span> <span name="attr_spell_status_alert"></span>
+                </p>
+
+                <h1 data-i18n="battle-combat-round"></h1>
                 <div class="section">
-                    <h1 data-i18n="battle-combat-round"></h1>
                     <table class="npc-initiative">
                         <thead>
                         <tr>
@@ -21718,10 +21777,10 @@
                                 <div class="fake-button-roll"></div>
                             </td>
                             <th width="25%">
-                                <span data-i18n="initiative" data-i18n-title="initiative-npc-title"></span>
+                                <span data-i18n="initiative" data-i18n-title="npc-initiative-title"></span>
                             </th>
                             <th width="25%">
-                                <span data-i18n="modifier-status"></span>
+                                <span data-i18n="status-short"></span>
                             </th>
                             <th width="25%">
                                 <span data-i18n="base"></span>
@@ -21764,61 +21823,106 @@
                         </tr>
                         </tbody>
                     </table>
+                </div>
 
-                    <h1 data-i18n="battle-attacks"></h1>
-                    <div class="npc-battle">
-                        <table>
-                            <thead>
-                            <tr>
-                                <th width="50%">
-                                    <span data-i18n="combat-maneuver-bonus-short"  data-i18n-title="combat-maneuver-bonus"></span>
-                                </th>
-                                <th width="50%">
-                                    <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus"></span>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td>
-                                    <input type="number" name="attr_npc_combat_maneuver_bonus" title="" step="1" value="0"/>
-                                </td>
-                                <td>
-                                    <input type="number" name="attr_npc_base_attack_bonus" title="" step="1" value="0" />
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                <h1 data-i18n="battle-attacks"></h1>
+                <div class="section">
+                    <div class="flex-row">
+                        <div class="flex-col6">
+                            <table class="npc-combat-maneuver-bonus">
+                                <thead>
+                                <tr>
+                                    <td width="1%">
+                                        <div class="fake-button-roll"></div>
+                                    </td>
+                                    <th width="25%">
+                                        <span data-i18n="combat-maneuver-bonus-short" data-i18n-title="npc-combat-maneuver-bonus-title"></span>
+                                    </th>
+                                    <th width="25%">
+                                        <span data-i18n="status-short"></span>
+                                    </th>
+                                    <th width="25%">
+                                        <span data-i18n="base"></span>
+                                    </th>
+                                    <th width="25%">
+                                        <span data-i18n="temporary-short" data-i18n-title="temporary-title"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <button
+                                                name="roll_npc_combat_maneuver_bonus"
+                                                type="roll"
+                                                data-i18n-title="combat-maneuver-bonus-roll-title"
+                                                value="@{option_whisper} &{template:roll}{{roll_basic=show}} {{name=@{character_name}}} {{status=@{status}}} {{label=@{label_combat_maneuver_bonus}}} {{test=[[1d20+@{npc_combat_maneuver_bonus_total}]]}}"
+                                        ></button>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_npc_combat_maneuver_bonus_total" title="" class="text-strong" value="@{foo_status_combat_maneuver_bonus}+@{npc_combat_maneuver_bonus_base}+@{npc_combat_maneuver_bonus_temporary}" disabled="disabled"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_npc_combat_maneuver_bonus_mod_status" title="" value="@{foo_status_combat_maneuver_bonus}" disabled="disabled"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_npc_combat_maneuver_bonus_base" title="" min="0" step="1" value="0"/>
+                                    </td>
+                                    <td>
+                                        <input type="number" name="attr_npc_combat_maneuver_bonus_temporary" title="" step="1" value="0"/>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
 
-                        <table>
-                            <tbody>
-                            <tr>
-                                <td width="20%">
-                                    melee attacks*
-                                </td>
-                                <td>
-                                    <textarea name="attr_npc_melee_attack" title=""></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    ranged attacks*
-                                </td>
-                                <td>
-                                    <textarea name="attr_npc_ranged_attack" title=""></textarea>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>
-                                    special attacks*
-                                </td>
-                                <td>
-                                    <textarea name="attr_npc_special_attack" title=""></textarea>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
+                        <div class="flex-col6">
+                            <table class="npc-base-attack-bonus">
+                                <thead>
+                                <tr>
+                                    <th>
+                                        <span data-i18n="base-attack-bonus-short" data-i18n-title="base-attack-bonus"></span>
+                                    </th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <input type="number" name="attr_npc_base_attack_bonus" title="" step="1" value="0" />
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
+                    <table>
+                        <tbody>
+                        <tr>
+                            <td width="20%">
+                                <span data-i18n="npc-melee-attack"></span>
+                            </td>
+                            <td>
+                                <textarea name="attr_npc_melee_attack" title=""></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span data-i18n="npc-ranged-attack"></span>
+                            </td>
+                            <td>
+                                <textarea name="attr_npc_ranged_attack" title=""></textarea>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <span data-i18n="npc-special-attack"></span>
+                            </td>
+                            <td>
+                                <textarea name="attr_npc_special_attack" title=""></textarea>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
                 </div>
 
                 <div class="section">
@@ -21828,7 +21932,7 @@
                             <tbody>
                             <tr>
                                 <td width="20%">
-                                    spell like ability*
+                                    <span data-i18n="npc-spell-like-ability"></span>
                                 </td>
                                 <td>
                                     <textarea name="attr_npc_spell_like_ability" title=""></textarea>
@@ -21836,7 +21940,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    Spells prepared*
+                                    <span data-i18n="npc-spell-prepared"></span>
                                 </td>
                                 <td>
                                     <textarea name="attr_npc_cleric_spell_prepared" title=""></textarea>
@@ -21844,7 +21948,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    spell known*
+                                    <span data-i18n="npc-spell-known"></span>
                                 </td>
                                 <td>
                                     <textarea name="attr_npc_spell_known" title=""></textarea>
@@ -21870,7 +21974,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    feat modifier*
+                                    <span data-i18n="npc-feat-modifier"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_racial_modifier" title="" />
@@ -21878,7 +21982,7 @@
                             </tr>
                             <tr>
                                 <td>
-                                    special quality*
+                                    <span data-i18n="npc-special-quality"></span>
                                 </td>
                                 <td>
                                     <input type="text" name="attr_npc_special_quality" title="" />
@@ -21912,6 +22016,10 @@
         </label>
         <div class="tab-content">
             <div class="paper">
+                <p class="sheet-status-alert">
+                    <span name="attr_defense_status_alert"></span> <span name="attr_skill_status_alert"></span>
+                </p>
+
                 <h1 data-i18n="saves"></h1>
                 <table class="npc-saves section">
                     <thead>
@@ -21926,7 +22034,7 @@
                             <span data-i18n="total" data-i18n-title="npc-saves-total-title"></span>
                         </th>
                         <th width="14.285714%">
-                            <span data-i18n="modifier-status"></span>
+                            <span data-i18n="status-short"></span>
                         </th>
                         <th width="14.285714%">
                             <span data-i18n="base"></span>
@@ -22052,11 +22160,11 @@
                                 <span data-i18n="armor-class-ranged-short" data-i18n-title="npc-armor-class-ranged-title"></span>
                             </th>
                             <td></td>
-                            <th width="20%" colspan="2">
+                            <th width="20%" colspan="3">
                                 <span data-i18n="armor-class-flat-footed" data-i18n-title="npc-armor-class-flat-footed-title"></span>
                             </th>
                             <td></td>
-                            <th width="20%" colspan="2">
+                            <th width="20%" colspan="3">
                                 <span data-i18n="armor-class-touch" data-i18n-title="npc-armor-class-touch-title"></span>
                             </th>
                             <td></td>
@@ -22068,19 +22176,19 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_melee" title="" class="text-strong" value="@{npc_armor_class_melee_base}+@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_melee" title="" class="text-strong" value="(@{foo_status_armor_class_melee}+@{foo_status_armor_class_dodge})+@{npc_armor_class_melee_base}+@{npc_armor_class_temporary}" disabled="disabled"/>
                             </td>
-                            <td data-i18n-title="modifier-status">
-                                <input type="number" name="attr_npc_armor_class_melee_status" title="" value="+@{foo_status_armor_class_melee}" disabled="disabled" />
+                            <td data-i18n-title="status-short">
+                                <input type="number" name="attr_npc_armor_class_melee_status" title="" value="@{foo_status_armor_class_melee}" disabled="disabled" />
                             </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_melee_base" title="" value="0" />
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_ranged" title="" class="text-strong" value="@{npc_armor_class_melee_base}+@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_ranged" title="" class="text-strong" value="(@{foo_status_armor_class_ranged}+@{foo_status_armor_class_dodge})+@{npc_armor_class_melee_base}+@{npc_armor_class_temporary}" disabled="disabled"/>
                             </td>
-                            <td data-i18n-title="modifier-status">
+                            <td data-i18n-title="status-short">
                                 <input type="number" name="attr_npc_armor_class_ranged_status" title="" value="@{foo_status_armor_class_ranged}" disabled="disabled" />
                             </td>
                             <td data-i18n-title="base">
@@ -22088,32 +22196,41 @@
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_flat_footed" title="" class="text-strong" value="+@{foo_status_dexterity_flatfooted}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_flat_footed" title="" class="text-strong" value="+@{foo_status_dexterity_flatfooted}+@{npc_armor_class_flat_footed_base}+@{npc_armor_class_temporary}" disabled="disabled"/>
+                            </td>
+                            <td data-i18n-title="status-short">
+                                <input type="number" name="attr_npc_armor_class_flat_footed_status" title="" value="@{foo_status_dexterity_flatfooted}" disabled="disabled" />
                             </td>
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_flat_footed_base" title="" value="0" />
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_touch" title="" class="text-strong" value="@{foo_status_armor_class_dodge}+@{foo_armor_class_mod_dodge}+@{npc_armor_class_mod_miscellaneous}+@{npc_armor_class_mod_temporary}" disabled="disabled"/>
+                                <input type="number" name="attr_npc_armor_class_touch" title="" class="text-strong" value="@{foo_status_armor_class_dodge}+@{npc_armor_class_touch_base}+@{npc_armor_class_temporary}" disabled="disabled"/>
                             </td>
+                            <td data-i18n-title="status-short">
+                                <input type="number" name="attr_npc_armor_class_touch_status" title="" value="@{foo_status_armor_class_dodge}" disabled="disabled" />
+                            </td>
+
                             <td data-i18n-title="base">
                                 <input type="number" name="attr_npc_armor_class_touch_base" title="" value="0" />
                             </td>
                             <td></td>
                             <td>
-                                <input type="number" name="attr_npc_armor_class_mod_temporary" title="" step="1" value="0"/>
+                                <input type="number" name="attr_npc_armor_class_temporary" title="" step="1" value="0"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span data-i18n="armor-class"></span>
+                            </td>
+                            <td></td>
+                            <td colspan="13">
+                                <input type="text" name="attr_npc_armor_class" title="" />
                             </td>
                         </tr>
                         </tbody>
                     </table>
-
-                    <div class="input-group">
-                        <div class="input-group-text">
-                            <span data-i18n="armor-class"></span>
-                        </div>
-                        <input type="text" name="attr_npc_armor_class" title="" />
-                    </div>
                 </div>
 
                 <h1 data-i18n="combat-maneuver-defense"></h1>
@@ -22121,10 +22238,10 @@
                     <thead>
                     <tr>
                         <th width="25%">
-                            <span data-i18n="total" data-i18n-title="npc-combat-maneuver-defense-title"></span>
+                            <span data-i18n="combat-maneuver-defense-short" data-i18n-title="npc-combat-maneuver-defense-title"></span>
                         </th>
                         <th width="25%">
-                            <span data-i18n="modifier-status"></span>
+                            <span data-i18n="status-short"></span>
                         </th>
                         <th width="25%">
                             <span data-i18n="base"></span>
@@ -22158,7 +22275,7 @@
                         <tbody>
                         <tr>
                             <td width="20%">
-                                resistance*
+                                <span data-i18n="npc-resistance"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_resistance" title="" />
@@ -22166,7 +22283,7 @@
                         </tr>
                         <tr>
                             <td>
-                                damage resistance*
+                                <span data-i18n="npc-damage-resistance"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_damage_resistance" title="" />
@@ -22174,7 +22291,7 @@
                         </tr>
                         <tr>
                             <td>
-                                immune*
+                                <span data-i18n="npc-immune"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_immune" title="" />
@@ -22182,7 +22299,7 @@
                         </tr>
                         <tr>
                             <td>
-                                weakness*
+                                <span data-i18n="npc-weakness"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_weakness" title="" />
@@ -22190,7 +22307,7 @@
                         </tr>
                         <tr>
                             <td>
-                                defense ability*
+                                <span data-i18n="npc-defense-ability"></span>
                             </td>
                             <td>
                                 <input type="text" name="attr_npc_defensive_ability" title="" />
@@ -22203,22 +22320,26 @@
         </div>
 
         <label class="tab-label">
-            <span data-i18n="note-nav"></span>
+            <span data-i18n="note"></span>
         </label>
         <div class="tab-content">
             <div class="paper">
+                <p class="sheet-status-alert"></p>
+
                 <div class="npc-challenge-rating section">
                     <table>
                         <thead>
                         <tr>
-                            <th>
-                                <span>Facteur de puissance</span>
+                            <th width="120px">
+                                <span data-i18n="npc-challenge-rating-short" data-i18n-title="npc-challenge-rating"></span>
                             </th>
-                            <th>
-                                <span>Expérience</span>
+                            <td width="1%"></td>
+                            <th width="120px">
+                                <span data-i18n="npc-experience"></span>
                             </th>
+                            <td width="1%"></td>
                             <th>
-                                <span>Trésor</span>
+                                <span data-i18n="npc-treasure"></span>
                             </th>
                         </tr>
                         </thead>
@@ -22227,9 +22348,11 @@
                             <td>
                                 <input type="text" name="attr_npc_challenge_rating" title="" />
                             </td>
+                            <td></td>
                             <td>
                                 <input type="number" name="attr_npc_experience" title="" />
                             </td>
+                            <td></td>
                             <td>
                                 <input type="text" name="attr_npc_treasure" title="" />
                             </td>
@@ -22243,10 +22366,11 @@
                         <thead>
                         <tr>
                             <th width="50%">
-                                <span>Environment*</span>
+                                <span data-i18n="npc-environment"></span>
                             </th>
+                            <td></td>
                             <th width="50%">
-                                <span>Organisation*</span>
+                                <span data-i18n="npc-organization"></span>
                             </th>
                         </tr>
                         </thead>
@@ -22255,6 +22379,7 @@
                             <td>
                                 <input type="text" name="attr_npc_environment" title="" />
                             </td>
+                            <td></td>
                             <td>
                                 <input type="text" name="attr_npc_organization" title="" />
                             </td>
@@ -22268,7 +22393,7 @@
                         <thead>
                         <tr>
                             <th>
-                                <span>Description*</span>
+                                <span data-i18n="npc-description"></span>
                             </th>
                         </tr>
                         </thead>
@@ -22286,7 +22411,7 @@
                 <div class="note section">
                     <fieldset class="repeating_note">
                         <div class="note-content">
-                            <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-label-placeholder">
+                            <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-placeholder">
                             <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
                         </div>
                     </fieldset>
