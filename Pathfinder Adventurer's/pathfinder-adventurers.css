@@ -808,8 +808,10 @@ html, body {
 
 .charsheet .sheet-modal-dialog {
     position: fixed;
-    top: 10%;
+    top: 5%;
     left: 50%;
+    max-height: 90%;
+    padding: 30px;
     background-color: rgb(77, 57, 42);
     border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/modal.jpg");
     border-image-slice: 60 fill;
@@ -822,6 +824,7 @@ html, body {
     z-index: 12;
     transform: translate(-50%, 0%);
     transition: opacity 0.25s ease, visibility 0.25s ease, transform 0.25s ease;
+    overflow-y: auto;
 }
 
 .sheet-modal-checkbox:not(:checked) {
@@ -853,7 +856,7 @@ html, body {
 }
 
 .charsheet .sheet-modal-header {
-    padding: 30px 30px 10px;
+    padding-bottom: 10px;
 }
 
 .charsheet .sheet-modal-header span {
@@ -876,11 +879,10 @@ html, body {
 }
 
 .charsheet .sheet-modal-body {
-    padding: 0 30px 30px;
 }
 
 .charsheet .sheet-modal-footer {
-    padding: 0 30px 30px;
+    padding-top: 30px;
 }
 
 .charsheet .sheet-modal-dialog .sheet-status-accordion {
@@ -1166,7 +1168,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-note-modal .sheet-modal-body {
-    height: calc(100% - 61px - 10px);
+    height: calc(100% - 31px - 10px);
 }
 
 .charsheet .sheet-note-modal textarea {
