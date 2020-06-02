@@ -3,6 +3,7 @@ alpha   https://raw.githubusercontent.com/aloade/pathfinder/master/image/
 dev.    https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
 prod.   https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
 */
+
 /* --------------------------------------------------- */
 /* roll20 fixed */
 /* --------------------------------------------------- */
@@ -281,7 +282,7 @@ html, body {
     position: relative;
     height: 26px;
     font-size: 15px !important;
-    line-height: 18px;
+    line-height: 21px;
     margin: 0 !important;
     padding: 0 12px !important;
     text-align: center;
@@ -359,7 +360,6 @@ html, body {
     font-weight: bold;
     text-align: center;
     z-index: 1;
-    line-height: 23px;
     transition: opacity 0.25s ease;
     border-radius: 50%;
     color: inherit;
@@ -1095,6 +1095,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 /* --------------------------------------------------- */
 /* status */
 /* --------------------------------------------------- */
+
 .charsheet .sheet-status-modal {
     width: 100%;
     display: flex;
@@ -1414,7 +1415,11 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     line-height: 20px;
 }
 
-.charsheet .sheet-paper textarea.sheet-huge {
+.charsheet .sheet-paper textarea.sheet-small {
+    height: calc(16px + 2px + 20px);
+}
+
+.charsheet .sheet-paper textarea.sheet-large {
     height: calc(16px + 2px + 8 * 20px);
 }
 
@@ -1444,7 +1449,13 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_character_dexterity_mod_alert"][value="show"] ~ div input[name="attr_character_dexterity_mod"],
 input[name="attr_foo_armor_class_dexterity_alert"][value="show"] ~ div input[name="attr_armor_class_dexterity"],
-input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"] {
+input[name="attr_foo_combat_maneuver_defense_alert"][value="show"] ~ div input[name="attr_combat_maneuver_defense_dexteriy"],
+input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_npc_character_strength_total"],
+input[name="attr_foo_character_strength_total_alert"][value="show"] ~ div input[name="attr_npc_character_strength_mod"],
+input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_npc_character_dexterity_total"],
+input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input[name="attr_npc_character_dexterity_mod"],
+input[name="attr_foo_character_dexterity_mod_alert"][value="show"] ~ div input[name="attr_npc_character_dexterity_mod"]
+{
     color: rgb(200, 82, 58);
 }
 
@@ -2306,7 +2317,7 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 }
 
 .charsheet .sheet-npc-character-attribute {
-    max-width: 840px;
+    max-width: 960px;
     margin-bottom: 15px;
 }
 
@@ -2346,6 +2357,12 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 .charsheet .sheet-npc-combat-maneuver-defense {
     max-width: 480px;
 }
+
+.charsheet .sheet-npc-skill {
+    max-width: 360px;
+    margin-bottom: 15px;
+}
+
 /* --------------------------------------------------- */
 /* rolltemplate */
 /* --------------------------------------------------- */
