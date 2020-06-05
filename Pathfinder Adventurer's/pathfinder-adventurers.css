@@ -121,13 +121,23 @@ html, body {
 .charsheet .sheet-house,
 .charsheet .sheet-info-sign,
 .charsheet .sheet-link,
+.charsheet .sheet-pen,
 .charsheet .sheet-tools {
     font-family: "Pictos", sans-serif;
+    padding: 0 !important;
 }
 
-.charsheet .sheet-alert {
+.charsheet .sheet-alert::after,
+.charsheet .sheet-cogwheel::after,
+.charsheet .sheet-house::after,
+.charsheet .sheet-info-sign::after,
+.charsheet .sheet-link::after,
+.charsheet .sheet-pen::after,
+.charsheet .sheet-tools::after {
+}
+
+.charsheet .sheet-alert::after {
     color: rgb(220, 53, 69);
-    padding-right: 4px;
 }
 
 .charsheet .sheet-alert::after {
@@ -148,6 +158,10 @@ html, body {
 
 .charsheet .sheet-link::after {
     content : "j";
+}
+
+.charsheet .sheet-pen::after {
+    content : "p";
 }
 
 .charsheet .sheet-tools::after {
@@ -261,8 +275,8 @@ html, body {
 
 .sheet-button,
 .sheet-button-fake {
-    min-width: 26px;
     display: block;
+    min-width: 30px;
 }
 
 .charsheet .sheet-button::before {
@@ -281,10 +295,10 @@ html, body {
 .charsheet .sheet-button-switch {
     position: relative;
     height: 26px;
-    font-size: 15px !important;
-    line-height: 21px;
-    margin: 0 !important;
-    padding: 0 12px !important;
+    line-height: 20px;
+    font-size: 15px !important; /* roll20 hack */
+    margin: 0 !important; /* roll20 hack */
+    padding: 0 12px !important; /* roll20 hack */
     text-align: center;
     color: rgb(246, 226, 195);
     background-color: rgb(75, 38, 22);
@@ -387,13 +401,13 @@ html, body {
     display: flex;
     flex-wrap: wrap;
     align-items: stretch;
-    margin: 0 -4px 15px;
+    margin: -4px;
     padding: 0;
 }
 
 .charsheet .sheet-horizontal-button-group > li {
     list-style: none;
-    margin: 0 4px 8px;
+    margin: 4px;
     flex: 0 0 auto;
     width: auto;
     max-width: 100%;
@@ -414,51 +428,66 @@ html, body {
     flex: 0 0 auto;
     width: 100%;
 }
+
 /* repeating controls */
-.charsheet .repcontrol {
-    margin-top: 15px;
+.charsheet .repcontrol_add,
+.charsheet .repcontrol_edit,
+.charsheet .repcontrol_move,
+.charsheet .repcontrol_del {
+    visibility: hidden;
+    position: relative;
+    width: 30px;
+    height: 26px;
+    border: none;
+    border-radius: 0;
 }
 
-.charsheet .btn.repcontrol_add,
-.charsheet .btn.repcontrol_edit,
-.charsheet .btn.repcontrol_move,
-.charsheet .btn.repcontrol_del {
-    position: relative;
-    height: 26px;
-    line-height: 15px;
-    padding: 0 9px;
-    text-align: center;
+.charsheet .repcontrol_add:after,
+.charsheet .repcontrol_edit:after,
+.charsheet .repcontrol_move:after,
+.charsheet .repcontrol_del:after {
+    position: absolute;
+    display: block;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    line-height: 26px;
     color: rgb(246, 226, 195);
+    font-family: "Pictos", sans-serif;
     background-color: rgb(75, 38, 22);
     background-image: none;
     border-radius: 0;
-    border: 2px solid rgb(150, 120, 50);
+    border: none;
     border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg");
     border-image-slice: 49 fill;
     border-image-width: 15px;
     border-image-repeat: round;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.4);
     transition: color 0.35s ease;
+    visibility: visible;
 }
 
-.charsheet .btn.repcontrol_move,
-.charsheet .btn.repcontrol_del {
-    font-family: "Pictos", sans-serif;
-}
+.charsheet .repcontrol_add::after { content: "&"; }
+.charsheet .repcontrol_edit::after { content: "p"; }
+.charsheet .repcontainer.editmode ~ .repcontrol .repcontrol_edit::after { content: "3"; }
+.charsheet .repcontrol_move::after { content: "l"; }
+.charsheet .repcontrol_del::after { content: "#"; }
 
-.charsheet .btn.repcontrol_add:hover,
-.charsheet .btn.repcontrol_edit:hover,
-.charsheet .btn.repcontrol_move:hover,
-.charsheet .btn.repcontrol_del:hover {
+
+.charsheet .repcontrol_add:hover::after,
+.charsheet .repcontrol_edit:hover::after,
+.charsheet .repcontrol_move:hover::after,
+.charsheet .repcontrol_del:hover::after {
     color: rgb(255, 255, 255);
 }
 
-.charsheet .btn.repcontrol_add:active,
-.charsheet .btn.repcontrol_edit:active,
-.charsheet .btn.repcontrol_move:active,
-.charsheet .btn.repcontrol_del:active {
+.charsheet .repcontrol_add:active::after,
+.charsheet .repcontrol_edit:active::after,
+.charsheet .repcontrol_move:active::after,
+.charsheet .repcontrol_del:active::after {
     box-shadow: inset 0 9px 15px 0 #c4c4c4;
-    top:2px;
+    top: 2px;
 }
 
 .charsheet .repcontainer.editmode div.repitem .itemcontrol {
@@ -912,7 +941,6 @@ html, body {
     content: "&";
 }
 
-
 .charsheet .sheet-modal-dialog .sheet-accordion-label {
     margin-right: 30px;
 }
@@ -1152,7 +1180,11 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 /* --------------------------------------------------- */
 /* status custom */
 /* --------------------------------------------------- */
-.charsheet .sheet-status-custom-modal .sheet-modal-checkbox:hover ~ .sheet-modal-label {
+.charsheet .sheet-status-custom .sheet-accordion-container::before {
+    transition: color 0.25s ease;
+}
+
+.charsheet .sheet-status-custom .sheet-accordion-checkbox:hover ~ .sheet-accordion-container::before {
     color: rgb(255, 255, 255);
 }
 
@@ -1498,6 +1530,10 @@ input[name="attr_foo_character_dexterity_mod_alert"][value="show"] ~ div input[n
     max-width: 360px;
 }
 
+.sheet-counter .repcontrol {
+    margin-top: 15px;
+}
+
 .sheet-template-character-race-standard,
 .sheet-template-character-race-other {
     display: none;
@@ -1535,6 +1571,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-language-modal .sheet-modal-checkbox:hover ~ .sheet-modal-label {
     color: rgb(255, 255, 255);
+}
+
+.charsheet .sheet-language-modal .sheet-modal-label {
+    padding: 0 !important; /* roll20 hack */
 }
 
 .charsheet .sheet-character-height {
@@ -1581,6 +1621,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 1440px;
 }
 
+.charsheet .sheet-class .repcontrol {
+    margin-top: 15px;
+}
+
 .sheet-class-container-toggle input {
     display: none;
 }
@@ -1615,8 +1659,12 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
+.charsheet .sheet-equipment-proficiency .sheet-modal-label {
+    padding: 0 !important; /* roll20 hack */
+}
+
 /* class favorite */
-.charsheet .sheet-class-specialization-content {
+.charsheet .sheet-class-specialization .repitem {
     margin-bottom: 15px;
 }
 
@@ -1659,11 +1707,11 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-top: 15px;
 }
 
-.charsheet .sheet-battle-content {
-    margin-bottom: 15px;
+.charsheet .sheet-battle .repitem {
+    margin-bottom: 30px;
 }
 
-.charsheet .sheet-battle-content .sheet-accordion-checkbox {
+.charsheet .sheet-battle .repitem .sheet-accordion-checkbox {
     top: 0;
     left: 0;
     width: 30px !important;
@@ -1671,11 +1719,11 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 
-.charsheet .sheet-battle-content .sheet-accordion-container {
-    padding-left: 30px;
+.charsheet .sheet-battle .repitem .sheet-accordion-container {
+    padding-left: 40px;
 }
 
-.charsheet .sheet-battle-content .sheet-accordion-container::before {
+.charsheet .sheet-battle .repitem .sheet-accordion-container::before {
     top: 0;
     left: 0;
     width: 23px;
@@ -1686,19 +1734,20 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     border-radius: 4px;
 }
 
-.charsheet .sheet-battle-content .sheet-accordion-label {
-    margin-bottom: 15px;
+.charsheet .sheet-battle .repitem .sheet-accordion-content {
+    margin-top: 15px;
 }
 
-.charsheet .sheet-battle-label {
+.charsheet .sheet-battle .sheet-accordion-label {
     max-width: 840px;
+    margin-bottom: 15px;
 }
 
 .charsheet .sheet-battle-name {
     border: none !important;
 }
 
-.charsheet .sheet-battle-subcontent table {
+.charsheet .sheet-battle-content table {
     margin-bottom: 15px;
 }
 
@@ -1710,9 +1759,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 960px;
 }
 
-.charsheet .sheet-battle-subcontent-note {
+.charsheet .sheet-battle-content-note {
     min-height: 90px;
     max-width: 840px;
+    margin-bottom: 15px;
 }
 
 /* magic */
@@ -1802,19 +1852,18 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 
-.charsheet .sheet-spell-content .sheet-accordion-checkbox {
+.charsheet .sheet-grimoire .repitem .sheet-accordion-checkbox {
     top: 0;
     left: 0;
     width: 30px !important;
     height: 100% !important;
 }
 
-
-.charsheet .sheet-spell-content .sheet-accordion-container {
-    padding-left: 30px;
+.charsheet .sheet-grimoire .repitem .sheet-accordion-container {
+    padding-left: 40px;
 }
 
-.charsheet .sheet-spell-content .sheet-accordion-container::before {
+.charsheet .sheet-grimoire .repitem .sheet-accordion-container::before {
     top: 0;
     left: 0;
     width: 23px;
@@ -1825,12 +1874,16 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     border-radius: 4px;
 }
 
-.charsheet .sheet-spell-content .sheet-accordion-label {
-    margin-bottom: 15px;
+.charsheet .sheet-grimoire .repitem {
+    margin-bottom: 30px;
 }
 
-.charsheet .sheet-spell-content {
-    margin-bottom: 15px;
+.charsheet .sheet-grimoire .sheet-accordion-label {
+    margin-bottom: 15px
+}
+
+.charsheet .sheet-grimoire .repitem .sheet-accordion-content {
+    margin-top: 15px;
 }
 
 .charsheet .sheet-spell-roll button {
@@ -1927,6 +1980,11 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-spell-note {
     min-height: 185px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-grimoire .sheet-horizontal-button-group {
+
 }
 
 .charsheet .sheet-spell-aside table {
@@ -1989,6 +2047,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 1200px;
 }
 
+.charsheet .sheet-skill .repcontrol {
+    margin-top: 15px;
+}
+
 /* inventory */
 .charsheet .sheet-purse table {
     max-width: 480px;
@@ -2042,7 +2104,6 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     height: 8px;
 }
 
-/* progress bar */
 .charsheet .sheet-progress {
     position: relative;
 }
@@ -2219,7 +2280,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-weapon .repcontrol {
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
 .charsheet .sheet-armor {
@@ -2228,15 +2289,15 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-armor .repcontrol {
-    margin-bottom: 15px;
+    margin: 15px 0;
 }
 
-.charsheet .sheet-equipement {
+.charsheet .sheet-equipment {
     max-width: 480px;
 }
 
-.charsheet .sheet-equipement .repcontrol {
-    margin-bottom: 15px;
+.charsheet .sheet-equipment .repcontrol {
+    margin-top: 15px;
 }
 
 .charsheet .sheet-equipment-magic table {
@@ -2255,11 +2316,10 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     text-align: center;
 }
 
-
 /* feat */
 .charsheet .sheet-feat-racial {}
 
-.charsheet .sheet-feat-racial-content {
+.charsheet .sheet-feat-racial .repitem {
     margin-bottom: 15px;
 }
 
@@ -2274,7 +2334,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 
 .charsheet .sheet-feat {}
 
-.charsheet .sheet-feat-content {
+.charsheet .sheet-feat .repitem {
     margin-bottom: 15px;
 }
 
@@ -2292,22 +2352,29 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     height: 240px;
 }
 
-/* notes */
-.charsheet .sheet-note-content {
-    margin-bottom: 15px;
+/* stock */
+.charsheet .sheet-weapon-rack {
+    max-width: 1080px;
 }
 
-.charsheet .sheet-note-label {
-    border-bottom: none !important;
+.charsheet .sheet-weapon-rack .repcontrol {
+    margin-top: 15px;
 }
 
-.charsheet .sheet-note-description {
-    min-height: 240px;
-    height: 240px;
+.charsheet .sheet-armor-rack {
+    max-width: 1080px;
+}
+
+.charsheet .sheet-armor-rack .repcontrol {
+    margin-top: 15px;
 }
 
 .charsheet .sheet-deposit {
     max-width: 480px;
+}
+
+.charsheet .sheet-deposit .repcontrol {
+    margin-top: 15px;
 }
 
 /* --------------------------------------------------- */
