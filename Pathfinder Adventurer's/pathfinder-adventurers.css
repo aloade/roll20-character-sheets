@@ -1560,7 +1560,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 .charsheet .sheet-character-head {
-    max-width: 720px;
+    max-width: 840px;
     margin-bottom: 15px;
 }
 

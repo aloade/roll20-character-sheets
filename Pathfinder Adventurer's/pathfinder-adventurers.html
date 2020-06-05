@@ -1599,6 +1599,7 @@
                                         }
                                         else {
                                             if (user_number.character_age < local.race[user_number.character_race][7]) { // youth
+                                                cache.resume.push(getTranslationByKey("character-aging-youth"));
                                                 aging.label = getTranslationByKey("character-aging-youth");
                                                 if (user_number.option_status_aging === 1) {
                                                     aging.dexterity = 2;
@@ -1634,6 +1635,7 @@
                                             }
                                         }
                                         break;
+                                        console.log(cache.resume);
                                 }
 
                                 // ------------------------------------------
@@ -6743,16 +6745,16 @@
                         <table class="character-head">
                             <thead>
                             <tr>
-                                <th width="25%">
+                                <th width="20%">
                                     <span data-i18n="character-hair"></span>
                                 </th>
-                                <th width="25%">
+                                <th width="20%">
                                     <span data-i18n="character-skin"></span>
                                 </th>
-                                <th width="25%">
+                                <th width="20%">
                                     <span data-i18n="character-eyes"></span>
                                 </th>
-                                <th width="25%">
+                                <th width="40%">
                                     <span data-i18n="character-sight"></span>
                                 </th>
                             </tr>
