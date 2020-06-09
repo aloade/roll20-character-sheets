@@ -295,14 +295,13 @@ html, body {
 .charsheet .sheet-button-switch {
     position: relative;
     height: 26px;
-    line-height: 20px;
+    line-height: 24px;
     font-size: 15px !important; /* roll20 hack */
     margin: 0 !important; /* roll20 hack */
     padding: 0 12px !important; /* roll20 hack */
     text-align: center;
     color: rgb(246, 226, 195);
     background-color: rgb(75, 38, 22);
-    border: 2px solid rgb(150, 120, 50);
     border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/button.jpg");
     border-image-slice: 49 fill;
     border-image-width: 15px;
@@ -1125,7 +1124,6 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 /* --------------------------------------------------- */
 /* status */
 /* --------------------------------------------------- */
-
 .charsheet .sheet-status-modal {
     width: 100%;
     display: flex;
@@ -1689,29 +1687,25 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-battle {
-    max-width: calc(30px + 30px + 1080px);
-}
-
 .charsheet .sheet-battle-note {
     min-height: 90px;
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-battle-roll,
-.charsheet .sheet-battle-roll button {
-    width: 30px;
+.charsheet .sheet-attacks {
+    max-width: calc(30px + 30px + 1080px);
+    margin-bottom: 15px;
 }
 
-.charsheet .sheet-battle-roll > button {
+.charsheet .sheet-attacks-roll > button {
     margin-top: 15px;
 }
 
-.charsheet .sheet-battle .repitem {
+.charsheet .sheet-attacks .repitem {
     margin-bottom: 30px;
 }
 
-.charsheet .sheet-battle .repitem .sheet-accordion-checkbox {
+.charsheet .sheet-attacks .repitem .sheet-accordion-checkbox {
     top: 0;
     left: 0;
     width: 30px !important;
@@ -1719,11 +1713,11 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
 }
 
 
-.charsheet .sheet-battle .repitem .sheet-accordion-container {
+.charsheet .sheet-attacks .repitem .sheet-accordion-container {
     padding-left: 40px;
 }
 
-.charsheet .sheet-battle .repitem .sheet-accordion-container::before {
+.charsheet .sheet-attacks .repitem .sheet-accordion-container::before {
     top: 0;
     left: 0;
     width: 23px;
@@ -1734,34 +1728,38 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     border-radius: 4px;
 }
 
-.charsheet .sheet-battle .repitem .sheet-accordion-content {
+.charsheet .sheet-attacks .repitem .sheet-accordion-content {
     margin-top: 15px;
 }
 
-.charsheet .sheet-battle .sheet-accordion-label {
+.charsheet .sheet-attacks .sheet-accordion-label {
     max-width: 840px;
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-battle-name {
+.charsheet .sheet-attacks-name {
     border: none !important;
 }
 
-.charsheet .sheet-battle-content table {
+.charsheet .sheet-attacks-content table {
     margin-bottom: 15px;
 }
 
-.charsheet .sheet-battle-table-roll {
+.charsheet .sheet-attacks-table-roll {
     max-width: 960px;
 }
 
-.charsheet .sheet-battle-damage-table {
+.charsheet .sheet-attacks-damage-table {
     max-width: 960px;
 }
 
-.charsheet .sheet-battle-content-note {
+.charsheet .sheet-attacks-content-note {
     min-height: 90px;
     max-width: 840px;
+    margin-bottom: 15px;
+}
+
+.charsheet .sheet-attacks .repcontrol {
     margin-bottom: 15px;
 }
 
@@ -2400,6 +2398,10 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
     margin-bottom: 15px;
 }
 
+.charsheet .sheet-npc-battle-note {
+    margin-bottom: 15px;
+}
+
 .charsheet .sheet-npc-battle table {
     margin-bottom: 15px;
 }
@@ -2412,6 +2414,14 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 .charsheet .sheet-npc-base-attack-bonus {
     max-width: 120px;
     margin-bottom: 15px;
+}
+
+.charsheet .sheet-npc-battle-table-roll {
+    max-width: 720px;
+}
+
+.charsheet .sheet-npc-battle-damage-table {
+    max-width: 720px;
 }
 
 .charsheet .sheet-npc-saves {

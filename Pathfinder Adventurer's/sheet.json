@@ -13,9 +13,9 @@
       "displaytranslationkey": "useroptions-template",
       "type": "select",
       "options": [
-        "Companion|1",
-        "NPC|2",
-        "PJ|3"
+        "Companion|companion",
+        "NPC|npc",
+        "PC|pc"
       ],
       "optiontranslationkeys": [
         "option-template-companion",
