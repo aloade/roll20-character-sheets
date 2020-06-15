@@ -1258,7 +1258,7 @@
   "inventory-effect-dropped-out-hands": "Drops everything held in hands.",
   "currency-bank": "Bank",
   "currency-purse": "Purse",
-  "currency-platinum-title": "platinum coins\n1 pc = 100 gc",
+  "currency-platinum-title": "platinum coins\n1 pc = 10 gc",
   "currency-platinum": "pc",
   "currency-gold-title": "gold coins\n1 gc = 10 sc",
   "currency-gold": "gc",
