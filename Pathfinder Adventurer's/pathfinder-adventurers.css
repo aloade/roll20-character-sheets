@@ -277,6 +277,7 @@ html, body {
 .sheet-button-fake {
     display: block;
     min-width: 30px;
+    border: none;
 }
 
 .charsheet .sheet-button::before {
@@ -295,7 +296,7 @@ html, body {
 .charsheet .sheet-button-switch {
     position: relative;
     height: 26px;
-    line-height: 24px;
+    line-height: 22px;
     font-size: 15px !important; /* roll20 hack */
     margin: 0 !important; /* roll20 hack */
     padding: 0 12px !important; /* roll20 hack */
@@ -334,13 +335,13 @@ html, body {
 
 .sheet-button .sheet-input-group-text span {
     color: rgb(150, 150, 150);
-    line-height: 20px;
+    line-height: 22px;
 }
 
 .charsheet .sheet-button .sheet-input-group select {
     width: 100%;
     color: rgb(246, 226, 195);
-    line-height: 20px;
+    line-height: 22px;
     height: 21px;
     transition: color 0.35s ease;
     text-align-last: center;
@@ -1075,20 +1076,20 @@ html, body {
     display: none;
 }
 
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div .sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="companion"] ~ div .sheet-template-companion,
 input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div .sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div .sheet-template-playable-character {
     display: block;
 }
 
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div tr.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="companion"] ~ div tr.sheet-template-companion,
 input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div tr.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div tr.sheet-template-playable-character {
     display: table-row;
 }
 
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div th.sheet-template-companion,
-input.sheet-toggle[name="attr_option_template"][value="pet"] ~ div td.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="companion"] ~ div th.sheet-template-companion,
+input.sheet-toggle[name="attr_option_template"][value="companion"] ~ div td.sheet-template-companion,
 input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div th.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="npc"] ~ div td.sheet-template-non-playable-character,
 input.sheet-toggle[name="attr_option_template"][value="pc"] ~ div th.sheet-template-playable-character,

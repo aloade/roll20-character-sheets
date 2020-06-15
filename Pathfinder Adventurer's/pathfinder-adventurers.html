@@ -326,7 +326,7 @@
                 }
 
                 if ( cache.type === null) {
-                    console.log("["+datelocale()+"] drop ignored for '" + user_string.compendium_name + "'");
+                    sendLog("drop ignored for '" + user_string.compendium_name + "'");
                     delete(cache);
                     delete(user_number);
                     delete(user_string);
@@ -390,7 +390,7 @@
                                 payload["npc_hit_points_description"] = description.trim();
                             }
                             else {
-                                console.log("["+datelocale()+"] Hit points parse error for '"+user_string.compendium_hit_points+"'");
+                                sendLog("Hit points parse error for '"+user_string.compendium_hit_points+"'");
                                 payload["health_hit_points_base"] = 1;
                                 payload["health_hit_points_ceiling"] = 1;
                                 payload["npc_hit_points_description"] = user_string.compendium_hit_points;
@@ -440,7 +440,7 @@
                                 payload["npc_alignment"] = alignment;
                             }
                             else {
-                                console.log("["+datelocale()+"] Alignment parse error for '"+user_string.compendium_alignment+"'");
+                                sendLog("Alignment parse error for '"+user_string.compendium_alignment+"'");
                                 payload["npc_alignment"] = 5;
                             }
                         }
@@ -460,7 +460,7 @@
                                 payload["npc_combat_maneuver_bonus_note"] = description.trim();
                             }
                             else {
-                                console.log("["+datelocale()+"] CMB parse error for '"+user_string.compendium_combat_maneuver_bonus+"'");
+                                sendLog("CMB parse error for '"+user_string.compendium_combat_maneuver_bonus+"'");
                                 payload["npc_combat_maneuver_bonus_base"] = 0;
                                 payload["npc_combat_maneuver_bonus_note"] = user_string.compendium_combat_maneuver_bonus;
                             }
@@ -477,7 +477,7 @@
                                 payload["npc_initiative"] = parseInt(value);
                             }
                             else {
-                                console.log("["+datelocale()+"] Initiative parse error for '"+user_string.compendium_initiative+"'");
+                                sendLog("Initiative parse error for '"+user_string.compendium_initiative+"'");
                                 payload["npc_initiative"] = 0;
                                 payload["npc_initiative_note"] = user_string.compendium_initiative;
                             }
@@ -544,7 +544,7 @@
                                 payload["npc_armor_class_note"] = description.trim();
                             }
                             else {
-                                console.log("["+datelocale()+"] AC parse error for '"+user_string.compendium_armor_class+"'");
+                                sendLog("AC parse error for '"+user_string.compendium_armor_class+"'");
                                 payload["npc_armor_class_melee_base"] = 0;
                                 payload["npc_armor_class_flat_footed_base"] = 0;
                                 payload["npc_armor_class_touch_base"] = 0;
@@ -571,7 +571,7 @@
                                 }
                             }
                             else {
-                                console.log("["+datelocale()+"] CMD parse error for '"+user_string.compendium_combat_maneuver_defense+"'");
+                                sendLog("CMD parse error for '"+user_string.compendium_combat_maneuver_defense+"'");
                                 payload["npc_combat_maneuver_defense_base"] = 0;
                                 payload["npc_combat_maneuver_defense_note"] = user_string.compendium_combat_maneuver_defense;
                             }
@@ -602,7 +602,7 @@
                                 payload["npc_challenge_rating"] = parseInt(value);
                             }
                             else {
-                                console.log("["+datelocale()+"] CR parse error for '"+user_string.compendium_challenge_rating+"'");
+                                sendLog("CR parse error for '"+user_string.compendium_challenge_rating+"'");
                                 payload["npc_challenge_rating"] = 0;
                             }
                         }
@@ -662,7 +662,7 @@
                                 }
                             }
                             else {
-                                console.log("["+datelocale()+"] parse error for '"+user_string.compendium_casting_time+"'");
+                                sendLog("parse error for '"+user_string.compendium_casting_time+"'");
                             }
                         }
                         // components
@@ -688,7 +688,7 @@
                                 }
                             }
                             else {
-                                console.log("["+datelocale()+"] parse error for '"+user_string.compendium_components+"'");
+                                sendLog("parse error for '"+user_string.compendium_components+"'");
                             }
                         }
                         // damage
@@ -702,7 +702,7 @@
                                 if ( damage_fixed !== undefined ) payload[cache.header + "damage_miscellaneous"] = parseInt(damage_fixed);
                             }
                             else {
-                                console.log("["+datelocale()+"] parse error for '"+user_string.compendium_spell_damage+"'");
+                                sendLog("parse error for '"+user_string.compendium_spell_damage+"'");
                             }
                             if ( user_string.compendium_spell_damage_type !== "" ) cache.content.push(getTranslationByKey("spell-content-damage-type") + user_string.compendium_spell_damage_type);
 
@@ -967,7 +967,7 @@
                             valid.push(current);
                         }
                         else {
-                            console.log("["+datelocale()+"] "+(range === 0 ? "Melee" : "Ranged")+" attack parse error for '"+data[i]+"'");
+                            sendLog((range === 0 ? "Melee" : "Ranged")+" attack parse error for '"+data[i]+"'");
                             error.push(data[i]);
                         }
                     }
@@ -1731,7 +1731,6 @@
                                             }
                                         }
                                         break;
-                                        console.log(cache.resume);
                                 }
 
                                 // ------------------------------------------
@@ -3728,8 +3727,8 @@
         });
     }
 
-    // skill custom
-    on( "change:repeating_skillcustom:skill_custom_ranks remove:repeating_skillcustom", skill_custom);
+    // skill custom ( ranks )
+    on("change:repeating_skillcustom:skill_custom_ranks remove:repeating_skillcustom", skill_custom);
     function skill_custom() {
         getAttrsRepeating("skillcustom", ["skill_custom_ranks"], (repeating) => {
             // prepare payload
@@ -3747,18 +3746,87 @@
         });
     }
 
-    on(
-        "change:repeating_skillcustom:skill_custom_mod_attribute_select"
-        + " change:foo_status_encumbrance"
+    // skill custom ( attributes )
+    on( " change:foo_status_encumbrance"
         + " change:foo_character_strength_mod change:foo_character_dexterity_mod"
         + " change:character_intelligence_base change:character_intelligence_race change:character_intelligence_bonus change:character_intelligence_penalty change:character_intelligence_temporary"
         + " change:character_constitution_base change:character_constitution_race change:character_constitution_bonus change:character_constitution_penalty change:character_constitution_temporary"
         + " change:character_wisdom_base change:character_wisdom_race change:character_wisdom_bonus change:character_wisdom_penalty change:character_wisdom_temporary"
         + " change:character_charisma_base change:character_charisma_race change:character_charisma_bonus change:character_charisma_penalty change:character_charisma_temporary"
-        , skill_custom_modifier );
-    function skill_custom_modifier(e) {
+        , skill_custom_attribute );
+    function skill_custom_attribute(e) {
         // format "repeating_skillcustom_-LrcL2qT7lhjZ6BZrble_skill_custom_mod_attribute_select"
         let source = e.sourceAttribute.replace(/skill_custom_mod_attribute_select/, '');
+
+        getAttrsNumber([
+            "foo_status_encumbrance", "foo_character_strength_mod", "foo_character_dexterity_mod",
+            "character_strength_base", "character_strength_race", "character_strength_bonus", "character_strength_penalty", "character_strength_temporary",
+            "character_dexterity_base", "character_dexterity_race", "character_dexterity_bonus", "character_dexterity_penalty", "character_dexterity_temporary",
+            "character_constitution_base", "character_constitution_race", "character_constitution_bonus", "character_constitution_penalty", "character_constitution_temporary",
+            "character_intelligence_base", "character_intelligence_race", "character_intelligence_bonus", "character_intelligence_penalty", "character_intelligence_temporary",
+            "character_wisdom_base", "character_wisdom_race", "character_wisdom_bonus", "character_wisdom_penalty", "character_wisdom_temporary",
+            "character_charisma_base", "character_charisma_race", "character_charisma_bonus", "character_charisma_penalty", "character_charisma_temporary",
+        ], (user) => {
+            let attribute = {
+                "strength" : user.foo_character_strength_mod,
+                "dexterity": user.foo_character_dexterity_mod,
+                "constitution": Math.floor( ( user.character_constitution_base+user.character_constitution_race+user.character_constitution_bonus+user.character_constitution_penalty+user.character_constitution_temporary ) / 2 - 5),
+                "intelligence": Math.floor( ( user.character_intelligence_base+user.character_intelligence_race+user.character_intelligence_bonus+user.character_intelligence_penalty+user.character_intelligence_temporary) / 2 - 5),
+                "wisdom": Math.floor( ( user.character_wisdom_base+user.character_wisdom_race+user.character_wisdom_bonus+user.character_wisdom_penalty+user.character_wisdom_temporary) / 2 - 5),
+                "charisma": Math.floor( ( user.character_charisma_base+user.character_charisma_race+user.character_charisma_bonus+user.character_charisma_penalty+user.character_charisma_temporary ) / 2 - 5),
+            };
+            let encumbrance = user.foo_status_encumbrance;
+
+            getAttrsRepeating("skillcustom", ["skill_custom_mod_attribute_select"], (repeating) => {
+                // prepare payload
+                let payload = {};
+
+                // iterate payload
+                Object.keys(repeating).forEach( id => {
+                    switch( repeating[id].skill_custom_mod_attribute_select ) {
+                        case 1: // strength
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.strength;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = encumbrance;
+                            break;
+
+                        case 2: // dexterity
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.dexterity;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = encumbrance;
+                            break;
+
+                        case 3: // constitution
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.constitution;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = 0;
+                            break;
+
+                        case 4: // intelligence
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.intelligence;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = 0;
+                            break;
+
+                        case 5: // wisdom
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.wisdom;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = 0;
+                            break;
+
+                        case 6: // charisma
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_attribute"] = attribute.charisma;
+                            payload["repeating_skillcustom_"+id+"_skill_custom_mod_status"] = 0;
+                            break;
+                    }
+                });
+                delete(repeating);
+
+                // send payload
+                setAttrs(payload);
+            });
+        });
+    }
+
+    on( "change:repeating_skillcustom:skill_custom_mod_attribute_select", skill_custom_modifier );
+    function skill_custom_modifier(e) {
+        // format "repeating_skillcustom_-LrcL2qT7lhjZ6BZrble_skill_custom_mod_attribute_select"
+        let id = e.sourceAttribute.replace(/skill_custom_mod_attribute_select/, '');
 
         getAttrsNumber([
             "foo_status_encumbrance", "foo_character_strength_mod", "foo_character_dexterity_mod",
@@ -3773,36 +3841,35 @@
             let payload = {};
             switch(+e.newValue) {
                 case 1: // strength
-                    payload[source+"skill_custom_mod_attribute"] = user.foo_character_strength_mod;
-                    payload[source+"skill_custom_mod_status"] = user.foo_status_encumbrance;
+                    payload[id+"skill_custom_mod_attribute"] = user.foo_character_strength_mod;
+                    payload[id+"skill_custom_mod_status"] = user.foo_status_encumbrance;
                     break;
 
                 case 2: // dexterity
-                    payload[source+"skill_custom_mod_attribute"] = user.foo_character_dexterity_mod;
-                    payload[source+"skill_custom_mod_status"] = user.foo_status_encumbrance;
+                    payload[id+"skill_custom_mod_attribute"] = user.foo_character_dexterity_mod;
+                    payload[id+"skill_custom_mod_status"] = user.foo_status_encumbrance;
                     break;
 
                 case 3: // constitution
-                    payload[source+"skill_custom_mod_attribute"] = Math.floor( ( user.character_constitution_base+user.character_constitution_race+user.character_constitution_bonus+user.character_constitution_penalty+user.character_constitution_temporary ) / 2 - 5);
-                    payload[source+"skill_custom_mod_status"] = 0;
+                    payload[id+"skill_custom_mod_attribute"] = Math.floor( ( user.character_constitution_base+user.character_constitution_race+user.character_constitution_bonus+user.character_constitution_penalty+user.character_constitution_temporary ) / 2 - 5);
+                    payload[id+"skill_custom_mod_status"] = 0;
                     break;
 
                 case 4: // intelligence
-                    payload[source+"skill_custom_mod_attribute"] = Math.floor( ( user.character_intelligence_base+user.character_intelligence_race+user.character_intelligence_bonus+user.character_intelligence_penalty+user.character_intelligence_temporary) / 2 - 5);
-                    payload[source+"skill_custom_mod_status"] = 0;
+                    payload[id+"skill_custom_mod_attribute"] = Math.floor( ( user.character_intelligence_base+user.character_intelligence_race+user.character_intelligence_bonus+user.character_intelligence_penalty+user.character_intelligence_temporary) / 2 - 5);
+                    payload[id+"skill_custom_mod_status"] = 0;
                     break;
 
                 case 5: // wisdom
-                    payload[source+"skill_custom_mod_attribute"] = Math.floor( ( user.character_wisdom_base+user.character_wisdom_race+user.character_wisdom_bonus+user.character_wisdom_penalty+user.character_wisdom_temporary) / 2 - 5);
-                    payload[source+"skill_custom_mod_status"] = 0;
+                    payload[id+"skill_custom_mod_attribute"] = Math.floor( ( user.character_wisdom_base+user.character_wisdom_race+user.character_wisdom_bonus+user.character_wisdom_penalty+user.character_wisdom_temporary) / 2 - 5);
+                    payload[id+"skill_custom_mod_status"] = 0;
                     break;
 
                 case 6: // charisma
-                    payload[source+"skill_custom_mod_attribute"] = Math.floor( ( user.character_charisma_base+user.character_charisma_race+user.character_charisma_bonus+user.character_charisma_penalty+user.character_charisma_temporary ) / 2 - 5) ;
-                    payload[source+"skill_custom_mod_status"] = 0;
+                    payload[id+"skill_custom_mod_attribute"] = Math.floor( ( user.character_charisma_base+user.character_charisma_race+user.character_charisma_bonus+user.character_charisma_penalty+user.character_charisma_temporary ) / 2 - 5) ;
+                    payload[id+"skill_custom_mod_status"] = 0;
                     break;
             }
-            console.log(payload[source+"skill_custom_mod_attribute"]);
             // send payload
             setAttrs(payload);
         });
@@ -4341,6 +4408,11 @@
     // function
     // ------------------------------------------
 
+    // send mesage to log screen
+    function sendLog(message) {
+        console.log("["+datelocale()+"] "+message);
+    }
+
     // convert units
     //
     // value            (number)
@@ -4429,7 +4501,7 @@
     // section	        (string) section name from "repeating_<section>_<field>"
     // fields           (string or array of string) attributes from "repeating_<section>_<field>"
     // callback         (function) returning function after xhr request
-    // isNumber         (boolean) parse date as number(true) or string(false)
+    // isNumber         (boolean) parse date as number(true)|default or string(false)
     function getAttrsRepeating(section, fields, callback, isNumber = true) {
         section = section.replace(/^repeating_/g, '');
         if ( !Array.isArray(fields) ) fields = [fields];
@@ -20596,8 +20668,8 @@
                                             <option data-i18n="attribute-dexterity-short" value="2"></option>
                                             <option data-i18n="attribute-constitution-short" value="3"></option>
                                             <option data-i18n="attribute-intelligence-short" value="4"></option>
-                                            <option data-i18n="attribute-charisma-short" value="5"></option>
-                                            <option data-i18n="attribute-wisdom-short" value="6"></option>
+                                            <option data-i18n="attribute-wisdom-short" value="5"></option>
+                                            <option data-i18n="attribute-charisma-short" value="6"></option>
                                         </select>
                                     </div>
                                 </td>
