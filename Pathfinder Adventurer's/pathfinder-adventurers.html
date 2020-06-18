@@ -286,8 +286,8 @@
                     // convert units
                     if ( !prop.startsWith("compendium_") ) continue;
                     if ( user_number.compendium_unit_active === 1 ) {
-                        if ( user_number.option_unit_height === 2 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(foot|ft)[\.]?/gi, height_callback);
-                        if ( user_number.option_unit_weight === 1 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(pound|livre|lb)[\.]?/gi, weight_callback);
+                        if ( user_number.option_unit_height === 2 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(foot|ft)[.]?/gi, parse_height);
+                        if ( user_number.option_unit_weight === 1 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(pound|livre|lb)[.]?/gi, parse_weight);
                     }
                 }
                 if ( user_string.compendium_weight !== "") {
@@ -403,12 +403,12 @@
                         payload["health_nonlethal_damage_base"] = 0;
 
                         // attributes
-                        payload["npc_character_strength_base"] = parseInt(user_string.compendium_strength);
-                        payload["npc_character_dexterity_base"] = parseInt(user_string.compendium_dexterity);
-                        payload["npc_character_constitution_base"] = parseInt(user_string.compendium_constitution);
-                        payload["npc_character_intelligence_base"] = parseInt(user_string.compendium_intelligence);
-                        payload["npc_character_wisdom_base"] = parseInt(user_string.compendium_wisdom);
-                        payload["npc_character_charisma_base"] = parseInt(user_string.compendium_charisma);
+                        payload["npc_character_strength_base"] = parseNumber(user_string.compendium_strength);
+                        payload["npc_character_dexterity_base"] = parseNumber(user_string.compendium_dexterity);
+                        payload["npc_character_constitution_base"] = parseNumber(user_string.compendium_constitution);
+                        payload["npc_character_intelligence_base"] = parseNumber(user_string.compendium_intelligence);
+                        payload["npc_character_wisdom_base"] = parseNumber(user_string.compendium_wisdom);
+                        payload["npc_character_charisma_base"] = parseNumber(user_string.compendium_charisma);
                         payload["npc_aura"] = user_string.compendium_aura;
                         payload["npc_reach"] = user_string.compendium_reach;
                         payload["npc_sense"] = user_string.compendium_sense;
@@ -451,9 +451,9 @@
                         payload["npc_monster_class"] = user_string.compendium_monster_class;
 
                         // battle
-                        payload["npc_base_attack_bonus"] = parseInt(user_string.compendium_base_attack_bonus);
+                        payload["npc_base_attack_bonus"] = parseNumber(user_string.compendium_base_attack_bonus);
                         if ( user_string.compendium_combat_maneuver_bonus !== "") {
-                            let regex = user_string.compendium_combat_maneuver_bonus.match(/\+?([0-9]+(.*))/i); // <number> (<string>)
+                            let regex = user_string.compendium_combat_maneuver_bonus.match(/([0-9]+)(.*)/i); // <number> (<string>)
                             if ( regex !== null ) {
                                 let [, value, description] = regex;
                                 payload["npc_combat_maneuver_bonus_base"] = parseInt(value);
@@ -495,34 +495,38 @@
                             }
                         });
                         let attacks = {
-                            "attack": [],
-                            "error": [],
+                            "valid": [],
+                            "invalid": [],
                         };
 
                         if ( user_string.compendium_melee_attack !== "") {
-                            let [valid, error] = parse_attacks(user_string.compendium_melee_attack, 0);
-                            attacks.attack.concat(valid);
-                            attacks.error.concat(error);
+                            let [valid, invalid] = parse_attacks(user_string.compendium_melee_attack, 0);
+                            attacks.valid = attacks.valid.concat(valid);
+                            attacks.invalid = attacks.invalid.concat(invalid);
                         }
                         if ( user_string.compendium_ranged_attack !== "") {
-                            let [valid, error] = parse_attacks(user_string.compendium_ranged_attack, 1);
-                            attacks.attack.concat(valid);
-                            attacks.error.concat(error);
+                            let [valid, invalid] = parse_attacks(user_string.compendium_ranged_attack, 1);
+                            attacks.valid = attacks.valid.concat(valid);
+                            attacks.invalid = attacks.invalid.concat(invalid);
                         }
-                        payload["npc_battle_note"] = attacks.error.join("\n");
-                        for ( let i = 0; i < attacks.attack.length; i++) {
+                        payload["npc_battle_note"] = attacks.invalid.join("\n");
+                        for ( let i = 0; i < attacks.valid.length; i++) {
                             // generate new ID
                             let header = "repeating_npcbattle_"+generateRowID()+"_";
+                            let description = [];
+                            if ( attacks.valid[i].hasOwnProperty("special") ) description.push(attacks.valid[i].special);
+                            if ( attacks.valid[i].hasOwnProperty("base_attack") && attacks.valid[i].base_attack.indexOf("/") !== -1 ) description.push(getTranslationByKey("combat-maneuver-bonus-short")+" "+attacks.valid[i].base_attack);
+                            if ( attacks.valid[i].description !== "" ) description.push(attacks.valid[i].description);
 
-                            payload[header+"npc_battle_name"] = attacks.attack[i].name;
-                            payload[header+"npc_battle_description_short"] = ( attacks.attack[i].hasOwnProperty("base_attack") && attacks.attack[i].base_attack.indexOf("/") !== -1 ? getTranslationByKey("combat-maneuver-bonus-short")+" : "+attacks.attack[i].base_attack : "" );
-                            payload[header+"npc_battle_base_attack"] = attacks.attack[i].base_attack_1st;
-                            payload[header+"npc_battle_range"] = attacks.attack[i].range;
-                            payload[header+"npc_battle_dice_count"] = attacks.attack[i].dice_count;
-                            payload[header+"npc_battle_dice_type"] = attacks.attack[i].dice_type;
-                            payload[header+"npc_battle_damage"] = attacks.attack[i].damage;
-                            if ( attacks.attack[i].hasOwnProperty("critic") ) payload[header+"npc_battle_damage_critic"] = attacks.attack[i].critic;
-                            payload[header+"npc_battle_description"] = attacks.attack[i].description;
+                            payload[header+"npc_battle_name"] = attacks.valid[i].name;
+                            payload[header+"npc_battle_description_short"] = description.join(", ");
+                            payload[header+"npc_battle_base_attack"] = attacks.valid[i].base_attack_1st;
+                            payload[header+"npc_battle_range"] = attacks.valid[i].range;
+                            payload[header+"npc_battle_dice_count"] = attacks.valid[i].dice_count;
+                            payload[header+"npc_battle_dice_type"] = attacks.valid[i].dice_type;
+                            payload[header+"npc_battle_damage"] = attacks.valid[i].damage;
+                            if ( attacks.valid[i].hasOwnProperty("critic") ) payload[header+"npc_battle_damage_critic"] = attacks.valid[i].critic;
+                            if ( attacks.valid[i].hasOwnProperty("other") ) payload[header+"npc_battle_description"] = attacks.valid[i].other;
                         }
                         delete(attacks);
                         payload["npc_special_attack"] = user_string.compendium_special_attack;
@@ -533,7 +537,7 @@
                         payload["npc_spell_like_ability"] = user_string.compendium_spell_like_ability;
 
                         // defense
-                        payload["npc_base_attack_bonus"] = parseInt(user_string.compendium_base_attack_bonus);
+                        payload["npc_base_attack_bonus"] = parseNumber(user_string.compendium_base_attack_bonus);
                         if ( user_string.compendium_armor_class !== "") {
                             let regex =  user_string.compendium_armor_class.match(/([0-9]+).*touch\s*[+]?([0-9]+).*flat-footed\s*[+]?([0-9]+).*\((.*)\)/i);
                             if ( regex !== null ) {
@@ -582,13 +586,13 @@
                         }
                         payload["npc_damage_resistance"] = user_string.compendium_damage_resistance;
                         payload["npc_defensive_ability"] = user_string.compendium_defensive_ability;
-                        payload["npc_fortitude"] = parseInt(user_string.compendium_fortitude);
+                        payload["npc_fortitude"] = parseNumber(user_string.compendium_fortitude);
                         payload["npc_immune"] = user_string.compendium_immune;
                         payload["npc_racial_modifier"] = user_string.compendium_racial_modifier;
                         payload["npc_weakness"] = user_string.compendium_weakness;
-                        payload["npc_reflex"] = parseInt(user_string.compendium_reflex);
+                        payload["npc_reflex"] = parseNumber(user_string.compendium_reflex);
                         payload["npc_resistance"] = user_string.compendium_resistance;
-                        payload["npc_willpower"] = parseInt(user_string.compendium_willpower);
+                        payload["npc_willpower"] = parseNumber(user_string.compendium_willpower);
 
                         // feat
                         payload["npc_feat"] = user_string.compendium_feat;
@@ -596,10 +600,10 @@
 
                         // note
                         if ( user_string.compendium_challenge_rating !== "") {
-                            let regex = user_string.compendium_challenge_rating.match(/([0-9]+)/i); // CR <number>
+                            let regex = user_string.compendium_challenge_rating.match(/(cr\s*)?(.*)/i); // CR <number>/<number>
                             if ( regex !== null ) {
-                                let [, value] = regex;
-                                payload["npc_challenge_rating"] = parseInt(value);
+                                let [, , value] = regex;
+                                payload["npc_challenge_rating"] = value;
                             }
                             else {
                                 sendLog("CR parse error for '"+user_string.compendium_challenge_rating+"'");
@@ -609,7 +613,7 @@
                         else {
                             payload["npc_challenge_rating"] = 0;
                         }
-                        payload["npc_experience"] = parseInt(user_string.compendium_experience.replace(/,/g, "") );
+                        payload["npc_experience"] = parseNumber(user_string.compendium_experience.replace(/,/g, "") );
                         payload["npc_treasure"] = user_string.compendium_treasure;
                         payload["npc_organization"] = user_string.compendium_organization;
                         payload["npc_special_quality"] = user_string.compendium_special_quality;
@@ -676,7 +680,7 @@
                                 payload[cache.header + "component_focalizing"] = (component.indexOf("F") !== -1 ? 1 : 0);
                                 payload[cache.header + "component_divine_focalizing"] = (component.indexOf("DF") !== -1 ? 1 : 0);
 
-                                regex = user_string.compendium_components.match(/\(([^\(^)]+)\)/g);
+                                regex = user_string.compendium_components.match(/\(([^(^)]+)\)/g);
                                 // format <*> (<string>)
                                 // regex : 2 - materiel details
                                 if ( regex !== null ) {
@@ -759,7 +763,7 @@
                         // saving throw
                         if ( user_string.compendium_saving_throw !== "" ) {
                             // format : <string> <string> (<string>)
-                            let [, type, , saving_throw, harmless] = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s*(half|negates|partial))?([\s\(]*harmless[\s\)]*)?/i);
+                            let [, type, , saving_throw, harmless] = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s*(half|negates|partial))?([\s(]*harmless[\s)]*)?/i);
                             if ( type !== null ) {
                                 switch (type.toLowerCase()) {
                                     case "none": payload[cache.header + "save"] = 0; break;
@@ -784,7 +788,7 @@
                         // school
                         if ( user_string.compendium_school !== "" ) {
                             // format : <string> (<string>) [<array>]
-                            let [, school, , sub_school, , register] = user_string.compendium_school.match(/([a-z]+)(\s*\(([a-z]+)\))?(\s*\[([ a-z,-]+)\])?/i);
+                            let [, school, , sub_school, , register] = user_string.compendium_school.match(/([a-z]+)(\s*\(([a-z]+)\))?(\s*\[([ a-z,-]+)])?/i);
                             if( school !== null ) {
                                 if ( sub_school === undefined ) sub_school = school;
                                 switch (sub_school.toLowerCase()) {
@@ -799,7 +803,7 @@
                                     case "teleportation": payload[cache.header + "school"] = 2.6; break;
                                     // divination
                                     case "divination": payload[cache.header + "school"] = 3.1; break;
-                                    case "scrying": payload[cache.header + "school"] = 3.2; break
+                                    case "scrying": payload[cache.header + "school"] = 3.2; break;
                                     // enchantment
                                     case "charm": payload[cache.header + "school"] = 4.1; break;
                                     case "compulsion": payload[cache.header + "school"] = 4.3; break;
@@ -936,42 +940,44 @@
                 setAttrs(payload, {silent: false}, compendium_reset);
 
                 // functions
-                function weight_callback(match) {
+                function parse_weight(match) {
                     return formatNumber( convertUnit(parseFloat(match), "lb2kg"), 0.01) + " " + cache.kilogram;
                 }
 
-                function height_callback(match) {
+                function parse_height(match) {
                     return formatNumber( convertUnit(parseFloat(match), "ft2m"), 0.5) + " " + cache.meter;
                 }
 
                 function parse_attacks(data, range) {
                     data = data.split(",");
-                    let valid = [], error = [];
+                    let valid = [], invalid = [];
 
                     for ( let i = 0, size = data.length; i < size; i++ ) {
-                        let regex = data[i].match(/([0-9a-z+\s]*)(\+([0-9]+)(\/\+[0-9]+)*)\s*\(\s*([0-9])+d([0-9]+)(\+([0-9]+))?\/?(([0-9]+)-20)?(x?([0-9]))\s*(.*)\)/i); // <string> +/-<number> (<number>d<number>+<number> <string>)
+                        let regex = data[i].match(/(.*)\s(\+?([0-9]+)(\/\+[0-9]+)*)\s*(touch|melee)?\s*\(([0-9]+)+d([0-9]+)([+-][0-9]+)?(\/([0-9]+)-20)?(\/x([0-9]))?(.*)\)(.*)/i);
                         if ( regex !== null ) {
-                            let [, label, base_attack, base_attack_1st, , dice_count, dice_type, , damage, , critic, , critic_factor, description] = regex;
+                            let [, label, base_attack_raw, base_attack_1st, , special, dice_count, dice_type, damage, , critic, , critic_factor, description, other] = regex;
                             let current = {
                                 "name": label.trim(),
+                                "base_attack": base_attack_raw,
                                 "base_attack_1st": parseInt(base_attack_1st),
                                 "range": range,
                                 "dice_count": parseInt(dice_count),
-                                "dice_type": parseInt(dice_type),
-                                "description": description.trim()
+                                "dice_type": parseInt(dice_type)
                             };
-                            if ( damage !== undefined ) current.damage = parseInt(damage);
+                            if ( damage !== undefined ) current.damage = parseFloat(damage);
                             if ( critic !== undefined ) current.critic = parseInt(critic);
                             if ( critic_factor !== undefined ) current.critic_factor = parseInt(critic_factor);
-                            if ( base_attack !== undefined ) current.base_attack = base_attack;
+                            if ( special !== undefined ) current.special = special;
+                            if ( other !== undefined ) current.other = other;
+                            current.description = ( description !== undefined ? description.trim() : "");
                             valid.push(current);
                         }
                         else {
                             sendLog((range === 0 ? "Melee" : "Ranged")+" attack parse error for '"+data[i]+"'");
-                            error.push(data[i]);
+                            invalid.push(data[i]);
                         }
                     }
-                    return [valid, error];
+                    return [valid, invalid];
                 }
             });
         });
@@ -3423,7 +3429,7 @@
                 payload[field.set.reflex] = cache.reflex;
                 payload[field.set.willpower] = cache.willpower;
                 payload[field.set.level] = cache.level;
-                payload["character_experience_total"] = cache.experience_total
+                payload["character_experience_total"] = cache.experience_total;
 
                 delete(cache);
                 delete(user);
@@ -3734,10 +3740,7 @@
         + " change:character_wisdom_base change:character_wisdom_race change:character_wisdom_bonus change:character_wisdom_penalty change:character_wisdom_temporary"
         + " change:character_charisma_base change:character_charisma_race change:character_charisma_bonus change:character_charisma_penalty change:character_charisma_temporary"
         , skill_custom_attribute );
-    function skill_custom_attribute(e) {
-        // format "repeating_skillcustom_-LrcL2qT7lhjZ6BZrble_skill_custom_mod_attribute_select"
-        let source = e.sourceAttribute.replace(/skill_custom_mod_attribute_select/, '');
-
+    function skill_custom_attribute() {
         getAttrsNumber([
             "foo_status_encumbrance", "foo_character_strength_mod", "foo_character_dexterity_mod",
             "character_strength_base", "character_strength_race", "character_strength_bonus", "character_strength_penalty", "character_strength_temporary",
@@ -3932,7 +3935,7 @@
             getAttrs(Object.values(field.getString), (user_string) => {
                 // generate new ID
                 // note : setAttrs() generate new row if doesn't exist
-                let id = "repeating_battle_"+generateRowID()+"_"
+                let id = "repeating_battle_"+generateRowID()+"_";
                 field.set = preprendArrayProperties(field.set, id );
 
                 let cache = [];
@@ -4471,12 +4474,16 @@
     }
 
     // parse and clean numbers from roll20
-    // ( checkbox from roll20 return "on" for TRUE, 0 for FALSE )
+    // checkbox from roll20 return "on" for TRUE, 0 for FALSE
+    // some values from compendium return various string instead of an number ( "-", "&amp;Mdash;", ... )
     //
     // value            (number) number to parse
     function parseNumber(value) {
         if ( value === "" ) return null;
-        return parseFloat(value) || (value === "on" ? 1 : 0);
+        if ( value === "on" ) return 1;
+        value = parseFloat(value);
+        if ( isNaN(value) ) value = 0;
+        return value;
     }
 
     // sort string with locale configuration
@@ -4781,8 +4788,8 @@
         <div class="flex-row">
             <div class="flex-col8">
                 <div class="header-name">
-                    <input class="header-character" type="text" name="attr_character_name" title="" value="@{character_name}" data-i18n-placeholder="character-name" />
-                    <input class="header-player" type="text" name="attr_player_name" title="" data-i18n-placeholder="player-name" />
+                    <input class="header-character" type="text" name="attr_character_name" title="" value="@{character_name}" data-i18n-placeholder="character-name-placeholder" />
+                    <input class="header-title" type="text" name="attr_character_title" title="" data-i18n-placeholder="character-title-placeholder" />
                 </div>
             </div>
 
@@ -5761,7 +5768,7 @@
                                                                 <span data-i18n="option-unit-height-short"></span>
                                                             </div>
                                                             <select name="attr_option_unit_height" title="" data-i18n-list="option-unit-height-list">
-                                                                <option value="1" selected="selected"data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
+                                                                <option value="1" selected="selected" data-i18n="option-unit-feet" data-i18n-list-item="feet"></option>
                                                                 <option value="2" data-i18n="option-unit-meter" data-i18n-list-item="meter"></option>
                                                             </select>
                                                         </div>
@@ -8835,7 +8842,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spellcustom_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -9721,7 +9728,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell0_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -10607,7 +10614,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell1_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -11493,7 +11500,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell2_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -12379,7 +12386,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell3_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -13265,7 +13272,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell4_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -14151,7 +14158,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell5_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -15037,7 +15044,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell6_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -15923,7 +15930,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell7_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -16809,7 +16816,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell8_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -17695,7 +17702,7 @@
                                                                                 <tr>
                                                                                     <td>
                                                                                         <select name="attr_spell9_save_type" title="" data-i18n-list="spell-save-list">
-                                                                                            <option data-i18n="spell-save-effect-negates" value="1"data-i18n-list-item="negates" selected="selected"></option>
+                                                                                            <option data-i18n="spell-save-effect-negates" value="1" data-i18n-list-item="negates" selected="selected"></option>
                                                                                             <option data-i18n="spell-save-effect-negates-harmless" value="2" data-i18n-list-item="negates-harmless"></option>
                                                                                             <option data-i18n="spell-save-effect-half-damage" value="3" data-i18n-list-item="half-damage"></option>
                                                                                             <option data-i18n="spell-save-effect-harmless" value="4" data-i18n-list-item="harmless"></option>
@@ -22259,6 +22266,7 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td></td>
                                     <td colspan="4">
                                         <textarea name="attr_npc_combat_maneuver_bonus_note" class="small" title=""></textarea>
                                     </td>
@@ -23052,10 +23060,9 @@
 
                 <h1 data-i18n="note"></h1>
                 <div class="note section">
-                    <fieldset class="repeating_note">
+                    <fieldset class="repeating_npc_note">
                         <div class="note-content">
-                            <input type="text" name="attr_note_label" title="" class="note-label text-left text-bold" data-i18n-placeholder="note-placeholder">
-                            <textarea class="note-description" name="attr_note_description" title="" data-i18n-placeholder="note-description-placeholder"></textarea>
+                            <textarea class="note-description" name="attr_npc_note_description" title="" data-i18n-placeholder="note-placeholder"></textarea>
                         </div>
                     </fieldset>
                 </div>
