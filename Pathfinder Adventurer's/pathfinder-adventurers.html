@@ -1,6 +1,19 @@
 <script data-type="text/worker">
     const local = {
         "language": "en", // used for to sort string
+        "encumbrance_mode" : {
+            // category height
+            //    2 legs    4 legs
+            "-8": [16,      24], // colossal
+            "-4": [8,       12], // gargantuan
+            "-2": [4,       6], // huge
+            "-1": [2,       3], // large
+            "0":  [1,       1.5], // medium
+            "1":  [0.75,    1], // small
+            "2":  [0.5,     0.75], // tiny
+            "4":  [0.25,    0.5], // diminutive
+            "8":  [0.125,   0.25] // fine
+        },
         "experience_rate" : {
             // level
             //    slow      medium   fast
@@ -24,19 +37,6 @@
             "17": [2700000, 1800000, 1200000],
             "18": [3850000, 2550000, 1700000],
             "19": [5350000, 3600000, 2400000]
-        },
-        "encumbrance_mode" : {
-            // category height
-            //    2 legs    4 legs
-            "-8": [16,      24], // colossal
-            "-4": [8,       12], // gargantuan
-            "-2": [4,       6], // huge
-            "-1": [2,       3], // large
-            "0":  [1,       1.5], // medium
-            "1":  [0.75,    1], // small
-            "2":  [0.5,     0.75], // tiny
-            "4":  [0.25,    0.5], // diminutive
-            "8":  [0.125,   0.25] // fine
         },
         "race" : {
             // "id" : [id type, id substype, height base male (inch), weight base male (lb), height base female (inch), weight base female (lb), modifier weight, adult (year), middle age (year), old (year), age venerable (year)]
@@ -254,7 +254,9 @@
     // ------------------------------------------
     // compendium drop
     // ------------------------------------------
-    on( "change:compendium_name", compendium_drop );
+    // from compendium_data, "source", "Level", "Speed 20ft", "Speed 30ft" and "Weapon Type"["simple"/"martial"/"exotic"] are not used -->
+
+    on( "change:compendium_data", compendium_drop );
     function compendium_drop() {
         getAttrsNumber([
             "compendium_creature_size_active", "compendium_unit_active", "option_unit_height", "option_unit_weight",
@@ -263,54 +265,59 @@
             getAttrs([
                 "option_template",
                 "nav_spell",
-                "compendium_category","compendium_content","compendium_cost","compendium_name","compendium_range","compendium_spell_resistance","compendium_weight",
-                "compendium_armor_category","compendium_arcane_spell_failure_chance","compendium_armor_check_penalty","compendium_armor_bonus","compendium_critical_damage","compendium_critical_range","compendium_damage_medium","compendium_damage_small","compendium_damage_type","compendium_maximum_dexterity_bonus","compendium_weapon_category",
-                "compendium_area","compendium_casting_time","compendium_components","compendium_duration","compendium_effect","compendium_saving_throw","compendium_school","compendium_special","compendium_spell_damage","compendium_spell_damage_type","compendium_target",
-                "compendium_armor_class","compendium_alignment","compendium_aura","compendium_base_attack_bonus","compendium_challenge_rating","compendium_charisma", "compendium_cleric_spell_prepared","compendium_combat_maneuver_bonus","compendium_combat_maneuver_defense","compendium_constitution","compendium_creature_type", "compendium_damage_resistance","compendium_defensive_ability","compendium_dexterity","compendium_environment","compendium_experience","compendium_feat","compendium_fortitude", "compendium_hit_points","compendium_immune","compendium_initiative","compendium_intelligence","compendium_languages","compendium_monster_class","compendium_melee_attack","compendium_organization", "compendium_ranged_attack","compendium_racial_modifier","compendium_reach","compendium_reflex","compendium_resistance","compendium_sense","compendium_skill","compendium_space", "compendium_special_quality","compendium_special_attack","compendium_speed","compendium_spell_known","compendium_spell_like_ability","compendium_size", "compendium_strength","compendium_treasure","compendium_weakness","compendium_willpower","compendium_wisdom"
+                "compendium_name", "compendium_data", "compendium_content"
             ], (user_string) => {
-                if ( user_string.compendium_name === "") return false;
+                if ( user_string.compendium_name === "" || user_string.compendium_data === "") return false;
 
+                let data = JSON.parse(user_string.compendium_data);
                 let cache = {
                     "type": null,
                     "meter": getTranslationByKey("option-unit-meter-short"),
-                    "kilogram": getTranslationByKey("option-unit-kilogram-short")
+                    "kilogram": getTranslationByKey("option-unit-kilogram-short"),
+                    "blacklist": ["Source", "blobs"] // exclude non string properties and unused
                 };
 
+                // ------------------------------------------
                 // clean values
-                for ( let prop in user_string) {
-                    if ( !user_string.hasOwnProperty(prop) || user_string[prop] === "" ) continue;
+                // ------------------------------------------
+                user_string.compendium_name = user_string.compendium_name.trim();
+                user_string.compendium_content = user_string.compendium_content.trim();
+                for ( let prop in data ) {
+                    if ( !data.hasOwnProperty(prop) ) continue;
+                    if ( cache.blacklist.indexOf(prop) !== -1 ) continue;
 
                     // trim value
-                    user_string[prop] = user_string[prop].trim();
+                    data[prop] = data[prop].trim();
 
                     // convert units
-                    if ( !prop.startsWith("compendium_") ) continue;
                     if ( user_number.compendium_unit_active === 1 ) {
-                        if ( user_number.option_unit_height === 2 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(foot|ft)[.]?/gi, parse_height);
-                        if ( user_number.option_unit_weight === 1 ) user_string[prop] = user_string[prop].replace(/([0-9]+)[\s-]*(pound|livre|lb)[.]?/gi, parse_weight);
+                        if ( user_number.option_unit_height === 2 ) data[prop] = data[prop].replace(/([0-9]+)[\s-]*(foot|ft)[.]?/gi, parse_height);
+                        if ( user_number.option_unit_weight === 1 ) data[prop] = data[prop].replace(/([0-9]+)[\s-]*(pound|livre|lb)[.]?/gi, parse_weight);
                     }
                 }
-                if ( user_string.compendium_weight !== "") {
-                    if ( user_number.compendium_creature_size_active === 1 ) user_string.compendium_weight = local.weight_mode[user_number.character_creature_size_select] * user_string.compendium_weight;
+                if ( data.hasOwnProperty("Weight") && data.Weight !== "" ) {
+                    if ( user_number.compendium_creature_size_active === 1 ) data.Weight = local.weight_mode[user_number.character_creature_size_select] * data.Weight;
                     if ( user_number.compendium_unit_active === 1 && user_number.option_unit_weight === 1 ) {
-                        user_string.compendium_weight = convertUnit(user_string.compendium_weight, "lb2kg");
-                        user_string.compendium_weight = formatNumber(user_string.compendium_weight, 0.01); // don't apply local decimals on purpose
+                        data.Weight = convertUnit(data.Weight, "lb2kg");
+                        data.Weight = formatNumber(data.Weight, 0.01); // don't apply local decimals on purpose
                     }
                 }
 
+                // ------------------------------------------
                 // detect type of object
-                if ( user_string.hasOwnProperty("compendium_category")) {
-                    switch (user_string.compendium_category.toLowerCase()) {
+                // ------------------------------------------
+                if ( data.hasOwnProperty("Category")) {
+                    switch (data["Category"].toLowerCase()) {
                         case "bestiary":
                             if ( user_string.option_template === "npc" ) cache.type = "monster";
                             break;
 
                         case "items":
                             if ( user_string.option_template === "pc" || user_string.option_template === "npc" ) {
-                                if ( user_string.compendium_armor_category !== "") {
+                                if ( data.hasOwnProperty("Armor Category") ) {
                                     cache.type = "armor";
                                 }
-                                else if ( user_string.compendium_weapon_category !== "" ) {
+                                else if ( data.hasOwnProperty("Weapon Category") ) {
                                     cache.type = "weapon";
                                 }
                                 else {
@@ -333,7 +340,9 @@
                     return;
                 }
 
+                // ------------------------------------------
                 // iterate data
+                // ------------------------------------------
                 let payload = {};
                 switch(cache.type) {
                     case "armor":
@@ -341,30 +350,28 @@
 
                         // generate new ID
                         // note : setAttrs() generate new row if doesn't exist
-                        cache.header = "repeating_equipmentarmor_"+generateRowID()+"_equipment_armor_";
+                        cache.header = "repeating_armor_"+generateRowID()+"_equipment_armor_";
 
                         // armor bonus
-                        payload[cache.header+"bonus"] = +user_string.compendium_armor_bonus;
+                        payload[cache.header+"bonus"] = parseNumber(data["Armor/Shield Bonus"]);
                         // maximum_dexterity_bonus
-                        if ( user_string.compendium_maximum_dexterity_bonus !== "") {
-                            payload[cache.header + "dexterity_ceiling"] = +user_string.compendium_maximum_dexterity_bonus;
-                        }
+                        payload[cache.header + "dexterity_ceiling"] = parseNumber(data["Maximum Dex Bonus"]);
                         // armor_check_penalty
-                        payload[cache.header+"malus"] = +user_string.compendium_armor_check_penalty;
+                        payload[cache.header+"malus"] = parseNumber(data["Armor Check Penalty"]);
                         // arcane_spell_failure_chance
-                        if ( user_string.compendium_arcane_spell_failure_chance !== "" ) {
-                            let regex = user_string.compendium_arcane_spell_failure_chance.match(/^([0-9]+)/);
+                        if ( data["Arcane Spell Failure Chance"] !== "" ) {
+                            let regex = data["Arcane Spell Failure Chance"].match(/^([0-9]+)/);
                             if ( regex !== null) {
                                 let [, value] = regex;
                                 payload[cache.header + "spell_failure"] = parseInt(value);
                             }
                         }
                         // name
-                        payload[cache.header+"name"] = user_string.compendium_name;
+                        payload[cache.header+"name"] = parseString(user_string.compendium_name);
                         // special
-                        payload[cache.header+"special"] = user_string.compendium_special;
+                        payload[cache.header+"special"] = parseString(data["Special"]);
                         // type
-                        switch(user_string.compendium_armor_category.toLowerCase()) {
+                        switch(data["Armor Category"].toLowerCase()) {
                             case "light": payload[cache.header+"type"] = 1; break;
                             case "medium": payload[cache.header+"type"] = 2; break;
                             case "heavy": payload[cache.header+"type"] = 3; break;
@@ -372,17 +379,17 @@
                             default: payload[cache.header+"type"] = 5; break;
                         }
                         // weight
-                        payload[cache.header+"weight"] = user_string.compendium_weight;
+                        payload[cache.header+"weight"] = parseNumber(data["Weight"]);
 
                         break;
 
                     case "monster":
                         // head
-                        payload["character_name"] = user_string.compendium_name;
+                        payload["character_name"] = parseString(user_string.compendium_name);
 
                         // hit points
-                        if ( user_string.compendium_hit_points !== "") {
-                            let regex =  user_string.compendium_hit_points.match(/([0-9]+)(.*)/i);
+                        if ( data.hasOwnProperty("HP") ) {
+                            let regex = data["HP"].match(/([0-9]+)(.*)/i);
                             if ( regex !== null ) {
                                 let [, value, description] = regex;
                                 payload["health_hit_points_base"] = parseInt(value);
@@ -390,10 +397,10 @@
                                 payload["npc_hit_points_description"] = description.trim();
                             }
                             else {
-                                sendLog("Hit points parse error for '"+user_string.compendium_hit_points+"'");
+                                sendLog("Hit points parse error for '"+data["HP"]+"'");
                                 payload["health_hit_points_base"] = 1;
                                 payload["health_hit_points_ceiling"] = 1;
-                                payload["npc_hit_points_description"] = user_string.compendium_hit_points;
+                                payload["npc_hit_points_description"] = parseString(data["HP"]);
                             }
                         }
                         else {
@@ -403,22 +410,32 @@
                         payload["health_nonlethal_damage_base"] = 0;
 
                         // attributes
-                        payload["npc_character_strength_base"] = parseNumber(user_string.compendium_strength);
-                        payload["npc_character_dexterity_base"] = parseNumber(user_string.compendium_dexterity);
-                        payload["npc_character_constitution_base"] = parseNumber(user_string.compendium_constitution);
-                        payload["npc_character_intelligence_base"] = parseNumber(user_string.compendium_intelligence);
-                        payload["npc_character_wisdom_base"] = parseNumber(user_string.compendium_wisdom);
-                        payload["npc_character_charisma_base"] = parseNumber(user_string.compendium_charisma);
-                        payload["npc_aura"] = user_string.compendium_aura;
-                        payload["npc_reach"] = user_string.compendium_reach;
-                        payload["npc_sense"] = user_string.compendium_sense;
-                        payload["npc_space"] = user_string.compendium_space;
-                        payload["npc_speed"] = user_string.compendium_speed;
-                        payload["npc_size"] = user_string.compendium_size;
+                        payload["npc_character_strength_base"] = parseNumber(data["Str"]);
+                        payload["npc_character_dexterity_base"] = parseNumber(data["Dex"]);
+                        payload["npc_character_constitution_base"] = parseNumber(data["Con"]);
+                        payload["npc_character_intelligence_base"] = parseNumber(data["Int"]);
+                        payload["npc_character_wisdom_base"] = parseNumber(data["Wis"]);
+                        payload["npc_character_charisma_base"] = parseNumber(data["Cha"]);
+                        payload["npc_character_aura"] = parseString(data["Aura"]);
+                        payload["npc_character_reach"] = parseString(data["Reach"]);
+                        payload["npc_character_sense"] = parseString(data["Senses"]);
+                        payload["npc_character_space"] = parseString(data["Space"]);
+                        payload["npc_character_speed"] = parseString(data["Speed"]);
+                        switch(parseString(data["Size"]).toLowerCase() ) {
+                            case "fine": payload["npc_character_creature_size"] = 8; break;
+                            case "diminutive": payload["npc_character_creature_size"] = 4; break;
+                            case "tiny": payload["npc_character_creature_size"] = 2; break;
+                            case "small": payload["npc_character_creature_size"] = 1; break;
+                            case "large": payload["npc_character_creature_size"] = -1; break;
+                            case "huge": payload["npc_character_creature_size"] = -2; break;
+                            case "gargantuan": payload["npc_character_creature_size"] = -4; break;
+                            case "colossal": payload["npc_character_creature_size"] = -8; break;
+                            default: payload["npc_character_creature_size"] = 0; break; // medium
+                        }
 
                         // background
-                        if ( user_string.compendium_alignment !== "") {
-                            let regex = user_string.compendium_alignment.match(/([cln])([gne]?)/i); // [CLN][gne]
+                        if ( data.hasOwnProperty("Alignment") ) {
+                            let regex = data["Alignment"].match(/([cln])([gne]?)/i); // [CLN][gne]
                             if ( regex !== null ) {
                                 let [, major, minor] = regex;
                                 let alignment = 5;
@@ -440,46 +457,46 @@
                                 payload["npc_alignment"] = alignment;
                             }
                             else {
-                                sendLog("Alignment parse error for '"+user_string.compendium_alignment+"'");
+                                sendLog("Alignment parse error for '"+data["Alignment"]+"'");
                                 payload["npc_alignment"] = 5;
                             }
                         }
                         payload["npc_content"] = user_string.compendium_content;
-                        payload["npc_creature_type"] = user_string.compendium_creature_type;
-                        payload["npc_environment"] = user_string.compendium_environment;
-                        payload["npc_languages"] = user_string.compendium_languages;
-                        payload["npc_monster_class"] = user_string.compendium_monster_class;
+                        payload["npc_creature_type"] = parseString(data["Creature Type"]);
+                        payload["npc_environment"] = parseString(data["Environment"]);
+                        payload["npc_languages"] = parseString(data["Languages"]);
+                        payload["npc_monster_class"] = parseString(data["Monster Class"]);
 
                         // battle
-                        payload["npc_base_attack_bonus"] = parseNumber(user_string.compendium_base_attack_bonus);
-                        if ( user_string.compendium_combat_maneuver_bonus !== "") {
-                            let regex = user_string.compendium_combat_maneuver_bonus.match(/([0-9]+)(.*)/i); // <number> (<string>)
+                        payload["npc_base_attack_bonus"] = parseNumber(data["Base Atk"]);
+                        if ( data.hasOwnProperty("CMB") ) {
+                            let regex = data["CMB"].match(/([0-9]+)(.*)/i); // <number> (<string>)
                             if ( regex !== null ) {
                                 let [, value, description] = regex;
                                 payload["npc_combat_maneuver_bonus_base"] = parseInt(value);
                                 payload["npc_combat_maneuver_bonus_note"] = description.trim();
                             }
                             else {
-                                sendLog("CMB parse error for '"+user_string.compendium_combat_maneuver_bonus+"'");
+                                sendLog("CMB parse error for '"+data["CMB"]+"'");
                                 payload["npc_combat_maneuver_bonus_base"] = 0;
-                                payload["npc_combat_maneuver_bonus_note"] = user_string.compendium_combat_maneuver_bonus;
+                                payload["npc_combat_maneuver_bonus_note"] = parseString(data["CMB"]);
                             }
                         }
                         else {
                             payload["npc_combat_maneuver_bonus_base"] = 0;
                             payload["npc_combat_maneuver_bonus_note"] = "";
                         }
-                        if ( user_string.compendium_initiative !== "") {
+                        if ( data.hasOwnProperty("Init") ) {
                             // initiative got a bunch of data
-                            let regex = user_string.compendium_initiative.match(/\+?([0-9]+)/i); // <string> +/-<number>
+                            let regex = data["Init"].match(/\+?([0-9]+)/i); // <string> +/-<number>
                             if ( regex !== null ) {
                                 let [, value] = regex;
                                 payload["npc_initiative"] = parseInt(value);
                             }
                             else {
-                                sendLog("Initiative parse error for '"+user_string.compendium_initiative+"'");
+                                sendLog("Initiative parse error for '"+data["Init"]+"'");
                                 payload["npc_initiative"] = 0;
-                                payload["npc_initiative_note"] = user_string.compendium_initiative;
+                                payload["npc_initiative_note"] = parseString(data["Init"]);
                             }
                         }
                         else {
@@ -499,13 +516,13 @@
                             "invalid": [],
                         };
 
-                        if ( user_string.compendium_melee_attack !== "") {
-                            let [valid, invalid] = parse_attacks(user_string.compendium_melee_attack, 0);
+                        if ( data.hasOwnProperty("Melee") ) {
+                            let [valid, invalid] = parse_attacks(parseString(data["Melee"]), 0);
                             attacks.valid = attacks.valid.concat(valid);
                             attacks.invalid = attacks.invalid.concat(invalid);
                         }
-                        if ( user_string.compendium_ranged_attack !== "") {
-                            let [valid, invalid] = parse_attacks(user_string.compendium_ranged_attack, 1);
+                        if ( data.hasOwnProperty("Ranged") ) {
+                            let [valid, invalid] = parse_attacks(parseString(data["Ranged"]), 1);
                             attacks.valid = attacks.valid.concat(valid);
                             attacks.invalid = attacks.invalid.concat(invalid);
                         }
@@ -529,17 +546,20 @@
                             if ( attacks.valid[i].hasOwnProperty("other") ) payload[header+"npc_battle_description"] = attacks.valid[i].other;
                         }
                         delete(attacks);
-                        payload["npc_special_attack"] = user_string.compendium_special_attack;
+                        payload["npc_special_attack"] = parseString(data["Special Attacks"]);
 
                         // magic
-                        payload["npc_cleric_spell_prepared"] = user_string.compendium_cleric_spell_prepared;
-                        payload["npc_spell_known"] = user_string.compendium_spell_known;
-                        payload["npc_spell_like_ability"] = user_string.compendium_spell_like_ability;
+                        payload["npc_cleric_spell_prepared"] = parseString(data["Cleric Spells Prepared"]);
+                        payload["npc_spell_known"] = parseString(data["Spells Known"]);
+                        payload["npc_spell_like_ability"] = parseString(data["Spell-Like Abilities"]);
 
                         // defense
-                        payload["npc_base_attack_bonus"] = parseNumber(user_string.compendium_base_attack_bonus);
-                        if ( user_string.compendium_armor_class !== "") {
-                            let regex =  user_string.compendium_armor_class.match(/([0-9]+).*touch\s*[+]?([0-9]+).*flat-footed\s*[+]?([0-9]+).*\((.*)\)/i);
+                        payload["npc_reflex"] = parseNumber(data["Ref"]);
+                        payload["npc_fortitude"] = parseNumber(data["Fort"]);
+                        payload["npc_willpower"] = parseNumber(data["Will"]);
+
+                        if ( data.hasOwnProperty("AC") ) {
+                            let regex = data["AC"].match(/([0-9]+).*touch\s*[+]?([0-9]+).*flat-footed\s*[+]?([0-9]+).*\((.*)\)/i);
                             if ( regex !== null ) {
                                 let [, melee, flat_footed, touch, description] = regex;
                                 payload["npc_armor_class_melee_base"] = parseInt(melee);
@@ -548,11 +568,11 @@
                                 payload["npc_armor_class_note"] = description.trim();
                             }
                             else {
-                                sendLog("AC parse error for '"+user_string.compendium_armor_class+"'");
+                                sendLog("AC parse error for '"+data["AC"]+"'");
                                 payload["npc_armor_class_melee_base"] = 0;
                                 payload["npc_armor_class_flat_footed_base"] = 0;
                                 payload["npc_armor_class_touch_base"] = 0;
-                                payload["npc_armor_class_note"] = user_string.compendium_armor_class;
+                                payload["npc_armor_class_note"] = parseString(data["AC"]);
                             }
                         }
                         else {
@@ -561,62 +581,64 @@
                             payload["npc_armor_class_touch_base"] = 0;
                             payload["npc_armor_class_note"] = "";
                         }
-                        payload["npc_combat_maneuver_defense_base"] = user_string.compendium_combat_maneuver_defense; // <number> (<string>)
-                        if ( user_string.compendium_combat_maneuver_defense !== "") {
-                            let regex = user_string.compendium_combat_maneuver_defense.match(/([0-9]+(.*))/i); // <string> +/-<number>
+                        if ( data.hasOwnProperty("CMD") ) {
+                            let regex = data["CMD"].match(/([0-9]+(.*))/i); // <string> +/-<number>
                             if ( regex !== null ) {
                                 let [, value, description] = regex;
                                 payload["npc_combat_maneuver_defense_base"] = parseInt(value);
                                 if ( description !== undefined ) {
-                                    payload["npc_combat_maneuver_defense_note"] = description;
+                                    payload["npc_combat_maneuver_defense_note"] = description.trim();
                                 }
                                 else {
                                     payload["npc_combat_maneuver_defense_note"] = "";
                                 }
                             }
                             else {
-                                sendLog("CMD parse error for '"+user_string.compendium_combat_maneuver_defense+"'");
+                                sendLog("CMD parse error for '"+data["CMD"]+"'");
                                 payload["npc_combat_maneuver_defense_base"] = 0;
-                                payload["npc_combat_maneuver_defense_note"] = user_string.compendium_combat_maneuver_defense;
+                                payload["npc_combat_maneuver_defense_note"] = parseString(data["CMD"]);
                             }
                         }
                         else {
                             payload["npc_combat_maneuver_defense_base"] = 0;
                             payload["npc_combat_maneuver_defense_note"] = "";
                         }
-                        payload["npc_damage_resistance"] = user_string.compendium_damage_resistance;
-                        payload["npc_defensive_ability"] = user_string.compendium_defensive_ability;
-                        payload["npc_fortitude"] = parseNumber(user_string.compendium_fortitude);
-                        payload["npc_immune"] = user_string.compendium_immune;
-                        payload["npc_racial_modifier"] = user_string.compendium_racial_modifier;
-                        payload["npc_weakness"] = user_string.compendium_weakness;
-                        payload["npc_reflex"] = parseNumber(user_string.compendium_reflex);
-                        payload["npc_resistance"] = user_string.compendium_resistance;
-                        payload["npc_willpower"] = parseNumber(user_string.compendium_willpower);
+                        payload["npc_damage_resistance"] = parseString(data["DR"]);
+                        payload["npc_defensive_ability"] = parseString(data["defensive Abilities"]);
+                        payload["npc_immune"] = parseString(data["Immune"]);
+                        payload["npc_racial_modifier"] = parseString(data["Racial Midifiers"]);
+                        payload["npc_weakness"] = parseString(data["Weakness"]);
+                        payload["npc_resistance"] = parseString(data["Resist"]);
 
                         // feat
-                        payload["npc_feat"] = user_string.compendium_feat;
-                        payload["npc_skill"] = user_string.compendium_skill;
+                        payload["npc_feat"] = parseString(data["Feats"]);
+                        payload["npc_skill"] = parseString(data["Skills"]);
 
                         // note
-                        if ( user_string.compendium_challenge_rating !== "") {
-                            let regex = user_string.compendium_challenge_rating.match(/(cr\s*)?(.*)/i); // CR <number>/<number>
+                        if ( data.hasOwnProperty("CR") ) {
+                            let regex = data["CR"].match(/(cr\s*)?(.*)/i); // CR <number>/<number>
                             if ( regex !== null ) {
                                 let [, , value] = regex;
-                                payload["npc_challenge_rating"] = value;
+                                payload["npc_challenge_rating"] = parseNumber(value);
                             }
                             else {
-                                sendLog("CR parse error for '"+user_string.compendium_challenge_rating+"'");
+                                sendLog("CR parse error for '"+data["CR"]+"'");
                                 payload["npc_challenge_rating"] = 0;
                             }
                         }
                         else {
                             payload["npc_challenge_rating"] = 0;
                         }
-                        payload["npc_experience"] = parseNumber(user_string.compendium_experience.replace(/,/g, "") );
-                        payload["npc_treasure"] = user_string.compendium_treasure;
-                        payload["npc_organization"] = user_string.compendium_organization;
-                        payload["npc_special_quality"] = user_string.compendium_special_quality;
+                        if ( data.hasOwnProperty("XP")) {
+                            let xp = parseString(data["XP"]).replace(/,/g, "");
+                            payload["npc_experience"] = parseNumber( xp );
+                        }
+                        else {
+                            payload["npc_experience"] = 0;
+                        }
+                        payload["npc_treasure"] = parseString(data["Treasure"]);
+                        payload["npc_organization"] = parseString(data["Organization"]);
+                        payload["npc_special_quality"] = parseString(data["SQ"]);
                         break;
 
                     case "other":
@@ -627,11 +649,11 @@
                         cache.header = "repeating_equipment_"+generateRowID()+"_equipment_";
 
                         // label
-                        payload[cache.header+"label"] = user_string.compendium_name;
+                        payload[cache.header+"label"] = parseString(user_string.compendium_name);
                         // quantity
                         payload[cache.header+"quantity"] = 1;
                         // weight
-                        payload[cache.header+"weight"] = user_string.compendium_weight;
+                        payload[cache.header+"weight"] = parseNumber(data["Weight"]);
 
                         break;
 
@@ -644,15 +666,15 @@
                         cache.content = [];
 
                         // area, target
-                        if ( user_string.compendium_area !== "" || user_string.compendium_target !== "" ) {
-                            payload[cache.header + "target"] = "";
-                            if ( user_string.compendium_area !== "" ) payload[cache.header + "target"] += user_string.compendium_area;
-                            if ( user_string.compendium_target !== "" ) payload[cache.header + "target"] += user_string.compendium_target;
-                        }
+                        let str = [];
+                        if ( data.hasOwnProperty("Area") ) str.push(parseString(data["Area"]));
+                        if ( data.hasOwnProperty("Target") ) str.push(parseString(data["Target"]));
+                        if ( str.length > 0 ) payload[cache.header + "target"] = str.join(", ");
+                        delete(str);
                         // casting time
-                        if ( user_string.compendium_casting_time !== "" ) {
+                        if ( data.hasOwnProperty("Casting Time") ) {
                             // format : <string>
-                            let regex = user_string.compendium_casting_time.match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
+                            let regex = data["Casting Time"].match(/(1 minute|1 round|free|full round|immediate|permanent|standard|swift)/i);
                             if ( regex !== null) {
                                 let [, casting_time] = regex;
                                 switch(casting_time) {
@@ -666,12 +688,12 @@
                                 }
                             }
                             else {
-                                sendLog("parse error for '"+user_string.compendium_casting_time+"'");
+                                sendLog("parse error for '"+data["Casting Time"]+"'");
                             }
                         }
                         // components
-                        if ( user_string.compendium_components !== "" ) {
-                            let regex = user_string.compendium_components.match(/(DF|F|M|S|V)/g);
+                        if ( data.hasOwnProperty("Components") ) {
+                            let regex = data["Components"].match(/(DF|F|M|S|V)/g);
                             if ( regex !== null ) {
                                 let [, component] = regex;
                                 payload[cache.header + "component_verbal"] = (component.indexOf("V") !== -1 ? 1 : 0);
@@ -680,7 +702,7 @@
                                 payload[cache.header + "component_focalizing"] = (component.indexOf("F") !== -1 ? 1 : 0);
                                 payload[cache.header + "component_divine_focalizing"] = (component.indexOf("DF") !== -1 ? 1 : 0);
 
-                                regex = user_string.compendium_components.match(/\(([^(^)]+)\)/g);
+                                regex = data["Components"].match(/\(([^(^)]+)\)/g);
                                 // format <*> (<string>)
                                 // regex : 2 - materiel details
                                 if ( regex !== null ) {
@@ -692,13 +714,13 @@
                                 }
                             }
                             else {
-                                sendLog("parse error for '"+user_string.compendium_components+"'");
+                                sendLog("parse error for '"+data["Components"]+"'");
                             }
                         }
                         // damage
-                        if ( user_string.compendium_spell_damage !== "" ) {
+                        if ( data.hasOwnProperty("Spell Damage") ) {
                             // format : <number>d<number> + <number>
-                            let regex = user_string.compendium_spell_damage.match(/([0-9]+)d([0-9]+)(\s*\+\s*([0-9]+))?/i);
+                            let regex = data["Spell Damage"].match(/([0-9]+)d([0-9]+)(\s*\+\s*([0-9]+))?/i);
                             if ( regex !== null ) {
                                 let [, dices_count, dices, , damage_fixed] = regex;
                                 payload[cache.header + "damage_dice_count"] = parseInt(dices_count);
@@ -706,18 +728,19 @@
                                 if ( damage_fixed !== undefined ) payload[cache.header + "damage_miscellaneous"] = parseInt(damage_fixed);
                             }
                             else {
-                                sendLog("parse error for '"+user_string.compendium_spell_damage+"'");
+                                sendLog("parse error for '"+data["Spell Damage"]+"'");
                             }
-                            if ( user_string.compendium_spell_damage_type !== "" ) cache.content.push(getTranslationByKey("spell-content-damage-type") + user_string.compendium_spell_damage_type);
+                            if ( data["Spell Damage Type"] !== "" ) cache.content.push(getTranslationByKey("spell-content-damage-type") + parseString(data["Spell Damage Type"]));
 
                             payload[cache.header + "damage_toggle"] = "show";
                             payload[cache.header + "damage"] = 1;
                         }
                         // duration
-                        if ( user_string.compendium_duration !== "" ) {
+                        if ( data.hasOwnProperty("Duration") ) {
                             // format : <string>
-                            let [, duration] = user_string.compendium_duration.match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
-                            if ( duration !== null ) {
+                            let regex = data["Duration"].match(/(concentration|instantaneous|permanent|subjects|effects|area)/i);
+                            if ( regex !== null ) {
+                                let [, duration] = regex;
                                 switch(duration) {
                                     case "concentration": payload[cache.header + "duration"] = 1; break;
                                     case "instantaneous": payload[cache.header + "duration"] = 2; break;
@@ -729,26 +752,27 @@
                             }
                             else {
                                 payload[cache.header + "duration"] = 3;
-                                if ( user_string.compendium_duration !== "" ) {
-                                    payload[cache.header + "duration_description"] = user_string.compendium_duration;
+                                if ( data["Duration"] !== "" ) {
+                                    payload[cache.header + "duration_description"] = parseString(data["Duration"]);
                                 }
                             }
                         }
                         // effect
-                        if ( user_string.compendium_effect !== "" ) {
-                            cache.content.push(getTranslationByKey("spell-content-effect") + user_string.compendium_effect);
+                        if ( data.hasOwnProperty("Effect") ) {
+                            cache.content.push(getTranslationByKey("spell-content-effect") + parseString(data["Effect"]));
                         }
                         // name
                         payload[cache.header+"name"] = user_string.compendium_name;
                         // spell resistance
-                        if ( user_string.compendium_spell_resistance !== "" ) {
-                            payload[cache.header + "spell_resistance"] = (/yes/i.test(user_string.compendium_spell_resistance) ? 1 : 0 );
+                        if ( data["Spell Resistance"] !== "" ) {
+                            payload[cache.header + "spell_resistance"] = (/yes/i.test(data["Spell Resistance"]) ? 1 : 0 );
                         }
                         // range
-                        if ( user_string.compendium_range !== "" ) {
+                        if ( data.hasOwnProperty("Range") ) {
                             // format : <string> <*>
-                            let [, range, , description] = user_string.compendium_range.match(/([a-z]+)(\s*\(?(.*)\))?/i);
-                            if ( range !== null ) {
+                            let regex = data["Range"].match(/([a-z]+)(\s*\(?(.*)\))?/i);
+                            if ( regex !== null ) {
+                                let [, range, , description] = regex;
                                 switch (range.toLowerCase()) {
                                     case "personal": payload[cache.header + "range"] = 1;break;
                                     case "touch": payload[cache.header + "range"] = 2; break;
@@ -759,12 +783,16 @@
                                 }
                                 if ( description !== undefined ) payload[cache.header + "range_description"] = description.trim();
                             }
+                            else {
+                                sendLog("parse error for '"+data["Range"]+"'");
+                            }
                         }
                         // saving throw
-                        if ( user_string.compendium_saving_throw !== "" ) {
+                        if ( data.hasOwnProperty("Saving Throw") ) {
                             // format : <string> <string> (<string>)
-                            let [, type, , saving_throw, harmless] = user_string.compendium_saving_throw.match(/(fortitude|none|reflex|will)(\s*(half|negates|partial))?([\s(]*harmless[\s)]*)?/i);
-                            if ( type !== null ) {
+                            let regex = data["Saving Throw"].match(/(fortitude|none|reflex|will)(\s*(half|negates|partial))?([\s(]*harmless[\s)]*)?/i);
+                            if ( regex !== null ) {
+                                let [, type, , saving_throw, harmless] = regex;
                                 switch (type.toLowerCase()) {
                                     case "none": payload[cache.header + "save"] = 0; break;
                                     case "fortitude": payload[cache.header + "save"] = 1; break;
@@ -784,12 +812,16 @@
                                 }
                                 if ( payload[cache.header + "save"] !== 0 ) payload[cache.header+"save_toggle"] = "show";
                             }
+                            else {
+                                sendLog("parse error for '"+data["Saving Throw"]+"'");
+                            }
                         }
                         // school
-                        if ( user_string.compendium_school !== "" ) {
+                        if ( data.hasOwnProperty("School") ) {
                             // format : <string> (<string>) [<array>]
-                            let [, school, , sub_school, , register] = user_string.compendium_school.match(/([a-z]+)(\s*\(([a-z]+)\))?(\s*\[([ a-z,-]+)])?/i);
-                            if( school !== null ) {
+                            let regex = data["School"].match(/([a-z]+)(\s*\(([a-z]+)\))?(\s*\[([ a-z,-]+)])?/i);
+                            if( regex !== null ) {
+                                let [, school, , sub_school, , register] = regex;
                                 if ( sub_school === undefined ) sub_school = school;
                                 switch (sub_school.toLowerCase()) {
                                     // abjuration
@@ -857,6 +889,9 @@
                                     }
                                 }
                             }
+                            else {
+                                sendLog("parse error for '"+data["School"]+"'");
+                            }
                         }
 
                         // content
@@ -877,31 +912,60 @@
                         cache.header = "repeating_weapon_"+generateRowID()+"_equipment_weapon_";
 
                         // critic
-                        if ( user_string.compendium_critical_range !== "" ) {
-                            let [, value] = user_string.compendium_critical_range.match(/^([0-9]+)/);
-                            if ( value !== null ) payload[cache.header+"critic"] = parseInt(value);
+                        if ( data.hasOwnProperty("Critical Range") ) {
+                            let regex = data["Critical Range"].match(/^([0-9]+)/);
+                            if ( regex !== null ) {
+                                let [, value] = regex;
+                                payload[cache.header+"critic"] = parseInt(value);
+                            }
+                            else {
+                                sendLog("parse error for '"+data["Critical Range"]+"'");
+                            }
                         }
-                        if ( user_string.compendium_critical_damage !== "" ) {
-                            let [, value] = user_string.compendium_critical_damage.match(/([0-9]+)$/);
-                            if ( value !== null ) payload[cache.header + "critic_multiplier"] = parseInt(value);
+                        if ( data.hasOwnProperty("Critical Damage") ) {
+                            let regex = data["Critical Damage"].match(/([0-9]+)$/);
+                            if ( regex !== null ) {
+                                let [, value] = regex;
+                                payload[cache.header + "critic_multiplier"] = parseInt(value);
+                            }
+                            else {
+                                sendLog("parse error for '"+data["Critical Damage"]+"'");
+                            }
                         }
                         // damage
-                        if ( user_string.compendium_damage_small !== "" || user_string.compendium_damage_medium !== "" ) {
-                            let damage = (user_number.compendium_creature_size_active === 1 && user_number.character_creature_size_select > 0 ? user_string.compendium_damage_small : user_string.compendium_damage_medium);
-                            if (damage !== "") {
-                                let [, dices_count, dices] = damage.match(/([0-9]+)d([0-9]+)/);
-                                if ( dices_count !== null) {
+                        if ( user_number.character_creature_size_select <= 0 ) {
+                            if ( data.hasOwnProperty("Damage (Medium)") ) {
+                                let regex = data["Damage (Medium)"].match(/([0-9]+)d([0-9]+)/);
+                                if ( regex !== null ) {
+                                    let [, dices_count, dices] = regex;
                                     payload[cache.header + "dices_count"] = parseInt(dices_count);
                                     payload[cache.header + "dices"] = parseInt(dices);
                                 }
+                                else {
+                                    sendLog("parse error for '"+data["Damage (Medium)"]+"'");
+                                }
                             }
                         }
+                        else {
+                            if ( data.hasOwnProperty("Damage (Small)") ) {
+                                let regex = data["Damage (Small)"].match(/([0-9]+)d([0-9]+)/);
+                                if ( regex !== null ) {
+                                    let [, dices_count, dices] = regex;
+                                    payload[cache.header + "dices_count"] = parseInt(dices_count);
+                                    payload[cache.header + "dices"] = parseInt(dices);
+                                }
+                                else {
+                                    sendLog("parse error for '"+data["Damage (Small)"]+"'");
+                                }
+                            }
+                        }
+
                         // damage type
-                        if ( user_string.compendium_damage_type !== "") {
+                        if ( data.hasOwnProperty("Damage Type") ) {
                             let damage_type = 0;
-                            if ( user_string.compendium_damage_type.search(/piercing/i) !== -1 ) damage_type += 1; // percing
-                            if ( user_string.compendium_damage_type.search(/slashing/i) !== -1 ) damage_type += 2; // slshing
-                            if ( user_string.compendium_damage_type.search(/bludgeoning/i) !== -1 ) damage_type += 4; // blugeoning
+                            if ( data["Damage Type"].search(/piercing/i) !== -1 ) damage_type += 1; // piercing
+                            if ( data["Damage Type"].search(/slashing/i) !== -1 ) damage_type += 2; // slashing
+                            if ( data["Damage Type"].search(/bludgeoning/i) !== -1 ) damage_type += 4; // blugeoning
                             switch (damage_type) {
                                 case 1: payload[cache.header + "damage_type"] = 3; break;
                                 case 2: payload[cache.header + "damage_type"] = 4; break;
@@ -912,12 +976,12 @@
                             }
                         }
                         // name
-                        payload[cache.header+"name"] = user_string.compendium_name;
+                        payload[cache.header+"name"] = parseString(user_string.compendium_name);
                         // range
-                        switch( user_string.compendium_weapon_category.toLowerCase() ) {
+                        switch( data["Weapon Category"].toLowerCase() ) {
                             case "ranged":
                                 payload[cache.header+"range"] = 2;
-                                payload[cache.header+"range_description"] = user_string.compendium_range;
+                                payload[cache.header+"range_description"] = parseString(data["Range"]);
                                 break;
 
                             default:
@@ -925,17 +989,16 @@
                                 break;
                         }
                         // special
-                        if ( user_string.compendium_special !== "" ) {
-                            payload[cache.header + "special"] = user_string.compendium_special;
-                        }
+                        payload[cache.header+"special"] = parseString(data["Special"]);
                         // weight
-                        payload[cache.header+"weight"] = user_string.compendium_weight;
+                        payload[cache.header+"weight"] = parseString(data["Weight"]);
                         break;
                 }
                 delete(cache);
                 delete(user_number);
                 delete(user_string);
 
+                console.log(payload);
                 // send payload
                 setAttrs(payload, {silent: false}, compendium_reset);
 
@@ -985,84 +1048,9 @@
 
     function compendium_reset() {
         let payload = {
-            // common
-            "compendium_category": "",
+            "compendium_data": "",
             "compendium_content": "",
-            "compendium_cost": "",
-            "compendium_name": "",
-            "compendium_range": "",
-            "compendium_spell_resistance": "",
-            "compendium_weight": "",
-            // items
-            "compendium_armor_category": "",
-            "compendium_arcane_spell_failure_chance": "",
-            "compendium_armor_check_penalty": "",
-            "compendium_armor_bonus": "",
-            "compendium_critical_damage": "",
-            "compendium_critical_range": "",
-            "compendium_damage_medium": "",
-            "compendium_damage_small": "",
-            "compendium_damage_type": "",
-            "compendium_maximum_dexterity_bonus": "",
-            "compendium_weapon_category": "",
-            // spells
-            "compendium_area": "",
-            "compendium_casting_time": "",
-            "compendium_components": "",
-            "compendium_duration": "",
-            "compendium_effect": "",
-            "compendium_saving_throw": "",
-            "compendium_school": "",
-            "compendium_special": "",
-            "compendium_spell_damage": "",
-            "compendium_spell_damage_type": "",
-            "compendium_target": "",
-            // monster
-            "compendium_armor_class": "",
-            "compendium_alignment": "",
-            "compendium_aura": "",
-            "compendium_base_attack_bonus": "",
-            "compendium_challenge_rating": "",
-            "compendium_charisma": "",
-            "compendium_cleric_spell_prepared": "",
-            "compendium_combat_maneuver_bonus": "",
-            "compendium_combat_maneuver_defense": "",
-            "compendium_constitution": "",
-            "compendium_creature_type": "",
-            "compendium_damage_resistance": "",
-            "compendium_defensive_ability": "",
-            "compendium_dexterity": "",
-            "compendium_environment": "",
-            "compendium_experience": "",
-            "compendium_feat": "",
-            "compendium_fortitude": "",
-            "compendium_hit_points": "",
-            "compendium_immune": "",
-            "compendium_initiative": "",
-            "compendium_intelligence": "",
-            "compendium_languages": "",
-            "compendium_monster_class": "",
-            "compendium_melee_attack": "",
-            "compendium_organization": "",
-            "compendium_ranged_attack": "",
-            "compendium_racial_modifier": "",
-            "compendium_reach": "",
-            "compendium_reflex": "",
-            "compendium_resistance": "",
-            "compendium_sense": "",
-            "compendium_skill": "",
-            "compendium_space": "",
-            "compendium_special_quality": "",
-            "compendium_special_attack": "",
-            "compendium_speed": "",
-            "compendium_spell_known": "",
-            "compendium_spell_like_ability": "",
-            "compendium_size": "",
-            "compendium_strength": "",
-            "compendium_treasure": "",
-            "compendium_weakness": "",
-            "compendium_willpower": "",
-            "compendium_wisdom": ""
+            "compendium_name": ""
         };
         setAttrs(payload, {silent: true});
     }
@@ -4341,11 +4329,6 @@
     // function
     // ------------------------------------------
 
-    // send mesage to log window
-    function sendLog(message) {
-        console.log("["+datelocale()+"] "+message);
-    }
-
     // convert units
     //
     // value            (number)
@@ -4435,7 +4418,7 @@
     // fields           (string or array of string) attributes from "repeating_<section>_<field>"
     // callback         (function) returning function after xhr request
     // isNumber         (boolean) parse date as number(true)|default or string(false)
-    function getAttrsRepeating(section, fields, callback, isNumber = true) {
+    function getAttrsRepeating(section, fields, callback) {
         section = section.replace(/^repeating_/g, '');
         if ( !Array.isArray(fields) ) fields = [fields];
         if ( !(callback instanceof Function) ) callback = () => {};
@@ -4452,7 +4435,7 @@
                 Object.keys(raw).forEach( key => {
                     [, field, sub_field] = key.match(regex);
                     if ( !payload.hasOwnProperty( field ) ) payload[ field ] = {};
-                    payload[ field ][ sub_field ] = ( isNumber ? parseNumber( raw[key] ) : raw[key] );
+                    payload[ field ][ sub_field ] = parseNumber( raw[key] );
                 });
                 callback(payload);
             });
@@ -4479,11 +4462,25 @@
     //
     // value            (number) number to parse
     function parseNumber(value) {
-        if ( value === "" ) return null;
+        if ( value === null || value === undefined ) return 0;
         if ( value === "on" ) return 1;
-        value = parseFloat(value);
         if ( isNaN(value) ) value = 0;
-        return value;
+        return parseFloat(value);
+    }
+
+    // parse and clean string from roll20
+    // checkbox from roll20 return "on" for TRUE, 0 for FALSE
+    // some values from compendium return various string instead of an number ( "-", "&amp;Mdash;", ... )
+    //
+    // value            (number) number to parse
+    function parseString(value) {
+        if ( value === null || value === undefined ) return "";
+        return String(value).trim();
+    }
+
+    // send mesage to log window
+    function sendLog(message) {
+        console.log("["+datelocale()+"] "+message);
     }
 
     // sort string with locale configuration
@@ -4703,86 +4700,9 @@
 <input type="hidden" name="attr_foo_combat_maneuver_defense_alert" value="hide" />
 
 <div class="compendium-drop-target">
-    <!-- attributes "Level", "Speed 20ft", "Speed 30ft" and "Weapon Type"["simple"/"martial"/"exotic"] are not used -->
-    <!-- attribute "Weapon Category"["unarmed"/"light melee"/"one-handed melee"/"two-handed-melee"/"ranged"] is partially used -->
-    <!--common -->
-    <input type="hidden" name="attr_compendium_category" accept="Category" />
-    <input type="hidden" name="attr_compendium_content" accept="Content" />
-    <input type="hidden" name="attr_compendium_cost" accept="Cost" />
     <input type="hidden" name="attr_compendium_name" accept="Name" />
-    <input type="hidden" name="attr_compendium_range" accept="Range" />
-    <input type="hidden" name="attr_compendium_spell_resistance" accept="Spell Resistance" />
-    <input type="hidden" name="attr_compendium_weight" accept="Weight" />
-    <!-- items -->
-    <input type="hidden" name="attr_compendium_armor_category" accept="Armor Category" />
-    <input type="hidden" name="attr_compendium_arcane_spell_failure_chance" accept="Arcane Spell Failure Chance" />
-    <input type="hidden" name="attr_compendium_armor_check_penalty" accept="Armor Check Penalty" />
-    <input type="hidden" name="attr_compendium_armor_bonus" accept="Armor/Shield Bonus" />
-    <input type="hidden" name="attr_compendium_critical_damage" accept="Critical Damage" />
-    <input type="hidden" name="attr_compendium_critical_range" accept="Critical Range" />
-    <input type="hidden" name="attr_compendium_damage_medium" accept="Damage (Medium)" />
-    <input type="hidden" name="attr_compendium_damage_small" accept="Damage (Small)" />
-    <input type="hidden" name="attr_compendium_damage_type" accept="Damage Type" />
-    <input type="hidden" name="attr_compendium_maximum_dexterity_bonus" accept="Maximum Dex Bonus" />
-    <input type="hidden" name="attr_compendium_weapon_category" accept="Weapon Category" />
-    <!-- spells -->
-    <input type="hidden" name="attr_compendium_area" accept="Area" />
-    <input type="hidden" name="attr_compendium_casting_time" accept="Casting Time" />
-    <input type="hidden" name="attr_compendium_components" accept="Components" />
-    <input type="hidden" name="attr_compendium_duration" accept="Duration" />
-    <input type="hidden" name="attr_compendium_effect" accept="Effect" />
-    <input type="hidden" name="attr_compendium_saving_throw" accept="Saving Throw" />
-    <input type="hidden" name="attr_compendium_school" accept="School" />
-    <input type="hidden" name="attr_compendium_special" accept="Special" />
-    <input type="hidden" name="attr_compendium_spell_damage" accept="Spell Damage" />
-    <input type="hidden" name="attr_compendium_spell_damage_type" accept="Spell Damage Type" />
-    <input type="hidden" name="attr_compendium_target" accept="Target" />
-    <!-- attributes for Monster -->
-    <input type="hidden" name="attr_compendium_armor_class" accept="AC" />
-    <input type="hidden" name="attr_compendium_alignment" accept="Alignment" />
-    <input type="hidden" name="attr_compendium_aura" accept="Aura" />
-    <input type="hidden" name="attr_compendium_base_attack_bonus" accept="Base Atk" />
-    <input type="hidden" name="attr_compendium_challenge_rating" accept="CR" />
-    <input type="hidden" name="attr_compendium_charisma" accept="Cha" />
-    <input type="hidden" name="attr_compendium_cleric_spell_prepared" accept="Cleric Spells Prepared" />
-    <input type="hidden" name="attr_compendium_combat_maneuver_bonus" accept="CMB" />
-    <input type="hidden" name="attr_compendium_combat_maneuver_defense" accept="CMD" />
-    <input type="hidden" name="attr_compendium_constitution" accept="Con" />
-    <input type="hidden" name="attr_compendium_creature_type" accept="Creature Type" />
-    <input type="hidden" name="attr_compendium_damage_resistance" accept="DR" />
-    <input type="hidden" name="attr_compendium_defensive_ability" accept="dfensive Abilities" />
-    <input type="hidden" name="attr_compendium_dexterity" accept="Dex" />
-    <input type="hidden" name="attr_compendium_environment" accept="Environment" />
-    <input type="hidden" name="attr_compendium_experience" accept="XP" />
-    <input type="hidden" name="attr_compendium_feat" accept="Feats" />
-    <input type="hidden" name="attr_compendium_fortitude" accept="Fort" />
-    <input type="hidden" name="attr_compendium_hit_points" accept="HP" />
-    <input type="hidden" name="attr_compendium_immune" accept="immune" />
-    <input type="hidden" name="attr_compendium_initiative" accept="Init" />
-    <input type="hidden" name="attr_compendium_intelligence" accept="Int" />
-    <input type="hidden" name="attr_compendium_languages" accept="Languages" />
-    <input type="hidden" name="attr_compendium_monster_class" accept="Monster Class" />
-    <input type="hidden" name="attr_compendium_melee_attack" accept="Melee" />
-    <input type="hidden" name="attr_compendium_organization" accept="Organization" />
-    <input type="hidden" name="attr_compendium_ranged_attack" accept="Ranged" />
-    <input type="hidden" name="attr_compendium_racial_modifier" accept="Racial Modifiers" />
-    <input type="hidden" name="attr_compendium_reach" accept="Reach" />
-    <input type="hidden" name="attr_compendium_reflex" accept="Ref" />
-    <input type="hidden" name="attr_compendium_resistance" accept="Resist" />
-    <input type="hidden" name="attr_compendium_sense" accept="Senses" />
-    <input type="hidden" name="attr_compendium_skill" accept="Skills" />
-    <input type="hidden" name="attr_compendium_space" accept="Space" />
-    <input type="hidden" name="attr_compendium_special_quality" accept="SQ" />
-    <input type="hidden" name="attr_compendium_special_attack" accept="Special Attacks" />
-    <input type="hidden" name="attr_compendium_speed" accept="Speed" />
-    <input type="hidden" name="attr_compendium_spell_known" accept="Spells Known" />
-    <input type="hidden" name="attr_compendium_spell_like_ability" accept="Spell-Like Abilities" />
-    <input type="hidden" name="attr_compendium_size" accept="Size" />
-    <input type="hidden" name="attr_compendium_strength" accept="Str" />
-    <input type="hidden" name="attr_compendium_treasure" accept="Treasure" />
-    <input type="hidden" name="attr_compendium_weakness" accept="Weakness" />
-    <input type="hidden" name="attr_compendium_willpower" accept="Will" />
-    <input type="hidden" name="attr_compendium_wisdom" accept="Wis" />
+    <input type="hidden" name="attr_compendium_data" accept="data" />
+    <input type="hidden" name="attr_compendium_content" accept="Content" />
 
     <div class="header">
         <div class="flex-row">
@@ -22042,7 +21962,17 @@
                         <tbody>
                         <tr>
                             <td>
-                                <input type="text" name="attr_npc_size" title="" />
+                                <select name="attr_npc_character_creature_size" title="">
+                                    <option data-i18n="character-creature-size-fine" value="8"></option>
+                                    <option data-i18n="character-creature-size-diminutive" value="4"></option>
+                                    <option data-i18n="character-creature-size-tiny" value="2"></option>
+                                    <option data-i18n="character-creature-size-small" value="1"></option>
+                                    <option data-i18n="character-creature-size-medium" value="0" selected="selected"></option>
+                                    <option data-i18n="character-creature-size-large" value="-1"></option>
+                                    <option data-i18n="character-creature-size-huge" value="-2"></option>
+                                    <option data-i18n="character-creature-size-gargantuan" value="-4"></option>
+                                    <option data-i18n="character-creature-size-colossal" value="-8"></option>
+                                </select>
                             </td>
                             <td></td>
                             <td>
@@ -22079,7 +22009,7 @@
                                 <span data-i18n="npc-character-aura"></span>
                             </td>
                             <td>
-                                <input type="text" name="attr_npc_aura" title="" />
+                                <input type="text" name="attr_npc_character_aura" title="" />
                             </td>
                         </tr>
                         <tr>
@@ -22095,7 +22025,7 @@
                                 <span data-i18n="npc-character-sense"></span>
                             </td>
                             <td>
-                                <input type="text" name="attr_npc_sense" title="" />
+                                <input type="text" name="attr_npc_character_sense" title="" />
                             </td>
                         </tr>
                         <tr>
@@ -22130,15 +22060,15 @@
                     <tbody>
                     <tr>
                         <td>
-                            <input type="text" name="attr_npc_space" title="" />
+                            <input type="text" name="attr_npc_character_space" title="" />
                         </td>
                         <td></td>
                         <td>
-                            <input type="number" name="attr_npc_reach" title="" />
+                            <input type="number" name="attr_npc_character_reach" title="" />
                         </td>
                         <td></td>
                         <td>
-                            <input type="text" name="attr_npc_speed" title="" />
+                            <input type="text" name="attr_npc_character_speed" title="" />
                         </td>
                     </tr>
                     </tbody>

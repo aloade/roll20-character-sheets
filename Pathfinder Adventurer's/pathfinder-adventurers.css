@@ -99,7 +99,6 @@ html, body {
     box-sizing: border-box;
     font-family: "Gloria Hallelujah", "Patrick Hand", sans-serif;
     color: rgb(56, 61, 65);
-    line-height: 15px;
 }
 
 /* "text-align-last:center; " chrome hack for 'text-align: center' */
@@ -342,11 +341,11 @@ html, body {
     width: 100%;
     color: rgb(246, 226, 195);
     line-height: 22px;
-    height: 21px;
+    height: 26px;
     transition: color 0.35s ease;
     text-align-last: center;
     padding-right: 8px;
-    border-bottom: none;
+    border: none !important;
 }
 
 .sheet-button-switch {
@@ -394,6 +393,7 @@ html, body {
 .charsheet .sheet-button-switch-label {
     padding-left: 15px;
     color: inherit;
+    line-height: 22px;
 }
 
 /* group of horizontal button */
@@ -819,7 +819,8 @@ html, body {
     cursor: pointer;
 }
 
-.sheet-modal-label {
+.sheet-modal-label::after {
+    line-height: 26px;
 }
 
 .charsheet .sheet-modal-background {
