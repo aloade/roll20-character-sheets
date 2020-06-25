@@ -299,7 +299,7 @@
                     if ( user_number.compendium_creature_size_active === 1 ) data.Weight = local.weight_mode[user_number.character_creature_size_select] * data.Weight;
                     if ( user_number.compendium_unit_active === 1 && user_number.option_unit_weight === 1 ) {
                         data.Weight = convertUnit(data.Weight, "lb2kg");
-                        data.Weight = formatNumber(data.Weight, 0.01); // don't apply local decimals on purpose
+                        data.Weight = formatNumber(data.Weight, 0.5); // don't apply local decimals on purpose
                     }
                 }
 
@@ -722,9 +722,9 @@
                             // format : <number>d<number> + <number>
                             let regex = data["Spell Damage"].match(/([0-9]+)d([0-9]+)(\s*\+\s*([0-9]+))?/i);
                             if ( regex !== null ) {
-                                let [, dices_count, dices, , damage_fixed] = regex;
-                                payload[cache.header + "damage_dice_count"] = parseInt(dices_count);
-                                payload[cache.header + "damage_dice_type"] = parseInt(dices);
+                                let [, dice_count, dice_type, , damage_fixed] = regex;
+                                payload[cache.header + "damage_dice_count"] = parseInt(dice_count);
+                                payload[cache.header + "damage_dice_type"] = parseInt(dice_type);
                                 if ( damage_fixed !== undefined ) payload[cache.header + "damage_miscellaneous"] = parseInt(damage_fixed);
                             }
                             else {
@@ -937,9 +937,9 @@
                             if ( data.hasOwnProperty("Damage (Medium)") ) {
                                 let regex = data["Damage (Medium)"].match(/([0-9]+)d([0-9]+)/);
                                 if ( regex !== null ) {
-                                    let [, dices_count, dices] = regex;
-                                    payload[cache.header + "dices_count"] = parseInt(dices_count);
-                                    payload[cache.header + "dices"] = parseInt(dices);
+                                    let [, dice_count, dices] = regex;
+                                    payload[cache.header + "dice_count"] = parseInt(dice_count);
+                                    payload[cache.header + "dice_type"] = parseInt(dices);
                                 }
                                 else {
                                     sendLog("parse error for '"+data["Damage (Medium)"]+"'");
@@ -950,9 +950,9 @@
                             if ( data.hasOwnProperty("Damage (Small)") ) {
                                 let regex = data["Damage (Small)"].match(/([0-9]+)d([0-9]+)/);
                                 if ( regex !== null ) {
-                                    let [, dices_count, dices] = regex;
-                                    payload[cache.header + "dices_count"] = parseInt(dices_count);
-                                    payload[cache.header + "dices"] = parseInt(dices);
+                                    let [, dice_count, dice_type] = regex;
+                                    payload[cache.header + "dice_count"] = parseInt(dice_count);
+                                    payload[cache.header + "dice_type"] = parseInt(dice_type);
                                 }
                                 else {
                                     sendLog("parse error for '"+data["Damage (Small)"]+"'");
@@ -998,13 +998,12 @@
                 delete(user_number);
                 delete(user_string);
 
-                console.log(payload);
                 // send payload
                 setAttrs(payload, {silent: false}, compendium_reset);
 
                 // functions
                 function parse_weight(match) {
-                    return formatNumber( convertUnit(parseFloat(match), "lb2kg"), 0.01) + " " + cache.kilogram;
+                    return formatNumber( convertUnit(parseFloat(match), "lb2kg"), 0.5) + " " + cache.kilogram;
                 }
 
                 function parse_height(match) {
@@ -3100,7 +3099,7 @@
 
     // character weight + character race
     on(
-        " change:option_unit_decimal change:option_unit_thousand change:option_unit_height change:option_unit_weight"
+        "change:option_unit_decimal change:option_unit_thousand change:option_unit_height change:option_unit_weight"
         + " change:character_race change:character_sex"
         + " change:character_height_mod change:character_weight_mod"
         , character_height_weight );
@@ -3985,8 +3984,8 @@
             },
             "set" : {
                 "name" : "weapon_rack_name",
-                "damage_dice_count" : "weapon_rack_dices_count",
-                "damage_dice_type" : "weapon_rack_dices",
+                "damage_dice_count" : "weapon_rack_dice_count",
+                "damage_dice_type" : "weapon_rack_dice_type",
                 "damage_critic" : "weapon_rack_critic",
                 "damage_critic_multiplier" : "weapon_rack_critic_multiplier",
                 "range" : "weapon_rack_range",
@@ -4153,8 +4152,8 @@
 
         let field = {
             "getNumber" : {
-                "damage_dice_count" : "weapon_rack_dices_count",
-                "damage_dice_type" : "weapon_rack_dices",
+                "damage_dice_count" : "weapon_rack_dice_count",
+                "damage_dice_type" : "weapon_rack_dice_type",
                 "damage_critic" : "weapon_rack_critic",
                 "damage_critic_multiplier" : "weapon_rack_critic_multiplier",
                 "range" : "weapon_rack_range",
@@ -21230,11 +21229,11 @@
                                 </td>
                                 <td width="14.285714%">
                                     <div class="input-group">
-                                        <input type="number" name="attr_weapon_rack_dices_count" title="" min="1" step="1" value="1"/>
+                                        <input type="number" name="attr_weapon_rack_dice_count" title="" min="1" step="1" value="1"/>
                                         <div class="input-group-text">
                                             <span data-i18n="dice-short"></span>
                                         </div>
-                                        <select class="fixed-small" name="attr_weapon_rack_dices" title="">
+                                        <select class="fixed-small" name="attr_weapon_rack_dice_type" title="">
                                             <option value="2" selected="selected">2</option>
                                             <option value="3">3</option>
                                             <option value="4">4</option>
