@@ -68,7 +68,7 @@
       "options": [
         "Slow|1",
         "Medium|2",
-        "Fast[3"
+        "Fast|3"
       ],
       "optiontranslationkeys": [
         "character-experience-rate-slow",
@@ -78,15 +78,6 @@
       "default": "2",
       "description": "foo",
       "descriptiontranslationkey": "useroptions-experience-rate-description"
-    },
-    {
-      "attribute": "option_status_condition",
-      "displayname": "",
-      "displaytranslationkey": "useroptions-status-condition",
-      "type": "checkbox",
-      "value": "1",
-      "description": "foo",
-      "descriptiontranslationkey": "useroptions-status-condition-description"
     },
     {
       "attribute": "option_status_aging",
@@ -105,6 +96,15 @@
       "value": "1",
       "description": "foo",
       "descriptiontranslationkey": "useroptions-status-armor-penalty-description"
+    },
+    {
+      "attribute": "option_status_condition",
+      "displayname": "",
+      "displaytranslationkey": "useroptions-status-condition",
+      "type": "checkbox",
+      "value": "1",
+      "description": "foo",
+      "descriptiontranslationkey": "useroptions-status-condition-description"
     },
     {
       "attribute": "option_status_class",
@@ -143,7 +143,7 @@
       "descriptiontranslationkey": "useroptions-status-wound-threshold-description"
     },
     {
-      "attribute": "option_unit_movement",
+      "attribute": "option_unit_speed",
       "displayname": "",
       "displaytranslationkey": "useroptions-unit-movement",
       "type": "select",
