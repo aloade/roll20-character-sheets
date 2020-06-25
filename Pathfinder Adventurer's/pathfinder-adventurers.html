@@ -541,7 +541,7 @@
                             payload[header+"npc_battle_range"] = attacks.valid[i].range;
                             payload[header+"npc_battle_dice_count"] = attacks.valid[i].dice_count;
                             payload[header+"npc_battle_dice_type"] = attacks.valid[i].dice_type;
-                            payload[header+"npc_battle_damage"] = attacks.valid[i].damage;
+                            if ( attacks.valid[i].hasOwnProperty("damage") )  payload[header+"npc_battle_damage"] = attacks.valid[i].damage;
                             if ( attacks.valid[i].hasOwnProperty("critic") ) payload[header+"npc_battle_damage_critic"] = attacks.valid[i].critic;
                             if ( attacks.valid[i].hasOwnProperty("other") ) payload[header+"npc_battle_description"] = attacks.valid[i].other;
                         }
