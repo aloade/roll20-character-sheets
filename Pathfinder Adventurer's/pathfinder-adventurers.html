@@ -2373,61 +2373,61 @@
                                 // status custom
                                 // ------------------------------------------
                                 Object.keys(repeating_custom).forEach(id => {
-                                    if ( parseNumber(repeating_custom[id][field.custom.switch]) === 1 && isJSON( repeating_custom[id][field.custom.formula] ) ) {
+                                    if ( repeating_custom[id][field.custom.switch] === "on" && isJSON( repeating_custom[id][field.custom.formula] ) ) {
                                         // label
-                                        if ( repeating_custom[id][field.custom.switch] !== "" ) cache.resume.push( repeating_custom[id][field.custom.label] );
+                                        cache.resume.push( repeating_custom[id][field.custom.label] );
 
                                         // format data
-                                        let json = JSON.parse(repeating_custom[id][field.custom.formula]);
-                                        for ( let prop in json ) {
-                                            if ( json.hasOwnProperty(prop) ) json[prop] = parseInt( json[prop] );
+                                        let formula = JSON.parse( repeating_custom[id][field.custom.formula] );
+                                        for ( let prop in formula ) {
+                                            if ( formula.hasOwnProperty(prop) ) formula[prop] = parseInt( formula[prop] );
                                         }
 
                                         // character
-                                        if (json.hasOwnProperty("hp") && json.hp !== 0 ) status.hit_points += json.hp;
+                                        if (formula.hasOwnProperty("hp") && formula.hp !== 0 ) status.hit_points += formula.hp;
                                         // action
-                                        if ( json.hasOwnProperty("act") && json.act === 0 ) status.action = false;
-                                        if ( json.hasOwnProperty("afr") && json.afr === 0 ) status.action_full_round = false;
-                                        if ( json.hasOwnProperty("sb") && json.sb >= 0 ) status.speed_base = Math.min( status.speed_base, json.sb );
-                                        if ( json.hasOwnProperty("stm") && json.stm !== 100 ) status.speed_tactic = Math.min( status.speed_tactic, json.stm/100 );
-                                        if ( json.hasOwnProperty("srm") && json.srm !== 4 ) status.speed_run_mode = Math.min( status.speed_run_mode, json.srm );
-                                        if ( json.hasOwnProperty("afa") && json.afa !== 0 ) status.arcane_spell_failure += json.afa;
-                                        if ( json.hasOwnProperty("att") && json.att === 0 ) status.action_attack = false;
-                                        if ( json.hasOwnProperty("ao") && json.ao === 0 ) status.attack_opportunity = false;
-                                        if ( json.hasOwnProperty("sa") && json.sa === 1 ) status.target_sneak_attack = true;
-                                        if ( json.hasOwnProperty("spe") && json.spe === 0 ) status.action_spell = false;
+                                        if ( formula.hasOwnProperty("act") && formula.act === 0 ) status.action = false;
+                                        if ( formula.hasOwnProperty("afr") && formula.afr === 0 ) status.action_full_round = false;
+                                        if ( formula.hasOwnProperty("sb") && formula.sb >= 0 ) status.speed_base = Math.min( status.speed_base, formula.sb );
+                                        if ( formula.hasOwnProperty("stm") && formula.stm !== 100 ) status.speed_tactic = Math.min( status.speed_tactic, formula.stm/100 );
+                                        if ( formula.hasOwnProperty("srm") && formula.srm !== 4 ) status.speed_run_mode = Math.min( status.speed_run_mode, formula.srm );
+                                        if ( formula.hasOwnProperty("afa") && formula.afa !== 0 ) status.arcane_spell_failure += formula.afa;
+                                        if ( formula.hasOwnProperty("att") && formula.att === 0 ) status.action_attack = false;
+                                        if ( formula.hasOwnProperty("ao") && formula.ao === 0 ) status.attack_opportunity = false;
+                                        if ( formula.hasOwnProperty("sa") && formula.sa === 1 ) status.target_sneak_attack = true;
+                                        if ( formula.hasOwnProperty("spe") && formula.spe === 0 ) status.action_spell = false;
                                         // attribute
-                                        if ( json.hasOwnProperty("str") && json.str !== 0 ) status.strength += json.str;
-                                        if ( json.hasOwnProperty("sc")&& json.sc !== 0 ) status.strength_ceiling = Math.min( status.strength_ceiling, json.sc );
-                                        if ( json.hasOwnProperty("dex") && json.dex !== 0 ) status.dexterity += json.dex;
-                                        if ( json.hasOwnProperty("dc")&& json.dc !== 0 ) status.dexterity_ceiling = Math.min( status.dexterity_ceiling, json.dc );
-                                        if ( json.hasOwnProperty("dmc")&& json.dmc !== 0 ) status.dexterity_mod_ceiling = Math.min( status.dexterity_mod_ceiling, json.dmc );
-                                        if ( json.hasOwnProperty("con") && json.con !== 0 ) status.constitution += json.con;
-                                        if ( json.hasOwnProperty("int") && json.int !== 0 ) status.intelligence += json.int;
-                                        if ( json.hasOwnProperty("wis") && json.wis !== 0 ) status.wisdom += json.wis;
-                                        if ( json.hasOwnProperty("cha") && json.cha !== 0 ) status.charisma += json.cha;
+                                        if ( formula.hasOwnProperty("str") && formula.str !== 0 ) status.strength += formula.str;
+                                        if ( formula.hasOwnProperty("sc")&& formula.sc !== 0 ) status.strength_ceiling = Math.min( status.strength_ceiling, formula.sc );
+                                        if ( formula.hasOwnProperty("dex") && formula.dex !== 0 ) status.dexterity += formula.dex;
+                                        if ( formula.hasOwnProperty("dc")&& formula.dc !== 0 ) status.dexterity_ceiling = Math.min( status.dexterity_ceiling, formula.dc );
+                                        if ( formula.hasOwnProperty("dmc")&& formula.dmc !== 0 ) status.dexterity_mod_ceiling = Math.min( status.dexterity_mod_ceiling, formula.dmc );
+                                        if ( formula.hasOwnProperty("con") && formula.con !== 0 ) status.constitution += formula.con;
+                                        if ( formula.hasOwnProperty("int") && formula.int !== 0 ) status.intelligence += formula.int;
+                                        if ( formula.hasOwnProperty("wis") && formula.wis !== 0 ) status.wisdom += formula.wis;
+                                        if ( formula.hasOwnProperty("cha") && formula.cha !== 0 ) status.charisma += formula.cha;
                                         // battle
-                                        if ( json.hasOwnProperty("ini") && json.ini !== 0 ) status.initiative += json.ini;
-                                        if ( json.hasOwnProperty("cmb") && json.cmb !== 0) status.combat_maneuver_bonus += json.cmb;
-                                        if ( json.hasOwnProperty("ba") && json.ba !== 0 ) status.base_attack += json.ba;
-                                        if ( json.hasOwnProperty("dam") && json.dam !== 0 ) status.attack_damage += json.dam;
+                                        if ( formula.hasOwnProperty("ini") && formula.ini !== 0 ) status.initiative += formula.ini;
+                                        if ( formula.hasOwnProperty("cmb") && formula.cmb !== 0) status.combat_maneuver_bonus += formula.cmb;
+                                        if ( formula.hasOwnProperty("ba") && formula.ba !== 0 ) status.base_attack += formula.ba;
+                                        if ( formula.hasOwnProperty("dam") && formula.dam !== 0 ) status.attack_damage += formula.dam;
                                         // magic
-                                        if ( json.hasOwnProperty("asf") && json.asf !== 0 ) status.arcane_spell_failure += json.asf;
-                                        if ( json.hasOwnProperty("cl") && json.cl !== 0 ) status.caster_level += json.cl;
-                                        if ( json.hasOwnProperty("cnc") && json.cnc !== 0  ) status.concentration += json.cnc;
-                                        if ( json.hasOwnProperty("hdm") && json.hdm === 1 ) status.half_damage_magic = true;
+                                        if ( formula.hasOwnProperty("asf") && formula.asf !== 0 ) status.arcane_spell_failure += formula.asf;
+                                        if ( formula.hasOwnProperty("cl") && formula.cl !== 0 ) status.caster_level += formula.cl;
+                                        if ( formula.hasOwnProperty("cnc") && formula.cnc !== 0  ) status.concentration += formula.cnc;
+                                        if ( formula.hasOwnProperty("hdm") && formula.hdm === 1 ) status.half_damage_magic = true;
                                         // defense
-                                        if ( json.hasOwnProperty("ref") && json.ref !== 0 ) status.reflex += json.ref;
-                                        if ( json.hasOwnProperty("for") && json.for !== 0 ) status.fortitude += json.for;
-                                        if ( json.hasOwnProperty("wil") && json.wil !== 0 ) status.willpower += json.wil;
-                                        if ( json.hasOwnProperty("acm") && json.acm !== 0 ) status.armor_class_melee += json.acm;
-                                        if ( json.hasOwnProperty("acr") && json.acr !== 0 ) status.armor_class_ranged += json.acr;
-                                        if ( json.hasOwnProperty("cmd") && json.cmd !== 0 ) status.combat_maneuver_defense += json.cmd;
-                                        if ( json.hasOwnProperty("ipa") && json.ipa === 1 ) status.immune_physical_attack = true;
+                                        if ( formula.hasOwnProperty("ref") && formula.ref !== 0 ) status.reflex += formula.ref;
+                                        if ( formula.hasOwnProperty("for") && formula.for !== 0 ) status.fortitude += formula.for;
+                                        if ( formula.hasOwnProperty("wil") && formula.wil !== 0 ) status.willpower += formula.wil;
+                                        if ( formula.hasOwnProperty("acm") && formula.acm !== 0 ) status.armor_class_melee += formula.acm;
+                                        if ( formula.hasOwnProperty("acr") && formula.acr !== 0 ) status.armor_class_ranged += formula.acr;
+                                        if ( formula.hasOwnProperty("cmd") && formula.cmd !== 0 ) status.combat_maneuver_defense += formula.cmd;
+                                        if ( formula.hasOwnProperty("ipa") && formula.ipa === 1 ) status.immune_physical_attack = true;
                                         //skill
-                                        if ( json.hasOwnProperty("ski") && json.ski !== 0 ) status.skill += json.ski;
-                                        if ( json.hasOwnProperty("ski") && json.sp !== 0 ) status.skill_perception += json.sp;
-                                        if ( json.hasOwnProperty("sr") && json.sr !== 0 ) status.skill_reactive = json.sr;
+                                        if ( formula.hasOwnProperty("ski") && formula.ski !== 0 ) status.skill += formula.ski;
+                                        if ( formula.hasOwnProperty("ski") && formula.sp !== 0 ) status.skill_perception += formula.sp;
+                                        if ( formula.hasOwnProperty("sr") && formula.sr !== 0 ) status.skill_reactive = formula.sr;
                                     }
                                 });
                                 delete(repeating_custom);
@@ -4417,7 +4417,7 @@
     // fields           (string or array of string) attributes from "repeating_<section>_<field>"
     // callback         (function) returning function after xhr request
     // isNumber         (boolean) parse date as number(true)|default or string(false)
-    function getAttrsRepeating(section, fields, callback) {
+    function getAttrsRepeating(section, fields, callback, isNumber = "true") {
         section = section.replace(/^repeating_/g, '');
         if ( !Array.isArray(fields) ) fields = [fields];
         if ( !(callback instanceof Function) ) callback = () => {};
@@ -4434,7 +4434,7 @@
                 Object.keys(raw).forEach( key => {
                     [, field, sub_field] = key.match(regex);
                     if ( !payload.hasOwnProperty( field ) ) payload[ field ] = {};
-                    payload[ field ][ sub_field ] = parseNumber( raw[key] );
+                    payload[ field ][ sub_field ] = (isNumber ? parseNumber( raw[key]) : raw[key] );
                 });
                 callback(payload);
             });
@@ -4446,7 +4446,7 @@
     // value            (string)
     // return           (boolean)
     function isJSON(str) {
-        if ( str === "" || str === null ) return false;
+        if ( str === null || typeof str !== "string" || str === "" ) return false;
         // clean string
         str = str.replace(/\\(?:["\\\/bfnrt]|u[0-9a-fA-F]{4})/g, '@'); // @ character
         str = str.replace(/"[^"\\\n\r]*"|true|false|null|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?/g, ']'); // enclosures
