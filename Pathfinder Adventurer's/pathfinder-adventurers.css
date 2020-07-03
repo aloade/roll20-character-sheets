@@ -107,10 +107,6 @@ html, body {
     text-align-last: center !important;
 }
 
-.charsheet .sheet-text-strong {
-    font-weight: bold;
-}
-
 .charsheet .sheet-text-bold {
     font-weight: bold;
 }
@@ -340,8 +336,8 @@ html, body {
 .charsheet .sheet-button .sheet-input-group select {
     width: 100%;
     color: rgb(246, 226, 195);
-    line-height: 22px;
-    height: 26px;
+    line-height: 23px;
+    height: 23px;
     transition: color 0.35s ease;
     text-align-last: center;
     padding-right: 8px;
@@ -1419,22 +1415,16 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/select_dropdown_dark.png") no-repeat center right;
 }
 
-.charsheet .sheet-paper input:disabled,
-.charsheet input.sheet-disabled {
+.charsheet .sheet-paper input[type="number"]:disabled:not(.sheet-not-disabled),
+.charsheet .sheet-paper input[type="text"][readonly]:not(.sheet-not-disabled) {
     cursor: default;
     pointer-events:none;
-}
-
-.charsheet .sheet-paper input:disabled,
-.charsheet .sheet-paper input.sheet-disabled {
     background: transparent repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 7px);
     border: none;
 }
 
-.charsheet .sheet-paper input.sheet-text-strong:disabled,
-.sheet-paper input[type="text"].sheet-text-strong.sheet-disabled {
-    background: rgba(0, 0, 0, 0.04);
-    border: none;
+.charsheet .sheet-paper input.sheet-disabled {
+    background: rgba(0, 0, 0, 0.04) !important;
 }
 
 .charsheet .sheet-paper textarea {
@@ -1461,15 +1451,6 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
     text-decoration: underline dashed;
     text-decoration-color: inherit;
     cursor: help;
-}
-
-.charsheet .sheet-paper .sheet-input-group.sheet-disabled {
-    background: transparent repeating-linear-gradient(-45deg, transparent, transparent 2px, rgba(0, 0, 0, 0.04) 2px, rgba(0, 0, 0, 0.04) 7px);
-}
-
-.charsheet .sheet-paper .sheet-input-group.sheet-disabled input,
-.charsheet .sheet-paper .sheet-input-group.sheet-disabled select {
-    background: none !important;
 }
 
 /* --------------------------------------------------- */
