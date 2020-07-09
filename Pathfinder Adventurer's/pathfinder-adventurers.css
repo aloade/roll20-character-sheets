@@ -1444,7 +1444,7 @@ input.sheet-toggle[name="attr_option_health"][value="alternative"] ~ div td.shee
 }
 
 .charsheet .sheet-paper textarea.sheet-large {
-    height: calc(16px + 2px + 8 * 20px);
+    height: calc(16px + 2px + 16 * 20px);
 }
 
 .charsheet .sheet-paper span[title]:not(.sheet-alert) {
