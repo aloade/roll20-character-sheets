@@ -3031,15 +3031,15 @@
     // ------------------------------------------
     // spoken languages
     on(
-        "change:language_common change:language_draconic change:language_dwarven change:language_elven change:language_gnomish change:language_goblin change:language_halfling change:language_jotun change:language_orcish change:language_sylvan change:language_undercommon"
-        + " change:language_abyssal change:language_aklo change:language_aquan change:language_auran change:language_celestial change:language_gnoll change:language_ignan change:language_infernal change:language_necril change:language_shadowtongue change:language_terran"
+        "change:language_common change:language_draconic change:language_dwarven change:language_elven change:language_giant change:language_gnome change:language_goblin change:language_halfling change:language_orc change:language_sylvan change:language_undercommon"
+        + " change:language_aboleth change:language_abyssal change:language_aklo change:language_aquan change:language_auran change:language_boggard change:language_celestial change:language_gnoll change:language_ignan change:language_infernal change:language_necril change:language_samsaran change:language_shadowtongue change:language_strix chang:language_tengu change:language_terran change:language_vishkanya  change:language_wayang"
         + " change:language_druidic"
         + " change:language_other"
         , character_spoken_language );
     function character_spoken_language() {
         getAttrsNumber([
-            "language_common", "language_draconic", "language_dwarven", "language_elven", "language_gnomish", "language_goblin", "language_halfling", "language_jotun", "language_orcish", "language_sylvan", "language_undercommon",
-            "language_abyssal", "language_aklo", "language_aquan", "language_auran", "language_celestial", "language_gnoll", "language_ignan", "language_infernal", "language_necril", "language_shadowtongue", "language_terran",
+            "language_common", "language_draconic", "language_dwarven", "language_elven", "language_giant", "language_gnome", "language_goblin", "language_halfling", "language_orc", "language_sylvan", "language_undercommon",
+            "language_aboleth",  "language_abyssal", "language_aklo", "language_aquan", "language_auran", "language_boggard", "language_celestial", "language_gnoll", "language_ignan", "language_infernal", "language_necril", "language_samsaran", "language_shadowtongue", "language_strix", "language_tengu", "language_terran", "language_vishkanya", "language_wayang",
             "language_druidic",
             "language_other"
         ], (user_number) => {
@@ -3052,26 +3052,33 @@
                 if (user_number.language_draconic === 1) languages.push(getTranslationByKey("language-draconic"));
                 if (user_number.language_dwarven === 1) languages.push(getTranslationByKey("language-dwarven"));
                 if (user_number.language_elven === 1) languages.push(getTranslationByKey("language-elven"));
-                if (user_number.language_gnomish === 1) languages.push(getTranslationByKey("language-gnomish"));
+                if (user_number.language_giant === 1) languages.push(getTranslationByKey("language-giant"));
+                if (user_number.language_gnome === 1) languages.push(getTranslationByKey("language-gnome"));
                 if (user_number.language_goblin === 1) languages.push(getTranslationByKey("language-goblin"));
                 if (user_number.language_halfling === 1) languages.push(getTranslationByKey("language-halfling"));
-                if (user_number.language_jotun === 1) languages.push(getTranslationByKey("language-jotun"));
-                if (user_number.language_orcish === 1) languages.push(getTranslationByKey("language-orcish"));
+                if (user_number.language_orc === 1) languages.push(getTranslationByKey("language-orc"));
                 if (user_number.language_sylvan === 1) languages.push(getTranslationByKey("language-sylvan"));
                 if (user_number.language_undercommon === 1) languages.push(getTranslationByKey("language-undercommon"));
 
                 // rare languages
+                if (user_number.language_aboleth === 1) languages.push(getTranslationByKey("language-aboleth"));
                 if (user_number.language_abyssal === 1) languages.push(getTranslationByKey("language-abyssal"));
                 if (user_number.language_aklo === 1) languages.push(getTranslationByKey("language-aklo"));
                 if (user_number.language_aquan === 1) languages.push(getTranslationByKey("language-aquan"));
                 if (user_number.language_auran === 1) languages.push(getTranslationByKey("language-auran"));
+                if (user_number.language_boggard === 1) languages.push(getTranslationByKey("language-boggard"));
                 if (user_number.language_celestial === 1) languages.push(getTranslationByKey("language-celestial"));
                 if (user_number.language_gnoll === 1) languages.push(getTranslationByKey("language-gnoll"));
                 if (user_number.language_ignan === 1) languages.push(getTranslationByKey("language-ignan"));
                 if (user_number.language_infernal === 1) languages.push(getTranslationByKey("language-infernal"));
                 if (user_number.language_necril === 1) languages.push(getTranslationByKey("language-necril"));
+                if (user_number.language_samsaran === 1) languages.push(getTranslationByKey("language-samsaran"));
                 if (user_number.language_shadowtongue === 1) languages.push(getTranslationByKey("language-shadowtongue"));
+                if (user_number.language_strix === 1) languages.push(getTranslationByKey("language-strix"));
+                if (user_number.language_tengu === 1) languages.push(getTranslationByKey("language-tengu"));
                 if (user_number.language_terran === 1) languages.push(getTranslationByKey("language-terran"));
+                if (user_number.language_vishkanya === 1) languages.push(getTranslationByKey("language-vishkanya"));
+                if (user_number.language_wayang === 1) languages.push(getTranslationByKey("language-wayang"));
 
                 // secrets languages
                 if (user_number.language_druidic === 1) languages.push(getTranslationByKey("language-druidic"));
@@ -6991,11 +6998,18 @@
                                                                 <span class="button-switch-label" data-i18n="language-elven"></span>
                                                             </div>
                                                         </li>
-                                                        <li data-i18n-list-item="gnomish">
+                                                        <li data-i18n-list-item="giant">
                                                             <div class="button-switch">
-                                                                <input type="checkbox" name="attr_language_gnomish" title="" />
+                                                                <input type="checkbox" name="attr_language_giant" title="" />
                                                                 <span class="button-switch-face"></span>
-                                                                <span class="button-switch-label" data-i18n="language-gnomish"></span>
+                                                                <span class="button-switch-label" data-i18n="language-giant"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li data-i18n-list-item="gnome">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_gnome" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-gnome"></span>
                                                             </div>
                                                         </li>
                                                         <li data-i18n-list-item="goblin">
@@ -7012,18 +7026,11 @@
                                                                 <span class="button-switch-label" data-i18n="language-halfling"></span>
                                                             </div>
                                                         </li>
-                                                        <li data-i18n-list-item="jotun">
+                                                        <li data-i18n-list-item="orc">
                                                             <div class="button-switch">
-                                                                <input type="checkbox" name="attr_language_jotun" title="" />
+                                                                <input type="checkbox" name="attr_language_orc" title="" />
                                                                 <span class="button-switch-face"></span>
-                                                                <span class="button-switch-label" data-i18n="language-jotun"></span>
-                                                            </div>
-                                                        </li>
-                                                        <li data-i18n-list-item="orcish">
-                                                            <div class="button-switch">
-                                                                <input type="checkbox" name="attr_language_orcish" title="" />
-                                                                <span class="button-switch-face"></span>
-                                                                <span class="button-switch-label" data-i18n="language-orcish"></span>
+                                                                <span class="button-switch-label" data-i18n="language-orc"></span>
                                                             </div>
                                                         </li>
                                                         <li data-i18n-list-item="sylvan">
@@ -7044,6 +7051,13 @@
 
                                                     <h2 data-i18n="language-uncommon"></h2>
                                                     <ul data-i18n-list="language-uncommon-list">
+                                                        <li data-i18n-list-item="aboleth">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_aboleth" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-aboleth"></span>
+                                                            </div>
+                                                        </li>
                                                         <li data-i18n-list-item="abyssal">
                                                             <div class="button-switch">
                                                                 <input type="checkbox" name="attr_language_abyssal" title="" />
@@ -7070,6 +7084,13 @@
                                                                 <input type="checkbox" name="attr_language_auran" title="" />
                                                                 <span class="button-switch-face"></span>
                                                                 <span class="button-switch-label" data-i18n="language-auran"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li data-i18n-list-item="boggard">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_boggard" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-boggard"></span>
                                                             </div>
                                                         </li>
                                                         <li data-i18n-list-item="celestial">
@@ -7107,6 +7128,13 @@
                                                                 <span class="button-switch-label" data-i18n="language-necril"></span>
                                                             </div>
                                                         </li>
+                                                        <li data-i18n-list-item="samsaran">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_samsaran" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-samsaran"></span>
+                                                            </div>
+                                                        </li>
                                                         <li data-i18n-list-item="shadowtongue">
                                                             <div class="button-switch">
                                                                 <input type="checkbox" name="attr_language_shadowtongue" title="" />
@@ -7114,11 +7142,39 @@
                                                                 <span class="button-switch-label" data-i18n="language-shadowtongue"></span>
                                                             </div>
                                                         </li>
+                                                        <li data-i18n-list-item="strix">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_strix" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-strix"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li data-i18n-list-item="tengu">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_tengu" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-tengu"></span>
+                                                            </div>
+                                                        </li>
                                                         <li data-i18n-list-item="terran">
                                                             <div class="button-switch">
                                                                 <input type="checkbox" name="attr_language_terran" title="" />
                                                                 <span class="button-switch-face"></span>
                                                                 <span class="button-switch-label" data-i18n="language-terran"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li data-i18n-list-item="vishkanya">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_vishkanya" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-vishkanya"></span>
+                                                            </div>
+                                                        </li>
+                                                        <li data-i18n-list-item="wayang">
+                                                            <div class="button-switch">
+                                                                <input type="checkbox" name="attr_language_wayang" title="" />
+                                                                <span class="button-switch-face"></span>
+                                                                <span class="button-switch-label" data-i18n="language-wayang"></span>
                                                             </div>
                                                         </li>
                                                     </ul>
@@ -23143,12 +23199,11 @@
                 <b>{{label}}</b><br />
                 <span class="text-disabled" data-i18n="rt-arcane-spell-failure-ignore"></span>
                 <b><span data-i18n="spell-incantation"></span></b> : {{incantation}}<br />
-                <!-- INCANTATION FUMBLE -->
+
                 {{#rollWasFumble() incantation}}
                 <span class="text-danger" data-i18n="rt-incantation-fumble"></span>
                 {{/rollWasFumble() incantation}}
-                <!-- INCANTATION FUMBLE -->
-                <!-- INCANTATION SUCCESS-->
+
                 {{#^rollWasFumble() incantation}}
                 {{#^rollWasCrit() incantation}}<span data-i18n="rt-incantation-success"></span><br />{{/^rollWasCrit() incantation}}
                 {{#rollWasCrit() incantation}}<span class="text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() incantation}}
@@ -23159,7 +23214,7 @@
                 {{#rollTotal() touch_used 2}}<b><span data-i18n="spell-incantation-ranged-touch"></span></b>: {{touch}}<br />{{/rollTotal() touch_used 2}}
                 {{/rollGreater() touch_used 0}}
                 {{/^rollWasFumble() incantation}}
-                <!-- INCANTATION SUCCESS-->
+
             </p>
         </div>
 
@@ -23261,15 +23316,16 @@
         </div>
         <div class="body">
             <p>
-                <b>{{label}}</b>
+                <b>{{label}}</b><br />
                 {{#rollGreater() damage_used 0}}
-                <br />
                 {{#damage}}<b><span data-i18n="rt-damage"></span></b> : {{damage}}<br />{{/damage}}
                 {{#damage_critic}}<b><span data-i18n="rt-damage-critic"></span></b> : {{damage_critic}}<br />{{/damage_critic}}
                 {{/rollGreater() damage_used 0}}
+
                 {{#rollGreater() effect_used 0}}
                 <b><span data-i18n="rt-effect"></span></b> : {{effect}}<br />
                 {{/rollGreater() effect_used 0}}
+
                 {{#rollGreater() save_used 0}}
                 <b><span data-i18n="rt-save"></span></b> :&nbsp;
                 {{#rollTotal() save_used 1}}<span data-i18n="save-fortitude"></span>,&nbsp;{{/rollTotal() save_used 1}}
@@ -23280,7 +23336,8 @@
                 {{#rollTotal() save 3}}<span data-i18n="spell-save-effect-half-damage"></span>{{/rollTotal() save 3}}
                 {{#rollTotal() save 4}}<span data-i18n="spell-save-effect-harmless"></span>{{/rollTotal() save 4}}
                 {{#rollTotal() save 5}}<span data-i18n="spell-save-effect-partial"></span>{{/rollTotal() save 5}}
-                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}<br />
+                {{#rollTotal() save 6}}<span data-i18n="spell-save-effect-unveils"></span>{{/rollTotal() save 6}}
+                <br />
                 <b><span data-i18n="rt-difficulty-class"></span></b> : {{save_difficulty_class}}<br />
                 {{/rollGreater() save_used 0}}
             </p>
@@ -23302,18 +23359,15 @@
             <p>
                 <b>{{label}}</b><br />
                 <b>{{label_concentration}}</b> : {{test}}<br />
-                <!-- FUMBLE -->
+
                 {{#rollWasFumble() test}}
                 <span class="text-danger" data-i18n="rt-fumble"></span>
                 {{/rollWasFumble() test}}
-                <!-- FUMBLE -->
-                <!-- INCANTATION SUCCESS-->
+
                 {{#^rollWasFumble() test}}
                 {{#^rollWasCrit() test}}{{#difficulty_class}}<b><span data-i18n="rt-difficulty-class"></span></b> : {{difficulty_class}}<br />{{/difficulty_class}}{{/^rollWasCrit() test}}
                 {{#rollWasCrit() test}}<span class="text-success" data-i18n="rt-incantation-critic"></span><br />{{/rollWasCrit() test}}
-
                 {{/^rollWasFumble() test}}
-                <!-- INCANTATION SUCCESS-->
             </p>
         </div>
         {{#rollWasCrit() test}}</div>{{/rollWasCrit() test}}
