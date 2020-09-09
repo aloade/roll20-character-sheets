@@ -1771,7 +1771,7 @@ input[name="attr_character_race_toggle"][value="hide"] ~ div .sheet-template-cha
     max-width: 1245px;
     min-height: 620px;
     padding: 30px 45px 55px;
-    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets-static.png");
+    border-image-source: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheets_static.png");
     border-image-slice: 100 fill;
     border-image-width: 94px;
     border-image-repeat: stretch;
@@ -2439,7 +2439,7 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 
 .sheet-rolltemplate-roll {
     padding: 12px;
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheet-rolled.png") no-repeat;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheet_rolled.png") no-repeat;
     background-size: 100% 100%;
 }
 
