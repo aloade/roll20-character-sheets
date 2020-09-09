@@ -2568,6 +2568,6 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 
 /* template - magic */
 .sheet-rolltemplate-roll .sheet-magic {
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/incantation.png") no-repeat center;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/incantation2.png") no-repeat center;
     background-size: contain;
 }
