@@ -1,9 +1,3 @@
-/* url
-alpha   https://raw.githubusercontent.com/aloade/pathfinder/master/image/
-dev.    https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
-prod.   https://raw.githubusercontent.com/Roll20/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/
-*/
-
 /* --------------------------------------------------- */
 /* roll20 fixed */
 /* --------------------------------------------------- */
@@ -204,9 +198,9 @@ html, body {
 /* "text-align-last:center; " chrome hack for 'text-align: center' */
 .charsheet select {
     text-align-last:center;
-    -moz-appearance: textfield;
-    -webkit-appearance: textfield;
-    appearance: textfield;
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    appearance: none;
     cursor: pointer;
 }
 
@@ -2445,7 +2439,7 @@ input[name="attr_foo_character_dexterity_total_alert"][value="show"] ~ div input
 
 .sheet-rolltemplate-roll {
     padding: 12px;
-    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/paper_rolled.png") no-repeat;
+    background: url("https://raw.githubusercontent.com/aloade/roll20-character-sheets/master/Pathfinder%20Adventurer%27s/image/sheet-rolled.png") no-repeat;
     background-size: 100% 100%;
 }
 
