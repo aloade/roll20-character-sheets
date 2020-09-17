@@ -39,9 +39,9 @@ certains point sont discutables pour l'interprétation de certaines règles, voi
 - Global
     
 - Entête
+  - status : ajouter CA naturel, esquive et parade dans les status custom
     
 - Personnage
-    - vérifier les classes de personnages
 
 - Combat
 
