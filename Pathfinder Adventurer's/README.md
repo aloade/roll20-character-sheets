@@ -37,11 +37,14 @@ certains point sont discutables pour l'interprétation de certaines règles, voi
 - L'âge limite pour la jeunesse n'est pas définit clairement dans les règles, donc les personnages auront les malus de la jeunesse tant qu'ils n'ont pas atteient l'âge adulte.
 
 - Global
+  - drag & drop ne fonctionne pas si personne n'est pas GM ?
     
 - Entête
   - status : ajouter CA naturel, esquive et parade dans les status custom
     
 - Personnage
+  - dés de vie reviennt à 8 dans spécialisation
+  - ( compagnon animal ) total de point de viee dépensé n'est pas effectif )
 
 - Combat
 
