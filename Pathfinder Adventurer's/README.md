@@ -54,6 +54,8 @@ certains point sont discutables pour l'interprétation de certaines règles, voi
 - Défense
 
 - Compétences
+    - ajout compétences contextuelles ( double compteur + liste verticale séparée )
+      aventure / autre / contextuelle / représentation )
       
 - Inventaire
 
